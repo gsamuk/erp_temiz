@@ -43,7 +43,7 @@
 
                 @if(Session::get('userData')->purchase_view == 1)
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/signout">
+                    <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-sticker-text-outline"></i> <span>Purchase</span>
                     </a>
                 </li>
@@ -52,7 +52,7 @@
 
                 @if(Session::get('userData')->sale_view == 1)
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/signout">
+                    <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-sticker-text-outline"></i> <span>Sale</span>
                     </a>
                 </li>
@@ -61,7 +61,7 @@
 
                 @if(Session::get('userData')->purchase_approve == 1)
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/signout">
+                    <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-sticker-text-outline"></i> <span>Purchase Approve</span>
                     </a>
                 </li>
@@ -70,7 +70,7 @@
 
                 @if(Session::get('userData')->sale_approve == 1)
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/signout">
+                    <a class="nav-link menu-link" href="#">
                         <i class="mdi mdi-sticker-text-outline"></i> <span>Sale Approve</span>
                     </a>
                 </li>
