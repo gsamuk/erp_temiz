@@ -24,7 +24,7 @@ class CreatePurchaseorderTable extends Migration
             $table->date('due_date');
             $table->dateTime('remind_time');
             $table->tinyInteger('is_approve');
-            $table->dateTime('insert_time');
+            $table->dateTime('insert_time')->useCurrent();
         });
     }
 

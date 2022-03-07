@@ -17,7 +17,7 @@ class CreateUsershistoryTable extends Migration
             $table->id();
             $table->string('actions');
             $table->integer('users_id');
-            $table->dateTime('insert_time');
+            $table->dateTime('insert_time')->useCurrent();
             $table->string('user_name');
             $table->string('password');
             $table->string('logo_user');
