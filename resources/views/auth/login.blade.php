@@ -21,13 +21,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="text-center mt-sm-5 mb-4 text-white-50">
+                    <div class="mt-sm-5 text-white-50 mb-4 text-center">
                         <div>
                             <a href="index" class="d-inline-block auth-logo">
-                                <img src="{{ URL::asset('assets/images/logo-light.png')}}" alt="" height="20">
+                                <img src="{{ URL::asset('assets/images/dark_logo.png') }}" alt="" height="39">
                             </a>
                         </div>
-                        <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                        <p class="fs-15 fw-medium mt-3">Zeberced Consration ERP</p>
                     </div>
                 </div>
             </div>
@@ -38,18 +38,26 @@
                     <div class="card mt-4">
 
                         <div class="card-body p-4">
-                            <div class="text-center mt-2">
-                                <h5 class="text-primary">Welcome Back !</h5>
-                                <p class="text-muted">Sign in to continue to Velzon.</p>
+                            <div class="mt-2 text-center">
+                                <h5 class="text-primary">Hoşgeldiniz !!!</h5>
+                                <p class="text-muted">Zeberced ERP Giriş Sayfası</p>
+                                @if (session()->has('message'))
+                                <div class="alert alert-danger alert-dismissible fade show mb-xl-0 shadow" role="alert">
+                                    <strong> Hata! </strong> {{ session()->get('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                @endif
+
                             </div>
-                            <div class="p-2 mt-4">
-                                <form action="{{ route('login.post') }}" method="POST">
+                            <div class="mt-4 p-2">
+                                <form action="{{ route('login.post') }}" id="#login_form" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                            value=" " id="username" name="email" placeholder="Enter username">
-                                        @error('email')
+                                        <label for="user_name" class="form-label">Kullanıcı Adı & Kodu</label>
+                                        <input type="text" class="form-control" id="user_name" name="user_name"
+                                            value="cemal" placeholder="Enter username">
+                                        @error('user_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -57,17 +65,15 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <div class="float-end">
-                                            <a href="auth-pass-reset-basic" class="text-muted">Forgot password?</a>
-                                        </div>
-                                        <label class="form-label" for="password-input">Password</label>
+
+                                        <label class="form-label" for="password-input">Şifre</label>
                                         <div class="position-relative auth-pass-inputgroup mb-3">
                                             <input type="password"
                                                 class="form-control pe-5 @error('password') is-invalid @enderror"
-                                                name="password" placeholder="Enter password" id="password-input"
-                                                value="123456">
+                                                name="password" value="123456" placeholder="Enter password"
+                                                id="password-input">
                                             <button
-                                                class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
+                                                class="btn btn-link position-absolute end-0 text-decoration-none text-muted top-0"
                                                 type="button" id="password-addon"><i
                                                     class="ri-eye-fill align-middle"></i></button>
                                             @error('password')
@@ -75,6 +81,7 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                             @enderror
+
                                         </div>
                                     </div>
 
@@ -84,18 +91,18 @@
                                         <label class="form-check-label" for="auth-remember-check">Remember me</label>
                                     </div>
 
+
                                     <div class="mt-4">
-                                        <button class="btn btn-success w-100" type="submit">Sign In</button>
+                                        <button class="btn btn-success w-100" type="submit">Giriş Yap</button>
                                     </div>
 
 
+                                </form>
                             </div>
                         </div>
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-
-
 
 
 
@@ -113,9 +120,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <p class="mb-0 text-muted">&copy; <script>
-                                document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
                     </div>
                 </div>
             </div>
@@ -124,6 +131,7 @@
     <!-- end Footer -->
 </div>
 @endsection
+
 @section('script')
 <script src="assets/libs/particles.js/particles.js.min.js"></script>
 <script src="assets/js/pages/particles.app.js"></script>

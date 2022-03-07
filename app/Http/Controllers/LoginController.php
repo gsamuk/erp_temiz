@@ -21,13 +21,17 @@ class LoginController extends Controller
     {
 
         $request->validate([
-            'email' => 'required',
+            'user_name' => 'required',
             'password' => 'required',
         ]);
-        $email = $request->email;
+        $user_name = $request->user_name;
+        $password = $request->password;
 
 
-        $user = Login::where('email', $email)
+        $user = Login::where('users.user_name', $user_name)
+            ->where('users.password', $password)
+            ->join('Authorizations', 'users.id', '=', 'authorizations.user_id')
+            ->select('users.*', 'authorizations.purchase_view', 'authorizations.sale_view', 'authorizations.purchase_approve', 'authorizations.sale_approve')
             ->first();
 
         if ($user) {
@@ -54,11 +58,10 @@ class LoginController extends Controller
                     $request->session()->put('LogoData', $logo->status());
                 }
             }
-
-
-
             return redirect()->intended('/')->withSuccess('Signed in');
         } else {
+            $request->session()->forget('userData');
+            $request->session()->forget('LogoData');
             return redirect("login")->with('message', 'Hatalı Kullanıcı Adı yada Şifre');
         }
     }

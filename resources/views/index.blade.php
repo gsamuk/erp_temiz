@@ -7,9 +7,7 @@
 @endcomponent
 
 
-{{ print_r(Session::get('LogoData')) }}
-
-
+Home
 
 @endsection
 @section('script')
