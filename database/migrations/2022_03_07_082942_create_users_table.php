@@ -34,9 +34,18 @@ class CreateUsersTable extends Migration
             'surname' => 'Kurt',
             'email' => 'test@test.com',
             'user_name' => 'cemal',
-            'logo_user' => 'CEMAL_KURT',
+            'logo_user' => 'LOGO',
             'user_code' => '1111',
-            'logo_password' => '1111',
+            'logo_password' => 'dekatek',
+            'password' => '123456',
+            'created_at' => now(),
+        ]);
+
+        Users::insert([
+            'name' => 'Gültekin',
+            'surname' => 'Samuk',
+            'email' => 'gsamuk@gmail.com',
+            'user_name' => 'gsamuk',
             'password' => '123456',
             'created_at' => now(),
         ]);

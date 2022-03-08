@@ -34,4 +34,21 @@ class UserController extends Controller
             ]);
         return redirect("profil")->with('message', 'Güncelleme Başarılı');
     }
+
+
+    public function user_list()
+    {
+        $users = User::join('Authorizations', 'users.id', '=', 'authorizations.user_id')
+            ->select(
+                'users.*',
+                'authorizations.purchase_view',
+                'authorizations.sale_view',
+                'authorizations.purchase_approve',
+                'authorizations.sale_approve',
+                'authorizations.is_admin'
+            )
+            ->get();
+
+        return view('user_list', compact('users'));
+    }
 }

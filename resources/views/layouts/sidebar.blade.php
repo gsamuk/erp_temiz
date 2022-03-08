@@ -84,35 +84,36 @@
                 </li>
 
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.components')</span></li>
+                @if(Session::get('userData')->is_admin == 1)
+
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>Admin Yetki Alanı</span></li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMaps" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
-                        <i class="ri-map-pin-line"></i> <span>@lang('translation.maps')</span>
+                        <i class="ri-map-pin-line"></i> <span>Yönetim</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMaps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="maps-google" class="nav-link" data-key="t-google">
-                                    Google
+                                <a href="users" class="nav-link" data-key="t-google">
+                                    Kullanıcı Yönetimi
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="maps-vector" class="nav-link" data-key="t-vector">
-                                    Vector
+                                    Ayarlar
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="maps-leaflet" class="nav-link" data-key="t-leaflet">
-                                    Leaflet
-                                </a>
-                            </li>
+
                         </ul>
                     </div>
                 </li>
-
+                @endif
             </ul>
+
+
+
         </div>
         <!-- Sidebar -->
     </div>

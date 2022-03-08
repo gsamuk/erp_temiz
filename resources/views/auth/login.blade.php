@@ -56,7 +56,7 @@
                                     <div class="mb-3">
                                         <label for="user_name" class="form-label">Kullanıcı Adı & Kodu</label>
                                         <input type="text" class="form-control" id="user_name" name="user_name"
-                                            value="cemal" placeholder="Enter username">
+                                            value="{{Cookie::get('user_name')}}" placeholder="Enter username">
                                         @error('user_name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -70,8 +70,8 @@
                                         <div class="position-relative auth-pass-inputgroup mb-3">
                                             <input type="password"
                                                 class="form-control pe-5 @error('password') is-invalid @enderror"
-                                                name="password" value="123456" placeholder="Enter password"
-                                                id="password-input">
+                                                name="password" value="{{ Cookie::get('password') }}"
+                                                placeholder="Enter password" id="password-input">
                                             <button
                                                 class="btn btn-link position-absolute end-0 text-decoration-none text-muted top-0"
                                                 type="button" id="password-addon"><i
@@ -86,9 +86,16 @@
                                     </div>
 
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="auth-remember-check">
-                                        <label class="form-check-label" for="auth-remember-check">Remember me</label>
+                                        @if(Cookie::get('rememberme'))
+                                        <input class="form-check-input" type="checkbox" id="rememberme"
+                                            name="rememberme" checked>
+                                        @else
+                                        <input class="form-check-input" type="checkbox" id="rememberme"
+                                            name="rememberme">
+
+                                        @endif
+
+                                        <label class="form-check-label" for="auth-remember-check">Beni Hatırla</label>
                                     </div>
 
 

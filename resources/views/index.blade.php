@@ -6,7 +6,6 @@
 @slot('title') Starter @endslot
 @endcomponent
 
-
 Home
 
 @endsection

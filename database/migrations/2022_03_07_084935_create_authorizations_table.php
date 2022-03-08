@@ -21,6 +21,7 @@ class CreateAuthorizationsTable extends Migration
             $table->tinyInteger('sale_view')->default(0);
             $table->tinyInteger('purchase_approve')->default(0);
             $table->tinyInteger('sale_approve')->default(0);
+            $table->tinyInteger('is_admin')->default(0);
         });
 
         Authorizations::insert([
@@ -29,6 +30,15 @@ class CreateAuthorizationsTable extends Migration
             'sale_view' => 1,
             'purchase_approve' => 1,
             'sale_approve' => 1,
+            'is_admin' => 1,
+        ]);
+
+
+        Authorizations::insert([
+            'user_id' => 2,
+            'purchase_view' => 1,
+            'sale_view' => 1,
+            'purchase_approve' => 1,
         ]);
     }
 
