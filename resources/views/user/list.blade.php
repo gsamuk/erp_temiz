@@ -73,7 +73,7 @@
                                 <td>
 
                                     <div class="hstack gap-3 fs-15">
-                                        <a href="javascript:void(0);" class="link-primary"><i
+                                        <a href="user/{{ $user->id }}" class="link-primary"><i
                                                 class="ri-settings-4-line"></i></a>
                                         <a href="javascript:void(0);" class="link-danger"><i
                                                 class="ri-delete-bin-5-line"></i></a>

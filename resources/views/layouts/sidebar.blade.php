@@ -96,12 +96,12 @@
                     <div class="collapse menu-dropdown" id="sidebarMaps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="users" class="nav-link" data-key="t-google">
+                                <a href="{{ route('users'); }}" class="nav-link" data-key="t-google">
                                     Kullanıcı Yönetimi
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="maps-vector" class="nav-link" data-key="t-vector">
+                                <a href="#" class="nav-link" data-key="t-vector">
                                     Ayarlar
                                 </a>
                             </li>

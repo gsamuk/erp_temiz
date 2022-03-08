@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('logo_user')->nullable(true);
             $table->string('user_code')->nullable(true);
             $table->string('logo_password')->nullable(true);
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });
 
