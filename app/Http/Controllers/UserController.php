@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use App\Models\Users;
 
 
 class UserController extends Controller
@@ -11,7 +11,7 @@ class UserController extends Controller
 
     public function user($id)
     {
-        $user = User::where('users.id', $id)
+        $user = Users::where('users.id', $id)
             ->join('Authorizations', 'users.id', '=', 'authorizations.user_id')
             ->select(
                 'users.*',
@@ -35,7 +35,7 @@ class UserController extends Controller
 
         ]);
 
-        User::Where("id", $request->input("user_id"))
+        Users::Where("id", $request->input("user_id"))
             ->update([
                 'name' => $request->input("name"),
                 'surname' => $request->input("surname"),
@@ -49,17 +49,6 @@ class UserController extends Controller
 
     public function user_list()
     {
-        $users = User::join('Authorizations', 'users.id', '=', 'authorizations.user_id')
-            ->select(
-                'users.*',
-                'authorizations.purchase_view',
-                'authorizations.sale_view',
-                'authorizations.purchase_approve',
-                'authorizations.sale_approve',
-                'authorizations.is_admin'
-            )
-            ->get();
-
-        return view('user.list', compact('users'));
+        return view('user.list');
     }
 }
