@@ -27,7 +27,7 @@
                                 <img src="{{ URL::asset('assets/images/dark_logo.png') }}" alt="" height="39">
                             </a>
                         </div>
-                        <p class="fs-15 fw-medium mt-3">Zeberced Consration ERP</p>
+                        <p class="fs-15 fw-medium mt-3">Zeberced Ltd ERP</p>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,8 @@
 
 
                                     <div class="mt-4">
-                                        <button class="btn btn-success w-100" type="submit">Giriş Yap</button>
+                                        <button id="giris" class="btn btn-success w-100" type="submit">Giriş
+                                            Yap</button>
                                     </div>
 
 
@@ -129,7 +130,7 @@
                     <div class="text-center">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        </script> Zeberced ERP </p>
                     </div>
                 </div>
             </div>
@@ -140,8 +141,16 @@
 @endsection
 
 @section('script')
-<script src="assets/libs/particles.js/particles.js.min.js"></script>
-<script src="assets/js/pages/particles.app.js"></script>
-<script src="assets/js/pages/password-addon.init.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(function() {
+        $( "#giris" ).click(function() {
+            $(this).attr("disabled", true); 
+            $(this).html("Bekleyiniz..."); 
+    });
+});
+</script>
 
 @endsection

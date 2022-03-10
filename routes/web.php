@@ -12,6 +12,7 @@ Route::middleware([Kontrol::class])->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
     Route::post('profil_post', [App\Http\Controllers\UserController::class, 'profil_post'])->name('profil.post');
+    Route::post('password_change', [App\Http\Controllers\UserController::class, 'password_change'])->name('profil.password_change_post');
     Route::post('user_authorizations', [App\Http\Controllers\AuthorizationsController::class, 'set_authorizations'])->name('user.authorizations.post');
 
     Route::get('users', [App\Http\Controllers\UserController::class, 'user_list'])->name("users");

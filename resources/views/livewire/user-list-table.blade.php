@@ -29,10 +29,7 @@
                                     <th scope="col">Kulanıcı Adı</th>
                                     <th scope="col">Şifre</th>
                                     <th scope="col">Logo Kulanıcı</th>
-                                    <th scope="col">Satın Alma</th>
-                                    <th scope="col">Satış</th>
-                                    <th scope="col">Satın Alma Onay</th>
-                                    <th scope="col">Sartış Onay</th>
+                                    <th scope="col">Logo Şifre</th>
                                     <th scope="col">Yönetici</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -41,44 +38,25 @@
                                 @foreach ($users as $user)
                                 <tr>
                                     <th scope="row">{{ $user->id }}</th>
-                                    <td><b>{{ $user->name }} {{ $user->surname }}</b></td>
+                                    <td><a href="{{ route('user',$user->id) }}"><b>{{ $user->name }} {{ $user->surname
+                                                }}</b></a> </td>
                                     <td>{{ $user->user_name }}</td>
                                     <td>{{ $user->password }}</td>
                                     <td>{{ $user->logo_user }}</td>
-                                    <td>
-                                        @if ($user->purchase_view == 1)
-                                        <i class="ri-checkbox-circle-line align-middle text-success"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($user->sale_view == 1)
-                                        <i class="ri-checkbox-circle-line align-middle text-success"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($user->purchase_approve == 1)
-                                        <i class="ri-checkbox-circle-line align-middle text-success"></i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($user->sale_approve == 1)
-                                        <i class="ri-checkbox-circle-line align-middle text-success"></i>
-                                        @endif
-                                    </td>
+                                    <td>{{ $user->logo_password }}</td>
                                     <td>
                                         @if ($user->is_admin == 1)
                                         <i class="ri-checkbox-circle-line align-middle text-success"></i>
+                                        @else
+                                        <i class="ri-close-circle-fill  align-middle text-danger"></i>
                                         @endif
                                     </td>
                                     <td>
-
                                         <div class="hstack gap-3 fs-15">
-                                            <a href="user/{{ $user->id }}" class="link-primary"><i
+                                            <a href="{{ route('user',$user->id) }}" class="link-primary"><i
                                                     class="ri-settings-4-line"></i></a>
-                                            <a wire:click="remove({{ $user->id }})" class="link-danger"><i
-                                                    class="ri-delete-bin-5-line"></i></a>
-                                        </div>
 
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

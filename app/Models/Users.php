@@ -10,5 +10,5 @@ class Users extends Model
     use HasFactory;
     protected $table = "users";
 
-    protected $fillable = ['name', 'surname', 'user_name', 'password', 'email'];
+    protected $fillable = ['name', 'surname', 'user_name'];
 }
