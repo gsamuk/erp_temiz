@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Models\Login;
-
+use Exception;
 
 class LoginController extends Controller
 {
@@ -21,7 +21,6 @@ class LoginController extends Controller
 
     public function login_post(Request $request)
     {
-
         $request->validate([
             'user_name' => 'required',
             'password' => 'required',
@@ -31,8 +30,14 @@ class LoginController extends Controller
         $rememberme = $request->has('rememberme') ? true : false;
 
 
+        $active = Login::where('is_active', 0)->where('user_name', $user_name)->first();
+        if ($active) {
+            return redirect("login")->with('message', 'Bu Kullanıcı Hesabı Kapalı! Eğer bir sorun olduğunu düşünüyorsanız sistem yöneticisi iletişime geçiniz.');
+        }
+
         $user = Login::where('users.user_name', $user_name)
             ->where('users.password', $password)
+            ->where('users.is_active', 1)
             ->join('Authorizations', 'users.id', '=', 'authorizations.user_id')
             ->select(
                 'users.*',
@@ -59,27 +64,32 @@ class LoginController extends Controller
             }
 
             if ($user->logo_user && $user->logo_password) {
+                try {
+                    $logo = Http::asForm()->post(env('LOGO_API_URL') . '/token', [
+                        'username' => $user->logo_user,
+                        'password' => $user->logo_password,
+                        'firmno' => env('LOGO_DEFAULT_FIRM_NO'),
+                        'grant_type' => 'password',
 
-                $logo = Http::asForm()->post(env('LOGO_API_URL') . '/token', [
-                    'username' => $user->logo_user,
-                    'password' => $user->logo_password,
-                    'firmno' => env('LOGO_DEFAULT_FIRM_NO'),
-                    'grant_type' => 'password',
+                        'headers' => [
+                            'Authorization' => 'Basic ' . env('LOGO_API_KEY'),
+                            'Accept' => 'application/json',
+                        ]
+                    ]);
 
-                    'headers' => [
-                        'Authorization' => 'Basic ' . env('LOGO_API_KEY'),
-                        'Accept' => 'application/json',
-                    ]
-                ]);
+                    if ($logo) {
 
-                if ($logo) {
-
-                    if ($logo->status() == 200) {
-                        $request->session()->put('LogoLogin', true);
-                        $request->session()->put('LogoData', $logo);
-                    } elseif ($logo->status() == 400) {
-                        $request->session()->put('LogoLogin', false);
+                        if ($logo->status() == 200) {
+                            $request->session()->put('LogoLogin', true);
+                            $request->session()->put('LogoData', $logo);
+                        } elseif ($logo->status() == 400) {
+                            $request->session()->put('LogoLogin', false);
+                        }
                     }
+                } catch (Exception $e) {
+                    //dd($e);
+                    $request->session()->put('LogoLogin', false);
+                    return redirect()->intended('/')->withSuccess('Signed in');
                 }
             } else {
                 $request->session()->put('LogoLogin', false);

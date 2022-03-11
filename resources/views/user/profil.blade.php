@@ -8,6 +8,9 @@
 <div class="row">
     <!--end col-->
     <div class="col-xxl-6">
+        @foreach ($errors->all() as $error)
+        <p class="text-danger">{{ $error }}</p>
+        @endforeach
         <div class="card ">
             <div class="card-header">
                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -39,14 +42,6 @@
                             </div>
                         </div>
                         @endif
-
-
-                        @foreach ($errors->all() as $error)
-
-                        <p class="text-danger">{{ $error }}</p>
-
-                        @endforeach
-
                         <form action="{{ route('profil.post') }}" method="POST">
                             @csrf
                             <input type="hidden" value="{{ $id }}" name="user_id">
@@ -108,15 +103,16 @@
 
 
 
-
+                                @if(Session::get('userData')->is_admin == 1)
                                 <div class="col-lg-12">
                                     <input type="checkbox" name="is_active" data-plugin="switchery" data-color="#1bb99a"
                                         {{ $is_active ? 'checked' : '' }}>
                                     <label class="form-check-label" for="formCheck6">
-                                        Kulanıcı Aktif / Pasif (İşaretli ise Aktif)
+                                        Kullanıcı Aktif <small>( Pasif duruma getirmek için işareti kaldırıp
+                                            güncelleyin)</small>
                                     </label>
                                 </div>
-
+                                @endif
 
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
@@ -131,37 +127,9 @@
                     <!--end tab-pane-->
                     <div class="tab-pane" id="changePassword" role="tabpanel">
 
-                        <form action="{{ route('profil.password_change_post') }}" method="POST">
-                            @csrf
+                        @livewire('user.password-change', ["user_id" => $id] )
 
-                            <input type="hidden" value="{{ $id }}" name="user_id">
-                            <div class="row g-2">
-                                <!--end col-->
-                                <div class="col-lg-4">
-                                    <div>
-                                        <label for="newpasswordInput" class="form-label">Şifre *</label>
-                                        <input type="password" class="form-control" name="password">
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-4">
-                                    <div>
-                                        <label for="confirmpasswordInput" class="form-label">Şifre Tekrar *</label>
-                                        <input type="password" class="form-control" name="password_confirm">
-                                    </div>
-                                </div>
-                                <!--end col-->
 
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="text-start">
-                                        <button type="submit" class="btn btn-success">Değiştir</button>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                            </div>
-                            <!--end row-->
-                        </form>
 
                     </div>
                     <!--end tab-pane-->
@@ -171,10 +139,10 @@
         </div>
     </div>
     @if(Session::get('userData')->is_admin == 1)
-    <div class="col-xxl-4">
+    <div class="col-xxl-6">
         <div class="card ">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Kullanıcı Yetkileri</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Kullanıcı Yetki Tanımları</h4>
 
             </div>
             <div class="card-body ">
@@ -219,7 +187,7 @@
                         <input type="checkbox" name="is_admin" data-plugin="switchery" data-color="#1bb99a" {{ $is_admin
                             ? 'checked' : '' }}>
                         <label class="form-check-label" for="formCheck6">
-                            Admin Yetkisi
+                            Admin Yetkisine Sahiptir
                         </label>
                     </div>
 

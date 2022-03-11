@@ -36,7 +36,6 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="card mt-4">
-
                         <div class="card-body p-4">
                             <div class="mt-2 text-center">
                                 <h5 class="text-primary">Hoşgeldiniz !!!</h5>
@@ -92,9 +91,7 @@
                                         @else
                                         <input class="form-check-input" type="checkbox" id="rememberme"
                                             name="rememberme">
-
                                         @endif
-
                                         <label class="form-check-label" for="auth-remember-check">Beni Hatırla</label>
                                     </div>
 
@@ -111,6 +108,10 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
+
+                    <div class="alert alert-info   alert-borderless" role="alert">
+                        Eğer şifrenizi unuttuysanız sistem yönetici ile iletişime geçiniz.
+                    </div>
 
 
 
@@ -141,6 +142,9 @@
 @endsection
 
 @section('script')
+<script src="assets/libs/particles.js/particles.js.min.js"></script>
+<script src="assets/js/pages/particles.app.js"></script>
+<script src="assets/js/pages/password-addon.init.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>

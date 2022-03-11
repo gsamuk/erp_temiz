@@ -15,7 +15,7 @@
 @section('script')
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 <script type="text/javascript">
-    document.addEventListener('livewire:load', () => {   
+  document.addEventListener('livewire:load', () => {   
       window.livewire.on('CloseWin', () => {
             console.log("CloseWin");   
       });

@@ -60,7 +60,6 @@ class UserController extends Controller
 
     public function password_change(Request $request)
     {
-
         $request->validate(
             [
                 'password'         => 'required',
