@@ -56,13 +56,21 @@
                                             <a href="{{ route('user',$user->id) }}" class="link-primary"><i
                                                     class="ri-settings-4-line"></i></a>
 
+                                            @if( Session::get('userData')->id != $user->id)
 
-                                            <a href="#" wire:click="remove({{ $user->id }});" class="link-primary">
-                                                <i class="ri-delete-bin-fill align-bottom text-muted"></i>
-                                            </a>
+                                            @if($confirming===$user->id)
+                                            <button wire:click="remove({{ $user->id }})"
+                                                class="btn btn-soft-dark btn-sm ">Emin
+                                                misin?</button>
+                                            @else
+                                            <button wire:click="confirmDelete({{ $user->id }})"
+                                                class="btn btn-soft-danger btn-sm ">Sil</button>
+                                            @endif
 
 
-
+                                            @else
+                                            <small>You</small>
+                                            @endif
 
                                         </div>
                                     </td>

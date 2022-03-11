@@ -10,6 +10,7 @@ class UserListTable extends Component
 {
     public $name, $surname, $user_name, $password, $email, $logo_user, $logo_password;
     public $users;
+    public $confirming;
 
     protected $rules = [
         'name' => 'required',
@@ -46,6 +47,10 @@ class UserListTable extends Component
         $this->getAll();
     }
 
+    public function confirmDelete($id)
+    {
+        $this->confirming = $id;
+    }
 
     public function store()
     {
@@ -73,16 +78,18 @@ class UserListTable extends Component
 
     public function getAll()
     {
-        $user_list = Users::join('Authorizations', 'users.id', '=', 'authorizations.user_id')
-            ->select(
-                'users.*',
-                'authorizations.purchase_view',
-                'authorizations.sale_view',
-                'authorizations.purchase_approve',
-                'authorizations.sale_approve',
-                'authorizations.is_admin'
-            )
-            ->get();
-        $this->users = $user_list;
+        if ($this->users == null) {
+            $user_list = Users::join('Authorizations', 'users.id', '=', 'authorizations.user_id')
+                ->select(
+                    'users.*',
+                    'authorizations.purchase_view',
+                    'authorizations.sale_view',
+                    'authorizations.purchase_approve',
+                    'authorizations.sale_approve',
+                    'authorizations.is_admin'
+                )
+                ->get();
+            $this->users = $user_list;
+        }
     }
 }
