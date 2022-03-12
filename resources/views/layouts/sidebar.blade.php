@@ -8,7 +8,7 @@
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="" height="17">
+                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="" height="29">
             </span>
         </a>
         <!-- Light Logo-->
@@ -17,7 +17,7 @@
                 <img src="{{ URL::asset('assets/images/logo-sm.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('assets/images/logo-light.png') }}" alt="" height="17">
+                <img src="{{ URL::asset('assets/images/dark_logo.png') }}" alt="" height="29">
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -35,7 +35,7 @@
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="/">
                         <i class="mdi mdi-puzzle-outline"></i> <span>DashBoard</span>
                     </a>
                 </li>
@@ -45,29 +45,34 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m1" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
-                        <i class="ri-map-pin-line"></i> <span>Satın Alma</span>
+                        <i class="ri-map-pin-line"></i> <span>Satınalma</span>
                     </a>
                     <div class="collapse menu-dropdown" id="m1">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Satın Alma Oluştur
+                                    Siparişler
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Satın Onay Durum
+                                    İrsaliyeler
                                 </a>
                             </li>
 
-
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Faturalar
+                                </a>
+                            </li>
                             @if(Session::get('userData')->purchase_approve == 1)
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="#">
-                                    <span>Purchase Approve</span>
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Onay
                                 </a>
                             </li>
                             @endif
+
 
 
                         </ul>
@@ -90,18 +95,25 @@
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Satış Oluştur
+                                    Siparişler
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Satış Onay Durum
+                                    İrsaliyeler
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Faturalar
+                                </a>
+                            </li>
+
                             @if(Session::get('userData')->sale_approve == 1)
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#">
-                                    <span>Sale Approve</span>
+                                    <span>Onay</span>
                                 </a>
                             </li>
                             @endif

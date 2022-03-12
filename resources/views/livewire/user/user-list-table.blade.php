@@ -21,7 +21,7 @@
                     </div>
                     @endif
                     <div class="table-responsive">
-                        <table class="table table-striped table-nowrap align-middle mb-0">
+                        <table class="table table-sm table-striped table-nowrap align-middle mb-0">
                             <thead class="table-light text-muted">
                                 <tr>
                                     <th scope="col">ID</th>
