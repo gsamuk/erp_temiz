@@ -17,4 +17,12 @@ Route::middleware([Kontrol::class])->group(function () {
 
     Route::get('users', [App\Http\Controllers\UserController::class, 'user_list'])->name("users");
     Route::get('user/{id}', [App\Http\Controllers\UserController::class, 'user'])->name('user');
+
+    Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
+
+
+    Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');
+    Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
+    Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
+    Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
 });

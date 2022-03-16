@@ -90,14 +90,14 @@ class LoginPage extends Component
 
             if ($user->logo_user && $user->logo_password) {
                 try {
-                    $logo = Http::asForm()->post(env('LOGO_API_URL') . '/token', [
+                    $logo = Http::asForm()->post('http://65.21.157.111:32001/api/v1/token', [
                         'username' => $user->logo_user,
                         'password' => $user->logo_password,
-                        'firmno' => env('LOGO_DEFAULT_FIRM_NO'),
+                        'firmno' => 1,
                         'grant_type' => 'password',
 
                         'headers' => [
-                            'Authorization' => 'Basic ' . env('LOGO_API_KEY'),
+                            'Authorization' => 'Basic k8TM58bDD6HEgzEuI9WOxf/gZai+NLuWMiobQp8/YwQ=',
                             'Accept' => 'application/json',
                         ]
                     ]);
@@ -112,6 +112,7 @@ class LoginPage extends Component
                         }
                     }
                 } catch (Exception $e) {
+                    dd($e);
                     $request->session()->put('LogoLogin', false);
                     return redirect()->to('/');
                 }

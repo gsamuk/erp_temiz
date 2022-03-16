@@ -8,6 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LogoDb extends Model
 {
     protected $connection = 'logo_sqlsrv';
-    protected $table = 'LG_001_ITEMS';
-    protected $primaryKey = 'LOGICALREF';
+    protected $table = 'LNX_STD_1_001_01_ITEMS';
 }

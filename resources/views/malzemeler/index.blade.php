@@ -4,10 +4,10 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') Zeberced ERP @endslot
-@slot('title') Dashboard @endslot
+@slot('title') Malzemeler @endslot
 @endcomponent
 
-@livewire('dashboard',['d1' => 55, 'd2'=>56 ])
+@livewire('malzemeler.index')
 
 
 @endsection

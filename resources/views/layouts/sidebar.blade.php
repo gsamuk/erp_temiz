@@ -50,24 +50,24 @@
                     <div class="collapse menu-dropdown" id="m1">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
+                                <a href="{{ route('satinalma.siparis') }}" class="nav-link" data-key="t-google">
                                     Siparişler
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
+                                <a href="{{ route('satinalma.irsaliye') }}" class="nav-link" data-key="t-google">
                                     İrsaliyeler
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
+                                <a href="{{ route('satinalma.fatura') }}" class="nav-link" data-key="t-google">
                                     Faturalar
                                 </a>
                             </li>
                             @if(Session::get('userData')->purchase_approve == 1)
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
+                                <a href="{{ route('satinalma.onay') }}" class="nav-link" data-key="t-google">
                                     Onay
                                 </a>
                             </li>
@@ -121,6 +121,33 @@
                     </div>
                 </li>
                 @endif
+
+
+
+                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarMaps">
+                        <i class="ri-map-pin-line"></i> <span>Malzemeler </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="m3">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
+                                    Liste
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Rapor
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                @endif
+
+
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/signout">
