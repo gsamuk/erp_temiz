@@ -12,14 +12,25 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search = '';
-
+    public $code = '';
+    public $tur = '';
+    // https://www.itsolutionstuff.com/post/laravel-livewire-add-or-remove-dynamically-input-fields-exampleexample.html
+    // https://stackoverflow.com/questions/59677821/laravel-how-to-specify-rows-for-dynamic-input-fields-based-on-condition
     public function render()
     {
+
+        $data = LogoDb::where('NAME', 'like', '%' . $this->search . '%')
+            ->when($this->tur, function ($query) {
+                return $query->where('CARDTYPE', $this->tur);
+            })
+            ->when($this->code, function ($query) {
+                return $query->where('CODE', $this->code);
+            })
+            ->orderByDesc('NAME')
+            ->paginate(10);
+
         return view('livewire.malzemeler.index', [
-            'items' => LogoDb::where('MALZEME_ADI', 'like', '%' . $this->search . '%')
-                ->orWhere('MALZEME_KODU', 'like', '%' . $this->search . '%')
-                ->orderByDesc('MALZEME_ADI')
-                ->paginate(15),
+            'items' => $data,
         ]);
     }
 }
