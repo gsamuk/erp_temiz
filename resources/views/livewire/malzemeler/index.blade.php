@@ -2,13 +2,6 @@
     <div class="row">
 
         <div class="col-xxl-12">
-
-
-
-
-
-        </div>
-        <div class="col-xxl-12">
             <div class="card" id="companyList">
                 <div class="card-header">
                     <div class="row g-2">
@@ -29,6 +22,7 @@
                         </div>
 
                         <div class="col-md-3">
+
                             <select class="form-control" wire:model="tur">
                                 <option value="" selected>Hepsi</option>
                                 <option value="1">(TM) Ticari Mal</option>
@@ -40,14 +34,19 @@
                                 <option value="13">(TK) Tüketim Malı</option>
                                 <option value="20">(MS) Malzeme Sınıfı (Genel)</option>
                                 <option value="21">(MT) Malzeme Sınıfı (Tablolu)</option>
-
                             </select>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            {{ $line }}
                         </div>
 
                     </div>
 
                 </div>
                 <div class="card-body">
+
                     <div>
                         <div class="table-responsive table-card mb-3">
                             <table class="table table-sm  align-middle table-nowrap mb-0" id="itemTable"

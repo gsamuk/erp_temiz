@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-12">
         <div class="card my-3">
             <div class="card-body">
                 <form>
@@ -9,7 +9,7 @@
 
                         <div class="col-12">
                             <!-- Small Tables -->
-                            <table class="table table-sm  ">
+                            <table class="table table-sm">
 
                                 <thead>
                                     <tr>
@@ -37,13 +37,16 @@
 
                                         <td>
                                             <div class="input-group input-group-sm">
-                                                <input type="text" class="form-control" wire:model="kod.0">
+                                                <input type="text" class="form-control" wire:model="kod.0"
+                                                    wire:click="setLine(0)" data-bs-toggle="modal"
+                                                    data-bs-target="#malzemeModal">
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="input-group input-group-sm">
-                                                <input type="text" class="form-control" wire:model="aciklama.0">
+                                                <input type="text" class="form-control" wire:model="aciklama.0"
+                                                    data-bs-toggle="modal" data-bs-target="#malzemeModal">
                                             </div>
                                         </td>
 
@@ -68,15 +71,11 @@
                                             </div>
                                         </td>
 
-
-
                                         <td>
                                         </td>
                                     </tr>
                                     @foreach ($inputs as $key => $value)
                                     <tr>
-
-
                                         <th scope="row"> {{ $value}} </th>
                                         <td>
                                             <div class="input-group input-group-sm">
@@ -90,15 +89,16 @@
                                         <td>
                                             <div class="input-group input-group-sm">
                                                 <input type="text" class="form-control border-dashed"
-                                                    wire:model="kod.{{ $value }}">
+                                                    wire:click="setLine({{ $value }})" wire:model="kod.{{ $value }}"
+                                                    data-bs-toggle="modal" data-bs-target="#malzemeModal">
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="input-group input-group-sm">
                                                 <input type="text" class="form-control border-dashed"
-                                                    wire:model="aciklama.{{ $value }}"
-                                                    wire:click.prevent="$emit('showModal', {{ $i }})">
+                                                    wire:model="aciklama.{{ $value }}" data-bs-toggle="modal"
+                                                    data-bs-target="#malzemeModal">
                                             </div>
                                         </td>
 
@@ -125,23 +125,14 @@
                                             </div>
                                         </td>
 
-
-
                                         <td>
                                             <button class="btn btn-sm btn-light"
                                                 wire:click.prevent="remove({{$key}})"><i
                                                     class="mdi mdi-delete"></i></button>
 
                                         </td>
-
-
-
                                     </tr>
                                     @endforeach
-
-
-
-
 
                                 </tbody>
                             </table>
@@ -154,7 +145,6 @@
                         <div class="col-12 ps-0">
                             <button class="btn btn-primary mb-3 position-absolute top-0 end-0"
                                 wire:click.prevent="add({{$i}})"><i class="mdi mdi-plus"></i></button>
-
                             <button class="btn btn-success mb-3 "> <i class="mdi mdi-content-save"></i>
                                 Save</button>
                         </div>
@@ -164,3 +154,15 @@
         </div>
     </div>
 </div>
+
+
+<div id="malzemeModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                @livewire('malzemeler.index')
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

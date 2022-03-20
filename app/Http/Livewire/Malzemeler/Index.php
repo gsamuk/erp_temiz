@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Malzemeler;
 use App\Models\LogoDb;
 use Livewire\Component;
 use Livewire\WithPagination;
+use PhpParser\Node\Expr\FuncCall;
 
 class Index extends Component
 {
@@ -14,11 +15,18 @@ class Index extends Component
     public $search = '';
     public $code = '';
     public $tur = '';
-    // https://www.itsolutionstuff.com/post/laravel-livewire-add-or-remove-dynamically-input-fields-exampleexample.html
-    // https://stackoverflow.com/questions/59677821/laravel-how-to-specify-rows-for-dynamic-input-fields-based-on-condition
+    public $line = 0;
+
+    protected $listener =  ['activeLine' => 'setLine'];
+
+    public function setline()
+    {
+        dd();
+        $this->line = 10;
+    }
+
     public function render()
     {
-
         $data = LogoDb::where('NAME', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
                 return $query->where('CARDTYPE', $this->tur);
@@ -30,7 +38,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.malzemeler.index', [
-            'items' => $data,
+            'items' => $data
         ]);
     }
 }
