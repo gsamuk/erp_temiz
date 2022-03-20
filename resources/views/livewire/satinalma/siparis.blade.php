@@ -21,7 +21,7 @@
                                             <th scope="col">Miktar</th>
                                             <th scope="col">Birim</th>
                                             <th scope="col">Birim Fiyat</th>
-                                            <th scope="col"></th>
+                                            <th scope="col">-</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -39,7 +39,7 @@
                                             <td>
                                                 <div class="input-group input-group-sm">
                                                     <input type="text" class="form-control" wire:model="kod.0"
-                                                        wire:click="$emit('setLine',0)" data-bs-toggle="modal"
+                                                        wire:click.prevent="$emit('setLine',0)" data-bs-toggle="modal"
                                                         data-bs-target="#malzemeModal">
                                                 </div>
                                             </td>
@@ -100,6 +100,7 @@
                                             <td>
                                                 <div class="input-group input-group-sm">
                                                     <input type="text" class="form-control border-dashed"
+                                                        wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
                                                         wire:model="aciklama.{{ $value }}" data-bs-toggle="modal"
                                                         data-bs-target="#malzemeModal">
                                                 </div>
@@ -160,13 +161,11 @@
 </div>
 
 <div>
-    <div id="malzemeModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
+    <div id="malzemeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-body">
-                    @livewire('malzemeler.index')
-                </div>
+                @livewire('malzemeler.index')
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

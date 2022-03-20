@@ -5,6 +5,12 @@
             <div class="card" id="companyList">
                 <div class="card-header">
                     <div class="row g-2">
+                        <div class="col-md-2">
+                            <div class="search-box">
+                                <input type="text" class="form-control search" wire:model="code" placeholder="Kod Ara">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
 
                         <div class="col-md-3">
                             <div class="search-box">
@@ -14,12 +20,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
-                            <div class="search-box">
-                                <input type="text" class="form-control search" wire:model="code" placeholder="Kod Ara">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
+
 
                         <div class="col-md-3">
 
@@ -59,6 +60,7 @@
                                         <th class="sort" data-sort="kod" scope="col">KOD</th>
                                         <th class="sort" data-sort="name" scope="col">MALZEME ADI</th>
                                         <th class="sort" data-sort="grp" scope="col">GRUP KODU</th>
+                                        <th class="sort" data-sort="tool" scope="col"></th>
 
                                     </tr>
                                 </thead>
@@ -71,11 +73,11 @@
                                         <td class="owner">{{ $item->NAME }}</td>
                                         <td class="owner">{{ $item->STGRPCODE }}</td>
                                         <td class="owner">
-                                            <button wire:click="addItem({{ $line }}, {{ $item->LOGICALREF }}  )"
+                                            <button wire:click.prevent="addItem({{ $line }}, {{ $item->LOGICALREF }} )"
                                                 class="btn btn-sm btn-soft-secondary fw-medium"><i
-                                                    class="ri-add-fill align-bottom"></i> Ekle</button>
+                                                    class="ri-add-fill align-bottom"></i>
+                                                Ekle</button>
                                         </td>
-                                        <th class="sort" data-sort="btn" scope="col"></th>
                                     </tr>
                                     @endforeach
                                 </tbody>

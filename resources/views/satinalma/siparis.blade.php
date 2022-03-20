@@ -15,5 +15,12 @@
 
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('malzemeModal'), {keyboard: false}).hide();
+    window.addEventListener('CloseModal', event => {           
+        myModal.hide();
+    });
+    
+</script>
 
 @endsection

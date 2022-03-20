@@ -21,6 +21,7 @@ class Siparis extends Component
         $item = LogoDb::where('LOGICALREF', $d['ref'])->first();
         $this->kod[$d['line']] = $item->CODE;
         $this->aciklama[$d['line']] = $item->NAME;
+        $this->dispatchBrowserEvent('CloseModal');
     }
 
 
