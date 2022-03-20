@@ -53,7 +53,7 @@
                                 wire:loading.class="opacity-50">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="sort" data-sort="btn" scope="col"></th>
+
                                         <th class="sort" data-sort="ref" scope="col">REF</th>
                                         <th class="sort" data-sort="tur" scope="col">Tür</th>
                                         <th class="sort" data-sort="kod" scope="col">KOD</th>
@@ -65,16 +65,17 @@
                                 <tbody class="list form-check-all">
                                     @foreach ($items as $item)
                                     <tr>
-                                        <td class="owner">
-                                            <button class="btn btn-sm btn-soft-secondary fw-medium"><i
-                                                    class="ri-add-fill align-bottom"></i> Ekle</button>
-                                        </td>
                                         <td class="owner">{{ $item->LOGICALREF }}</td>
                                         <td class="owner">{{ $item->CARDTYPE }}</td>
                                         <td class="owner">{{ $item->CODE }}</td>
                                         <td class="owner">{{ $item->NAME }}</td>
                                         <td class="owner">{{ $item->STGRPCODE }}</td>
-
+                                        <td class="owner">
+                                            <button wire:click="addItem({{ $line }}, {{ $item->LOGICALREF }}  )"
+                                                class="btn btn-sm btn-soft-secondary fw-medium"><i
+                                                    class="ri-add-fill align-bottom"></i> Ekle</button>
+                                        </td>
+                                        <th class="sort" data-sort="btn" scope="col"></th>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -85,7 +86,6 @@
                             {{ $items->links() }}
                         </div>
                     </div>
-
 
                 </div>
             </div>

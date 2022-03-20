@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Malzemeler;
 use App\Models\LogoDb;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpParser\Node\Expr\FuncCall;
+
 
 class Index extends Component
 {
@@ -17,12 +17,17 @@ class Index extends Component
     public $tur = '';
     public $line = 0;
 
-    protected $listener =  ['activeLine' => 'setLine'];
+    protected $listeners  = ['setLine'];
 
-    public function setline()
+    public function setLine($id)
     {
-        dd();
-        $this->line = 10;
+        $this->line = $id;
+    }
+
+
+    public function addItem($line, $ref)
+    {
+        $this->emit('getItem', ['line' => $line, 'ref' => $ref]);
     }
 
     public function render()

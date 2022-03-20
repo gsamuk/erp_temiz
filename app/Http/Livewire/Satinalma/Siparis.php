@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Satinalma;
 
 use Livewire\Component;
+use App\Models\LogoDb;
 
 class Siparis extends Component
 {
@@ -11,6 +12,17 @@ class Siparis extends Component
     public $updateMode = false;
     public $inputs = [];
     public $i = 1;
+
+    protected $listeners = ["getItem"];
+
+
+    public function getItem($d)
+    {
+        $item = LogoDb::where('LOGICALREF', $d['ref'])->first();
+        $this->kod[$d['line']] = $item->CODE;
+        $this->aciklama[$d['line']] = $item->NAME;
+    }
+
 
     public function add($i)
     {
@@ -22,12 +34,6 @@ class Siparis extends Component
     public function remove($i)
     {
         unset($this->inputs[$i]);
-    }
-
-    public function setLine($id)
-    {
-
-        $this->emitTo("Index", "activeLine");
     }
 
 
