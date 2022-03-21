@@ -8,7 +8,7 @@ use App\Models\LogoDb;
 class Siparis extends Component
 {
 
-    public $tip, $kod, $aciklama, $miktar, $birim, $birim_fiyat;
+    public $tip, $kod, $aciklama, $miktar, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar;
     public $updateMode = false;
     public $inputs = [];
     public $i = 1;

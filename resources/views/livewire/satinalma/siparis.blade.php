@@ -163,6 +163,9 @@
                                                     <th scope="col">Miktar</th>
                                                     <th scope="col">Birim</th>
                                                     <th scope="col">Birim Fiyat</th>
+                                                    <th scope="col">Kdv</th>
+                                                    <th scope="col">Tutar</th>
+                                                    <th scope="col">Net Tutar</th>
                                                     <th scope="col"></th>
                                                     <th scope="col"></th>
                                                 </tr>
@@ -216,6 +219,27 @@
                                                         <div class="input-group input-group-sm">
                                                             <input type="number" class="form-control rounded-0"
                                                                 wire:model="birim_fiyat.0">
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control rounded-0"
+                                                                wire:model="kdv.0">
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control rounded-0"
+                                                                wire:model="tutar.0">
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control rounded-0"
+                                                                wire:model="net_tutar.0">
                                                         </div>
                                                     </td>
 
@@ -275,6 +299,29 @@
                                                         <div class="input-group input-group-sm">
                                                             <input type="number" class="form-control border-dashed "
                                                                 wire:model="birim_fiyat.{{ $value }}">
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control border-dashed "
+                                                                wire:model="kdv.{{ $value }}">
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control border-dashed "
+                                                                wire:model="tutar.{{ $value }}">
+                                                        </div>
+                                                    </td>
+
+
+                                                    <td>
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="number" class="form-control border-dashed "
+                                                                wire:model="net_tutar.{{ $value }}">
                                                         </div>
                                                     </td>
 
