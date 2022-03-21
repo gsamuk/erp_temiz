@@ -1,1 +1,58 @@
-(()=>{new Swiper(".images-menu",{slidesPerView:"auto",spaceBetween:10,pagination:{el:".swiper-pagination",clickable:!0}}),GLightbox({selector:".image-popup",title:!1});var e=document.querySelector("#loadmore"),t=3;e.addEventListener("click",(function(e){for(var r=[].concat(function(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)}(document.querySelectorAll(".list .list-element"))),n=t;n<t+3;n++)r[n]&&(r[n].style.display="block");(t+=3)>=r.length&&(event.target.style.display="none")}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!**************************************************!*\
+  !*** ./resources/js/pages/search-result.init.js ***!
+  \**************************************************/
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: search-result init js
+*/
+// Images Slider menu
+var swiper = new Swiper(".images-menu", {
+  slidesPerView: 'auto',
+  spaceBetween: 10,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true
+  }
+}); // GLightbox Popup
+
+var lightbox = GLightbox({
+  selector: '.image-popup',
+  title: false
+}); // loadmore Js
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+var loadmore = document.querySelector("#loadmore");
+var currentItems = 3;
+loadmore.addEventListener("click", function (e) {
+  var elementList = [].concat(_toConsumableArray(document.querySelectorAll(".list .list-element")));
+
+  for (var i = currentItems; i < currentItems + 3; i++) {
+    if (elementList[i]) {
+      elementList[i].style.display = "block";
+    }
+  }
+
+  currentItems += 3; // Load more button will be hidden after list fully loaded
+
+  if (currentItems >= elementList.length) {
+    event.target.style.display = "none";
+  }
+});
+/******/ })()
+;

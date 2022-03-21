@@ -1,1 +1,325 @@
-(()=>{var e;function t(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function r(e){if(null!==document.getElementById(e)){var t=document.getElementById(e).getAttribute("data-colors");return(t=JSON.parse(t)).map((function(e){var t=e.replace(" ","");if(-1===t.indexOf(",")){var r=getComputedStyle(document.documentElement).getPropertyValue(t);return r||t}var a=e.split(",");if(2==a.length){var o=getComputedStyle(document.documentElement).getPropertyValue(a[0]);return o="rgba("+o+","+a[1]+")"}return t}))}}var a={series:[44,55,13,43,22],chart:{height:300,type:"pie"},labels:["Team A","Team B","Team C","Team D","Team E"],legend:{position:"bottom"},dataLabels:{dropShadow:{enabled:!1}},colors:r("simple_pie_chart")};new ApexCharts(document.querySelector("#simple_pie_chart"),a).render();a={series:[44,55,41,17,15],chart:{height:300,type:"donut"},legend:{position:"bottom"},dataLabels:{dropShadow:{enabled:!1}},colors:r("simple_dount_chart")};new ApexCharts(document.querySelector("#simple_dount_chart"),a).render();a={series:[44,55,13,33],chart:{height:280,type:"donut"},dataLabels:{enabled:!1},legend:{position:"bottom"},colors:r("updating_donut_chart")};var o=new ApexCharts(document.querySelector("#updating_donut_chart"),a);o.render(),document.querySelector("#randomize").addEventListener("click",(function(){o.updateSeries(o.w.globals.series.map((function(){return Math.floor(100*Math.random())+1})))})),document.querySelector("#add").addEventListener("click",(function(){var e;o.updateSeries(((e=o.w.globals.series.slice()).push(Math.floor(100*Math.random())+1),e))})),document.querySelector("#remove").addEventListener("click",(function(){var e;o.updateSeries(((e=o.w.globals.series.slice()).pop(),e))})),document.querySelector("#reset").addEventListener("click",(function(){o.updateSeries(a.series)}));var n=r("gradient_chart");t(e={series:[44,55,41,17,15],chart:{height:300,type:"donut"},plotOptions:{pie:{startAngle:-90,endAngle:270}},dataLabels:{enabled:!1},fill:{type:"gradient"},legend:{formatter:function(e,t){return e+" - "+t.w.globals.series[t.seriesIndex]}},title:{text:"Gradient Donut with custom Start-angle",style:{fontWeight:500}}},"legend",{position:"bottom"}),t(e,"colors",n),a=e;new ApexCharts(document.querySelector("#gradient_chart"),a).render();a={series:[44,55,41,17,15],chart:{height:300,type:"donut",dropShadow:{enabled:!0,color:"#111",top:-1,left:3,blur:3,opacity:.2}},stroke:{width:0},plotOptions:{pie:{donut:{labels:{show:!0,total:{showAlways:!0,show:!0}}}}},labels:["Comedy","Action","SciFi","Drama","Horror"],dataLabels:{dropShadow:{blur:3,opacity:.8}},fill:{type:"pattern",opacity:1,pattern:{enabled:!0,style:["verticalLines","squares","horizontalLines","circles","slantedLines"]}},states:{hover:{filter:"none"}},theme:{palette:"palette2"},title:{text:"Favourite Movie Type",style:{fontWeight:500}},legend:{position:"bottom"},colors:r("pattern_chart")};new ApexCharts(document.querySelector("#pattern_chart"),a).render();r("image_pie_chart"),a={series:[44,33,54,45],chart:{height:300,type:"pie"},colors:["#93C3EE","#E5C6A0","#669DB5","#94A74A"],fill:{type:"image",opacity:.85,image:{src:["./assets/images/small/img-1.jpg","./assets/images/small/img-2.jpg","./assets/images/small/img-3.jpg","./assets/images/small/img-4.jpg"],width:25,imagedHeight:25}},stroke:{width:4},dataLabels:{enabled:!0,style:{colors:["#111"]},background:{enabled:!0,foreColor:"#fff",borderWidth:0}},legend:{position:"bottom"}};new ApexCharts(document.querySelector("#image_pie_chart"),a).render();a={series:[25,15,44,55,41,17],chart:{height:300,type:"pie"},labels:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],theme:{monochrome:{enabled:!0,color:"#405189",shadeTo:"light",shadeIntensity:.6}},plotOptions:{pie:{dataLabels:{offset:-5}}},title:{text:"Monochrome Pie",style:{fontWeight:500}},dataLabels:{formatter:function(e,t){return[t.w.globals.labels[t.seriesIndex],e.toFixed(1)+"%"]},dropShadow:{enabled:!1}},legend:{show:!1}};new ApexCharts(document.querySelector("#monochrome_pie_chart"),a).render()})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!***************************************************!*\
+  !*** ./resources/js/pages/apexcharts-pie.init.js ***!
+  \***************************************************/
+var _options;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: Pie Chart init js
+*/
+// get colors array from the string
+function getChartColorsArray(chartId) {
+  if (document.getElementById(chartId) !== null) {
+    var colors = document.getElementById(chartId).getAttribute("data-colors");
+    colors = JSON.parse(colors);
+    return colors.map(function (value) {
+      var newValue = value.replace(" ", "");
+
+      if (newValue.indexOf(",") === -1) {
+        var color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
+        if (color) return color;else return newValue;
+        ;
+      } else {
+        var val = value.split(',');
+
+        if (val.length == 2) {
+          var rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
+          rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
+          return rgbaColor;
+        } else {
+          return newValue;
+        }
+      }
+    });
+  }
+} //  Simple Pie Charts
+
+
+var chartPieBasicColors = getChartColorsArray("simple_pie_chart");
+var options = {
+  series: [44, 55, 13, 43, 22],
+  chart: {
+    height: 300,
+    type: 'pie'
+  },
+  labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+  legend: {
+    position: 'bottom'
+  },
+  dataLabels: {
+    dropShadow: {
+      enabled: false
+    }
+  },
+  colors: chartPieBasicColors
+};
+var chart = new ApexCharts(document.querySelector("#simple_pie_chart"), options);
+chart.render(); // Simple Donut Charts
+
+var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
+var options = {
+  series: [44, 55, 41, 17, 15],
+  chart: {
+    height: 300,
+    type: 'donut'
+  },
+  legend: {
+    position: 'bottom'
+  },
+  dataLabels: {
+    dropShadow: {
+      enabled: false
+    }
+  },
+  colors: chartDonutBasicColors
+};
+var chart = new ApexCharts(document.querySelector("#simple_dount_chart"), options);
+chart.render(); // Updating Donut Charts
+
+var chartDonutupdatingColors = getChartColorsArray("updating_donut_chart");
+var options = {
+  series: [44, 55, 13, 33],
+  chart: {
+    height: 280,
+    type: 'donut'
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend: {
+    position: 'bottom'
+  },
+  colors: chartDonutupdatingColors
+};
+var upadatedonutchart = new ApexCharts(document.querySelector("#updating_donut_chart"), options);
+upadatedonutchart.render();
+
+function appendData() {
+  var arr = upadatedonutchart.w.globals.series.slice();
+  arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1);
+  return arr;
+}
+
+function removeData() {
+  var arr = upadatedonutchart.w.globals.series.slice();
+  arr.pop();
+  return arr;
+}
+
+function randomize() {
+  return upadatedonutchart.w.globals.series.map(function () {
+    return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+  });
+}
+
+function reset() {
+  return options.series;
+}
+
+document.querySelector("#randomize").addEventListener("click", function () {
+  upadatedonutchart.updateSeries(randomize());
+});
+document.querySelector("#add").addEventListener("click", function () {
+  upadatedonutchart.updateSeries(appendData());
+});
+document.querySelector("#remove").addEventListener("click", function () {
+  upadatedonutchart.updateSeries(removeData());
+});
+document.querySelector("#reset").addEventListener("click", function () {
+  upadatedonutchart.updateSeries(reset());
+}); // Gradient Donut Chart
+
+var chartPieGradientColors = getChartColorsArray("gradient_chart");
+var options = (_options = {
+  series: [44, 55, 41, 17, 15],
+  chart: {
+    height: 300,
+    type: 'donut'
+  },
+  plotOptions: {
+    pie: {
+      startAngle: -90,
+      endAngle: 270
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  fill: {
+    type: 'gradient'
+  },
+  legend: {
+    formatter: function formatter(val, opts) {
+      return val + " - " + opts.w.globals.series[opts.seriesIndex];
+    }
+  },
+  title: {
+    text: 'Gradient Donut with custom Start-angle',
+    style: {
+      fontWeight: 500
+    }
+  }
+}, _defineProperty(_options, "legend", {
+  position: 'bottom'
+}), _defineProperty(_options, "colors", chartPieGradientColors), _options);
+var chart = new ApexCharts(document.querySelector("#gradient_chart"), options);
+chart.render(); // Pattern Donut chart
+
+var chartPiePatternColors = getChartColorsArray("pattern_chart");
+var options = {
+  series: [44, 55, 41, 17, 15],
+  chart: {
+    height: 300,
+    type: 'donut',
+    dropShadow: {
+      enabled: true,
+      color: '#111',
+      top: -1,
+      left: 3,
+      blur: 3,
+      opacity: 0.2
+    }
+  },
+  stroke: {
+    width: 0
+  },
+  plotOptions: {
+    pie: {
+      donut: {
+        labels: {
+          show: true,
+          total: {
+            showAlways: true,
+            show: true
+          }
+        }
+      }
+    }
+  },
+  labels: ["Comedy", "Action", "SciFi", "Drama", "Horror"],
+  dataLabels: {
+    dropShadow: {
+      blur: 3,
+      opacity: 0.8
+    }
+  },
+  fill: {
+    type: 'pattern',
+    opacity: 1,
+    pattern: {
+      enabled: true,
+      style: ['verticalLines', 'squares', 'horizontalLines', 'circles', 'slantedLines']
+    }
+  },
+  states: {
+    hover: {
+      filter: 'none'
+    }
+  },
+  theme: {
+    palette: 'palette2'
+  },
+  title: {
+    text: "Favourite Movie Type",
+    style: {
+      fontWeight: 500
+    }
+  },
+  legend: {
+    position: 'bottom'
+  },
+  colors: chartPiePatternColors
+};
+var chart = new ApexCharts(document.querySelector("#pattern_chart"), options);
+chart.render(); // Pie Chart with Image Fill
+
+var chartPieImageColors = getChartColorsArray("image_pie_chart");
+var options = {
+  series: [44, 33, 54, 45],
+  chart: {
+    height: 300,
+    type: 'pie'
+  },
+  colors: ['#93C3EE', '#E5C6A0', '#669DB5', '#94A74A'],
+  fill: {
+    type: 'image',
+    opacity: 0.85,
+    image: {
+      src: ['./assets/images/small/img-1.jpg', './assets/images/small/img-2.jpg', './assets/images/small/img-3.jpg', './assets/images/small/img-4.jpg'],
+      width: 25,
+      imagedHeight: 25
+    }
+  },
+  stroke: {
+    width: 4
+  },
+  dataLabels: {
+    enabled: true,
+    style: {
+      colors: ['#111']
+    },
+    background: {
+      enabled: true,
+      foreColor: '#fff',
+      borderWidth: 0
+    }
+  },
+  legend: {
+    position: 'bottom'
+  }
+};
+var chart = new ApexCharts(document.querySelector("#image_pie_chart"), options);
+chart.render(); // monochrome_pie_chart
+
+var options = {
+  series: [25, 15, 44, 55, 41, 17],
+  chart: {
+    height: 300,
+    type: 'pie'
+  },
+  labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  theme: {
+    monochrome: {
+      enabled: true,
+      color: '#405189',
+      shadeTo: 'light',
+      shadeIntensity: 0.6
+    }
+  },
+  plotOptions: {
+    pie: {
+      dataLabels: {
+        offset: -5
+      }
+    }
+  },
+  title: {
+    text: "Monochrome Pie",
+    style: {
+      fontWeight: 500
+    }
+  },
+  dataLabels: {
+    formatter: function formatter(val, opts) {
+      var name = opts.w.globals.labels[opts.seriesIndex];
+      return [name, val.toFixed(1) + '%'];
+    },
+    dropShadow: {
+      enabled: false
+    }
+  },
+  legend: {
+    show: false
+  }
+};
+var chart = new ApexCharts(document.querySelector("#monochrome_pie_chart"), options);
+chart.render();
+/******/ })()
+;

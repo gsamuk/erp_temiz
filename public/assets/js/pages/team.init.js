@@ -1,1 +1,39 @@
-(()=>{for(var t=document.querySelectorAll(".team-list"),e=document.querySelectorAll(".filter-button"),i=0;i<e.length;i++)e[i].addEventListener("click",l);function l(e){"list-view-button"===e.target.id||"list-view-button"===e.target.parentElement.id?(document.getElementById("list-view-button").classList.add("active"),document.getElementById("grid-view-button").classList.remove("active"),t.forEach((function(t){t.classList.add("list-view-filter"),t.classList.remove("grid-view-filter")}))):(document.getElementById("grid-view-button").classList.add("active"),document.getElementById("list-view-button").classList.remove("active"),t.forEach((function(t){t.classList.remove("list-view-filter"),t.classList.add("grid-view-filter")})))}})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*****************************************!*\
+  !*** ./resources/js/pages/team.init.js ***!
+  \*****************************************/
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: Team Init Js File
+*/
+//Fiter Js
+var list = document.querySelectorAll(".team-list");
+var buttonGroups = document.querySelectorAll('.filter-button');
+
+for (var i = 0; i < buttonGroups.length; i++) {
+  buttonGroups[i].addEventListener('click', onButtonGroupClick);
+}
+
+function onButtonGroupClick(event) {
+  if (event.target.id === 'list-view-button' || event.target.parentElement.id === 'list-view-button') {
+    document.getElementById("list-view-button").classList.add("active");
+    document.getElementById("grid-view-button").classList.remove("active");
+    list.forEach(function (el) {
+      el.classList.add("list-view-filter");
+      el.classList.remove("grid-view-filter");
+    });
+  } else {
+    document.getElementById("grid-view-button").classList.add("active");
+    document.getElementById("list-view-button").classList.remove("active");
+    list.forEach(function (el) {
+      el.classList.remove("list-view-filter");
+      el.classList.add("grid-view-filter");
+    });
+  }
+}
+/******/ })()
+;

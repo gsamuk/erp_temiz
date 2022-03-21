@@ -1,1 +1,65 @@
-(()=>{var t=document.getElementById("borderedToast1Btn"),e=document.getElementById("borderedToast1");t&&t.addEventListener("click",(function(){new bootstrap.Toast(e).show()}));var o=document.getElementById("borderedToast2Btn"),a=document.getElementById("borderedToast2");o&&o.addEventListener("click",(function(){new bootstrap.Toast(a).show()}));var n=document.getElementById("borderedTost3Btn"),s=document.getElementById("borderedTost3");n&&n.addEventListener("click",(function(){new bootstrap.Toast(s).show()}));var d=document.getElementById("borderedToast4Btn"),c=document.getElementById("borderedToast4");d&&d.addEventListener("click",(function(){new bootstrap.Toast(c).show()})),toastPlacement=document.getElementById("toastPlacement"),toastPlacement&&document.getElementById("selectToastPlacement").addEventListener("change",(function(){toastPlacement.dataset.originalClass||(toastPlacement.dataset.originalClass=toastPlacement.className),toastPlacement.className=toastPlacement.dataset.originalClass+" "+this.value})),document.querySelectorAll(".bd-example .toast").forEach((function(t){new bootstrap.Toast(t,{autohide:!1}).show()}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!**************************************************!*\
+  !*** ./resources/js/pages/notifications.init.js ***!
+  \**************************************************/
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: Notifications init js
+*/
+// Bordered Toast 
+var toastTrigger2 = document.getElementById("borderedToast1Btn");
+var toastLiveExample2 = document.getElementById("borderedToast1");
+
+if (toastTrigger2) {
+  toastTrigger2.addEventListener("click", function () {
+    var toast = new bootstrap.Toast(toastLiveExample2);
+    toast.show();
+  });
+}
+
+var toastTrigger3 = document.getElementById("borderedToast2Btn");
+var toastLiveExample3 = document.getElementById("borderedToast2");
+
+if (toastTrigger3) {
+  toastTrigger3.addEventListener("click", function () {
+    var toast = new bootstrap.Toast(toastLiveExample3);
+    toast.show();
+  });
+}
+
+var toastTrigger4 = document.getElementById("borderedTost3Btn");
+var toastLiveExample4 = document.getElementById("borderedTost3");
+
+if (toastTrigger4) {
+  toastTrigger4.addEventListener("click", function () {
+    var toast = new bootstrap.Toast(toastLiveExample4);
+    toast.show();
+  });
+}
+
+var toastTrigger5 = document.getElementById("borderedToast4Btn");
+var toastLiveExample5 = document.getElementById("borderedToast4");
+
+if (toastTrigger5) {
+  toastTrigger5.addEventListener("click", function () {
+    var toast = new bootstrap.Toast(toastLiveExample5);
+    toast.show();
+  });
+} // placement toast
+
+
+toastPlacement = document.getElementById("toastPlacement");
+toastPlacement && document.getElementById("selectToastPlacement").addEventListener("change", function () {
+  toastPlacement.dataset.originalClass || (toastPlacement.dataset.originalClass = toastPlacement.className), toastPlacement.className = toastPlacement.dataset.originalClass + " " + this.value;
+}), document.querySelectorAll(".bd-example .toast").forEach(function (a) {
+  var b = new bootstrap.Toast(a, {
+    autohide: !1
+  });
+  b.show();
+});
+/******/ })()
+;

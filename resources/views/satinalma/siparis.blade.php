@@ -18,7 +18,7 @@
 <script>
     var myModal = new bootstrap.Modal(document.getElementById('malzemeModal'), {keyboard: false}).hide();
     window.addEventListener('CloseModal', event => {           
-        myModal.hide();
+        $('.modal').modal('hide');
     });
     
 </script>

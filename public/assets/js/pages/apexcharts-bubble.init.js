@@ -1,1 +1,181 @@
-(()=>{function e(e){if(null!==document.getElementById(e)){var t=document.getElementById(e).getAttribute("data-colors");return(t=JSON.parse(t)).map((function(e){var t=e.replace(" ","");if(-1===t.indexOf(",")){var a=getComputedStyle(document.documentElement).getPropertyValue(t);return a||t}var n=e.split(",");if(2==n.length){var r=getComputedStyle(document.documentElement).getPropertyValue(n[0]);return r="rgba("+r+","+n[1]+")"}return t}))}}function t(e,t,a){for(var n=0,r=[];n<t;){var m=Math.floor(750*Math.random())+1,l=Math.floor(Math.random()*(a.max-a.min+1))+a.min,o=Math.floor(61*Math.random())+15;r.push([m,l,o]),864e5,n++}return r}var a=e("simple_bubble"),n={series:[{name:"Bubble1",data:t(new Date("11 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Bubble2",data:t(new Date("12 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Bubble3",data:t(new Date("13 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Bubble4",data:t(new Date("14 Feb 2017 GMT").getTime(),20,{min:10,max:60})}],chart:{height:350,type:"bubble",toolbar:{show:!1}},dataLabels:{enabled:!1},fill:{opacity:.8},title:{text:"Simple Bubble Chart",style:{fontWeight:500}},xaxis:{tickAmount:12,type:"category"},yaxis:{max:70},colors:a};new ApexCharts(document.querySelector("#simple_bubble"),n).render();var r=e("bubble_chart");n={series:[{name:"Product1",data:t(new Date("11 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Product2",data:t(new Date("11 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Product3",data:t(new Date("11 Feb 2017 GMT").getTime(),20,{min:10,max:60})},{name:"Product4",data:t(new Date("11 Feb 2017 GMT").getTime(),20,{min:10,max:60})}],chart:{height:350,type:"bubble",toolbar:{show:!1}},dataLabels:{enabled:!1},fill:{type:"gradient"},title:{text:"3D Bubble Chart",style:{fontWeight:500}},xaxis:{tickAmount:12,type:"datetime",labels:{rotate:0}},yaxis:{max:70},theme:{palette:"palette2"},colors:r};new ApexCharts(document.querySelector("#bubble_chart"),n).render()})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!******************************************************!*\
+  !*** ./resources/js/pages/apexcharts-bubble.init.js ***!
+  \******************************************************/
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: Bubble Chart init js
+*/
+// get colors array from the string
+function getChartColorsArray(chartId) {
+  if (document.getElementById(chartId) !== null) {
+    var colors = document.getElementById(chartId).getAttribute("data-colors");
+    colors = JSON.parse(colors);
+    return colors.map(function (value) {
+      var newValue = value.replace(" ", "");
+
+      if (newValue.indexOf(",") === -1) {
+        var color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
+        if (color) return color;else return newValue;
+        ;
+      } else {
+        var val = value.split(',');
+
+        if (val.length == 2) {
+          var rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
+          rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
+          return rgbaColor;
+        } else {
+          return newValue;
+        }
+      }
+    });
+  }
+} // Bubble Charts Generate Data
+
+
+function generateData(baseval, count, yrange) {
+  var i = 0;
+  var series = [];
+
+  while (i < count) {
+    var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
+    ;
+    var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+    var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
+    series.push([x, y, z]);
+    baseval += 86400000;
+    i++;
+  }
+
+  return series;
+} // Simple Bubble
+
+
+var chartBubbleSimpleColors = getChartColorsArray("simple_bubble");
+var options = {
+  series: [{
+    name: 'Bubble1',
+    data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Bubble2',
+    data: generateData(new Date('12 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Bubble3',
+    data: generateData(new Date('13 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Bubble4',
+    data: generateData(new Date('14 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }],
+  chart: {
+    height: 350,
+    type: 'bubble',
+    toolbar: {
+      show: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  fill: {
+    opacity: 0.8
+  },
+  title: {
+    text: 'Simple Bubble Chart',
+    style: {
+      fontWeight: 500
+    }
+  },
+  xaxis: {
+    tickAmount: 12,
+    type: 'category'
+  },
+  yaxis: {
+    max: 70
+  },
+  colors: chartBubbleSimpleColors
+};
+var chart = new ApexCharts(document.querySelector("#simple_bubble"), options);
+chart.render(); // 3D Bubble
+
+var chartBubbleColors = getChartColorsArray("bubble_chart");
+var options = {
+  series: [{
+    name: 'Product1',
+    data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Product2',
+    data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Product3',
+    data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }, {
+    name: 'Product4',
+    data: generateData(new Date('11 Feb 2017 GMT').getTime(), 20, {
+      min: 10,
+      max: 60
+    })
+  }],
+  chart: {
+    height: 350,
+    type: 'bubble',
+    toolbar: {
+      show: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  fill: {
+    type: 'gradient'
+  },
+  title: {
+    text: '3D Bubble Chart',
+    style: {
+      fontWeight: 500
+    }
+  },
+  xaxis: {
+    tickAmount: 12,
+    type: 'datetime',
+    labels: {
+      rotate: 0
+    }
+  },
+  yaxis: {
+    max: 70
+  },
+  theme: {
+    palette: 'palette2'
+  },
+  colors: chartBubbleColors
+};
+var chart = new ApexCharts(document.querySelector("#bubble_chart"), options);
+chart.render();
+/******/ })()
+;

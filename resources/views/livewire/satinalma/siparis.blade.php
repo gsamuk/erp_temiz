@@ -12,9 +12,7 @@
     <form>
         @csrf
         <div class="row">
-
-
-            <div class="col-xxl-10">
+            <div class="col-xxl-12">
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
@@ -107,280 +105,310 @@
                                                 <th class="px-2">
 
                                                     <div class="row">
-                                                        <div class="col-lg-2">
+                                                        <div class="col-lg-3">
                                                             <label class="form-label">İş Yeri</label>
                                                         </div>
-                                                        <div class="col-lg-10">
-                                                            <input type="text"
-                                                                class="form-control form-control-sm mb-1 rounded-0">
+                                                        <div class="col-lg-9">
+                                                            <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                                <select class="form-select">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-lg-2">
+                                                        <div class="col-lg-3">
                                                             <label class="form-label">Bölüm</label>
                                                         </div>
-                                                        <div class="col-lg-10">
-                                                            <input type="text"
-                                                                class="form-control form-control-sm mb-1 rounded-0">
+                                                        <div class="col-lg-9">
+                                                            <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                                <select class="form-select">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
-                                                        <div class="col-lg-2">
+                                                        <div class="col-lg-3">
                                                             <label class="form-label">Fabrika</label>
                                                         </div>
-                                                        <div class="col-lg-10">
-                                                            <input type="text"
-                                                                class="form-control form-control-sm mb-1 rounded-0">
+                                                        <div class="col-lg-9">
+                                                            <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                                <select class="form-select">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
-                                                        <div class="col-lg-2">
+                                                        <div class="col-lg-3">
                                                             <label class="form-label">Ambar</label>
                                                         </div>
-                                                        <div class="col-lg-10">
-                                                            <input type="text"
-                                                                class="form-control form-control-sm mb-1 rounded-0">
+                                                        <div class="col-lg-9">
+                                                            <div class="input-group input-group-sm ">
+                                                                <select class="form-select">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-
-
                                                 </th>
                                             </tr>
                                         </table>
                                     </div>
 
-                                    <div class="col-12 bg-light">
-                                        <table class="table table-sm">
+                                    <div class="col-12  ">
 
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">Türü</th>
-                                                    <th scope="col">Kodu</th>
-                                                    <th scope="col">Açıklaması</th>
-                                                    <th scope="col">Miktar</th>
-                                                    <th scope="col">Birim</th>
-                                                    <th scope="col">Birim Fiyat</th>
-                                                    <th scope="col">Kdv</th>
-                                                    <th scope="col">Tutar</th>
-                                                    <th scope="col">Net Tutar</th>
-                                                    <th scope="col"></th>
-                                                    <th scope="col"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>
-                                                        <div class="input-group input-group-sm ">
-                                                            <select class="form-select rounded-0" wire:model="tip.0">
-                                                                <option selected>Malzeme</option>
-                                                                <option value="1">Diğer</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-striped align-middle table-nowrap">
 
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="text" class="form-control rounded-0"
-                                                                wire:model="kod.0"
-                                                                wire:click.prevent="$emit('setLine',0)"
-                                                                data-bs-toggle="modal" data-bs-target="#malzemeModal">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="text" class="form-control rounded-0"
-                                                                wire:model="aciklama.0" data-bs-toggle="modal"
-                                                                data-bs-target="#malzemeModal">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control rounded-0"
-                                                                wire:model="miktar.0">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <select class="form-select rounded-0" wire:model="birim.0">
-                                                                <option selected>Adet</option>
-                                                                <option value="1">Kutu</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control rounded-0"
-                                                                wire:model="birim_fiyat.0">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control rounded-0"
-                                                                wire:model="kdv.0">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control rounded-0"
-                                                                wire:model="tutar.0">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control rounded-0"
-                                                                wire:model="net_tutar.0">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary"
-                                                            wire:click.prevent="add({{$i}})"><i
-                                                                class="mdi mdi-plus"></i></button>
-                                                    </td>
-                                                </tr>
-                                                @foreach ($inputs as $key => $value)
-                                                <tr>
-                                                    <th scope="row"> {{ $value}} </th>
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <select class="form-select" wire:model="tip.{{ $value }}">
-                                                                <option selected>Malzeme</option>
-                                                                <option value="1">Diğer</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="text" class="form-control border-dashed"
-                                                                wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
-                                                                wire:model="kod.{{ $value }}" data-bs-toggle="modal"
-                                                                data-bs-target="#malzemeModal">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="text" class="form-control border-dashed"
-                                                                wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
-                                                                wire:model="aciklama.{{ $value }}"
-                                                                data-bs-toggle="modal" data-bs-target="#malzemeModal">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control border-dashed "
-                                                                wire:model="miktar.{{ $value }}">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <select class="form-select" wire:model="birim.{{ $value }}">
-                                                                <option selected>Adet</option>
-                                                                <option value="1">Kutu</option>
-                                                            </select>
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control border-dashed "
-                                                                wire:model="birim_fiyat.{{ $value }}">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control border-dashed "
-                                                                wire:model="kdv.{{ $value }}">
-                                                        </div>
-                                                    </td>
-
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control border-dashed "
-                                                                wire:model="tutar.{{ $value }}">
-                                                        </div>
-                                                    </td>
-
-
-                                                    <td>
-                                                        <div class="input-group input-group-sm">
-                                                            <input type="number" class="form-control border-dashed "
-                                                                wire:model="net_tutar.{{ $value }}">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-danger"
-                                                            wire:click.prevent="remove({{$key}})"><i
-                                                                class="mdi mdi-delete"></i></button>
-                                                    </td>
-
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary "
-                                                            wire:click.prevent="add({{$i}})"><i
-                                                                class="mdi mdi-plus"></i></button>
-                                                    </td>
-
-                                                </tr>
-                                                @endforeach
-                                                <tr>
-                                                    <th scope="row" colspan="5"></th>
-                                                    <td colspan="4">
-                                                        <div class="row">
-                                                            <div class="col-lg-5  ">
-                                                                <div class="p-1">Toplam Masraf</div>
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th scope="col"></th>
+                                                        <th scope="col">Türü</th>
+                                                        <th scope="col">Kodu</th>
+                                                        <th scope="col">Açıklaması</th>
+                                                        <th scope="col">Miktar</th>
+                                                        <th scope="col">Birim</th>
+                                                        <th scope="col">Birim Fiyat</th>
+                                                        <th scope="col">Kdv</th>
+                                                        <th scope="col">Tutar</th>
+                                                        <th scope="col">Net Tutar</th>
+                                                        <th scope="col"></th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>
+                                                            <div class="input-group input-group-sm ">
+                                                                <select class="form-select rounded-0"
+                                                                    wire:model="tip.0">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
                                                             </div>
-                                                            <div class="col-lg-7 border bg-white">
-                                                                <div class="p-1">
-                                                                    2858.5
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="text" class="form-control rounded-0"
+                                                                    wire:model="kod.0"
+                                                                    wire:click.prevent="$emit('setLine',0)"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#malzemeModal">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="text" class="form-control rounded-0"
+                                                                    wire:model="aciklama.0" data-bs-toggle="modal"
+                                                                    data-bs-target="#malzemeModal">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control rounded-0"
+                                                                    wire:model="miktar.0">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="form-select rounded-0"
+                                                                    wire:model="birim.0">
+                                                                    <option selected>Adet</option>
+                                                                    <option value="1">Kutu</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control rounded-0"
+                                                                    wire:model="birim_fiyat.0">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control rounded-0"
+                                                                    wire:model="kdv.0">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control rounded-0"
+                                                                    wire:model="tutar.0">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control rounded-0"
+                                                                    wire:model="net_tutar.0">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary"
+                                                                wire:click.prevent="add({{$i}})"><i
+                                                                    class="mdi mdi-plus"></i></button>
+                                                        </td>
+                                                        <td></td>
+                                                    </tr>
+                                                    @php
+                                                    $s =2;
+                                                    @endphp
+                                                    @foreach ($inputs as $key => $value)
+                                                    <tr>
+                                                        <th scope="row"> {{ $s}} </th>
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="form-select"
+                                                                    wire:model="tip.{{ $value }}">
+                                                                    <option selected>Malzeme</option>
+                                                                    <option value="1">Diğer</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="text" class="form-control border-dashed"
+                                                                    wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
+                                                                    wire:model="kod.{{ $value }}" data-bs-toggle="modal"
+                                                                    data-bs-target="#malzemeModal">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="text" class="form-control border-dashed"
+                                                                    wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
+                                                                    wire:model="aciklama.{{ $value }}"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#malzemeModal">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm ">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    wire:model="miktar.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <select class="form-select"
+                                                                    wire:model="birim.{{ $value }}">
+                                                                    <option selected>Adet</option>
+                                                                    <option value="1">Kutu</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    wire:model="birim_fiyat.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    wire:model="kdv.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    wire:model="tutar.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    wire:model="net_tutar.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-danger"
+                                                                wire:click.prevent="remove({{$key}})"><i
+                                                                    class="mdi mdi-delete"></i></button>
+                                                        </td>
+
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary "
+                                                                wire:click.prevent="add({{$i}})"><i
+                                                                    class="mdi mdi-plus"></i></button>
+                                                        </td>
+
+                                                    </tr>
+                                                    @php
+                                                    $s = $s + 1;
+                                                    @endphp
+                                                    @endforeach
+                                                    <tr>
+                                                        <th scope="row" colspan="7"></th>
+                                                        <td colspan="4">
+                                                            <div class="row">
+                                                                <div class="col-lg-5  ">
+                                                                    <div class="p-1">Toplam Masraf</div>
+                                                                </div>
+                                                                <div class="col-lg-7 border bg-white">
+                                                                    <div class="p-1">
+                                                                        2858.5
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="row">
-                                                            <div class="col-lg-5  ">
-                                                                <div class="p-1">Toplam İndirim</div>
-                                                            </div>
-                                                            <div class="col-lg-7 border bg-white">
-                                                                <div class="p-1">
-                                                                    2858.5
+                                                            <div class="row">
+                                                                <div class="col-lg-5  ">
+                                                                    <div class="p-1">Toplam İndirim</div>
+                                                                </div>
+                                                                <div class="col-lg-7 border bg-white">
+                                                                    <div class="p-1">
+                                                                        2858.5
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
 
-                                                        <div class="row">
-                                                            <div class="col-lg-5  ">
-                                                                <div class="p-1">Toplam</div>
-                                                            </div>
-                                                            <div class="col-lg-7 border bg-white">
-                                                                <div class="p-1">
-                                                                    2858.5
+                                                            <div class="row">
+                                                                <div class="col-lg-5  ">
+                                                                    <div class="p-1">Toplam</div>
+                                                                </div>
+                                                                <div class="col-lg-7 border bg-white">
+                                                                    <div class="p-1">
+                                                                        2858.5
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
 
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12 m-2 ">
@@ -404,11 +432,19 @@
 </div>
 
 <div>
-    <div id="malzemeModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-xl">
+    <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
-                @livewire('malzemeler.index')
+
+                <div class="modal-body m-0">
+                    @livewire('malzemeler.index')
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i
+                            class="ri-close-line me-1 align-middle"></i> Kapat</a>
+
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

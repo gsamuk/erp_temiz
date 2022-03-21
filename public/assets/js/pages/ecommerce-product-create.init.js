@@ -1,1 +1,31 @@
-(()=>{ClassicEditor.create(document.querySelector("#ckeditor-classic")).then((function(e){e.ui.view.editable.element.style.height="200px"})).catch((function(e){console.error(e)}));var e=document.querySelector("#dropzone-preview-list");e.id="";var o=e.parentNode.innerHTML;e.parentNode.removeChild(e);new Dropzone(".dropzone",{url:"https://httpbin.org/post",method:"post",previewTemplate:o,previewsContainer:"#dropzone-preview"})})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*************************************************************!*\
+  !*** ./resources/js/pages/ecommerce-product-create.init.js ***!
+  \*************************************************************/
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://Themesbrand.com/
+Contact: Themesbrand@gmail.com
+File: Ecommerce product create Js File
+*/
+// ckeditor
+ClassicEditor.create(document.querySelector('#ckeditor-classic')).then(function (editor) {
+  editor.ui.view.editable.element.style.height = '200px';
+})["catch"](function (error) {
+  console.error(error);
+}); // Dropzone
+
+var dropzonePreviewNode = document.querySelector("#dropzone-preview-list");
+dropzonePreviewNode.id = "";
+var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
+dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
+var dropzone = new Dropzone(".dropzone", {
+  url: 'https://httpbin.org/post',
+  method: "post",
+  previewTemplate: previewTemplate,
+  previewsContainer: "#dropzone-preview"
+});
+/******/ })()
+;
