@@ -20,6 +20,11 @@
     window.addEventListener('CloseModal', event => {           
         $('.modal').modal('hide');
     });
+
+    window.addEventListener('SetDisable', event => {                  
+         $("#input_aciklama_"+event.detail.line).prop("disabled", true);
+         $("#input_kod_"+event.detail.line).prop("disabled", true);
+    });
     
 </script>
 

@@ -165,8 +165,10 @@
 
                                     <div class="col-12  ">
 
+
                                         <div class="table-responsive">
-                                            <table class="table table-sm table-striped align-middle table-nowrap">
+                                            <table class="table table-sm table-striped align-middle table-nowrap"
+                                                style="width: 100%; min-width:1200px;">
 
                                                 <thead class="table-light">
                                                     <tr>
@@ -200,9 +202,7 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control rounded-0"
-                                                                    wire:model="kod.0"
-                                                                    wire:click.prevent="$emit('setLine',0)"
-                                                                    data-bs-toggle="modal"
+                                                                    wire:model="kod.0" data-bs-toggle="modal"
                                                                     data-bs-target="#malzemeModal">
                                                             </div>
                                                         </td>
@@ -286,6 +286,7 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control border-dashed"
+                                                                    id="input_kod_{{ $value }}"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
                                                                     wire:model="kod.{{ $value }}" data-bs-toggle="modal"
                                                                     data-bs-target="#malzemeModal">
@@ -295,6 +296,7 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control border-dashed"
+                                                                    id="input_aciklama_{{ $value }}"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
                                                                     wire:model="aciklama.{{ $value }}"
                                                                     data-bs-toggle="modal"

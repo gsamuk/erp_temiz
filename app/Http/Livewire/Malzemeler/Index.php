@@ -28,6 +28,7 @@ class Index extends Component
     public function addItem($line, $ref)
     {
         $this->emit('getItem', ['line' => $line, 'ref' => $ref]);
+        $this->dispatchBrowserEvent('SetDisable', ['line' => $line]);
     }
 
     public function render()
