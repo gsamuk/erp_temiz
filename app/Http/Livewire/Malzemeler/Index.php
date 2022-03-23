@@ -19,7 +19,7 @@ class Index extends Component
 
     protected $listeners  = ['setLine'];
 
-    public function setLine($id)
+    public function setLine($id) // hangi satırın seçildiğini listen yaparak alıoyuz siparis.blade i dinliyoruz
     {
         $this->line = $id;
     }
@@ -33,14 +33,14 @@ class Index extends Component
 
     public function render()
     {
-        $data = LogoDb::where('NAME', 'like', '%' . $this->search . '%')
+        $data = LogoDb::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
-                return $query->where('CARDTYPE', $this->tur);
+                return $query->where('stock_type', $this->tur);
             })
             ->when($this->code, function ($query) {
-                return $query->where('CODE', $this->code);
+                return $query->where('stock_code', $this->code);
             })
-            ->orderByDesc('NAME')
+            ->orderByDesc('stock_name')
             ->paginate(10);
 
         return view('livewire.malzemeler.index', [

@@ -203,6 +203,7 @@
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control rounded-0"
                                                                     wire:model="kod.0" data-bs-toggle="modal"
+                                                                    wire:click="$emitTo('malzemeler.index','setLine',0)"
                                                                     data-bs-target="#malzemeModal">
                                                             </div>
                                                         </td>
@@ -211,6 +212,7 @@
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control rounded-0"
                                                                     wire:model="aciklama.0" data-bs-toggle="modal"
+                                                                    wire:click="$emitTo('malzemeler.index','setLine',0)"
                                                                     data-bs-target="#malzemeModal">
                                                             </div>
                                                         </td>
@@ -218,14 +220,16 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control rounded-0"
-                                                                    wire:model="miktar.0">
+                                                                    wire:click="active_line(0)"
+                                                                    wire:model.lazy="miktar.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <select class="form-select rounded-0"
-                                                                    wire:model="birim.0">
+                                                                    wire:model.lazy="birim.0"
+                                                                    wire:click="active_line(0)">
                                                                     <option selected>Adet</option>
                                                                     <option value="1">Kutu</option>
                                                                 </select>
@@ -235,28 +239,29 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control rounded-0"
-                                                                    wire:model="birim_fiyat.0">
+                                                                    wire:click="active_line(0)"
+                                                                    wire:model.lazy="birim_fiyat.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control rounded-0"
-                                                                    wire:model="kdv.0">
+                                                                    wire:click="active_line(0)" wire:model.lazy="kdv.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control rounded-0"
-                                                                    wire:model="tutar.0">
+                                                                    disabled wire:model.lazy="tutar.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control rounded-0"
-                                                                    wire:model="net_tutar.0">
+                                                                    disabled wire:model.lazy="net_tutar.0">
                                                             </div>
                                                         </td>
 
@@ -307,13 +312,15 @@
                                                         <td>
                                                             <div class="input-group input-group-sm ">
                                                                 <input type="number" class="form-control border-dashed "
-                                                                    wire:model="miktar.{{ $value }}">
+                                                                    wire:click="active_line({{ $value }})"
+                                                                    wire:model.lazy="miktar.{{ $value }}">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <select class="form-select"
+                                                                    wire:click="active_line({{ $value }})"
                                                                     wire:model="birim.{{ $value }}">
                                                                     <option selected>Adet</option>
                                                                     <option value="1">Kutu</option>
@@ -324,22 +331,16 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control border-dashed "
-                                                                    wire:model="birim_fiyat.{{ $value }}">
+                                                                    wire:click="active_line({{ $value }})"
+                                                                    wire:model.lazy="birim_fiyat.{{ $value }}">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control border-dashed "
-                                                                    wire:model="kdv.{{ $value }}">
-                                                            </div>
-                                                        </td>
-
-
-                                                        <td>
-                                                            <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control border-dashed "
-                                                                    wire:model="tutar.{{ $value }}">
+                                                                    wire:click="active_line({{ $value }})"
+                                                                    wire:model.lazy="kdv.{{ $value }}">
                                                             </div>
                                                         </td>
 
@@ -347,7 +348,15 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="number" class="form-control border-dashed "
-                                                                    wire:model="net_tutar.{{ $value }}">
+                                                                    disabled wire:model="tutar.{{ $value }}">
+                                                            </div>
+                                                        </td>
+
+
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <input type="number" class="form-control border-dashed "
+                                                                    disabled wire:model="net_tutar.{{ $value }}">
                                                             </div>
                                                         </td>
 
@@ -377,7 +386,7 @@
                                                                 </div>
                                                                 <div class="col-lg-7 border bg-white">
                                                                     <div class="p-1">
-                                                                        2858.5
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -388,7 +397,7 @@
                                                                 </div>
                                                                 <div class="col-lg-7 border bg-white">
                                                                     <div class="p-1">
-                                                                        2858.5
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -400,7 +409,7 @@
                                                                 </div>
                                                                 <div class="col-lg-7 border bg-white">
                                                                     <div class="p-1">
-                                                                        2858.5
+
                                                                     </div>
                                                                 </div>
                                                             </div>
