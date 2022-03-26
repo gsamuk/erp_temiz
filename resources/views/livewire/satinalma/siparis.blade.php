@@ -2,7 +2,7 @@
     <style>
         label {
             font-size: 10px;
-            color: #424141;
+
         }
 
         table th {
@@ -28,16 +28,15 @@
                                     Detaylar
                                 </a>
                             </li>
-
                         </ul>
 
                         <div class="tab-content text-muted">
                             <div class="tab-pane active" id="nav-border-top-fis" role="tabpanel">
                                 <div class="row ">
-                                    <div class="col-lg-8 col-md-12">
-                                        <table class="table table-sm ">
+                                    <div class="col-lg-12 col-md-12">
+                                        <table class="table rwd-table table-sm ">
                                             <tr>
-                                                <th class="px-2">
+                                                <th class="px-1">
                                                     <div class="row">
                                                         <div class="col-lg-3">
                                                             <label class="form-label">Fiş No</label>
@@ -80,9 +79,10 @@
                                                                 class="form-control form-control-sm mb-1 rounded-0"
                                                                 readonly="readonly">
                                                         </div>
+
                                                     </div>
                                                 </th>
-                                                <th class="px-2">
+                                                <th class="px-3">
                                                     <div class="row">
                                                         <div class="col-lg-2">
                                                             <label class="form-label">Kodu</label>
@@ -109,6 +109,7 @@
                                                                 class="form-control form-control-sm mb-1 rounded-0"
                                                                 readonly="readonly">
                                                         </div>
+
                                                     </div>
 
                                                 </th>
@@ -169,13 +170,14 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+
                                                     </div>
                                                 </th>
                                             </tr>
                                         </table>
                                     </div>
 
-                                    <div class="col-lg-10 col-md-12  ">
+                                    <div class="col-lg-12 col-md-12  ">
 
 
                                         <div class="table-responsive">
@@ -214,7 +216,7 @@
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control rounded-0"
                                                                     name="tip[0]" wire:model="kod.0"
-                                                                    data-bs-toggle="modal"
+                                                                    data-bs-toggle="modal" readonly="readonly"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',0)"
                                                                     data-bs-target="#malzemeModal">
                                                             </div>
@@ -224,7 +226,7 @@
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control rounded-0"
                                                                     wire:model="aciklama.0" data-bs-toggle="modal"
-                                                                    name="aciklama[0]"
+                                                                    name="aciklama[0]" readonly="readonly"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',0)"
                                                                     data-bs-target="#malzemeModal">
                                                             </div>
@@ -306,7 +308,8 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control border-dashed"
-                                                                    name="kod[{{ $value }}]" id="input_kod_{{ $value }}"
+                                                                    readonly="readonly" name="kod[{{ $value }}]"
+                                                                    id="input_kod_{{ $value }}"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
                                                                     wire:model="kod.{{ $value }}" data-bs-toggle="modal"
                                                                     data-bs-target="#malzemeModal">
@@ -316,7 +319,7 @@
                                                         <td>
                                                             <div class="input-group input-group-sm">
                                                                 <input type="text" class="form-control border-dashed"
-                                                                    name="aciklama[{{ $value }}]"
+                                                                    readonly="readonly" name="aciklama[{{ $value }}]"
                                                                     id="input_aciklama_{{ $value }}"
                                                                     wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
                                                                     wire:model="aciklama.{{ $value }}"
