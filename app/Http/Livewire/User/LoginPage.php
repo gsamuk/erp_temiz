@@ -5,9 +5,9 @@ namespace App\Http\Livewire\User;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Http;
+use App\Models\LogoUserTokens;
 use App\Models\Users;
-use Exception;
+
 
 class LoginPage extends Component
 {
@@ -76,48 +76,18 @@ class LoginPage extends Component
 
         if ($user) {
 
+
+
             $request->session()->put('userData', $user);
 
             if ($this->rememberme) {
-                Cookie::queue(Cookie::make('rememberme', true, 500));
-                Cookie::queue(Cookie::make('password', $this->password, 500));
-                Cookie::queue(Cookie::make('user_name', $this->user_name, 500));
+                Cookie::queue(Cookie::make('rememberme', true, 500000));
+                Cookie::queue(Cookie::make('password', $this->password, 500000));
+                Cookie::queue(Cookie::make('user_name', $this->user_name, 500000));
             } else {
                 Cookie::queue(Cookie::forget('rememberme'));
                 Cookie::queue(Cookie::forget('password'));
                 Cookie::queue(Cookie::forget('user_name'));
-            }
-
-            if ($user->logo_user && $user->logo_password) {
-                try {
-                    $logo = Http::asForm()->post('http://65.21.157.111:32001/api/v1/token', [
-                        'username' => $user->logo_user,
-                        'password' => $user->logo_password,
-                        'firmno' => 1,
-                        'grant_type' => 'password',
-
-                        'headers' => [
-                            'Authorization' => 'Basic k8TM58bDD6HEgzEuI9WOxf/gZai+NLuWMiobQp8/YwQ=',
-                            'Accept' => 'application/json',
-                        ]
-                    ]);
-
-                    if ($logo) {
-
-                        if ($logo->status() == 200) {
-                            $request->session()->put('LogoLogin', true);
-                            $request->session()->put('LogoData', $logo);
-                        } elseif ($logo->status() == 400) {
-                            $request->session()->put('LogoLogin', false);
-                        }
-                    }
-                } catch (Exception $e) {
-                    dd($e);
-                    $request->session()->put('LogoLogin', false);
-                    return redirect()->to('/');
-                }
-            } else {
-                $request->session()->put('LogoLogin', false);
             }
 
             return redirect()->to('/');

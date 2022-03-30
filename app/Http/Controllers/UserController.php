@@ -85,4 +85,9 @@ class UserController extends Controller
     {
         return view('user.list');
     }
+
+    public function firma_sec() // liveWare ile yapıldı
+    {
+        return view('user.firma-sec');
+    }
 }

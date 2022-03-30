@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Kontrol;
-
+use App\Http\Middleware\LogoTokenKontrol;
 
 Route::get('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::post('/login_post', [App\Http\Controllers\LoginController::class, 'login_post'])->name('login.post');
@@ -17,13 +17,19 @@ Route::middleware([Kontrol::class])->group(function () {
     Route::post('user/authorizations', [App\Http\Controllers\AuthorizationsController::class, 'set_authorizations'])->name('user.authorizations.post');
     Route::get('users', [App\Http\Controllers\UserController::class, 'user_list'])->name("users");
     Route::get('user/{id}', [App\Http\Controllers\UserController::class, 'user'])->name('user');
+    Route::get('firma_sec', [App\Http\Controllers\UserController::class, 'firma_sec'])->name("firma_sec");
 
     /// malzeme işlemleri
     Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
 
-    // satın alma işlemleri
-    Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');
-    Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
-    Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
-    Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
+
+
+    Route::middleware([LogoTokenKontrol::class])->group(function () {
+        // Token Gerektiren işlemler Middleware Gereklidir
+        // satın alma işlemleri
+        Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');
+        Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
+        Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
+        Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
+    });
 });
