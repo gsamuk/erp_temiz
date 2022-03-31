@@ -196,7 +196,7 @@
                                                         <th style="width:80px;">Kdv</th>
                                                         <th style="width:100px;">Tutar</th>
                                                         <th style="width:100px;">Net Tutar</th>
-                                                        <th></th>
+                                                        <th>-</th>
 
                                                     </tr>
                                                 </thead>
@@ -234,35 +234,44 @@
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control rounded-0"
-                                                                    name="miktar[0]" wire:click="active_line(0)"
+                                                                <input type="number" step="any"
+                                                                    class="form-control rounded-0" name="miktar[0]"
+                                                                    wire:click="active_line(0)"
                                                                     wire:model.lazy="miktar.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
+
                                                             <div class="input-group input-group-sm">
-                                                                <select wire:model.lazy="birim.0" name="birim[0]"
-                                                                    wire:click="active_line(0)">
-                                                                    <option selected>Adet</option>
-                                                                    <option value="1">Kutu</option>
+                                                                <select wire:click="active_line(0)" name="birim[0]"
+                                                                    wire:model="birim.0">
+
+                                                                    @if(isset($birim_select[0]))
+                                                                    @foreach($birim_select[0] as $b)
+                                                                    <option value="{{ $b['CODE'] }}">{{ $b['NAME'] }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                    @endif
+
                                                                 </select>
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control rounded-0"
-                                                                    name="birim_fiyat[0]" wire:click="active_line(0)"
+                                                                <input type="number" step="any"
+                                                                    class="form-control rounded-0" name="birim_fiyat[0]"
+                                                                    wire:click="active_line(0)"
                                                                     wire:model.lazy="birim_fiyat.0">
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control rounded-0"
-                                                                    name="kdv[0]" wire:click="active_line(0)"
-                                                                    wire:model.lazy="kdv.0">
+                                                                <input type="number" step="any"
+                                                                    class="form-control rounded-0" name="kdv[0]"
+                                                                    wire:click="active_line(0)" wire:model.lazy="kdv.0">
                                                             </div>
                                                         </td>
 
@@ -330,7 +339,8 @@
 
                                                         <td>
                                                             <div class="input-group input-group-sm ">
-                                                                <input type="number" class="form-control border-dashed "
+                                                                <input type="number" step="any"
+                                                                    class="form-control border-dashed "
                                                                     name="miktar[{{ $value }}]"
                                                                     wire:click="active_line({{ $value }})"
                                                                     wire:model.lazy="miktar.{{ $value }}">
@@ -342,15 +352,21 @@
                                                                 <select wire:click="active_line({{ $value }})"
                                                                     name="birim[{{ $value }}]"
                                                                     wire:model="birim.{{ $value }}">
-                                                                    <option selected>Adet</option>
-                                                                    <option value="1">Kutu</option>
+                                                                    @if(isset($birim_select[$value]))
+                                                                    @foreach($birim_select[$value] as $b)
+                                                                    <option value="{{ $b['CODE'] }}">{{ $b['NAME'] }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                    @endif
+
                                                                 </select>
                                                             </div>
                                                         </td>
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control border-dashed "
+                                                                <input type="number" step="any"
+                                                                    class="form-control border-dashed "
                                                                     name="birim_fiyat[{{ $value }}]"
                                                                     wire:click="active_line({{ $value }})"
                                                                     wire:model.lazy="birim_fiyat.{{ $value }}">
@@ -359,7 +375,8 @@
 
                                                         <td>
                                                             <div class="input-group input-group-sm">
-                                                                <input type="number" class="form-control border-dashed "
+                                                                <input type="number" step="any"
+                                                                    class="form-control border-dashed "
                                                                     name="kdv[{{ $value }}]"
                                                                     wire:click="active_line({{ $value }})"
                                                                     wire:model.lazy="kdv.{{ $value }}">

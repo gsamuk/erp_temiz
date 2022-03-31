@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Satinalma;
 
 use Livewire\Component;
 use App\Models\LogoDb;
+use App\Models\LogoUnits;
+use App\Models\LogoUNITSETL;
 use App\Models\LogoWarehouses;
 use Illuminate\Http\Request;
 
@@ -14,21 +16,24 @@ class Siparis extends Component
     public $account_name, $account_code;
     public $project_name;
     public $project_code;
-
+    public $birim_select = [];
     public $line = 0;
-
     public $updateMode = false;
     public $inputs = [];
-    public $i = 1;
+    public $i = 0;
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
-
-        $item = LogoDb::where('logicalref', $d['ref'])->first();
         $this->line = $d["line"];
+        $item = LogoDb::where('logicalref', $d['ref'])->first();
+        $units = LogoUnits::Where('UNITSETREF', $item->unit_ref)->get();
+
+        $this->birim_select[$this->line] = $units;
+
+
         $this->kod[$this->line] = $item->stock_code;
         $this->aciklama[$this->line] = $item->stock_name;
 
