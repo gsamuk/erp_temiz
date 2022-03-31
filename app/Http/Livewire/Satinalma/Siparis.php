@@ -5,15 +5,15 @@ namespace App\Http\Livewire\Satinalma;
 use Livewire\Component;
 use App\Models\LogoDb;
 use App\Models\LogoUnits;
-use App\Models\LogoUNITSETL;
 use App\Models\LogoWarehouses;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cookie;
 
 class Siparis extends Component
 {
 
     public $tip, $kod, $aciklama, $miktar, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar, $warehouse;
-    public $account_name, $account_code;
+    public $account_name, $account_code, $account_ref_id;
     public $project_name;
     public $project_code;
     public $birim_select = [];
@@ -24,6 +24,41 @@ class Siparis extends Component
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
+    public function store()
+    {
+
+        $response = Http::withToken(Cookie::get("logo_access_token"))->post('http://65.21.157.111:32001/api/v1/purchaseOrders', [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => '2021-11-20T00:00:00',
+            'CLIENTREF' => $this->account_ref_id,
+            'TRANSACTIONS' => [
+                'items' => [
+                    [
+                        "TYPE" => 0,
+                        "MASTER_CODE" => "16874",
+                        "STOCKREF" => 7116,
+                        "CLIENTREF" => $this->account_ref_id,
+                        "QUANTITY" => 15.0,
+                        "PRICE" => 113.0,
+                        "UNIT_CODE" => "ADET",
+                        "VAT_RATE" => 8
+                    ],
+                    [
+                        "TYPE" => 0,
+                        "MASTER_CODE" => "16806",
+                        "STOCKREF" => 7116,
+                        "CLIENTREF" => $this->account_ref_id,
+                        "QUANTITY" => 15.0,
+                        "PRICE" => 113.0,
+                        "UNIT_CODE" => "ADET",
+                        "VAT_RATE" => 7
+                    ],
+                ]
+            ]
+        ])->json();
+    }
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
@@ -44,6 +79,7 @@ class Siparis extends Component
     {
         $this->account_code = $d['code'];
         $this->account_name = $d['name'];
+        $this->account_ref_id = $d['ref_id'];
         $this->dispatchBrowserEvent('CloseModal');
     }
 
@@ -71,12 +107,7 @@ class Siparis extends Component
     }
 
 
-    public function store()
-    {
-        foreach ($this->kod as $key => $v) {
-            dd($v);
-        }
-    }
+
 
     public function render()
     {

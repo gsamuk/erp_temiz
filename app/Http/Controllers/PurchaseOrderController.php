@@ -36,7 +36,7 @@ class PurchaseOrderController extends Controller
      */
     public function store(StorePurchaseOrderRequest $request)
     {
-        //
+        dd($request);
     }
 
     /**

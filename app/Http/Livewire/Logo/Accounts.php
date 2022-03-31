@@ -12,9 +12,16 @@ class Accounts extends Component
     protected $paginationTheme = 'bootstrap';
     public $search = '';
 
-    public function addAccount($code, $name)
+    public function addAccount($ref_id, $code, $name)
     {
-        $this->emit('getAccount', ['code' => $code, 'name' => $name]);
+        $this->emit(
+            'getAccount',
+            [
+                'ref_id' => $ref_id,
+                'code' => $code,
+                'name' => $name,
+            ]
+        );
     }
 
     public function render()

@@ -88,6 +88,7 @@
                                                             <label class="form-label">Kodu</label>
                                                         </div>
                                                         <div class="col-lg-10">
+                                                            <input type="hidden" wire:model="account_ref_id">
                                                             <input type="text" data-bs-toggle="modal"
                                                                 name="musteri_kodu" wire:model="account_code"
                                                                 data-bs-target="#accountsModal"
