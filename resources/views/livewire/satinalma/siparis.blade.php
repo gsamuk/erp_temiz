@@ -37,22 +37,14 @@
                                         <table class="table rwd-table table-sm ">
                                             <tr>
                                                 <th class="px-1">
-                                                    <div class="row">
-                                                        <div class="col-lg-3">
-                                                            <label class="form-label">Fiş No</label>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <input type="text" name="fis_no"
-                                                                class="form-control form-control-sm mb-1 rounded-0">
-                                                        </div>
-                                                    </div>
 
                                                     <div class="row">
                                                         <div class="col-lg-3">
                                                             <label class="form-label">Tarih</label>
                                                         </div>
                                                         <div class="col-lg-9">
-                                                            <input type="date" name="date"
+                                                            <input type="datetime-local" name="zaman" step="any"
+                                                                wire:model="zaman"
                                                                 class="form-control form-control-sm mb-1 rounded-0">
                                                         </div>
                                                     </div>
@@ -62,7 +54,7 @@
                                                             <label class="form-label">Belge No</label>
                                                         </div>
                                                         <div class="col-lg-9">
-                                                            <input type="text" name="belge_no"
+                                                            <input type="text" name="belge_no" wire:model="belge_no"
                                                                 class="form-control form-control-sm mb-1 rounded-0">
                                                         </div>
                                                     </div>
@@ -78,6 +70,8 @@
                                                                 data-bs-target="#projectsModal"
                                                                 class="form-control form-control-sm mb-1 rounded-0"
                                                                 readonly="readonly">
+                                                            @error('project_code') <span class="error">{{ $message
+                                                                }}</span> @enderror
                                                         </div>
 
                                                     </div>
@@ -109,6 +103,10 @@
                                                                 data-bs-target="#accountsModal"
                                                                 class="form-control form-control-sm mb-1 rounded-0"
                                                                 readonly="readonly">
+
+                                                            @error('account_ref_id') <span class="error text-danger">{{
+                                                                $message
+                                                                }}</span> @enderror
                                                         </div>
 
                                                     </div>
@@ -246,11 +244,12 @@
 
                                                             <div class="input-group input-group-sm">
                                                                 <select wire:click="active_line(0)" name="birim[0]"
-                                                                    wire:model="birim.0">
-
+                                                                    wire:model.defer="birim.0">
                                                                     @if(isset($birim_select[0]))
+                                                                    <option value=""> -- Seç --</option>
                                                                     @foreach($birim_select[0] as $b)
-                                                                    <option value="{{ $b['CODE'] }}">{{ $b['NAME'] }}
+                                                                    <option value="{{ $b['unit_code'] }}">{{
+                                                                        $b['unit_name'] }}
                                                                     </option>
                                                                     @endforeach
                                                                     @endif
@@ -352,10 +351,12 @@
                                                             <div class="input-group input-group-sm">
                                                                 <select wire:click="active_line({{ $value }})"
                                                                     name="birim[{{ $value }}]"
-                                                                    wire:model="birim.{{ $value }}">
+                                                                    wire:model.defer="birim.{{ $value }}">
                                                                     @if(isset($birim_select[$value]))
+                                                                    <option value=""> -- Seç --</option>
                                                                     @foreach($birim_select[$value] as $b)
-                                                                    <option value="{{ $b['CODE'] }}">{{ $b['NAME'] }}
+                                                                    <option value="{{ $b['unit_code'] }}">{{
+                                                                        $b['unit_name'] }}
                                                                     </option>
                                                                     @endforeach
                                                                     @endif
@@ -462,9 +463,32 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        @if (session()->has('error'))
+                                        <div class="col-4 m-2 ">
+                                            <div class="alert alert-danger alert-dismissible fade show shadow">
+                                                {{ session('error') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                        </div>
+                                        @endif
+
+                                        @if (session()->has('success'))
+                                        <div class="col-4 m-2 ">
+                                            <div class="alert alert-success alert-dismissible fade show shadow">
+                                                {{ session('success') }}
+                                            </div>
+                                        </div>
+                                        @endif
+
+
                                         <div class="col-12 m-2 ">
                                             <button type="submit" class="btn btn-success "> <i
                                                     class="mdi mdi-content-save"></i>Save</button>
+
+                                            <div wire:loading>
+                                                İşleniyor Lütfen Bekleyiniz...
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -480,6 +504,8 @@
             </div>
         </div>
     </form>
+
+
 </div>
 
 <div>

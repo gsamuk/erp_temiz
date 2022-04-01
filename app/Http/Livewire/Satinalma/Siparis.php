@@ -6,13 +6,17 @@ use Livewire\Component;
 use App\Models\LogoDb;
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cookie;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Siparis extends Component
 {
 
     public $tip, $kod, $aciklama, $miktar, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar, $warehouse;
+    public $zaman;
+    public $belge_no;
     public $account_name, $account_code, $account_ref_id;
     public $project_name;
     public $project_code;
@@ -22,50 +26,96 @@ class Siparis extends Component
     public $inputs = [];
     public $i = 0;
 
+
+
     protected $listeners = ["getItem", "getAccount", "getProject"];
+
+    protected $rules = [
+        'account_ref_id' => 'required',
+    ];
+    protected $messages = [
+        'account_ref_id.required' => 'Lütfen Cari Ünvan Seçiniz',
+    ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
+    public function mount()
+    {
+        date_default_timezone_set('Europe/Istanbul');
+        $this->zaman = date("Y-m-d H:i:s");
+    }
 
     public function store()
     {
 
-        $response = Http::withToken(Cookie::get("logo_access_token"))->post('http://65.21.157.111:32001/api/v1/purchaseOrders', [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => '2021-11-20T00:00:00',
-            'CLIENTREF' => $this->account_ref_id,
-            'TRANSACTIONS' => [
-                'items' => [
-                    [
-                        "TYPE" => 0,
-                        "MASTER_CODE" => "16874",
-                        "STOCKREF" => 7116,
-                        "CLIENTREF" => $this->account_ref_id,
-                        "QUANTITY" => 15.0,
-                        "PRICE" => 113.0,
-                        "UNIT_CODE" => "ADET",
-                        "VAT_RATE" => 8
-                    ],
-                    [
-                        "TYPE" => 0,
-                        "MASTER_CODE" => "16806",
-                        "STOCKREF" => 7116,
-                        "CLIENTREF" => $this->account_ref_id,
-                        "QUANTITY" => 15.0,
-                        "PRICE" => 113.0,
-                        "UNIT_CODE" => "ADET",
-                        "VAT_RATE" => 7
-                    ],
+
+        $this->validate();
+        $items = array();
+
+        foreach ($this->kod  as $in => $v) {
+            if (!isset($this->kdv[$in]) || $this->kdv[$in] == null) {
+                $kdv_ = NULL;
+            } else {
+                $kdv_ = $this->kdv[$in];
+            }
+
+            if (!isset($this->miktar[$in]) || $this->miktar[$in] == null) {
+                return session()->flash('error', 'Miktar Giriniz');
+            }
+
+            if (!isset($this->birim[$in]) || $this->birim[$in] == null) {
+                return session()->flash('error', 'Birim Seçiniz');
+            }
+
+            if (!isset($this->birim_fiyat[$in]) || $this->birim_fiyat[$in] == null) {
+                return session()->flash('error', 'Birim Fiyatları Giriniz');
+            }
+
+            $items[$in] = [
+                "TYPE" => 0,
+                "MASTER_CODE" => $this->kod[$in],
+                "CLIENTREF" => $this->account_ref_id,
+                "QUANTITY" => $this->miktar[$in],
+                "PRICE" => $this->birim_fiyat[$in],
+                "UNIT_CODE" => $this->birim[$in],
+                "VAT_RATE" => $kdv_,
+            ];
+        }
+
+        try {
+            $response = Http::withToken(Cookie::get("logo_access_token"))->post('http://65.21.157.111:32001/api/v1/purchaseOrders', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'DATE' => $this->zaman,
+                'CLIENTREF' => $this->account_ref_id,
+                'DOC_NUMBER' => $this->belge_no,
+                'TRANSACTIONS' => [
+                    'items' => $items
                 ]
-            ]
-        ])->json();
+            ]);
+            if ($response->status() == 200 && $response->successful() == true) {
+                dd($response->json());
+                $this->reset();
+                return session()->flash('success', 'Başarılı Sipariş ID #' . $response->json("INTERNAL_REFERENCE"));
+            } else {
+                return session()->flash('error', $response->getreasonPhrase());
+            }
+        } catch (Exception $e) {
+            return session()->flash('error', $e->getMessage());
+        }
     }
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
+
         $this->line = $d["line"];
         $item = LogoDb::where('logicalref', $d['ref'])->first();
-        $units = LogoUnits::Where('UNITSETREF', $item->unit_ref)->get();
 
+        $units = LogoUnits::Where('unitset_ref', $item->unitset_ref)->get();
         $this->birim_select[$this->line] = $units;
 
 
