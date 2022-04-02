@@ -45,7 +45,7 @@ class Siparis extends Component
     public function mount()
     {
         date_default_timezone_set('Europe/Istanbul');
-        $this->zaman = date("Y-m-d H:i:s");
+        $this->zaman = date("Y-m-d");
     }
 
     public function store()
@@ -98,10 +98,10 @@ class Siparis extends Component
                 ]
             ]);
             if ($response->status() == 200 && $response->successful() == true) {
-                dd($response->json());
                 $this->reset();
                 return session()->flash('success', 'Başarılı Sipariş ID #' . $response->json("INTERNAL_REFERENCE"));
             } else {
+                //dd($response->json('ModelState')['ValError0']);
                 return session()->flash('error', $response->getreasonPhrase());
             }
         } catch (Exception $e) {
