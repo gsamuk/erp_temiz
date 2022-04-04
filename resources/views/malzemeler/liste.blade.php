@@ -7,7 +7,7 @@
 @slot('title') Malzemeler @endslot
 @endcomponent
 
-@livewire('malzemeler.index')
+@livewire('malzemeler.liste')
 
 
 @endsection

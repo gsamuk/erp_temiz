@@ -11,6 +11,11 @@ class SatinAlmaController extends Controller
         return view('satinalma.siparis');
     }
 
+    public function siparis_olustur()
+    {
+        return view('satinalma.siparis_olustur');
+    }
+
     public function irsaliye()
     {
         return view('satinalma.irsaliye');

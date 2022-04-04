@@ -55,7 +55,10 @@ class LoginPage extends Component
     {
 
         $this->validate();
-        $active = Users::where('is_active', 0)->where('user_name', $this->user_name)->first();
+        $active = Users::where('is_active', 0)
+            ->where('user_name', $this->user_name)
+            ->first();
+
         if ($active) {
             return redirect("login")->with('message', 'Bu Kullanıcı Hesabı Kapalı! Eğer bir sorun olduğunu düşünüyorsanız sistem yöneticisi iletişime geçiniz.');
         }
@@ -76,8 +79,6 @@ class LoginPage extends Component
 
         if ($user) {
 
-
-
             $request->session()->put('userData', $user);
 
             if ($this->rememberme) {
@@ -92,9 +93,7 @@ class LoginPage extends Component
 
             return redirect()->to('/');
         } else {
-
             $request->session()->forget('userData');
-            $request->session()->forget('LogoData');
             $request->session()->put('LogoLogin', false);
             $this->err = "Hatalı Kullanıcı Adı yada Şifre";
         }

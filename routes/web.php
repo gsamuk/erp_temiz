@@ -28,6 +28,7 @@ Route::middleware([Kontrol::class])->group(function () {
         // Token Gerektiren işlemler Middleware Gereklidir
         // satın alma işlemleri
         Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');
+        Route::get('satinalma/siparis_olustur', [App\Http\Controllers\SatinAlmaController::class, 'siparis_olustur'])->name('satinalma.siparis_olustur');
         Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
         Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
         Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');

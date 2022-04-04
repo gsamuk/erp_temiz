@@ -54,6 +54,14 @@
                                     Siparişler
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('satinalma.siparis_olustur') }}" class="nav-link" data-key="t-google">
+                                    Sipariş Oluştur
+                                </a>
+                            </li>
+
+
                             <li class="nav-item">
                                 <a href="{{ route('satinalma.irsaliye') }}" class="nav-link" data-key="t-google">
                                     İrsaliyeler

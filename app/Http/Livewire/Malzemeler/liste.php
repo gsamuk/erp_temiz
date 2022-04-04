@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 
-class Index extends Component
+class Liste extends Component
 {
 
     use WithPagination;
@@ -35,16 +35,19 @@ class Index extends Component
     {
         $data = LogoDb::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
-                return $query->where('stock_type', $this->tur);
+                return $query->where('cardtype_name', $this->tur);
             })
             ->when($this->code, function ($query) {
                 return $query->where('stock_code', $this->code);
             })
             ->orderByDesc('stock_name')
-            ->paginate(10);
+            ->paginate(12);
 
-        return view('livewire.malzemeler.index', [
-            'items' => $data
+        $item_type = LogoDb::select('cardtype_name')->distinct()->get();
+
+        return view('livewire.malzemeler.liste', [
+            'items' => $data,
+            'item_type' => $item_type
         ]);
     }
 }

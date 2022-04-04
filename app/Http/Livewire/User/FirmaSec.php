@@ -44,6 +44,9 @@ class FirmaSec extends Component
             if ($token) {
                 $this->btn = false;
                 session()->flash('message', 'Geçiş Yapıldı, lütfen sayfayı yenileyiniz! ');
+            } else {
+                $this->btn = true;
+                session()->flash('error', 'Sorun, Lütfen logları kontrol ediniz. ');
             }
         }
     }

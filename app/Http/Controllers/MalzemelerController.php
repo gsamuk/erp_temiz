@@ -8,6 +8,6 @@ class MalzemelerController extends Controller
 {
     public function index()
     {
-        return view('malzemeler.index');
+        return view('malzemeler.liste');
     }
 }
