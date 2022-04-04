@@ -4,11 +4,21 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') Zeberced ERP @endslot
-@slot('title') Satınalma Siparişi @endslot
+@slot('title') Satınalma Siparişleri @endslot
 @endcomponent
 
-@livewire('satinalma.siparis')
+<div class="row">
+    <div class="col-xxl-7">
+        @livewire('satinalma.siparis', ['po_status' => 1, 'title' => 'Sipariş Öneri (Onay Bekleyen)'])
+    </div>
+    <div class="col-xxl-7">
+        @livewire('satinalma.siparis', ['po_status' => 4, 'title' => 'Sevkedilebilir Sipariş (Onayladı)'])
+    </div>
+    <div class="col-xxl-5">
+        @livewire('satinalma.siparis', ['po_status' => 2, 'title' => 'Sevkedilemez Sipariş (Red)'])
 
+    </div>
+</div>
 
 @endsection
 @section('script')

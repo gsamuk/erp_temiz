@@ -11,12 +11,14 @@ class Siparis extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search = '';
+    public $po_status;
+    public $title;
 
     public function render()
     {
-        $data = LogoPurchaseOrders::where('account_name', 'like', '%' . $this->search . '%')
+        $data = LogoPurchaseOrders::Where('po_status', $this->po_status)->where('account_name', 'like', '%' . $this->search . '%')
             ->orderBy('logicalref', 'desc')
-            ->paginate(10);
+            ->paginate(5);
         return view('livewire.satinalma.siparis', [
             'data' => $data
         ]);

@@ -50,16 +50,19 @@
                     <div class="collapse menu-dropdown" id="m1">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
+                                <a href="{{ route('satinalma.siparis_olustur') }}" class="nav-link" data-key="t-google">
+                                    Sipariş Oluştur
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
                                 <a href="{{ route('satinalma.siparis') }}" class="nav-link" data-key="t-google">
                                     Siparişler
                                 </a>
                             </li>
 
-                            <li class="nav-item">
-                                <a href="{{ route('satinalma.siparis_olustur') }}" class="nav-link" data-key="t-google">
-                                    Sipariş Oluştur
-                                </a>
-                            </li>
+
 
 
                             <li class="nav-item">

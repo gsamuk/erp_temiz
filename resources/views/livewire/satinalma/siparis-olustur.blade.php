@@ -1,4 +1,11 @@
 <div>
+    <style>
+        label {
+            color: rgb(65, 62, 62);
+            font-size: 0.9em;
+
+        }
+    </style>
     <div class="row">
         <div class="col-lg-12">
             <form wire:submit.prevent="store()">
@@ -17,159 +24,162 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row ">
+                        <div class="row">
                             <div class="col-lg-12 col-md-12">
-                                <table class="table rwd-table table-sm ">
-                                    <tr>
-                                        <th class="px-1">
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Tarih</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <input type="date" name="zaman" step="any" wire:model="zaman"
-                                                        class="form-control form-control-sm mb-1 rounded-0">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Belge No</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="belge_no" wire:model="belge_no"
-                                                        class="form-control form-control-sm mb-1 rounded-0">
-                                                </div>
-                                            </div>
-
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Proje Kodu</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" wire:model="project_code" name="proje_kodu"
-                                                        data-bs-toggle="modal" data-bs-target="#projectsModal"
-                                                        class="form-control form-control-sm mb-1 rounded-0"
-                                                        readonly="readonly">
-                                                    @error('project_code') <span class="error">{{ $message
-                                                        }}</span> @enderror
-                                                </div>
-
-                                            </div>
-                                        </th>
-                                        <th class="px-3">
-                                            <div class="row">
-                                                <div class="col-lg-2">
-                                                    <label class="form-label">Kodu</label>
-                                                </div>
-                                                <div class="col-lg-10">
-                                                    <input type="hidden" wire:model="account_ref_id">
-                                                    <input type="text" data-bs-toggle="modal" name="musteri_kodu"
-                                                        wire:model="account_code" data-bs-target="#accountsModal"
-                                                        class="form-control form-control-sm mb-1 rounded-0"
-                                                        readonly="readonly">
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-lg-2">
-                                                    <label class="form-label">Unvanı</label>
-                                                </div>
-                                                <div class="col-lg-10">
-                                                    <input type="text" wire:model="account_name" name="musteri_unvan"
-                                                        data-bs-toggle="modal" data-bs-target="#accountsModal"
-                                                        class="form-control form-control-sm mb-1 rounded-0"
-                                                        readonly="readonly">
-
-                                                    @error('account_ref_id') <span class="error text-danger">{{
-                                                        $message
-                                                        }}</span> @enderror
-                                                </div>
-
-                                            </div>
-
-                                        </th>
-                                        <th class="px-3">
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">İş Yeri</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                        <select>
-                                                            <option value="0" name="is_yeri" selected>000,
-                                                                Merkez</option>
-                                                        </select>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-nowrap" style="width: 60%; min-width:800px">
+                                        <tr>
+                                            <th class="px-2">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Tarih</label>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Bölüm</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                        <select>
-                                                            <option value="0" name="bolum" selected>000, Merkez
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Fabrika</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                        <select>
-                                                            <option value="0" name="fabrika" selected>000,
-                                                                Merkez</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-lg-3">
-                                                    <label class="form-label">Ambar</label>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <div class="input-group input-group-sm ">
-                                                        <select wire:model="warehouse" name="ambar">
-                                                            @foreach ($warehouses as $d)
-                                                            <option value="{{ $d->warehouse_no }}">{{
-                                                                $d->warehouse_name}}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="col-lg-8">
+                                                        <input type="date" name="zaman" step="any" wire:model="zaman"
+                                                            class="form-control form-control-sm mb-1 rounded-0">
                                                     </div>
                                                 </div>
 
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </table>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Belge No</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" name="belge_no" wire:model="belge_no"
+                                                            class="form-control form-control-sm mb-1 rounded-0">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Proje Kodu</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" wire:model="project_code" name="proje_kodu"
+                                                            data-bs-toggle="modal" data-bs-target="#projectsModal"
+                                                            class="form-control form-control-sm mb-1 rounded-0"
+                                                            readonly="readonly">
+                                                        @error('project_code') <span class="error">{{ $message
+                                                            }}</span> @enderror
+                                                    </div>
+
+                                                </div>
+                                            </th>
+                                            <th class="px-1 ">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Kodu</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <input type="hidden" wire:model="account_ref_id">
+                                                        <input type="text" data-bs-toggle="modal" name="musteri_kodu"
+                                                            wire:model="account_code" data-bs-target="#accountsModal"
+                                                            class="form-control form-control-sm mb-1 rounded-0"
+                                                            readonly="readonly">
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Unvanı</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" wire:model="account_name"
+                                                            name="musteri_unvan" data-bs-toggle="modal"
+                                                            data-bs-target="#accountsModal"
+                                                            class="form-control form-control-sm mb-1 rounded-0"
+                                                            readonly="readonly">
+
+                                                        @error('account_ref_id') <span class="error text-danger">{{
+                                                            $message
+                                                            }}</span> @enderror
+                                                    </div>
+
+                                                </div>
+
+                                            </th>
+                                            <th class="px-1">
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">İş Yeri</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                            <select class="form-select">
+                                                                <option value="0" name="is_yeri" selected>000,
+                                                                    Merkez</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Bölüm</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                            <select class="form-select">
+                                                                <option value="0" name="bolum" selected>000, Merkez
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Fabrika</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                            <select class="form-select">
+                                                                <option value="0" name="fabrika" selected>000,
+                                                                    Merkez</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <label class="form-label">Ambar</label>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="input-group input-group-sm ">
+                                                            <select wire:model="warehouse" name="ambar"
+                                                                class="form-select">
+                                                                @foreach ($warehouses as $d)
+                                                                <option value="{{ $d->warehouse_no }}">{{
+                                                                    $d->warehouse_name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
 
-                            <div class="col-lg-12 col-md-12  ">
+                            <div class="col-lg-12 col-md-12">
 
 
                                 <div class="table-responsive">
                                     <table class="table table-sm table-striped align-middle table-nowrap"
-                                        style="width: 100%; min-width:1200px;">
+                                        style="width: 60%; min-width:1200px ">
 
                                         <thead class="table-light">
                                             <tr>
                                                 <th style="width:30px;"></th>
                                                 <th style="width:85px;">Türü</th>
                                                 <th style="width:70px;">Kodu</th>
-                                                <th style="width:250px;">Açıklaması</th>
+                                                <th style="width:200px;">Açıklaması</th>
                                                 <th style="width:100px;">Miktar</th>
                                                 <th style="width:70px;">Birim</th>
                                                 <th style="width:100px;">Birim Fiyat</th>
@@ -195,8 +205,7 @@
                                                     <div class="input-group input-group-sm">
                                                         <input type="text" class="form-control rounded-0" name="tip[0]"
                                                             wire:model="kod.0" data-bs-toggle="modal"
-                                                            readonly="readonly"
-                                                            wire:click="$emitTo('malzemeler.index','setLine',0)"
+                                                            readonly="readonly" wire:click="$emit('setLine',0)"
                                                             data-bs-target="#malzemeModal">
                                                     </div>
                                                 </td>
@@ -206,7 +215,7 @@
                                                         <input type="text" class="form-control rounded-0"
                                                             wire:model="aciklama.0" data-bs-toggle="modal"
                                                             name="aciklama[0]" readonly="readonly"
-                                                            wire:click="$emitTo('malzemeler.index','setLine',0)"
+                                                            wire:click="$emit('setLine',0)"
                                                             data-bs-target="#malzemeModal">
                                                     </div>
                                                 </td>
@@ -293,7 +302,7 @@
                                                         <input type="text" class="form-control border-dashed"
                                                             readonly="readonly" name="kod[{{ $value }}]"
                                                             id="input_kod_{{ $value }}"
-                                                            wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
+                                                            wire:click="$emit('setLine',{{ $value }})"
                                                             wire:model="kod.{{ $value }}" data-bs-toggle="modal"
                                                             data-bs-target="#malzemeModal">
                                                     </div>
@@ -304,7 +313,7 @@
                                                         <input type="text" class="form-control border-dashed"
                                                             readonly="readonly" name="aciklama[{{ $value }}]"
                                                             id="input_aciklama_{{ $value }}"
-                                                            wire:click="$emitTo('malzemeler.index','setLine',{{ $value }})"
+                                                            wire:click="$emit('setLine',{{ $value }})"
                                                             wire:model="aciklama.{{ $value }}" data-bs-toggle="modal"
                                                             data-bs-target="#malzemeModal">
                                                     </div>
