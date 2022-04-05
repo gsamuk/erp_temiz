@@ -6,10 +6,7 @@ use Livewire\Component;
 use App\Models\LogoDb;
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
-use Exception;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cookie;
-use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\LogoRest;
 
 class SiparisOlustur extends Component
 {
@@ -94,23 +91,8 @@ class SiparisOlustur extends Component
                 'items' => $items
             ]
         ];
-        $url = 'http://65.21.157.111:32001/api/v1/purchaseOrders';
-
-
-        try {
-            $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
-            if ($response->status() == 200 && $response->successful() == true) {
-                $this->reset();
-                TransactionController::add($url, $data, $response->body());
-                return session()->flash('success', 'Başarılı Sipariş ID #' . $response->json("INTERNAL_REFERENCE"));
-            } else {
-                TransactionController::add($url, $data, $response->body());
-                return session()->flash('error', serialize($response->body()));
-            }
-        } catch (Exception $e) {
-            TransactionController::add($url, $data, $e->getMessage());
-            return session()->flash('error', $e->getMessage());
-        }
+        LogoRest::SiparisOlustur($data);
+        $this->reset();
     }
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
