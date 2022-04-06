@@ -7,12 +7,13 @@ use App\Models\LogoDb;
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
 use App\Http\Controllers\LogoRest;
-use NotificationChannels\Telegram\TelegramUpdates;
+use App\Http\Controllers\DbController;
+
 
 class SiparisOlustur extends Component
 {
 
-    public $tip, $kod, $aciklama, $miktar, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar, $warehouse;
+    public $tip, $kod, $aciklama, $miktar, $indirim, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar, $warehouse;
     public $zaman;
     public $belge_no;
     public $account_name, $account_code, $account_ref_id;
@@ -43,6 +44,32 @@ class SiparisOlustur extends Component
     {
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("Y-m-d");
+        if ($this->sid > 0) {
+            $data = DbController::getSiparis($this->sid);
+            $this->zaman = date('Y-m-d', strtotime($data->po_date));
+            $this->belge_no = $data->document_no;
+            $this->project_code = $data->po_projectref;
+            $this->account_name = $data->account_name;
+            $this->warehouse = $data->po_warehouseref;
+
+            $items = DbController::getSiparisDetay($this->sid);
+
+            foreach ($items as $itm => $v) {
+                $this->inputs[] = $itm;
+                $this->aciklama[$itm] = $v->stock_name;
+                $this->kod[$itm] = $v->stock_code;
+                $this->miktar[$itm] = $v->quantity;
+                $this->birim[$itm] = $v->unit_code;
+                $this->birim_fiyat[$itm] = $v->unit_price;
+                $this->kdv[$itm] = $v->vat;
+
+                $ml = LogoDb::where('stock_code', $v->stock_code)->first();
+
+                $units = LogoUnits::Where('unitset_ref', $ml->unitset_ref)->get();
+                $this->birim_select[$itm] = $units;
+                $this->birim[$itm] = $v->unit_code;
+            }
+        }
     }
 
     public function store()
@@ -146,28 +173,8 @@ class SiparisOlustur extends Component
     }
 
 
-
-
     public function render()
     {
-        if (isset($this->miktar[$this->line]) && $this->miktar[$this->line] > 0  && isset($this->birim_fiyat[$this->line]) && $this->birim_fiyat[$this->line] > 0) {
-            $this->tutar[$this->line] = $this->miktar[$this->line] * $this->birim_fiyat[$this->line];
-            $this->net_tutar[$this->line] = $this->miktar[$this->line] * $this->birim_fiyat[$this->line];
-        }
-
-
-        if (isset($this->miktar[$this->line]) && $this->miktar[$this->line] > 0  && isset($this->birim_fiyat[$this->line]) && $this->birim_fiyat[$this->line] > 0  && isset($this->kdv[$this->line]) && $this->kdv[$this->line] > 0) {
-            $kdv = $this->kdv[$this->line];
-            $tutar = $this->miktar[$this->line] * $this->birim_fiyat[$this->line];
-            $this->net_tutar[$this->line] = $tutar;
-            $this->tutar[$this->line] = $tutar + ($tutar * ($kdv / 100));
-        }
-
-
-        if (isset($this->miktar[$this->line]) && $this->miktar[$this->line] == 0  || isset($this->birim_fiyat[$this->line]) && $this->birim_fiyat[$this->line] == 0) {
-            $this->tutar[$this->line] = null;
-        }
-
         $data = LogoWarehouses::where('company_no', '1')->get();
         return view('livewire.satinalma.siparis-olustur', [
             'warehouses' => $data,

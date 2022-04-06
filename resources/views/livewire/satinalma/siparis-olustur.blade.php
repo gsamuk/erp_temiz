@@ -183,7 +183,8 @@
                                                 <th style="width:100px;">Miktar</th>
                                                 <th style="width:70px;">Birim</th>
                                                 <th style="width:100px;">Birim Fiyat</th>
-                                                <th style="width:80px;">Kdv</th>
+                                                <th style="width:80px;">Kdv %</th>
+                                                <th style="width:100px;">İndirim </th>
                                                 <th style="width:100px;">Tutar</th>
                                                 <th style="width:100px;">Net Tutar</th>
                                                 <th>-</th>
@@ -191,6 +192,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @if($sid == 0)
                                             <tr>
                                                 <th scope="row">1</th>
                                                 <td>
@@ -262,6 +264,15 @@
                                                     </div>
                                                 </td>
 
+
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" step="any" class="form-control rounded-0"
+                                                            name="indirim[0]" wire:click="active_line(0)"
+                                                            wire:model.lazy="indirim.0">
+                                                    </div>
+                                                </td>
+
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <input type="number" class="form-control rounded-0"
@@ -283,6 +294,8 @@
                                                 </td>
 
                                             </tr>
+                                            @endif
+
                                             @php
                                             $s =2;
                                             @endphp
@@ -363,6 +376,16 @@
                                                             class="form-control border-dashed " name="kdv[{{ $value }}]"
                                                             wire:click="active_line({{ $value }})"
                                                             wire:model.lazy="kdv.{{ $value }}">
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" step="any"
+                                                            class="form-control border-dashed "
+                                                            name="indirim[{{ $value }}]"
+                                                            wire:click="active_line({{ $value }})"
+                                                            wire:model.lazy="indirim.{{ $value }}">
                                                     </div>
                                                 </td>
 
