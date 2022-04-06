@@ -7,7 +7,8 @@
 @slot('title') Satınalma Siparişi @endslot
 @endcomponent
 
-@livewire('satinalma.siparis-olustur')
+
+@livewire('satinalma.siparis-olustur', ['sid' => $id])
 
 
 @endsection

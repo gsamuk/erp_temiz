@@ -7,6 +7,7 @@ use App\Models\LogoDb;
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
 use App\Http\Controllers\LogoRest;
+use NotificationChannels\Telegram\TelegramUpdates;
 
 class SiparisOlustur extends Component
 {
@@ -22,6 +23,7 @@ class SiparisOlustur extends Component
     public $updateMode = false;
     public $inputs = [];
     public $i = 0;
+    public $sid; // sipariş id
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
@@ -92,6 +94,7 @@ class SiparisOlustur extends Component
             ]
         ];
         LogoRest::SiparisOlustur($data);
+
         $this->reset();
     }
 

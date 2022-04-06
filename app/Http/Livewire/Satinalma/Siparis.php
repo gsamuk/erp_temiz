@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\LogoPurchaseOrders;
 use App\Http\Controllers\LogoRest;
 
+
+
 class Siparis extends Component
 {
     use WithPagination;

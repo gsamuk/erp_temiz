@@ -13,8 +13,6 @@
             </div>
 
             <div class="row">
-
-
                 <div class="col-xxl-5 col-sm-6">
                     <div class="search-box">
                         <input type="text" class="form-control search" wire:model="search"
@@ -73,7 +71,7 @@
             <div class="table-responsive">
                 <table class="table table-sm table-bordered  table-striped table-nowrap"
                     wire:loading.class="opacity-50">
-                    <thead class="table-info">
+                    <thead class="table-danger">
                         <tr>
                             <th scope="col align-center" style="width:50px;"> </th>
                             <th scope="col">Durum</th>
@@ -104,9 +102,11 @@
                                             aria-haspopup="true" aria-expanded="false">
                                             <span class="fs-18"><i class="mdi mdi-dots-vertical"></i></span>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-end" style="">
+                                        <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item" href="#"
-                                                onclick="detay({{$d->logicalref}})">Düzenle / Gör</a>
+                                                onclick="detay({{$d->logicalref}})">Gör</a>
+                                            <a class="dropdown-item"
+                                                href="{{ route('satinalma.siparis_duzenle', ['id'=> $d->logicalref ]) }}">Düzenle</a>
                                             <a class="dropdown-item" href="#" onclick="onay({{$d->logicalref}})">Onay
                                                 Durumu Değiştir</a>
                                             <a class="dropdown-item" href="#" onclick="sil({{$d->logicalref}})">Çıkar
