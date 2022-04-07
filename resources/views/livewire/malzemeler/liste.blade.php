@@ -36,19 +36,14 @@
                     wire:loading.class="opacity-50">
                     <thead class="table-light">
                         <tr>
-
                             <th class="sort" data-sort="tur" scope="col">Tür</th>
                             <th class="sort" data-sort="kod" scope="col">KOD</th>
                             <th class="sort" data-sort="name" scope="col"></th>
                             <th class="sort" data-sort="name" scope="col">MALZEME ADI</th>
                             <th class="sort" data-sort="name" scope="col">Eldeki Miktar</th>
                             <th class="sort" data-sort="name" scope="col">Ortalama Fiyat</th>
-
                             <th class="sort" data-sort="name" scope="col">Satın Alma Miktarı</th>
                             <th class="sort" data-sort="name" scope="col">Satın Alma Tutarı</th>
-
-
-
                         </tr>
 
                     </thead>
@@ -56,7 +51,6 @@
 
                         @foreach ($items as $item)
                         <tr>
-
                             <td class="owner">{{ $item->stock_type }}</td>
                             <td class="owner"><a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
                                     href="#">{{ $item->stock_code }}</a></td>

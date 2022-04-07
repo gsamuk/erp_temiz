@@ -26,7 +26,8 @@
                         @foreach ($projects as $project)
                         <tr>
                             <td class="owner">{{ $project->project_code }}</td>
-                            <td class="owner"><a wire:click.prevent="addProject('{{ $project->project_code }}')"
+                            <td class="owner"><a
+                                    wire:click.prevent="addProject('{{ $project->project_code }}', '{{ $project->record }}')"
                                     href="#"><button class="btn btn-primary btn-sm"> Seç </button></a></td>
                             <td class="owner">{{ $project->project_name }}</td>
 

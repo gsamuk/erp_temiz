@@ -8,7 +8,7 @@
     </style>
     <div class="row">
         <div class="col-lg-12">
-            <form wire:submit.prevent="store()">
+            <form wire:submit.prevent="store({{ $sid }})">
                 @csrf
                 <div class="card">
                     <div class="card-header ">
@@ -56,6 +56,7 @@
                                                         <label class="form-label">Proje Kodu</label>
                                                     </div>
                                                     <div class="col-lg-8">
+                                                        <input type="hidden" wire:model="project_ref_id">
                                                         <input type="text" wire:model="project_code" name="proje_kodu"
                                                             data-bs-toggle="modal" data-bs-target="#projectsModal"
                                                             class="form-control form-control-sm mb-1 rounded-0"
@@ -192,112 +193,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if($sid == 0)
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td>
-                                                    <div class="input-group input-group-sm ">
-                                                        <select wire:model="tip.0">
-                                                            <option selected>Malzeme</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="text" class="form-control rounded-0" name="tip[0]"
-                                                            wire:model="kod.0" data-bs-toggle="modal"
-                                                            readonly="readonly" wire:click="$emit('setLine',0)"
-                                                            data-bs-target="#malzemeModal">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="text" class="form-control rounded-0"
-                                                            wire:model="aciklama.0" data-bs-toggle="modal"
-                                                            name="aciklama[0]" readonly="readonly"
-                                                            wire:click="$emit('setLine',0)"
-                                                            data-bs-target="#malzemeModal">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any" class="form-control rounded-0"
-                                                            name="miktar[0]" wire:click="active_line(0)"
-                                                            wire:model.lazy="miktar.0">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-
-                                                    <div class="input-group input-group-sm">
-                                                        <select wire:click="active_line(0)" name="birim[0]"
-                                                            wire:model.defer="birim.0">
-                                                            @if(isset($birim_select[0]))
-                                                            <option value=""> -- Seç --</option>
-                                                            @foreach($birim_select[0] as $b)
-                                                            <option value="{{ $b['unit_code'] }}">{{
-                                                                $b['unit_name'] }}
-                                                            </option>
-                                                            @endforeach
-                                                            @endif
-
-                                                        </select>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any" class="form-control rounded-0"
-                                                            name="birim_fiyat[0]" wire:click="active_line(0)"
-                                                            wire:model.lazy="birim_fiyat.0">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any" class="form-control rounded-0"
-                                                            name="kdv[0]" wire:click="active_line(0)"
-                                                            wire:model.lazy="kdv.0">
-                                                    </div>
-                                                </td>
-
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any" class="form-control rounded-0"
-                                                            name="indirim[0]" wire:click="active_line(0)"
-                                                            wire:model.lazy="indirim.0">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" class="form-control rounded-0"
-                                                            name="tutar[0]" disabled wire:model.lazy="tutar.0">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" class="form-control rounded-0"
-                                                            name="net_tutar[0]" disabled wire:model.lazy="net_tutar.0">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
-                                                        wire:click.prevent="add({{$i}})"><i
-                                                            class="mdi mdi-plus"></i></button>
-                                                </td>
-
-                                            </tr>
-                                            @endif
 
                                             @php
-                                            $s =2;
+                                            $s =1;
                                             @endphp
                                             @foreach ($inputs as $key => $value)
                                             <tr>
@@ -417,10 +315,21 @@
 
 
                                             </tr>
+
                                             @php
                                             $s = $s + 1;
                                             @endphp
                                             @endforeach
+                                            <tr>
+                                                <th scope="row" colspan="11"></th>
+                                                <td>
+
+                                                    <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
+                                                        wire:click.prevent="add({{$i}})"><i
+                                                            class="mdi mdi-plus"></i></button>
+                                                </td>
+                                            </tr>
+
                                             <tr>
                                                 <th scope="row" colspan="6"></th>
                                                 <td colspan="4">

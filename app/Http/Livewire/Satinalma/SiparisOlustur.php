@@ -17,13 +17,16 @@ class SiparisOlustur extends Component
     public $zaman;
     public $belge_no;
     public $account_name, $account_code, $account_ref_id;
+
     public $project_name;
+    public $project_ref_id;
     public $project_code;
+
     public $birim_select = [];
-    public $line = 0;
+    public $line = 1;
     public $updateMode = false;
     public $inputs = [];
-    public $i = 0;
+    public $i = 1;
     public $sid; // sipariş id
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
@@ -48,8 +51,12 @@ class SiparisOlustur extends Component
             $data = DbController::getSiparis($this->sid);
             $this->zaman = date('Y-m-d', strtotime($data->po_date));
             $this->belge_no = $data->document_no;
-            $this->project_code = $data->po_projectref;
+            $this->project_code = $data->project_code;
+            $this->project_ref_id = $data->po_projectref;
+
+            $this->account_code = $data->acoount_code;
             $this->account_name = $data->account_name;
+            $this->account_ref_id = $data->accountref;
             $this->warehouse = $data->po_warehouseref;
 
             $items = DbController::getSiparisDetay($this->sid);
@@ -64,7 +71,6 @@ class SiparisOlustur extends Component
                 $this->kdv[$itm] = $v->vat;
 
                 $ml = LogoDb::where('stock_code', $v->stock_code)->first();
-
                 $units = LogoUnits::Where('unitset_ref', $ml->unitset_ref)->get();
                 $this->birim_select[$itm] = $units;
                 $this->birim[$itm] = $v->unit_code;
@@ -72,10 +78,11 @@ class SiparisOlustur extends Component
         }
     }
 
-    public function store()
+    public function store($sid)
     {
         $this->validate();
         $items = array();
+
 
         foreach ($this->kod  as $in => $v) {
             if (!isset($this->kdv[$in]) || $this->kdv[$in] == null) {
@@ -97,10 +104,12 @@ class SiparisOlustur extends Component
             }
 
 
-            $items[$in] = [
+            $items[] = [
                 "TYPE" => 0,
                 "MASTER_CODE" => $this->kod[$in],
                 "CLIENTREF" => $this->account_ref_id,
+                'PROJECT_CODE' => $this->project_code,
+                'PROJECTREF' => $this->project_ref_id,
                 "QUANTITY" => $this->miktar[$in],
                 "PRICE" => $this->birim_fiyat[$in],
                 "UNIT_CODE" => $this->birim[$in],
@@ -114,15 +123,21 @@ class SiparisOlustur extends Component
             ],
             'DATE' => $this->zaman,
             'CLIENTREF' => $this->account_ref_id,
+            "ARP_CODE" => $this->account_code,
             'DOC_NUMBER' => $this->belge_no,
             'SOURCE_WH' => $this->warehouse,
+            'PROJECT_CODE' => $this->project_code,
+            'PROJECTREF' => $this->project_ref_id,
             'TRANSACTIONS' => [
                 'items' => $items
             ]
         ];
-        LogoRest::SiparisOlustur($data);
 
-        $this->reset();
+
+
+        LogoRest::SiparisOlustur($data, $sid);
+
+        //$this->reset();
     }
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
@@ -152,6 +167,7 @@ class SiparisOlustur extends Component
     public function getProject($d) // seçilen projeyi  dinleyerek set ediyoruz 
     {
         $this->project_code = $d['code'];
+        $this->project_ref_id = $d['ref_id'];
         $this->dispatchBrowserEvent('CloseModal');
     }
 
@@ -170,6 +186,7 @@ class SiparisOlustur extends Component
     public function remove($i)
     {
         unset($this->inputs[$i]);
+        unset($this->kod[$i]);
     }
 
 

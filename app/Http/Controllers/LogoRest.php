@@ -18,14 +18,23 @@ class LogoRest extends Controller
         }
     }
 
-    static function SiparisOlustur($data)
+    static function SiparisOlustur($data, $sid)
     {
         try {
-            $url = Self::rest_url('purchaseOrders');
-            $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+            if ($sid > 0) {
+                $msg = "Sipariş Kaydı Düzenlendi";
+                $url = Self::rest_url('purchaseOrders/' . $sid);
+                $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $data);
+            } else {
+                $msg = "Yeni Sipariş Oluşturuldu";
+                $url = Self::rest_url('purchaseOrders');
+                $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+            }
+
+
             if ($response->status() == 200 && $response->successful() == true) {
                 TransactionController::add($url, $data, $response->body());
-                return session()->flash('success', 'Başarılı Sipariş ID #' . $response->json("INTERNAL_REFERENCE"));
+                return session()->flash('success', $msg . ' ID #' . $response->json("INTERNAL_REFERENCE"));
             } else {
                 TransactionController::add($url, $data, $response->body());
                 return session()->flash('error', serialize($response->body()));

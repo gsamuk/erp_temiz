@@ -92,10 +92,6 @@
                 @endif
 
 
-
-
-
-
                 @if(Session::get('userData')->sale_view == 1)
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m2" data-bs-toggle="collapse" role="button"
@@ -151,6 +147,26 @@
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
                                     Rapor
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                @endif
+
+
+
+                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#m4" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarMaps">
+                        <i class="ri-map-pin-line"></i> <span>Yönetim Raporları </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="m4">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Rapor 1
                                 </a>
                             </li>
                         </ul>
