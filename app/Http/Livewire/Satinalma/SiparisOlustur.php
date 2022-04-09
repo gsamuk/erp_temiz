@@ -23,10 +23,10 @@ class SiparisOlustur extends Component
     public $project_code;
 
     public $birim_select = [];
-    public $line = 1;
+    public $line = 0;
     public $updateMode = false;
     public $inputs = [];
-    public $i = 1;
+    public $i = 0;
     public $sid; // sipariş id
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
@@ -62,6 +62,8 @@ class SiparisOlustur extends Component
             $items = DbController::getSiparisDetay($this->sid);
 
             foreach ($items as $itm => $v) {
+
+                $this->i = $itm;
                 $this->inputs[] = $itm;
                 $this->aciklama[$itm] = $v->stock_name;
                 $this->kod[$itm] = $v->stock_code;
