@@ -259,7 +259,7 @@
                                                     <div class="input-group input-group-sm">
                                                         <input type="number" step="any"
                                                             class="form-control border-dashed " pattern="[0-9.]*"
-                                                            name="birim_fiyat[{{ $value }}]"
+                                                            name="birim_fiyat"
                                                             wire:model.lazy="birim_fiyat.{{ $value }}">
                                                     </div>
                                                 </td>
@@ -267,7 +267,7 @@
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <input type="number" step="any" id="kdv_{{ $value }}"
-                                                            class="form-control border-dashed " name="kdv[{{ $value }}]"
+                                                            class="form-control border-dashed " name="kdv"
                                                             wire:model.lazy="kdv.{{ $value }}">
                                                     </div>
                                                 </td>
@@ -285,8 +285,7 @@
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <input type="number" step="any"
-                                                            class="form-control border-dashed "
-                                                            name="indirim[{{ $value }}]"
+                                                            class="form-control border-dashed " name="indirim"
                                                             wire:model.lazy="indirim.{{ $value }}">
                                                     </div>
                                                 </td>
@@ -296,8 +295,8 @@
                                                     <div class="input-group input-group-sm">
                                                         <input type="text" id="tutar_{{ $value }}"
                                                             class="form-control border-dashed "
-                                                            wire:model.lazy="tutar.{{ $value }}"
-                                                            name="tutar[{{ $value }}]" readonly="readonly">
+                                                            wire:model.lazy="tutar.{{ $value }}" name="tutar"
+                                                            readonly="readonly">
                                                     </div>
                                                 </td>
 
@@ -306,8 +305,8 @@
                                                     <div class="input-group input-group-sm">
                                                         <input type="text" id="net_tutar_{{ $value }}"
                                                             class="form-control border-dashed "
-                                                            wire:model.lazy="net_tutar.{{ $value }}"
-                                                            name="net_tutar[{{ $value }}]" readonly="readonly">
+                                                            wire:model.lazy="net_tutar.{{ $value }}" name="net_tutar"
+                                                            readonly="readonly">
                                                     </div>
                                                 </td>
 
@@ -345,7 +344,7 @@
                                                             <div class="p-1">Toplam</div>
                                                         </div>
                                                         <div class="col-lg-6 border bg-white">
-                                                            <div class="p-1">
+                                                            <div class="p-1" id="div_toplam">
                                                                 {{ number_format($toplam,2,',','.') }}
                                                             </div>
                                                         </div>
@@ -356,7 +355,7 @@
                                                             <div class="p-1">Toplam Kdv</div>
                                                         </div>
                                                         <div class="col-lg-6 border bg-white">
-                                                            <div class="p-1">
+                                                            <div class="p-1" id="div_kdv">
                                                                 {{ number_format($toplam_kdv,2,',','.') }}
                                                             </div>
                                                         </div>
@@ -368,7 +367,7 @@
                                                             <div class="p-1">Net Toplam</div>
                                                         </div>
                                                         <div class="col-lg-6 border bg-white">
-                                                            <div class="p-1">
+                                                            <div class="p-1" id="div_net_toplam">
                                                                 {{ number_format($net_toplam,2,',','.') }}
                                                             </div>
                                                         </div>

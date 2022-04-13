@@ -108,6 +108,9 @@ class SiparisOlustur extends Component
                 }
             }
         }
+
+
+        $this->dispatchBrowserEvent('Hesapla');
     }
 
 
