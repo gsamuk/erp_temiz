@@ -78,8 +78,11 @@
                             <th scope="col">Fiş No</th>
                             <th scope="col">Belge No</th>
                             <th scope="col">Hesap</th>
+                            <th scope="col">Kdv</th>
                             <th scope="col">Toplam</th>
+                            <th scope="col">Net Toplam</th>
                             <th scope="col">Tarih</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,8 +106,8 @@
                                             <span class="fs-18"><i class="mdi mdi-dots-vertical"></i></span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#"
-                                                onclick="detay({{$d->logicalref}})">Gör</a>
+                                            <a class="dropdown-item"
+                                                href="{{ route('satinalma.siparis_duzenle', ['id'=> $d->logicalref ]) }}">Gör</a>
                                             <a class="dropdown-item"
                                                 href="{{ route('satinalma.siparis_duzenle', ['id'=> $d->logicalref ]) }}">Düzenle</a>
                                             <a class="dropdown-item" href="#" onclick="onay({{$d->logicalref}})">Onay
@@ -118,9 +121,21 @@
                             <td class="owner">{!! $status !!}</td>
                             <td class="owner">{{ $d->po_ficheno }}</td>
                             <td class="owner">{{ $d->document_no }}</td>
-                            <td class="owner text-dark  "><b>{{ $d->account_name }}</b></td>
-                            <td class="owner text-secondary"><b>{{ number_format($d->total_amount,2,',','.') }}</b></td>
+                            <td class="owner"><b>{{ $d->account_name }}</b></td>
+                            <td class="owner">{{ number_format($d->total_vat,2,',','.') }}</td>
+                            <td class="owner">{{ number_format($d->total_gross,2,',','.') }}</td>
+                            <td class="owner"><b>{{ number_format($d->total_amount,2,',','.') }}</b></td>
                             <td class="owner">{{ date('d-m-Y',strtotime($d->po_date)) }}</td>
+                            <td class="owner">
+
+
+                                @if($d->po_status == 2)
+                                <button title="Kayıtlardan Çıkar" class="remove-item-btn"
+                                    onclick="sil({{$d->logicalref}})">
+                                    <i class="ri-delete-bin-fill align-bottom text-muted"></i>
+                                </button>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -130,7 +145,12 @@
             <div class="d-flex justify-content-end mt-3">
                 {{ $data->links() }}
             </div>
+
+            Not: Satınalma siparişlerinin gerçekleşmesi için yetkili kişi tarafından onaylanması yani "Sevk Edilebilir"
+            olarak işaretlenmesi
+            gerekir.
         </div>
+
     </div>
 
 

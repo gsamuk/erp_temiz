@@ -13,7 +13,7 @@ use App\Http\Controllers\DbController;
 class SiparisOlustur extends Component
 {
 
-    public $tip, $kod, $aciklama, $miktar, $indirim, $birim, $birim_fiyat, $kdv, $tutar, $net_tutar, $warehouse;
+    public $tip, $kod, $aciklama, $miktar, $indirim, $birim, $birim_fiyat, $kdv, $kdv_inc, $tutar, $net_tutar, $warehouse;
     public $zaman;
     public $belge_no;
     public $account_name, $account_code, $account_ref_id;
@@ -29,6 +29,12 @@ class SiparisOlustur extends Component
     public $i = 0;
     public $sid; // sipariş id
 
+    public $toplam = 0;
+    public $toplam_kdv = 0;
+    public $net_toplam = 0;
+
+
+
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
     protected $rules = [
@@ -38,10 +44,73 @@ class SiparisOlustur extends Component
         'account_ref_id.required' => 'Lütfen Cari Ünvan Seçiniz',
     ];
 
-    public function updated($propertyName)
+    public function updated($name, $value)
     {
-        $this->validateOnly($propertyName);
+        $this->validateOnly($name);
+
+        $konum = strpos($name, 'birim_fiyat');
+
+        if ($konum !== false) {
+            $ln = explode('.', $name);
+            $ln = $ln[1];
+            if (!empty($this->miktar[$ln])) {
+                $tutar = $this->birim_fiyat[$ln] * $this->miktar[$ln];
+                $this->tutar[$ln] = $tutar;
+                if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 0) {
+                    $kdv = $tutar * $this->kdv[$ln] / 100;
+                    $net_tutar = $kdv + $tutar;
+                    $this->net_tutar[$ln] = $net_tutar;
+                } else if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 1) {
+                    $kdvSiz = $tutar / (1 + ($this->kdv[$ln] / 100));
+                    $this->net_tutar[$ln] = number_format($kdvSiz, 2, ',', '.');
+                } else {
+                    $this->net_tutar[$ln] = $tutar;
+                }
+            }
+        }
+
+        $konum_kdv = strpos($name, 'kdv');
+        if ($konum_kdv !== false) {
+            $ln = explode('.', $name);
+            $ln = $ln[1];
+            if (!empty($this->miktar[$ln])) {
+                $tutar = $this->birim_fiyat[$ln] * $this->miktar[$ln];
+                $this->tutar[$ln] = $tutar;
+                if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 0) {
+                    $kdv = $tutar * $this->kdv[$ln] / 100;
+                    $net_tutar = $kdv + $tutar;
+                    $this->net_tutar[$ln] = $net_tutar;
+                } else if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 1) {
+                    $kdvSiz = $tutar / (1 + ($this->kdv[$ln] / 100));
+                    $this->net_tutar[$ln] = number_format($kdvSiz, 2, ',', '.');
+                } else {
+                    $this->net_tutar[$ln] = $tutar;
+                }
+            }
+        }
+
+        $konum_miktar = strpos($name, 'miktar');
+        if ($konum_miktar !== false) {
+            $ln = explode('.', $name);
+            $ln = $ln[1];
+            if (!empty($this->birim_fiyat[$ln])) {
+                $tutar = $this->birim_fiyat[$ln] * $this->miktar[$ln];
+                $this->tutar[$ln] = $tutar;
+                if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 0) {
+                    $kdv = $tutar * $this->kdv[$ln] / 100;
+                    $net_tutar = $kdv + $tutar;
+                    $this->net_tutar[$ln] = $net_tutar;
+                } else if (!empty($this->kdv[$ln]) && $this->kdv_inc[$ln] == 1) {
+                    $kdvSiz = $tutar / (1 + ($this->kdv[$ln] / 100));
+                    $this->net_tutar[$ln] = number_format($kdvSiz, 2, ',', '.');
+                } else {
+                    $this->net_tutar[$ln] = $tutar;
+                }
+            }
+        }
     }
+
+
 
     public function mount()
     {
@@ -58,6 +127,9 @@ class SiparisOlustur extends Component
             $this->account_name = $data->account_name;
             $this->account_ref_id = $data->accountref;
             $this->warehouse = $data->po_warehouseref;
+            $this->toplam = $data->total_gross;
+            $this->toplam_kdv = $data->total_vat;
+            $this->net_toplam = $data->total_amount;
 
             $items = DbController::getSiparisDetay($this->sid);
 
@@ -70,6 +142,7 @@ class SiparisOlustur extends Component
                 $this->miktar[$itm] = $v->quantity;
                 $this->birim[$itm] = $v->unit_code;
                 $this->birim_fiyat[$itm] = $v->unit_price;
+                $this->kdv_inc[$itm] = $v->vat_included;
                 $this->kdv[$itm] = $v->vat;
 
                 $ml = LogoDb::where('stock_code', $v->stock_code)->first();
@@ -115,6 +188,7 @@ class SiparisOlustur extends Component
                 "QUANTITY" => $this->miktar[$in],
                 "PRICE" => $this->birim_fiyat[$in],
                 "UNIT_CODE" => $this->birim[$in],
+                "VAT_INCLUDED" => $this->kdv_inc[$in],
                 "VAT_RATE" => $kdv_,
             ];
         }
@@ -150,10 +224,12 @@ class SiparisOlustur extends Component
 
         $units = LogoUnits::Where('unitset_ref', $item->unitset_ref)->get();
         $this->birim_select[$this->line] = $units;
+        $this->birim[$this->line] = $units[0]['unit_code'];
 
 
         $this->kod[$this->line] = $item->stock_code;
         $this->aciklama[$this->line] = $item->stock_name;
+        $this->kdv_inc[$this->line] = 0;
 
         $this->dispatchBrowserEvent('CloseModal');
     }

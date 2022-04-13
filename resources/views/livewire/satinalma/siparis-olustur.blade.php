@@ -16,9 +16,9 @@
                             <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                                 Sipariş Oluştur {{ $sid }}</h5>
                             <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-success add-btn"><i
+                                <a href="/satinalma/siparis" class="btn btn-success add-btn"><i
                                         class="ri-store-2-fill align-bottom me-1"></i> Sipariş Listesi
-                                </button>
+                                </a>
 
                             </div>
                         </div>
@@ -185,9 +185,10 @@
                                                 <th style="width:70px;">Birim</th>
                                                 <th style="width:100px;">Birim Fiyat</th>
                                                 <th style="width:80px;">Kdv %</th>
+                                                <th style="width:80px;">Kdv</th>
                                                 <th style="width:100px;">İndirim </th>
                                                 <th style="width:100px;">Tutar</th>
-                                                <th style="width:100px;">Net Tutar</th>
+                                                <th style="width:150px;">Net Tutar</th>
                                                 <th>-</th>
 
                                             </tr>
@@ -233,27 +234,50 @@
                                                 <td>
                                                     <div class="input-group input-group-sm ">
                                                         <input type="number" step="any"
-                                                            class="form-control border-dashed "
+                                                            class="form-control border-dashed" id="miktar_{{ $value }}"
                                                             name="miktar[{{ $value }}]"
-                                                            wire:click="active_line({{ $value }})"
                                                             wire:model.lazy="miktar.{{ $value }}">
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
-                                                        <select wire:click="active_line({{ $value }})"
-                                                            name="birim[{{ $value }}]"
+                                                        <select name="birim[{{ $value }}]"
                                                             wire:model.defer="birim.{{ $value }}">
                                                             @if(isset($birim_select[$value]))
-                                                            <option value=""> -- Seç --</option>
                                                             @foreach($birim_select[$value] as $b)
                                                             <option value="{{ $b['unit_code'] }}">{{
                                                                 $b['unit_name'] }}
                                                             </option>
                                                             @endforeach
                                                             @endif
+                                                        </select>
+                                                    </div>
+                                                </td>
 
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" step="any"
+                                                            class="form-control border-dashed " pattern="[0-9.]*"
+                                                            name="birim_fiyat[{{ $value }}]"
+                                                            wire:model.lazy="birim_fiyat.{{ $value }}">
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="number" step="any" id="kdv_{{ $value }}"
+                                                            class="form-control border-dashed " name="kdv[{{ $value }}]"
+                                                            wire:model.lazy="kdv.{{ $value }}">
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <select name="kdv_inc[{{ $value }}]"
+                                                            wire:model="kdv_inc.{{ $value }}">
+                                                            <option value="0"> Hariç</option>
+                                                            <option value="1"> Dahil</option>
                                                         </select>
                                                     </div>
                                                 </td>
@@ -262,27 +286,7 @@
                                                     <div class="input-group input-group-sm">
                                                         <input type="number" step="any"
                                                             class="form-control border-dashed "
-                                                            name="birim_fiyat[{{ $value }}]"
-                                                            wire:click="active_line({{ $value }})"
-                                                            wire:model.lazy="birim_fiyat.{{ $value }}">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any"
-                                                            class="form-control border-dashed " name="kdv[{{ $value }}]"
-                                                            wire:click="active_line({{ $value }})"
-                                                            wire:model.lazy="kdv.{{ $value }}">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any"
-                                                            class="form-control border-dashed "
                                                             name="indirim[{{ $value }}]"
-                                                            wire:click="active_line({{ $value }})"
                                                             wire:model.lazy="indirim.{{ $value }}">
                                                     </div>
                                                 </td>
@@ -290,18 +294,20 @@
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
-                                                        <input type="number" class="form-control border-dashed "
-                                                            name="tutar[{{ $value }}]" disabled
-                                                            wire:model="tutar.{{ $value }}">
+                                                        <input type="text" id="tutar_{{ $value }}"
+                                                            class="form-control border-dashed "
+                                                            wire:model.lazy="tutar.{{ $value }}"
+                                                            name="tutar[{{ $value }}]" readonly="readonly">
                                                     </div>
                                                 </td>
 
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
-                                                        <input type="number" class="form-control border-dashed "
-                                                            name="net_tutar[{{ $value }}]" disabled
-                                                            wire:model="net_tutar.{{ $value }}">
+                                                        <input type="text" id="net_tutar_{{ $value }}"
+                                                            class="form-control border-dashed "
+                                                            wire:model.lazy="net_tutar.{{ $value }}"
+                                                            name="net_tutar[{{ $value }}]" readonly="readonly">
                                                     </div>
                                                 </td>
 
@@ -321,7 +327,7 @@
                                             @endphp
                                             @endforeach
                                             <tr>
-                                                <th scope="row" colspan="11"></th>
+                                                <th scope="row" colspan="12"></th>
                                                 <td>
 
                                                     <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
@@ -331,39 +337,39 @@
                                             </tr>
 
                                             <tr>
-                                                <th scope="row" colspan="6"></th>
-                                                <td colspan="4">
+                                                <th scope="row" colspan="8"></th>
+                                                <td colspan="5">
                                                     <div class="row">
                                                         <div class="col-lg-5  ">
 
-                                                            <div class="p-1">Toplam Masraf</div>
-                                                        </div>
-                                                        <div class="col-lg-7 border bg-white">
-                                                            <div class="p-1">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-lg-5  ">
-                                                            <div class="p-1">Toplam İndirim</div>
-                                                        </div>
-                                                        <div class="col-lg-7 border bg-white">
-                                                            <div class="p-1">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="row">
-                                                        <div class="col-lg-5  ">
                                                             <div class="p-1">Toplam</div>
                                                         </div>
-                                                        <div class="col-lg-7 border bg-white">
+                                                        <div class="col-lg-6 border bg-white">
                                                             <div class="p-1">
+                                                                {{ number_format($toplam,2,',','.') }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="row">
+                                                        <div class="col-lg-5  ">
+                                                            <div class="p-1">Toplam Kdv</div>
+                                                        </div>
+                                                        <div class="col-lg-6 border bg-white">
+                                                            <div class="p-1">
+                                                                {{ number_format($toplam_kdv,2,',','.') }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <div class="col-lg-5  ">
+                                                            <div class="p-1">Net Toplam</div>
+                                                        </div>
+                                                        <div class="col-lg-6 border bg-white">
+                                                            <div class="p-1">
+                                                                {{ number_format($net_toplam,2,',','.') }}
                                                             </div>
                                                         </div>
                                                     </div>

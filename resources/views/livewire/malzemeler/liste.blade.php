@@ -38,7 +38,9 @@
                         <tr>
                             <th class="sort" data-sort="tur" scope="col">Tür</th>
                             <th class="sort" data-sort="kod" scope="col">KOD</th>
+                            @if($ch)
                             <th class="sort" data-sort="name" scope="col"></th>
+                            @endif
                             <th class="sort" data-sort="name" scope="col">MALZEME ADI</th>
                             <th class="sort" data-sort="name" scope="col">Eldeki Miktar</th>
                             <th class="sort" data-sort="name" scope="col">Ortalama Fiyat</th>
@@ -54,9 +56,10 @@
                             <td class="owner">{{ $item->stock_type }}</td>
                             <td class="owner"><a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
                                     href="#">{{ $item->stock_code }}</a></td>
+                            @if($ch)
                             <td class="owner"><a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
                                     href="#"><button class="btn btn-primary btn-sm"> Seç </button></a></td>
-
+                            @endif
                             <td class="owner"><a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
                                     href="#">{{ $item->stock_name }}</a></td>
                             <td class="owner">{{ $item->onhand_quantity }}</td>

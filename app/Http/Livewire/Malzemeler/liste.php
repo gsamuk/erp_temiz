@@ -16,6 +16,7 @@ class Liste extends Component
     public $code = '';
     public $tur = '';
     public $line = 0;
+    public $ch = true;
 
     protected $listeners  = ['setLine'];
 
@@ -47,7 +48,8 @@ class Liste extends Component
 
         return view('livewire.malzemeler.liste', [
             'items' => $data,
-            'item_type' => $item_type
+            'item_type' => $item_type,
+            'ch' => $this->ch
         ]);
     }
 }

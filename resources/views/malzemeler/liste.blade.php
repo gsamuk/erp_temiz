@@ -4,10 +4,10 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') Zeberced ERP @endslot
-@slot('title') Malzemeler @endslot
+@slot('title') Malzeme Listesi @endslot
 @endcomponent
 
-@livewire('malzemeler.liste')
+@livewire('malzemeler.liste-detayli',['ch' => false])
 
 
 @endsection
