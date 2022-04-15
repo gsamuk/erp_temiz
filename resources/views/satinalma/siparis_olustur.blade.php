@@ -26,17 +26,19 @@
     window.addEventListener('Hesapla', event => {           
         var toplam = 0;
         $('input[name=tutar]').each(function() {
-            toplam = parseInt(toplam) + parseInt($(this).val());            
+            toplam = parseInt(toplam) + parseInt($(this).val()); 
+            console.log(toplam);           
          });
          $('#div_toplam').html(toplam);
 
-        var net_tutar = 0;
+        var net_tutar = 0; 
         $('input[name=net_tutar]').each(function() {
             net_tutar = parseInt(net_tutar) + parseInt($(this).val());            
+            console.log(net_tutar);           
          });
-         $('#div_net_toplam').html(net_tutar);
-         
-         //$('#div_kdv').html(parseInt(net_tutar) - parseInt(toplam));
+
+         $('#div_net_toplam').html(net_tutar);         
+         $('#div_kdv').html(parseInt(net_tutar) - parseInt(toplam));
 
 
     });

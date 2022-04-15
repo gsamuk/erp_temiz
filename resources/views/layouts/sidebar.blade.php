@@ -36,7 +36,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/">
-                        <i class="mdi mdi-puzzle-outline"></i> <span>DashBoard</span>
+                        <i class="ri-map-pin-line"></i> <span>DashBoard</span>
                     </a>
                 </li>
 
@@ -79,7 +79,7 @@
                             @if(Session::get('userData')->purchase_approve == 1)
                             <li class="nav-item">
                                 <a href="{{ route('satinalma.onay') }}" class="nav-link" data-key="t-google">
-                                    Onay
+                                    Onay Bekleyenler
                                 </a>
                             </li>
                             @endif
@@ -120,7 +120,7 @@
                             @if(Session::get('userData')->sale_approve == 1)
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#">
-                                    <span>Onay</span>
+                                    <span>Onay Bekleyenler</span>
                                 </a>
                             </li>
                             @endif
@@ -146,7 +146,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Rapor
+                                    Malzeme Durum Raporu
                                 </a>
                             </li>
                         </ul>
@@ -166,9 +166,34 @@
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Rapor 1
+                                    Stok Durum Raporu
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Cari Hesap Durum Raporu
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Satış Raporu
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Özel Rapor 1
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Özel Rapor 2
+                                </a>
+                            </li>
+
+
                         </ul>
                     </div>
                 </li>
@@ -178,7 +203,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/signout">
-                        <i class="mdi mdi-puzzle-outline"></i> <span>Çıkış</span>
+                        <i class="ri-map-pin-line"></i> <span>Çıkış</span>
                     </a>
                 </li>
 
@@ -199,6 +224,14 @@
                                     Kullanıcı Yönetimi
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('users'); }}" class="nav-link" data-key="t-google">
+                                    Log Kayıtları
+                                </a>
+                            </li>
+
+
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-vector">
                                     Ayarlar

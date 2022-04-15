@@ -37,16 +37,10 @@ class SiparisOlustur extends Component
 
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
-    protected $rules = [
-        'account_ref_id' => 'required',
-    ];
-    protected $messages = [
-        'account_ref_id.required' => 'Lütfen Cari Ünvan Seçiniz',
-    ];
 
     public function updated($name, $value)
     {
-        $this->validateOnly($name);
+
 
         $konum = strpos($name, 'birim_fiyat');
 
@@ -158,7 +152,7 @@ class SiparisOlustur extends Component
 
     public function store($sid)
     {
-        $this->validate();
+
         $items = array();
 
 

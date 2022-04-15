@@ -81,6 +81,7 @@
                                                     </div>
 
 
+
                                                 </div>
 
                                                 <div class="row">
@@ -186,9 +187,9 @@
                                                 <th style="width:100px;">Birim Fiyat</th>
                                                 <th style="width:80px;">Kdv %</th>
                                                 <th style="width:80px;">Kdv</th>
-                                                <th style="width:100px;">İndirim </th>
+
                                                 <th style="width:100px;">Tutar</th>
-                                                <th style="width:150px;">Net Tutar</th>
+                                                <th style="width:120px;">Net Tutar</th>
                                                 <th>-</th>
 
                                             </tr>
@@ -274,7 +275,7 @@
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
-                                                        <select name="kdv_inc[{{ $value }}]"
+                                                        <select name="kdv_inc[{{ $value }}]" disabled
                                                             wire:model="kdv_inc.{{ $value }}">
                                                             <option value="0"> Hariç</option>
                                                             <option value="1"> Dahil</option>
@@ -282,13 +283,6 @@
                                                     </div>
                                                 </td>
 
-                                                <td>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="number" step="any"
-                                                            class="form-control border-dashed " name="indirim"
-                                                            wire:model.lazy="indirim.{{ $value }}">
-                                                    </div>
-                                                </td>
 
 
                                                 <td>
@@ -326,7 +320,7 @@
                                             @endphp
                                             @endforeach
                                             <tr>
-                                                <th scope="row" colspan="12"></th>
+                                                <th scope="row" colspan="11"></th>
                                                 <td>
 
                                                     <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
@@ -336,8 +330,8 @@
                                             </tr>
 
                                             <tr>
-                                                <th scope="row" colspan="8"></th>
-                                                <td colspan="5">
+                                                <th scope="row" colspan="7"></th>
+                                                <td colspan="4">
                                                     <div class="row">
                                                         <div class="col-lg-5  ">
 
@@ -402,7 +396,7 @@
 
                                 <div class="col-12 m-2 ">
                                     <button type="submit" class="btn btn-success "> <i
-                                            class="mdi mdi-content-save"></i>Save</button>
+                                            class="mdi mdi-content-save"></i>Kaydet</button>
 
                                     <div wire:loading>
                                         İşleniyor Lütfen Bekleyiniz...

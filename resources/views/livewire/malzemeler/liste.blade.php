@@ -3,13 +3,7 @@
         <div class="col-xxl-12">
 
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <select class="form-select" wire:model="tur">
-                        @foreach ($item_type as $i)
-                        <option value="{{ $i->cardtype_name }}">{{ $i->cardtype_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+
 
                 <div class="col-md-4">
                     <div class="search-box">
@@ -26,6 +20,14 @@
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <select class="form-select" wire:model="tur">
+                        @foreach ($item_type as $i)
+                        <option value="{{ $i->cardtype_name }}">{{ $i->cardtype_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
 
             </div>
 
@@ -36,16 +38,17 @@
                     wire:loading.class="opacity-50">
                     <thead class="table-light">
                         <tr>
-                            <th class="sort" data-sort="tur" scope="col">Tür</th>
-                            <th class="sort" data-sort="kod" scope="col">KOD</th>
+                            <th class="sort" data-sort="kod" scope="col">Kod</th>
                             @if($ch)
                             <th class="sort" data-sort="name" scope="col"></th>
                             @endif
-                            <th class="sort" data-sort="name" scope="col">MALZEME ADI</th>
-                            <th class="sort" data-sort="name" scope="col">Eldeki Miktar</th>
-                            <th class="sort" data-sort="name" scope="col">Ortalama Fiyat</th>
-                            <th class="sort" data-sort="name" scope="col">Satın Alma Miktarı</th>
-                            <th class="sort" data-sort="name" scope="col">Satın Alma Tutarı</th>
+                            <th class="sort" data-sort="name" scope="col">Malzeme</th>
+                            <th class="sort" data-sort="name" scope="col">Stok</th>
+                            <th class="sort" data-sort="name" scope="col">Ort. Fiyat</th>
+                            <th class="sort" data-sort="name" scope="col">S.Alma Miktarı</th>
+                            <th class="sort" data-sort="name" scope="col">S.Alma Tutarı</th>
+                            <th class="sort" data-sort="tur" scope="col">Kart Tipi</th>
+                            <th class="sort" data-sort="tur" scope="col">Tür</th>
                         </tr>
 
                     </thead>
@@ -53,7 +56,7 @@
 
                         @foreach ($items as $item)
                         <tr>
-                            <td class="owner">{{ $item->stock_type }}</td>
+
                             <td class="owner"><a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
                                     href="#">{{ $item->stock_code }}</a></td>
                             @if($ch)
@@ -67,6 +70,8 @@
 
                             <td class="owner">{{ $item->purchase_quantity }}</td>
                             <td class="owner">{{ number_format($item->purchase_amount,2) }}</td>
+                            <td class="owner">{{ $item->cardtype_name }}</td>
+                            <td class="owner">{{ $item->stock_type }}</td>
                         </tr>
                         @endforeach
 
