@@ -258,10 +258,10 @@ class SiparisOlustur extends Component
         array_push($this->inputs, $i);
     }
 
-    public function remove($i)
+    public function remove($i, $v)
     {
         unset($this->inputs[$i]);
-        unset($this->kod[$i]);
+        unset($this->kod[$v]);
     }
 
 

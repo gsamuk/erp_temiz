@@ -55,15 +55,11 @@
                                 </a>
                             </li>
 
-
                             <li class="nav-item">
                                 <a href="{{ route('satinalma.siparis') }}" class="nav-link" data-key="t-google">
                                     Siparişler
                                 </a>
                             </li>
-
-
-
 
                             <li class="nav-item">
                                 <a href="{{ route('satinalma.irsaliye') }}" class="nav-link" data-key="t-google">
@@ -80,11 +76,17 @@
                             <li class="nav-item">
                                 <a href="{{ route('satinalma.onay') }}" class="nav-link" data-key="t-google">
                                     Onay Bekleyenler
+                                    <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
                                 </a>
                             </li>
                             @endif
 
-
+                            <li class="nav-item">
+                                <a href="{{ route('satinalma.fatura') }}" class="nav-link" data-key="t-google">
+                                    Satın Alma Talepleri
+                                    <span class="badge badge-pill bg-success" data-key="t-new">5</span>
+                                </a>
+                            </li>
 
                         </ul>
                     </div>
@@ -140,15 +142,34 @@
                     <div class="collapse menu-dropdown" id="m3">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
+                                <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link" data-key="t-google">
+                                    Malzeme Talebi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
-                                    Liste
+                                    Malzeme Listesi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Ambar Durum Raporu
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Minumum Stok Raporu
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Malzeme Durum Raporu
+                                    Malzeme Değer Raporu
                                 </a>
                             </li>
+
                         </ul>
                     </div>
                 </li>
@@ -225,6 +246,7 @@
                                 </a>
                             </li>
 
+
                             <li class="nav-item">
                                 <a href="{{ route('users'); }}" class="nav-link" data-key="t-google">
                                     Log Kayıtları
@@ -234,7 +256,7 @@
 
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-vector">
-                                    Ayarlar
+                                    Genel Ayarlar
                                 </a>
                             </li>
 

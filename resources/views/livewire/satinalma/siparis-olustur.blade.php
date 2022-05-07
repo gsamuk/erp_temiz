@@ -307,7 +307,7 @@
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-danger"
                                                         wire:loading.attr="disabled"
-                                                        wire:click.prevent="remove({{$key}})"><i
+                                                        wire:click.prevent="remove({{$key}}, {{ $value }})"><i
                                                             class="mdi mdi-delete"></i></button>
                                                 </td>
 
