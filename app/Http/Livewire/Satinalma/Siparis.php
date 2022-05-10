@@ -36,9 +36,12 @@ class Siparis extends Component
     public function render()
     {
         if ($this->po_status == 0) {
-            $data = LogoPurchaseOrders::where('account_name', 'like', '%' . $this->search . '%')->orderBy('po_status', 'asc')->paginate(30);
+            $data = LogoPurchaseOrders::where('account_name', 'like', '%' . $this->search . '%')
+                ->orderBy('po_status', 'asc')->paginate(30);
         } else {
-            $data = LogoPurchaseOrders::Where('po_status', $this->po_status)->where('account_name', 'like', '%' . $this->search . '%')->orderBy('po_status', 'asc')->paginate(30);
+            $data = LogoPurchaseOrders::Where('po_status', $this->po_status)
+                ->where('account_name', 'like', '%' . $this->search . '%')
+                ->orderBy('po_status', 'asc')->paginate(30);
         }
 
         return view('livewire.satinalma.siparis', [

@@ -25,7 +25,7 @@
 
                         <div class="col-md-3">
                             <select class="form-select" wire:model.lazy="tur">
-                                <option value="">-- Car Tipi Seç --</option>
+                                <option value="">-- Cart Tipi Seç --</option>
                                 @foreach ($item_type as $i)
                                 <option value="{{ $i->cardtype_name }}">{{ $i->cardtype_name }}</option>
                                 @endforeach
@@ -36,7 +36,9 @@
                             <select class="form-select" wire:model.lazy="stur">
                                 <option value="">-- Malzeme Tipi Seç --</option>
                                 @foreach ($stock_type as $i)
+                                @if($i->stock_type)
                                 <option value="{{ $i->stock_type }}">{{ $i->stock_type }}</option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
@@ -50,6 +52,7 @@
                             <thead class="table-light">
                                 <tr>
 
+                                    <th class="sort" data-sort="kod" scope="col">Kod</th>
                                     <th class="sort" data-sort="kod" scope="col">Kod</th>
                                     <th class="sort" data-sort="name" scope="col">Malzeme</th>
                                     <th class="sort" data-sort="name" scope="col">Stok Miktar</th>
@@ -68,7 +71,7 @@
 
                                 @foreach ($items as $item)
                                 <tr>
-
+                                    <td class="owner"><button class="btn btn-sm btn-info">Foto</button></td>
                                     <td class="owner">{{ $item->stock_code }}</td>
                                     <td class="owner">{{ $item->stock_name }}</td>
                                     <td class="owner">{{ $item->onhand_quantity }}</td>

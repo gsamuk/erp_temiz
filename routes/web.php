@@ -21,6 +21,7 @@ Route::middleware([Kontrol::class])->group(function () {
 
     /// malzeme işlemleri
     Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
+    Route::get('malzemeler/fotograf', [App\Http\Controllers\MalzemelerController::class, 'fotograf'])->name('malzemeler.fotograf'); // Malzeme Listesi
 
 
 
@@ -33,6 +34,10 @@ Route::middleware([Kontrol::class])->group(function () {
         Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
         Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
         Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
+
+
+        Route::get('malzeme/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzeme.talep_listesi');
         Route::get('malzeme/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzeme.talep_olustur');
+        Route::get('malzeme/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzeme.talep_duzenle');
     });
 });

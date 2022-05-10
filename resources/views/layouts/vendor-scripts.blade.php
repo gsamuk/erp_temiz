@@ -8,5 +8,8 @@
 <script src="{{ URL::asset('assets/js/pages/lord-icon-2.1.0.js') }}"></script>
 <script src="{{ URL::asset('assets/js/plugins.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+
+
 @yield('script')
 @yield('script-bottom')

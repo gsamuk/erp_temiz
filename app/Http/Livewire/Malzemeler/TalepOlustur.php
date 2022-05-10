@@ -7,36 +7,75 @@ use Livewire\Component;
 use App\Models\LogoDb;
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
-
+use App\Http\Controllers\LogoRest;
+use App\Http\Controllers\DbController;
 
 class TalepOlustur extends Component
 {
     public $line = 0;
     public $i = 0;
     public $inputs = [];
+    public $ref;
     public $kod;
     public $aciklama;
     public $miktar;
     public $birim;
+    public $project_ref_id;
+    public $project_code;
     public $desc;
-    public $meet_type; // karşılama türü 0:satınalma, 1:üretim emri, 2: ambar transfer
-    public $meet_stock; // stkotan karşılama 0:evet 1:hayır
-
     public $warehouse;
-
     public $birim_select = [];
+    public $tid = 0; // talep  id
 
-    public $tid; // sipariş id
+
+    public $zaman;
+    public $belge_no;
 
 
-    protected $listeners = ["getItem"];
+
+    protected $listeners = ["getItem", "getProject"];
+
+    public function getProject($d) // seçilen projeyi  dinleyerek set ediyoruz 
+    {
+        $this->project_code = $d['code'];
+        $this->project_ref_id = $d['ref_id'];
+        $this->dispatchBrowserEvent('CloseModal');
+    }
+
+
+    public function mount()
+    {
+
+        if ($this->tid > 0) {
+            $data = DbController::getTalep($this->tid);
+            $items = DbController::getTalepDetay($this->tid);
+            foreach ($items as $itm => $v) {
+                $this->i = $itm;
+                $this->inputs[] = $itm;
+                $this->aciklama[$itm] = $v->stock_name;
+                $this->kod[$itm] = $v->stock_code;
+                $this->miktar[$itm] = $v->quantity;
+                $this->desc[$itm] = $v->description;
+
+                $ml = LogoDb::where('stock_code', $v->stock_code)->first();
+                $this->ref[$itm] = $ml->logicalref;
+
+                $units = LogoUnits::Where('unitset_ref', $ml->unitset_ref)->get();
+                $this->birim_select[$itm] = $units;
+                $this->birim[$itm] = $v->unit_code;
+            }
+        }
+    }
 
     public function render()
     {
         $data = LogoWarehouses::where('company_no', '1')->get();
-        return view('livewire.malzemeler.talep-olustur', [
-            'warehouses' => $data,
-        ]);
+        return view(
+            'livewire.malzemeler.talep-olustur',
+            [
+                'warehouses' => $data,
+            ]
+        );
     }
 
 
@@ -70,11 +109,11 @@ class TalepOlustur extends Component
         $this->birim_select[$this->line] = $units;
         $this->birim[$this->line] = $units[0]['unit_code'];
 
-
+        $this->ref[$this->line] = $item->logicalref;
         $this->kod[$this->line] = $item->stock_code;
         $this->aciklama[$this->line] = $item->stock_name;
-        $this->miktar[$this->line] = 1; // test
-
+        $this->desc[$this->line] = "İhtiyaç";
+        $this->miktar[$this->line] = 1; // test verisi
 
         $this->dispatchBrowserEvent('CloseModal');
     }
@@ -96,12 +135,14 @@ class TalepOlustur extends Component
                 return session()->flash('error', 'Birim Seçiniz');
             }
 
-
-
             $items[] = [
-                "MASTER_CODE" => $this->kod[$in],
-                "QUANTITY" => $this->miktar[$in],
+                "ITEMREF" => $this->ref[$in],
+                "ITEM_CODE" => $this->kod[$in],
+                "AMOUNT" => $this->miktar[$in],
                 "UNIT_CODE" => $this->birim[$in],
+                "DESCRIPTION" => $this->desc[$in],
+                "MEET_TYPE" => 2,
+                "MEET_WITH_STOCK" => 0,
             ];
         }
 
@@ -110,11 +151,17 @@ class TalepOlustur extends Component
             'headers' => [
                 'Accept' => 'application/json',
             ],
+            'DATE' => $this->zaman,
+            'SPECODE' => "DEPO-TESIS",
+            'AUXIL_CODE' => "DEPO",
+            'SOURCEINDEX' => 0,
+            'PROJECTREF' => $this->project_ref_id,
+            'USER_NO' => 7,
             'TRANSACTIONS' => [
                 'items' => $items
             ]
         ];
 
-        dd($data);
+        LogoRest::MalzemeTalepFisi($data, $this->tid);
     }
 }

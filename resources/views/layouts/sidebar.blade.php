@@ -148,6 +148,12 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link" data-key="t-google">
+                                    Malzeme Talep Listesi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
                                     Malzeme Listesi
                                 </a>

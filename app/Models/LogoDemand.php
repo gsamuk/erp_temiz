@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LogoItems extends Model
+class LogoDemand extends Model
 {
-    protected $table = 'lv_items';
     protected $primaryKey = 'logicalref';
+    protected $table = 'lv_demand_001'; // 1 nolu firmanın verileri gelir
 }

@@ -4,23 +4,13 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') Zeberced ERP @endslot
-@slot('title') Malzeme Talebi @endslot
+@slot('title') Malzeme Fotoğraf Yönetimi @endslot
 @endcomponent
 
-@livewire('malzemeler.talep-olustur', ['tid' => $id ])
-
+@livewire('malzemeler.fotograf')
 
 @endsection
 @section('script')
 
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
-
-<script>
-    window.addEventListener('CloseModal', event => {            
-        $('.modal').modal('hide');
-    });
-
-</script>
-
 @endsection

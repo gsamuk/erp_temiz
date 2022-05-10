@@ -93,4 +93,53 @@ class LogoRest extends Controller
             return session()->flash('error', $e->getMessage());
         }
     }
+
+
+
+    static function MalzemeTalepFisi($data, $tid)
+    {
+
+        try {
+            if ($tid > 0) {
+                $msg = "Malzeme Talebi Düzenlendi";
+                $url = Self::rest_url('demandSlips/' . $tid);
+                $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $data);
+            } else {
+                $msg = "Yeni Malzeme Talep Oluşturuldu";
+                $url = Self::rest_url('demandSlips');
+                $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+            }
+
+
+            if ($response->status() == 200 && $response->successful() == true) {
+                TransactionController::add($url, $data, $response->body());
+                return session()->flash('success', $msg . ' ID #' . $response->json("INTERNAL_REFERENCE"));
+            } else {
+                TransactionController::add($url, $data, $response->body());
+                return session()->flash('error', serialize($response->body()));
+            }
+        } catch (Exception $e) {
+            TransactionController::add($url, $data, $e->getMessage());
+            return session()->flash('error', $e->getMessage());
+        }
+    }
+
+    static function MalzemeTalepSil($data)
+    {
+        $id = $data['id'];
+        try {
+            $url = Self::rest_url('demandSlips/' . $id);
+            $response = Http::withToken(Cookie::get("logo_access_token"))->delete($url);
+            if ($response->status() == 200 && $response->successful() == true) {
+                TransactionController::add($url, $data, $response->body());
+                return session()->flash('success', 'Başarılı Malzeme Talebi Silindi' . $response->json("INTERNAL_REFERENCE"));
+            } else {
+                TransactionController::add($url, $data, $response->body());
+                return session()->flash('error', serialize($response->body()));
+            }
+        } catch (Exception $e) {
+            TransactionController::add($url, $data, $e->getMessage());
+            return session()->flash('error', $e->getMessage());
+        }
+    }
 }
