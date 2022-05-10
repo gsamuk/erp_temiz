@@ -14,17 +14,4 @@
 @section('script')
 
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
-
-<script>
-    window.addEventListener('CloseModal', event => {           
-        $('.modal').modal('hide');
-    }); 
-
-    window.addEventListener('ShowModal', event => {           
-        $('#fotoModal').modal('show');
-    }); 
-
-</script>
-
 @endsection

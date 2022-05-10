@@ -300,6 +300,31 @@
                                             İşleniyor Lütfen Bekleyiniz...
                                         </div>
                                     </div>
+
+                                    <div class="col-8 m-2 ">
+                                        @if($item_photos)
+                                        <hr>
+
+                                        <div class="row">
+                                            @foreach ($item_photos as $p)
+                                            <div class="col-3">
+                                                <div class="bg-light p-2 m-1">
+                                                    <div>
+                                                        <img class="img-thumbnail"
+                                                            src="{{ asset('storage/images/items/thumb/'.$p['foto_path']) }}">
+                                                    </div>
+                                                    <div>
+                                                        {{ $p['stock_name'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @endif
+
+
+
+                                    </div>
                                 </div>
 
                             </div>

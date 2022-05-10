@@ -52,7 +52,7 @@
                             <thead class="table-light">
                                 <tr>
 
-                                    <th class="sort" data-sort="kod" scope="col">Kod</th>
+
                                     <th class="sort" data-sort="kod" scope="col">Kod</th>
                                     <th class="sort" data-sort="name" scope="col">Malzeme</th>
                                     <th class="sort" data-sort="name" scope="col">Stok Miktar</th>
@@ -71,7 +71,7 @@
 
                                 @foreach ($items as $item)
                                 <tr>
-                                    <td class="owner"><button class="btn btn-sm btn-info">Foto</button></td>
+
                                     <td class="owner">{{ $item->stock_code }}</td>
                                     <td class="owner">{{ $item->stock_name }}</td>
                                     <td class="owner">{{ $item->onhand_quantity }}</td>

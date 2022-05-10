@@ -9,6 +9,7 @@ use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
 use App\Http\Controllers\LogoRest;
 use App\Http\Controllers\DbController;
+use App\Models\LogoItemsPhoto;
 
 class TalepOlustur extends Component
 {
@@ -26,6 +27,7 @@ class TalepOlustur extends Component
     public $warehouse;
     public $birim_select = [];
     public $tid = 0; // talep  id
+    public $item_photos;
 
 
     public $zaman;
@@ -95,6 +97,7 @@ class TalepOlustur extends Component
     {
         unset($this->inputs[$i]);
         unset($this->kod[$v]);
+        unset($this->item_photos[$v]);
     }
 
 
@@ -104,6 +107,10 @@ class TalepOlustur extends Component
 
         $this->line = $d["line"];
         $item = LogoDb::where('logicalref', $d['ref'])->first();
+        $photos = LogoItemsPhoto::where('logo_stockref', $d['ref'])->first();
+        if ($photos) {
+            $this->item_photos[$this->line] = $photos;
+        }
 
         $units = LogoUnits::Where('unitset_ref', $item->unitset_ref)->get();
         $this->birim_select[$this->line] = $units;
@@ -114,6 +121,7 @@ class TalepOlustur extends Component
         $this->aciklama[$this->line] = $item->stock_name;
         $this->desc[$this->line] = "İhtiyaç";
         $this->miktar[$this->line] = 1; // test verisi
+
 
         $this->dispatchBrowserEvent('CloseModal');
     }

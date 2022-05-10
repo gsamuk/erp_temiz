@@ -6,6 +6,7 @@ use App\Models\LogoDb;
 use App\Models\LogoItems;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\LogoItemsPhoto;
 
 
 class Liste extends Component
@@ -22,6 +23,7 @@ class Liste extends Component
     public $details = false; // true malzeme detay bilgileri gösterir
 
     public $foto_ref; // malzeme ref id
+    public $item_photos;
 
     protected $listeners  = ['setLine'];
 
@@ -37,9 +39,21 @@ class Liste extends Component
         $this->dispatchBrowserEvent('SetDisable', ['line' => $line]);
     }
 
+
+    public function detay_goster($d = false)
+    {
+        $this->details = $d;
+    }
+
     public function render()
     {
-        $data = LogoItems::where('stock_name', 'like', '%' . $this->search . '%')
+        if ($this->details) {
+            $db = new LogoItems;
+        } else {
+            $db = new LogoDb;
+        }
+
+        $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
             })
@@ -54,6 +68,7 @@ class Liste extends Component
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();
 
+
         return view('livewire.malzemeler.liste', [
             'items' => $data,
             'item_type' => $item_type,
@@ -67,6 +82,6 @@ class Liste extends Component
     public function foto($ref)
     {
         $this->foto_ref = $ref;
-        $this->dispatchBrowserEvent('ShowModal');
+        $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $ref)->get();
     }
 }
