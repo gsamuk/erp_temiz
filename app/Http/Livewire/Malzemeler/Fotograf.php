@@ -37,9 +37,6 @@ class Fotograf extends Component
 
             ->take(10)
             ->get();
-
-
-
         return view('livewire.malzemeler.fotograf', [
             'data' => $data,
         ]);
