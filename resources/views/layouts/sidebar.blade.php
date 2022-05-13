@@ -94,6 +94,58 @@
                 @endif
 
 
+
+
+
+
+                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarMaps">
+                        <i class="ri-map-pin-line"></i> <span>Malzemeler </span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="m3">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link" data-key="t-google">
+                                    Talep Oluştur
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link" data-key="t-google">
+                                    Talep Listesi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
+                                    Malzeme Listesi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Ambar Durum Raporu
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Minumum Stok Raporu
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-google">
+                                    Malzeme Değer Raporu
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+                @endif
+
                 @if(Session::get('userData')->sale_view == 1)
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m2" data-bs-toggle="collapse" role="button"
@@ -130,58 +182,6 @@
                     </div>
                 </li>
                 @endif
-
-
-
-                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMaps">
-                        <i class="ri-map-pin-line"></i> <span>Malzemeler </span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="m3">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link" data-key="t-google">
-                                    Malzeme Talebi
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link" data-key="t-google">
-                                    Malzeme Talep Listesi
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
-                                    Malzeme Listesi
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
-                                    Ambar Durum Raporu
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
-                                    Minumum Stok Raporu
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
-                                    Malzeme Değer Raporu
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
-                @endif
-
-
 
                 @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
                 <li class="nav-item">

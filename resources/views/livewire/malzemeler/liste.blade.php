@@ -122,8 +122,7 @@
                                 @if($foto_ref && $foto_ref ==$item->logicalref )
                                 <br>
                                 @foreach ($item_photos as $p)
-                                <img class="img-thumbnail"
-                                    src="{{ asset('storage/images/items/thumb/'.$p->foto_path) }}">
+                                <img src="{{ asset('storage/images/items/thumb/'.$p->foto_path) }}">
                                 @endforeach
 
                                 @endif

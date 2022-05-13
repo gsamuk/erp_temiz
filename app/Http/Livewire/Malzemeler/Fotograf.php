@@ -17,7 +17,7 @@ class Fotograf extends Component
 
     use WithFileUploads;
 
-    public $search, $isEmpty;
+    public $search;
     public $code;
     public $ref;
     public $photo;
@@ -26,23 +26,18 @@ class Fotograf extends Component
 
     public function render()
     {
-        if (!empty($this->search) || !empty($this->code)) {
-            $data = LogoItems::where('logicalref', '>', 0)
-                ->when($this->search, function ($query) {
-                    return $query->where('stock_name', 'like', '%' . $this->search . '%');
-                })
-                ->when($this->code, function ($query) {
-                    return $query->where('stock_code', $this->code);
-                })
 
-                ->take(10)
-                ->get();
+        $data = LogoItems::where('logicalref', '>', 0)
+            ->when($this->search, function ($query) {
+                return $query->where('stock_name', 'like', '%' . $this->search . '%');
+            })
+            ->when($this->code, function ($query) {
+                return $query->where('stock_code', $this->code);
+            })
 
-            $this->isEmpty = '';
-        } else {
-            $data = [];
-            $this->isEmpty = __('Nothings Found.');
-        }
+            ->take(10)
+            ->get();
+
 
 
         return view('livewire.malzemeler.fotograf', [

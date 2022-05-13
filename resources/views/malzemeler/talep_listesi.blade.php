@@ -17,60 +17,10 @@
 @section('script')
 
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
-
-
 <script>
-    function sil(id){
-        $.confirm({
-        title: 'Onay',
-        closeIcon:true,
-        theme: 'material', 
-        content: 'Bu Kayıt Silinecek emin misiniz?',
-        buttons: {
-                Sil: function () {
-                    window.livewire.emit('TalepSil', { id : id });
-                },
-                       
-            }
-        });        
-    }
-
-
-    function onay(id){
-        $.confirm({
-        columnClass: 'col-md-6',
-        closeIcon:true,
-        title: 'Onay Durumu Değiştir',
-        theme: 'material', 
-        content:'Sipariş Durumunu Seçiniz',       
-        buttons: {
-            Oneri: {
-                    text: 'Öneri',
-                    btnClass: 'btn-blue',                    
-                    action: function(){
-                        window.livewire.emit('SiparisStatus', { id : id, po_status:1 });
-                    }                    
-                },
-                SevkEdilebilir: {
-                    text: 'Sevk Edilebilir',
-                    btnClass: 'btn-green',                    
-                    action: function(){
-                        window.livewire.emit('SiparisStatus', { id : id, po_status:4 });
-                    }                    
-                },
-                SevkEdilemez:  {
-                    text: 'Sevk Edilemez',
-                    btnClass: 'btn-red',                    
-                    action: function(){
-                        window.livewire.emit('SiparisStatus', { id : id, po_status:2 });
-                    }
-                },
-
-                     
-            }
-        });        
-    }
+    window.addEventListener('ShowMalzemeFotoModal', event => {           
+        $('#MalzemeFotoModal').modal('show');
+    }); 
 </script>
 
 @endsection

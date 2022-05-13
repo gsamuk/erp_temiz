@@ -10,7 +10,6 @@ use App\Models\LogoWarehouses;
 use App\Http\Controllers\LogoRest;
 use App\Http\Controllers\DbController;
 use App\Models\LogoItemsPhoto;
-use App\Models\Demand;
 
 class TalepOlustur extends Component
 {
@@ -131,15 +130,8 @@ class TalepOlustur extends Component
 
     public function store()
     {
-        $insert_time = date('Y-m-d H:i:s');
 
-        $dm = new Demand;
-        $demand = $dm::orderBy('insert_time', 'desc')->first();
-        if ($demand) {
-            $demand_no = $demand->demand_no + 1; /// son talep numarasını alıyoruz
-        } else {
-            $demand_no = 100;
-        }
+        $items = array();
 
         foreach ($this->kod  as $in => $v) {
 
@@ -150,22 +142,34 @@ class TalepOlustur extends Component
             if (!isset($this->birim[$in]) || $this->birim[$in] == null) {
                 return session()->flash('error', 'Birim Seçiniz');
             }
-            $dm = new Demand;
 
-            $dm->company_id = 1;
-            $dm->users_id = 1;
-            $dm->project_ref = 17;
-
-            $dm->demand_no = $demand_no;
-            $dm->logo_stockref = $this->ref[$in];
-            $dm->quantity = $this->miktar[$in];
-            $dm->unit_code = $this->birim[$in];
-            $dm->description = $this->desc[$in];
-            $dm->insert_time = $insert_time;
-            $dm->save();
+            $items[] = [
+                "ITEMREF" => $this->ref[$in],
+                "ITEM_CODE" => $this->kod[$in],
+                "AMOUNT" => $this->miktar[$in],
+                "UNIT_CODE" => $this->birim[$in],
+                "DESCRIPTION" => $this->desc[$in],
+                "MEET_TYPE" => 2,
+                "MEET_WITH_STOCK" => 0,
+            ];
         }
 
-        $this->reset();
-        return session()->flash('success', $demand_no . ' Belege Numaralı Malzeme Talebi Oluşturuldu.');
+
+        $data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => $this->zaman,
+            'SPECODE' => "DEPO-TESIS",
+            'AUXIL_CODE' => "DEPO",
+            'SOURCEINDEX' => 0,
+            'PROJECTREF' => $this->project_ref_id,
+            'USER_NO' => 7,
+            'TRANSACTIONS' => [
+                'items' => $items
+            ]
+        ];
+
+        LogoRest::MalzemeTalepFisi($data, $this->tid);
     }
 }
