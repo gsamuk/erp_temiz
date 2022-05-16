@@ -7,7 +7,7 @@ use App\Models\LogoItems;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\LogoItemsPhoto;
-
+use DB;
 
 class Liste extends Component
 {
@@ -52,7 +52,7 @@ class Liste extends Component
         } else {
             $db = new LogoDb;
         }
-
+        DB::enableQueryLog();
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
@@ -64,6 +64,9 @@ class Liste extends Component
             })
             ->orderByDesc('stock_name')
             ->paginate(12);
+        if ($this->search) {
+            dd(DB::getQueryLog());
+        }
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();

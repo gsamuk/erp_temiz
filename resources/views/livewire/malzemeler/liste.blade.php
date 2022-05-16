@@ -9,11 +9,11 @@
                     Malzemeler</h5>
                 <div class="flex-shrink-0">
                     <button wire:click="detay_goster({{ !$details }})" class="btn btn-info add-btn"><i
-                            class="ri-stack-fill  align-bottom me-1"></i>
+                            class="ri-stack-fill  align-bottom me-1"></i> Detaylı Liste
                     </button>
 
                     <a href="/malzemeler/fotograf" class="btn btn-success add-btn"><i
-                            class="ri-image-fill align-bottom me-1"></i>
+                            class="ri-image-fill align-bottom me-1"></i> Fotoğraf Yönetimi
                     </a>
                 </div>
             </div>
@@ -101,11 +101,11 @@
                                 @if($photo)
                                 <a href="#" wire:click="foto({{ $item->logicalref }})">
                                     <img src="{{ asset('storage/images/items/thumb/'.$photo->foto_path) }}"
-                                        style="width: 50px">
+                                        style="height: 50px">
                                 </a>
 
                                 @else
-                                <img class="img-thumbnail" src="/images/default.png">
+                                <img class="img-thumbnail" style="height: 50px" src="/images/default.png">
                                 @endif
                             </td>
 

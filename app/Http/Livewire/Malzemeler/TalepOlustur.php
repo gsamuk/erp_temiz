@@ -11,6 +11,7 @@ use App\Http\Controllers\LogoRest;
 use App\Http\Controllers\DbController;
 use App\Models\LogoItemsPhoto;
 use App\Models\Demand;
+use App\Models\DemandDetail;
 
 class TalepOlustur extends Component
 {
@@ -128,18 +129,19 @@ class TalepOlustur extends Component
     }
 
 
-
     public function store()
     {
         $insert_time = date('Y-m-d H:i:s');
 
-        $dm = new Demand;
-        $demand = $dm::orderBy('insert_time', 'desc')->first();
-        if ($demand) {
-            $demand_no = $demand->demand_no + 1; /// son talep numarasını alıyoruz
-        } else {
-            $demand_no = 100;
-        }
+        $demand = new Demand;
+        $demand->company_id = 1;
+        $demand->users_id = 1;
+        $demand->warehouse_no = 1;
+        $demand->insert_time = $insert_time;
+        $demand->save();
+
+        $demand_no = $demand->id; // eklenen id
+
 
         foreach ($this->kod  as $in => $v) {
 
@@ -150,18 +152,15 @@ class TalepOlustur extends Component
             if (!isset($this->birim[$in]) || $this->birim[$in] == null) {
                 return session()->flash('error', 'Birim Seçiniz');
             }
-            $dm = new Demand;
+            $dm = new DemandDetail;
 
-            $dm->company_id = 1;
-            $dm->users_id = 1;
-            $dm->project_ref = 17;
-
-            $dm->demand_no = $demand_no;
-            $dm->logo_stockref = $this->ref[$in];
+            $dm->demand_id = $demand_no;
+            $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
             $dm->unit_code = $this->birim[$in];
             $dm->description = $this->desc[$in];
             $dm->insert_time = $insert_time;
+            $dm->update_time = $insert_time;
             $dm->save();
         }
 

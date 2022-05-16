@@ -9,7 +9,7 @@ use App\Models\LogoItems;
 use Intervention\Image\Facades\Image;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-
+use DB;
 use App\Models\LogoItemsPhoto;
 
 class Fotograf extends Component
@@ -26,17 +26,20 @@ class Fotograf extends Component
 
     public function render()
     {
-
+        DB::enableQueryLog();
         $data = LogoItems::where('logicalref', '>', 0)
             ->when($this->search, function ($query) {
                 return $query->where('stock_name', 'like', '%' . $this->search . '%');
             })
             ->when($this->code, function ($query) {
                 return $query->where('stock_code', $this->code);
-            })
+            })->orderBy('logicalref', 'desc')
 
             ->take(10)
             ->get();
+        if ($this->search) {
+            // dd(DB::getQueryLog());
+        }
         return view('livewire.malzemeler.fotograf', [
             'data' => $data,
         ]);
