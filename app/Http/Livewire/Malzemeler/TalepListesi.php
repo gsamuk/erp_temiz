@@ -4,12 +4,8 @@ namespace App\Http\Livewire\Malzemeler;
 
 use Livewire\WithPagination;
 use Livewire\Component;
-
 use App\Models\Demand;
-use App\Models\DemandDetail;
-use App\Models\LogoItemsPhoto;
-use App\Models\LogoItems;
-use DB;
+
 
 class TalepListesi extends Component
 {
@@ -20,18 +16,9 @@ class TalepListesi extends Component
     public $no_search;
     public $warehouse_search;
 
-
-
     public $status = 10; // hepsi gelir
-
-    public $item;
-    public $item_id;
-    public $item_photos;
-
-
-    public $talep_username;
     public $talep_detay_id;
-    public $talep_detay;
+
 
 
     public function set_status($status)
@@ -75,22 +62,10 @@ class TalepListesi extends Component
 
 
 
-    public  function talep_detay($id, $name)
+    public  function talep_detay($id)
     {
-        $this->talep_username = $name;
         $this->talep_detay_id = $id; // seçili satırı renklendirme için
-
-        $this->emit('TalepYenile', $id);
-
-        $this->talep_detay = DemandDetail::Where('demand_detail.demand_id', $id)
-            ->leftjoin('lv_items', 'demand_detail.logo_stock_ref', '=', 'lv_items.logicalref')
-            ->select(
-                'lv_items.logicalref',
-                'lv_items.stock_code',
-                'lv_items.stock_name',
-                'lv_items.onhand_quantity',
-                'demand_detail.*',
-            )->get();
+        $this->emit('TalepKarsila', $id);
     }
 
 
