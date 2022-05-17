@@ -2,7 +2,7 @@
 
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
@@ -97,7 +97,7 @@
                                     </td>
                                     <td class="owner"><button
                                             wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                            class="btn btn-sm btn-success btn-block">Detay <i
+                                            class="btn btn-sm btn-info btn-block">Detay <i
                                                 class="ri-arrow-right-s-line"></i></button></td>
 
                                 </tr>
@@ -122,7 +122,7 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-7">
+        <div class="col-lg-8">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif

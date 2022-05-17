@@ -13,6 +13,12 @@ class TalepKarsila extends Component
     public $talep_detay;
     public $talep_id;
 
+    public $talep_line;
+
+
+    public $karsila;
+    public $satinal;
+
     public $item;
     public $item_id;
     public $item_photos;
