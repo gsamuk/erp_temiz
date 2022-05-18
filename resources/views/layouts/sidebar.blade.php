@@ -118,6 +118,13 @@
                                 </a>
                             </li>
 
+
+                            <li class="nav-item">
+                                <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
+                                    Malzeme Ekle
+                                </a>
+                            </li>
+
                             <li class="nav-item">
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
                                     Malzeme Listesi

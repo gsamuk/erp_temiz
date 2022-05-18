@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LogoUnits extends Model
 {
     protected $table = 'lv_units';
+    protected $primaryKey = 'logicalref';
 }

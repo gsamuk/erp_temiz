@@ -14,4 +14,10 @@ class HomeController extends Controller
     {
         return view('index');
     }
+
+
+    public function mobile()
+    {
+        return view('mobile_index');
+    }
 }

@@ -40,4 +40,9 @@ Route::middleware([Kontrol::class])->group(function () {
         Route::get('malzeme/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzeme.talep_olustur');
         Route::get('malzeme/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzeme.talep_duzenle');
     });
+
+
+
+
+    Route::get('/mobile', [App\Http\Controllers\HomeController::class, 'mobile'])->name('mobile');
 });
