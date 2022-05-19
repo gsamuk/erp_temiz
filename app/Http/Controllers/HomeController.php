@@ -15,9 +15,23 @@ class HomeController extends Controller
         return view('index');
     }
 
+    public function malzeme_detay($sku)
+    {
+        return view('mobile_index', ['sku' => $sku]);
+    }
 
     public function mobile()
     {
         return view('mobile_index');
+    }
+
+    public function talep_olustur()
+    {
+        return view('mobile_index');
+    }
+
+    public function talepler()
+    {
+        return view('mobile_talepler');
     }
 }

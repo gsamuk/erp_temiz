@@ -349,5 +349,10 @@
 
 
     </div>
+    <script>
+        document.addEventListener('livewire:load', function () {
+            livewire.emit('MalzemeGoster');
+         });
+    </script>
 
 </div>

@@ -22,7 +22,7 @@
                 <ul class="listview flush transparent no-line image-listview mt-2">
 
                     <li>
-                        <a href="/mobile/malzeme/talepler_olustur" class="item">
+                        <a href="/mobile/malzeme/talep_olustur" class="item">
                             <div class="icon-box bg-secondary">
                                 <ion-icon name="add-outline"></ion-icon>
                             </div>

@@ -22,7 +22,7 @@ class Liste extends Component
     public $search;
     public $search_stock_code;
     public $user_id;
-
+    public $sku;
 
     public $slc_item_type;
     public $slc_stock_type;
@@ -35,6 +35,21 @@ class Liste extends Component
     public $talep_miktar = 1;
     public $talep_neden = "İhtiyaç";
 
+
+    protected $listeners = ['MalzemeGoster' => 'MalzemeGoster'];
+
+    public function MalzemeGoster()
+    {
+
+        if (isset($this->sku)) {
+            $this->talep_miktar = 1;
+            $this->malzeme = LogoItems::where('stock_code', $this->sku)->first();
+            $this->malzeme_photos = LogoItemsPhoto::Where('stock_code', $this->sku)->get();
+            $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
+            $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
+            $this->dispatchBrowserEvent('ShowModal');
+        }
+    }
 
     public function mount()
     {
@@ -133,7 +148,7 @@ class Liste extends Component
     public function getMalzeme($ref)
     {
         $this->talep_miktar = 1;
-        $this->malzeme = LogoItems::find($ref);
+        $this->malzeme = LogoItems::where('logicalref', $ref)->first();
         $this->malzeme_photos = LogoItemsPhoto::Where('logo_stockref', $ref)->get();
         $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
         $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
