@@ -7,10 +7,9 @@
             role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color:#e7eeed; ">
-                        <h5 class="modal-title"> <span style="font-weight: bolder;">Malzeme Detayı</span>
-                        </h5>
-                        <a href="javascript:;" data-dismiss="modal" class="btn btn-primary btn-sm">Kapat</a>
+                    <div class="modal-header bg-secondary text-light">
+                        <h5 class="modal-title text-light"> Malzeme Detayı </h5>
+                        <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
                     </div>
 
                     <div class="modal-body m-0 p-1">
@@ -32,43 +31,55 @@
                                     <b class="text-danger" tyle="font-weight: bolder;">{{ $malzeme->stock_name
                                         }}</b><br>
                                     <small>Stok Kodu : {{ $malzeme->stock_code}}</small>
+
                                     <form wire:submit.prevent="ekle()">
 
-                                        <div class="form-group boxed">
-                                            <div class="input-wrapper">
-                                                <label class="label">Miktar</label>
-                                                <input type="number" wire:model="talep_miktar" class="form-control"
-                                                    placeholder="Talep Miktarı Giriniz.">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="form-group boxed">
+                                                    <div class="input-wrapper">
+                                                        <label class="label">Miktar</label>
+                                                        <input type="number" wire:model="talep_miktar"
+                                                            class="form-control" placeholder="Talep Miktarı Giriniz.">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="form-group boxed ">
+                                                    <div class="input-wrapper">
+                                                        <label class="label">Birim</label>
+                                                        <select wire:model="malzeme_birim" class="form-control">
+                                                            @if($malzeme_units)
+                                                            @foreach($malzeme_units as $c)
+                                                            <option value="{{$c->unit_code}}"> {{$c->unit_code}}
+                                                            </option>
+                                                            @endforeach
+                                                            @endif
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-group boxed">
+                                                    <div class="input-wrapper">
+                                                        <label class="label">Talep Nedeni</label>
+                                                        <input type="text" wire:model="talep_neden"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-2">
+                                                    <button type="submit" class="btn btn-primary">Talep Listesine
+                                                        Ekle</button><br><br>
+
+                                                    <small>Dikkat: Talep Listesinizi oluşturduktan sonra göndermeniz
+                                                        gereklidir.</small>
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <div class="form-group boxed ">
-                                            <div class="input-wrapper">
-                                                <label class="label">Birim</label>
-                                                <select wire:model="malzeme_birim" class="form-control">
-                                                    @if($malzeme_units)
-                                                    @foreach($malzeme_units as $c)
-                                                    <option value="{{$c->unit_code}}"> {{$c->unit_code}} </option>
-                                                    @endforeach
-                                                    @endif
-                                                </select>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group boxed">
-                                            <div class="input-wrapper">
-                                                <label class="label">Talep Nedeni</label>
-                                                <input type="text" wire:model="talep_neden" class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-2">
-                                            <button type="submit" class="btn btn-primary">Talep Listesine
-                                                Ekle</button>
-                                        </div>
-
 
                                     </form>
                                 </div>
@@ -97,29 +108,32 @@
         @endif
 
 
-        @if($talep_listesi->count() > 0)
+
         <!-- Modal Basic -->
         <div wire:ignore.self class="modal fade modalbox" id="TalepListModal" data-backdrop="static" tabindex="-1"
             role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color:#e7eeed; ">
-                        <h5 class="modal-title"> <span style="font-weight: bolder;">Talep Listeniz</span>
-                        </h5>
-                        <a href="javascript:;" data-dismiss="modal" class="btn btn-primary btn-sm">Kapat</a>
+                    <div class="modal-header bg-secondary text-light">
+                        <h5 class="modal-title text-light"> Malzeme Talep Listeniz </h5>
+                        <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
                     </div>
 
                     <div class="modal-body p-0 ">
-                        <div class="section full mt-1 mb-1 p-2">
+                        <div class="section full mt-1 mb-1">
+                            <div wire:loading.table>
+                                <div class="spinner-grow text-primary" role="status">
+                                </div>
+                            </div>
+
+                            @if($talep_listesi->count() > 0)
 
 
-
-                            <div class="table-responsive">
+                            <div class="table-responsive m-1">
                                 <table class="table table-sm table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col" style="width:50px;">S.K</th>
-                                            <th scope="col">Malzeme</th>
+                                            <th scope="col" style="width:240px;">Malzeme</th>
                                             <th scope="col">Miktar</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -128,54 +142,53 @@
                                     <tbody>
                                         @foreach($talep_listesi as $d)
                                         @php
-                                        $item = App\Models\LogoItems::where('logicalref',
-                                        $d->logo_stock_ref)->first();
+                                        $item = App\Models\LogoItems::where('logicalref', $d->logo_stock_ref)->first();
                                         @endphp
                                         <tr>
-                                            <td>{{ $item->stock_code}}</td>
-                                            <td><span class="text-danger"><b>{{ $item->stock_name
-                                                        }}</b></span>
+                                            <td>
+                                                <span class="text-danger"><b>{{ $item->stock_name }}</b></span>
                                                 <br>
-                                                <small> Talep Nedeni : {{ $d->description}}</small>
+                                                <small> S.K : {{ $item->stock_code}} | Talep Nedeni : {{
+                                                    $d->description}}</small>
                                             </td>
-                                            <td>{{ number_format($d->quantity,0,',','.') }} <br><small>
+                                            <td>{{ number_format($d->quantity,0,',','.') }} <small>
                                                     {{$d->unit_code}} </small></td>
-                                            <td><button wire:click="sil({{ $d->id }})"
-                                                    class="btn   btn-sm btn-secondary alight-right">
-                                                    Çıkar
+                                            <td><button wire:click="sil({{ $d->id }})" class="btn btn-sm btn-link ">
+                                                    X
                                                 </button>
                                             </td>
-
                                         </tr>
                                         @endforeach
-
-
                                     </tbody>
                                 </table>
-                                <br>
-                                <button class="btn btn-success">Talebi Gönder</button>
+                                <hr>
+                                <div class="p-1">
+                                    <button wire:click="talep_ekle();" class="btn btn-success">Talebi Gönder</button>
+                                    <p><small>Malzeme Talep Listenizi göndermeden önce ekleme çıkarma
+                                            yapabilirsiniz.</small></p>
+                                </div>
                             </div>
-
-
-
+                            @else
+                            <div class="alert alert-info m-2" role="alert">
+                                Talep Listeniz Boş.
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- * Modal Basic -->
-        @endif
+
 
 
         <!-- Panel Right -->
         <div class="modal fade panelbox panelbox-right" id="PanelRight" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Malzeme Filtrele</h4>
-                        <a href="javascript:;" data-dismiss="modal" class="panel-close">
-                            <ion-icon name="close-outline"></ion-icon>
-                        </a>
+                    <div class="modal-header bg-secondary text-light">
+                        <h4 class="modal-title text-light">Malzeme Filtrele</h4>
+                        <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
                     </div>
                     <div class="modal-body">
                         <div class="form-group basic">
@@ -251,18 +264,12 @@
                 <span class="badge badge-warning" style="margin-right:-10px; position: relative;">{{
                     $talep_listesi->count() }}</span>
                 <a href="#" class="btn btn-sm btn-danger rounded " data-toggle="modal" data-target="#TalepListModal">
-                    Talep
-                    Listeniz </a>
+                    Talep Listeniz </a>
                 @endif
-
                 <a href="#" class="btn btn-sm btn-secondary rounded " data-toggle="modal"
                     data-target="#PanelRight">Filtre</a>
             </div>
-
-
         </div>
-
-
 
         @if($slc_stock_type || $slc_item_type || $search || $search_stock_code )
         <div class="wide-block pt-1 pb-1">
@@ -297,15 +304,15 @@
         @endif
 
 
-        <ul class="listview image-listview media mt-1 p-1">
+        <ul class="listview image-listview media mt-1  ">
             @foreach ($malzemeler as $m)
             @php
             $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $m->logicalref)->first();
             @endphp
 
-            <li>
+            <li style="background-color: aliceblue">
                 <a href="javascript:;" class="item p-0" wire:click="getMalzeme({{$m->logicalref}})">
-                    <div class="p-1">
+                    <div class="m-1">
                         @if($photo)
                         <img src="{{ asset('storage/images/items/thumb/'.$photo->foto_path) }}"
                             class="border imaged w48">

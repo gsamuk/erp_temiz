@@ -78,6 +78,9 @@
                                 @foreach($data as $d)
                                 @php
                                 $cnt = App\Models\DemandDetail::where('demand_id', $d->id)->count();
+                                if($cnt == 0){
+                                continue;
+                                }
                                 @endphp
 
                                 <tr class="@if($d->id == $talep_detay_id) table-info @endif">

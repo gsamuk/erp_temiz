@@ -11,6 +11,9 @@ use App\Models\LogoDb;
 use App\Models\LogoItemsPhoto;
 use App\Models\LogoUnits;
 use App\Models\MobileDemanDetailTemp;
+use Illuminate\Support\Facades\Session;
+use App\Models\Demand;
+use App\Models\DemandDetail;
 
 class Liste extends Component
 {
@@ -18,19 +21,25 @@ class Liste extends Component
     protected $paginationTheme = 'bootstrap';
     public $search;
     public $search_stock_code;
+    public $user_id;
 
 
     public $slc_item_type;
     public $slc_stock_type;
-    public $perPage = 3;
+    public $perPage = 6;
     public $malzeme;
     public $malzeme_units;
     public $malzeme_birim;
 
 
-    public $talep_miktar;
+    public $talep_miktar = 1;
     public $talep_neden = "İhtiyaç";
 
+
+    public function mount()
+    {
+        $this->user_id = Session::get('userData')->id;
+    }
 
     public function render()
     {
@@ -49,7 +58,7 @@ class Liste extends Component
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();
-        $talep_listesi = MobileDemanDetailTemp::where('user_id', 1)->get();
+        $talep_listesi = MobileDemanDetailTemp::where('user_id', $this->user_id)->get();
 
         return view(
             'livewire.malzemeler.mobile.liste',
@@ -64,13 +73,13 @@ class Liste extends Component
 
     public function loadMore()
     {
-        $this->perPage += 3;
+        $this->perPage += 5;
     }
 
     public function ekle()
     {
         $db = new MobileDemanDetailTemp;
-        $db->user_id = 1;
+        $db->user_id = $this->user_id;
         $db->logo_stock_ref = $this->malzeme->logicalref;
         $db->quantity = $this->talep_miktar;
         $db->unit_code = $this->malzeme_birim;
@@ -82,20 +91,51 @@ class Liste extends Component
 
     public function sil($id)
     {
-        MobileDemanDetailTemp::where('id', $id)->where('user_id', 1)->delete();
+        MobileDemanDetailTemp::where('id', $id)->where('user_id', $this->user_id)->delete();
         $sayi = MobileDemanDetailTemp::where('user_id', 1)->count();
         if ($sayi == 0) {
-            $this->dispatchBrowserEvent('CloseTalepListModal');
+            $this->dispatchBrowserEvent('CloseModal');
         }
+    }
+
+
+    public function talep_ekle()
+    {
+
+        $insert_time = date('Y-m-d H:i:s');
+        $demand = new Demand;
+        $demand->company_id = 1;
+        $demand->users_id = $this->user_id;
+        $demand->warehouse_no = 1;
+        $demand->insert_time = $insert_time;
+        $demand->save();
+        $demand_no = $demand->id; // eklenen id
+
+
+        $talep_listesi = MobileDemanDetailTemp::where('user_id', $this->user_id)->get();
+
+        foreach ($talep_listesi as $d) {
+            $dm = new DemandDetail;
+            $dm->demand_id = $demand_no;
+
+            $dm->logo_stock_ref = $d->logo_stock_ref;
+            $dm->quantity = $d->quantity;
+            $dm->unit_code = $d->unit_code;
+            $dm->description = $d->description;
+            $dm->insert_time = $insert_time;
+            $dm->update_time = $insert_time;
+            $dm->save();
+        }
+        MobileDemanDetailTemp::where('user_id', $this->user_id)->delete();
+        $this->dispatchBrowserEvent('CloseModal');
     }
 
     public function getMalzeme($ref)
     {
-        $this->talep_miktar = null;
+        $this->talep_miktar = 1;
         $this->malzeme = LogoItems::find($ref);
         $this->malzeme_photos = LogoItemsPhoto::Where('logo_stockref', $ref)->get();
         $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
-
         $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
         $this->dispatchBrowserEvent('ShowModal');
     }

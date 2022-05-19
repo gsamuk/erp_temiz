@@ -23,14 +23,12 @@
         $('#MyModal').modal('show');      
     }); 
 
-
-    window.addEventListener('CloseTalepListModal', event => {    
-             
+    window.addEventListener('CloseTalepListModal', event => {                 
         $('#TalepListModal').modal('hide');      
-    }); 
-    
+    });     
   
     window.addEventListener('CloseModal', event => {  
       setTimeout(function(){  $('.modal').modal('hide');   }, 1000);        
     }); 
+    
 </script>

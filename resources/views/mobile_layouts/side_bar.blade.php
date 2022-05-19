@@ -11,6 +11,7 @@
                     </div>
                     <div class="in">
                         <strong>{{ Session::get('userData')->name }} {{ Session::get('userData')->surname }}</strong>
+                        <small>Kullanıcı NO : {{ Session::get('userData')->id }}</small>
                     </div>
                     <a href="javascript:;" class="close-sidebar-button" data-dismiss="modal">
                         <ion-icon name="close"></ion-icon>
@@ -19,17 +20,28 @@
                 <!-- * profile box -->
 
                 <ul class="listview flush transparent no-line image-listview mt-2">
+
                     <li>
-                        <a href="/" class="item">
+                        <a href="/mobile/malzeme/talepler_olustur" class="item">
                             <div class="icon-box bg-secondary">
-                                <ion-icon name="cube-outline"></ion-icon>
+                                <ion-icon name="add-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                Ürünler
+                                Malzeme Talebi Oluştur
                             </div>
                         </a>
                     </li>
 
+                    <li>
+                        <a href="/mobile/malzeme/talepler" class="item">
+                            <div class="icon-box bg-secondary">
+                                <ion-icon name="cube-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Malzeme Talepleriniz
+                            </div>
+                        </a>
+                    </li>
 
                     <li>
                         <a href="/duyurular" class="item">
@@ -40,23 +52,6 @@
                                 Duyurular
                             </div>
                         </a>
-                    </li>
-
-
-                    <li>
-                        <div class="item">
-                            <div class="icon-box bg-secondary">
-                                <ion-icon name="moon-outline"></ion-icon>
-                            </div>
-                            <div class="in">
-                                <div>Karanlık Mode</div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input dark-mode-switch"
-                                        id="darkmodesidebar">
-                                    <label class="custom-control-label" for="darkmodesidebar"></label>
-                                </div>
-                            </div>
-                        </div>
                     </li>
 
                     <li>
@@ -70,53 +65,7 @@
                         </a>
                     </li>
 
-
-
                 </ul>
-
-
-
-                <div class="listview-title mt-2 mb-1">
-                    <span>Yönetici Menüsü</span>
-                </div>
-
-                <ul class="listview flush transparent no-line image-listview">
-
-                    <li>
-                        <a href="/kullanicilar" class="item">
-                            <div class="icon-box bg-secondary">
-                                <ion-icon name="person-outline"></ion-icon>
-                            </div>
-                            <div class="in">
-                                Kullanıcılar
-                            </div>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/gruplar" class="item">
-                            <div class="icon-box bg-secondary">
-                                <ion-icon name="people-outline"></ion-icon>
-                            </div>
-                            <div class="in">
-                                Kullanıcı Grupları
-                            </div>
-                        </a>
-                    </li>
-
-
-                    <li>
-                        <a href="/kategoriler" class="item">
-                            <div class="icon-box bg-secondary">
-                                <ion-icon name="cube-outline"></ion-icon>
-                            </div>
-                            <div class="in">
-                                Ürün Kategorileri
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-
 
             </div>
 
