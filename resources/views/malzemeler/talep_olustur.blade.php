@@ -4,7 +4,7 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') Zeberced ERP @endslot
-@slot('title') Malzeme Talebi @endslot
+@slot('title') MALZEME TALEBİ @endslot
 @endcomponent
 
 @livewire('malzemeler.talep-olustur', ['tid' => $id ])

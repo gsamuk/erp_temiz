@@ -44,13 +44,23 @@
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                             Talep @if($tid > 0) Düzenle @else Oluştur @endif</h5>
-
                     </div>
                 </div>
                 <div class="card-body">
                     <form wire:submit.prevent="store()">
                         @csrf
                         <div class="row">
+
+                            <div class="col-lg-4 col-md-6 m-2 mb-4">
+                                <label class="form-label">Talep Edilen Depo</label>
+                                <select wire:model="warehouse" name="ambar" class="form-select" disabled>
+                                    @foreach ($warehouses as $d)
+                                    <option value="{{ $d->warehouse_no }}">{{
+                                        $d->warehouse_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="col-lg-12 col-md-12">
 
                                 <div class="table-responsive">

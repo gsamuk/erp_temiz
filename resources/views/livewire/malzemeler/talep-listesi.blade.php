@@ -2,8 +2,9 @@
 
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <div class="card">
+
                 <div class="card-header">
                     <div class="row">
                         <div class="col-xxl-6 col-sm-6 mb-1">
@@ -25,6 +26,7 @@
                 </div>
 
                 <div class="card-body">
+
                     <ul class="nav nav-tabs nav-tabs-custom nav-success  " role="tablist">
                         <li class="nav-item">
                             <a class="nav-link All py-3 @if($status == 10 ) active @endif " data-bs-toggle="tab"
@@ -60,7 +62,7 @@
                         @endif
 
                     </div>
-
+                    @if($data->count() > 0)
                     <div class="table-responsive">
                         <table class="table align-middle  table-sm table-bordered  table-striped table-nowrap"
                             wire:loading.class="opacity-50">
@@ -116,6 +118,9 @@
                     </div>
 
                     Not: Malzeme taleplerinin işleme alınabilmesi için yetkili kişi tarafından onaylanması gerekir.
+                    @else
+                    <div class="m-3"> Talep Bulunamadı..</div>
+                    @endif
                 </div>
 
 
@@ -125,7 +130,7 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif

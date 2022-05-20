@@ -4,10 +4,10 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title')| Velzon - Admin & Dashboard Template</title>
+    <title>Dekatek Online ERP | Zeberced</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
+    <meta content="Zeberced için hazırlanmış Logo Tiger ERP eklentisidir." name="description" />
+    <meta content="Dekatek" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico')}}">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

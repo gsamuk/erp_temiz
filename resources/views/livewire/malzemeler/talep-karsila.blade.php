@@ -57,7 +57,7 @@
         <div class="card-body">
 
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-12">
                     <table class="table table-light align-middle table-sm table-striped ">
                         <thead>
                             <tr>
@@ -68,6 +68,7 @@
                                 <th scope="col">Stok</th>
                                 <th scope="col" style="width:90px;">Karşılanan</th>
                                 <th scope="col" style="width:90px;">Satınalma</th>
+                                <th scope="col" style="width:90px;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,10 +92,7 @@
                                 $val = 0;
                                 $val2 = $dt->quantity;
                                 }
-
-                                @endphp
-                                <tr>
-
+                                if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } @endphp <tr>
                                     <td class="owner">
                                         @if($photo)
                                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
@@ -132,34 +130,34 @@
                                         <input type="hidden" x-data
                                             x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
 
-                                        <input type="number" wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
-                                            x-data
+                                        <input type="number" min="0"
+                                            wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
                                             x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val,0,'.',',') }}')"
                                             class="form-control">
                                     </td>
 
-                                    <td><input type="number" wire:model="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                    <td><input type="number" min="0"
+                                            wire:model="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
                                             x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val2,0,'.',',') }}')"
                                             class="form-control">
                                     </td>
 
+                                    <td><button wire:click="cikar({{ $dt->id }})"
+                                            class="btn btn-sm btn-danger">Çıkar</button></td>
 
-
-
-                                </tr>
-                                @endforeach
+                                    </tr>
+                                    @endforeach
                         </tbody>
                     </table>
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-12">
                     <div class="row">
 
-
-                        <div class="col-lg-12">
+                        @if(isset($karsila))
+                        @if(isset($karsila[$talep_id]))
+                        <div class="col-lg-6">
                             <div class="p-3" style="background-color: rgb(235, 255, 236)">
-                                @if(isset($karsila))
-                                @if(isset($karsila[$talep_id]))
                                 <h5><b>Stoktan Karşılama Listesi</b></h5>
                                 <table class="table border align-middle table-sm table-striped">
                                     <thead class="table-success">
@@ -170,9 +168,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        $k_have = false;
+                                        @endphp
+
                                         @foreach($karsila[$talep_id] as $item_id => $miktar)
                                         @if($miktar > 0)
                                         @php
+                                        $k_have = true;
                                         $itm = json_decode($talep_line[$talep_id][$item_id]);
                                         @endphp
                                         <tr>
@@ -183,20 +186,26 @@
                                         @endif
                                         @endforeach
 
+                                        @if(!$k_have)
+                                        <tr>
+                                            <td colspan="3" class="p-3">
+                                                <center>Stoktan Karşılama istesi Boş</center>
+                                            </td>
+                                        </tr>
                                         @endif
+
                                     </tbody>
                                 </table>
-                                @endif
                             </div>
                         </div>
+                        @endif
+                        @endif
 
 
-
-
-                        <div class="col-lg-12 mt-3">
+                        @if(isset($satinal))
+                        @if(isset($satinal[$talep_id]))
+                        <div class="col-lg-6">
                             <div class="p-3" style="background-color: rgb(255, 250, 201)">
-                                @if(isset($satinal))
-                                @if(isset($satinal[$talep_id]))
                                 <h5><b>Satın Alma Listesi</b></h5>
                                 <table class="table border align-middle table-sm table-striped ">
                                     <thead class="table-warning">
@@ -207,9 +216,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                        $s_have = false;
+                                        @endphp
+
                                         @foreach($satinal[$talep_id] as $item_id => $miktar)
                                         @if($miktar > 0)
+
                                         @php
+                                        $s_have = true;
                                         $itm = json_decode($talep_line[$talep_id][$item_id]);
                                         @endphp
                                         <tr>
@@ -218,17 +233,36 @@
                                             <td>{{ $miktar }}</td>
                                         </tr>
                                         @endif
-                                        @endforeach
 
+                                        @endforeach
+                                        @if(!$s_have)
+                                        <td colspan="3" class="p-3">
+                                            <center>Satınalma Listesi Boş</center>
+                                        </td>
                                         @endif
                                     </tbody>
                                 </table>
-                                @endif
+
                             </div>
+                        </div>
+                        @endif
+                        @endif
+                        <div class="col-lg-12 mt-3">
+                            Yetkili personel stoktan karşılama yada satınalma veri giriş alanlarını değiştirerek kayıt
+                            işlemi
+                            yapmalıdır.
                         </div>
 
                         <div class="col-lg-12 mt-3">
-                            <button class="btn btn-success btn-lg">Kaydet</button>
+                            @if(isset($s_have) && isset($k_have) )
+                            @if($s_have || $k_have)
+                            <button wire:click="kaydet();" class="btn btn-success btn-lg">Onayla & Kaydet</button>
+                            @else
+                            <button class="btn btn-danger btn-lg" disabled> Kaydet</button><br>
+                            <small class="text-danger">Kaydedilecek veri yok, lütfen stoktan karşılama yada satınalma
+                                veri giriş alanlarını kullanın </small>
+                            @endif
+                            @endif
                         </div>
                     </div>
 

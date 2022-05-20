@@ -32,7 +32,7 @@
                     </span>
                 </button>
 
-                <!-- App Search-->
+                <!-- App Search
                 <form class="app-search d-none d-md-block">
                     <div class="position-relative">
                         <input type="text" class="form-control" placeholder="Search..." autocomplete="off"
@@ -43,6 +43,7 @@
                     </div>
 
                 </form>
+                -->
             </div>
 
 
@@ -67,10 +68,10 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome {{Session::get('userData')->name}}!</h6>
+                        <h6 class="dropdown-header">Hoşgeldin {{Session::get('userData')->name}}</h6>
                         <a class="dropdown-item" href="/user/{{Session::get('userData')->id}}"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Profile</span></a>
+                                class="align-middle">Kullanıcı Profili</span></a>
                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#firma_secModal"><i
                                 class="mdi mdi-store-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Firma Seç</span></a>

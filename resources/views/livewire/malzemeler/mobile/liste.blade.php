@@ -35,7 +35,7 @@
                                     <form wire:submit.prevent="ekle()">
 
                                         <div class="row">
-                                            <div class="col-4">
+                                            <div class="col-6">
                                                 <div class="form-group boxed">
                                                     <div class="input-wrapper">
                                                         <label class="label">Miktar</label>
@@ -45,7 +45,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4">
+                                            <div class="col-6">
                                                 <div class="form-group boxed ">
                                                     <div class="input-wrapper">
                                                         <label class="label">Birim</label>
@@ -57,12 +57,13 @@
                                                             @endforeach
                                                             @endif
                                                         </select>
-
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="col-12">
+
+
                                                 <div class="form-group boxed">
                                                     <div class="input-wrapper">
                                                         <label class="label">Talep Nedeni</label>
@@ -72,9 +73,8 @@
                                                 </div>
 
                                                 <div class="mt-2">
-                                                    <button type="submit" class="btn btn-primary">Talep Listesine
-                                                        Ekle</button><br><br>
-
+                                                    <button type="submit" class="btn btn-primary"> Ekle</button>
+                                                    <br><br>
                                                     <small>Dikkat: Talep Listesinizi oluşturduktan sonra göndermeniz
                                                         gereklidir.</small>
                                                 </div>
@@ -164,9 +164,11 @@
                                 <hr>
                                 <div class="p-1">
                                     <button wire:click="talep_ekle();" class="btn btn-success">Talebi Gönder</button>
+
                                     <p><small>Malzeme Talep Listenizi göndermeden önce ekleme çıkarma
                                             yapabilirsiniz.</small></p>
                                 </div>
+
                             </div>
                             @else
                             <div class="alert alert-info m-2" role="alert">
@@ -337,6 +339,8 @@
             @if($malzemeler->hasMorePages())
             <button class="btn btn-text-primary shadowed mr-1 mb-1" wire:click.prevent="loadMore">Devamını
                 Yükle</button>
+
+            <button id="writeButton" class="btn btn-success">NFC</button>
             @endif
 
             <div wire:loading.table>
@@ -350,6 +354,18 @@
 
     </div>
     <script>
+        writeButton.addEventListener("click", async () => {
+      console.log("User clicked write button");
+
+      try {
+        const ndef = new NDEFReader();
+        await ndef.write("Hello world!");
+        console.log("> Message written");
+      } catch (error) {
+        console.log("Argh! " + error);
+      }
+    });
+
         document.addEventListener('livewire:load', function () {
             livewire.emit('MalzemeGoster');
          });

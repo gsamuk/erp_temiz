@@ -21,7 +21,7 @@ class Talepler extends Component
     public function render()
     {
         $talepler = Demand::where('users_id', $this->user_id)
-            ->orderBy('id', 'desc')
+            ->orderBy('id', 'desc')->limit(10)
             ->get();
 
         return view('livewire.malzemeler.mobile.talepler', ['talepler' => $talepler]);

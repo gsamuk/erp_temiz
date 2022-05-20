@@ -30,8 +30,31 @@ class TalepKarsila extends Component
     {
         $this->talep_id = $id;
         $this->talep_detay = DemandDetail::Where('demand_id', $id)->get();
+        if ($this->talep_detay->count() == 0) {
+            $this->talep_detay = null;
+        }
     }
 
+    public function cikar($id)
+    {
+        DemandDetail::Where('id', $id)->delete();
+        $count = DemandDetail::where('demand_id', $this->talep_id)->count();
+        if ($count == 0) {
+            Demand::Where('id', $this->talep_id)->delete();
+            $this->talep_detay = null;
+            $this->karsila = null;
+            $this->satinal = null;
+        } else {
+            unset($this->karsila[$this->talep_id][$id]);
+            unset($this->satinal[$this->talep_id][$id]);
+            $this->TalepKarsila($this->talep_id);
+        }
+    }
+
+    public function kaydet()
+    {
+        dd($this->karsila);
+    }
 
     public function render()
     {
