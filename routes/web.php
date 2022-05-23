@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Kontrol;
 use App\Http\Middleware\LogoTokenKontrol;
+use App\Http\Controllers\UserController;
 
 Route::get('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::post('/login_post', [App\Http\Controllers\LoginController::class, 'login_post'])->name('login.post');

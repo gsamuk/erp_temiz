@@ -6,6 +6,7 @@
 
                 <th scope="col">İzin Grubu</th>
                 <th scope="col"></th>
+                <th scope="col"></th>
                 <th scope="col">İzin Türü</th>
                 <th scope="col">-</th>
             </tr>
@@ -18,6 +19,7 @@
             <tr>
 
                 <td>{{ $d->group_name }}</td>
+                <td>{{ $d->name }}</td>
                 <td>@if($izin) <i class="ri-checkbox-circle-line align-middle text-success"></i> @else <i
                         class="ri-close-circle-line align-middle text-danger"></i> @endif</td>
                 <td>{{ $d->description }}</td>

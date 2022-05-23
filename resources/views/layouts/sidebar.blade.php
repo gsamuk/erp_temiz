@@ -51,18 +51,21 @@
                     </a>
                     <div class="collapse menu-dropdown" id="m3">
                         <ul class="nav nav-sm flex-column">
+                            @if(Erp::izin('items_list'))
                             <li class="nav-item">
-
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
                                     Malzeme Listesi
                                 </a>
                             </li>
+                            @endif
+
+                            @if(Erp::izin('items_create'))
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
                                     Malzeme Ekle
                                 </a>
                             </li>
-
+                            @endif
 
                             <li class="nav-item">
                                 <a href="#sidebarCrm" class="nav-link" data-bs-toggle="collapse" role="button"
@@ -71,26 +74,27 @@
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarCrm">
                                     <ul class="nav nav-sm flex-column">
+                                        @if(Erp::izin('items_demand'))
                                         <li class="nav-item">
                                             <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link"
                                                 data-key="t-level-3.1">
                                                 Talep Listesi
                                                 <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
                                             </a>
-
-
                                         </li>
+
                                         <li class="nav-item">
                                             <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link"
                                                 data-key="t-level-3.2">
                                                 Talep Oluştur
                                             </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </li>
 
-
+                            @if(Erp::izin('items_reports'))
                             <li class="nav-item">
                                 <a href="#sidebarCrm_" class="nav-link" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarCrm_" data-key="t-level-2.2"> Malzeme
@@ -114,7 +118,7 @@
                                     </ul>
                                 </div>
                             </li>
-
+                            @endif
 
 
 
@@ -175,11 +179,6 @@
                         </ul>
                     </div>
                 </li>
-
-
-
-
-
 
 
                 <li class="nav-item">
@@ -269,8 +268,7 @@
                     </a>
                 </li>
 
-
-
+                @if(Erp::izin('is_admin'))
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>Admin Yetki Alanı</span></li>
 
@@ -304,7 +302,7 @@
                         </ul>
                     </div>
                 </li>
-
+                @endif
             </ul>
 
 

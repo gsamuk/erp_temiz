@@ -103,7 +103,7 @@
 
 
 
-
+                                @if(Erp::izin('is_admin'))
                                 <div class="col-lg-12">
                                     <input type="checkbox" name="is_active" data-plugin="switchery" data-color="#1bb99a"
                                         {{ $is_active ? 'checked' : '' }}>
@@ -112,7 +112,7 @@
                                             güncelleyin)</small>
                                     </label>
                                 </div>
-
+                                @endif
 
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
@@ -136,7 +136,7 @@
 
 
 
-
+    @if(Erp::izin('is_admin'))
     <div class="col-xxl-6">
         <div class="card ">
             <div class="card-header align-items-center d-flex">
@@ -147,12 +147,11 @@
             </div>
         </div>
     </div>
-
+    @endif
 
 </div>
 <!--end row-->
 @endsection
 @section('script')
-
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 @endsection
