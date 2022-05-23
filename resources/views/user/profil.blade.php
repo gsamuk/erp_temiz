@@ -103,7 +103,7 @@
 
 
 
-                                @if(Session::get('userData')->is_admin == 1)
+
                                 <div class="col-lg-12">
                                     <input type="checkbox" name="is_active" data-plugin="switchery" data-color="#1bb99a"
                                         {{ $is_active ? 'checked' : '' }}>
@@ -112,7 +112,7 @@
                                             güncelleyin)</small>
                                     </label>
                                 </div>
-                                @endif
+
 
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
@@ -126,93 +126,27 @@
                     </div>
                     <!--end tab-pane-->
                     <div class="tab-pane" id="changePassword" role="tabpanel">
-
                         @livewire('user.password-change', ["user_id" => $id] )
-
-
-
                     </div>
                     <!--end tab-pane-->
-
                 </div>
             </div>
         </div>
     </div>
-    @if(Session::get('userData')->is_admin == 1)
+
+
+
+
     <div class="col-xxl-6">
         <div class="card ">
             <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">Kullanıcı Yetki Tanımları</h4>
-
             </div>
             <div class="card-body ">
-                <form action="{{ route('user.authorizations.post') }}" method="POST">
-                    @csrf
-                    <input type="hidden" value="{{ $id }}" name="user_id" id="user_id">
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="purchase_view" data-plugin="switchery" data-color="#1bb99a" {{
-                            $purchase_view ? 'checked' : '' }}>
-                        <label class="form-check-label" for="formCheck6">
-                            Satın Alma Yapabilir
-                        </label>
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="sale_view" data-plugin="switchery" data-color="#1bb99a" {{
-                            $sale_view ? 'checked' : '' }}>
-                        <label class="form-check-label" for="formCheck6">
-                            Satış Yapabilir
-                        </label>
-                    </div>
-
-
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="purchase_approve" data-plugin="switchery" data-color="#1bb99a" {{
-                            $purchase_approve ? 'checked' : '' }}>
-                        <label class="form-check-label" for="formCheck6">
-                            Satın Alma Onayı Verebilir
-                        </label>
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="sale_approve" data-plugin="switchery" data-color="#1bb99a" {{
-                            $sale_approve ? 'checked' : '' }}>
-                        <label class="form-check-label" for="formCheck6">
-                            Satış Onayı Verebilir
-                        </label>
-                    </div>
-
-
-                    <div class="form-check mb-3">
-                        <input type="checkbox" name="is_admin" data-plugin="switchery" data-color="#1bb99a" {{ $is_admin
-                            ? 'checked' : '' }}>
-                        <label class="form-check-label" for="formCheck6">
-                            Admin Yetkisine Sahiptir
-                        </label>
-                    </div>
-
-
-                    @if (session()->has('success'))
-                    <div class="col-lg-12">
-                        <div class="alert alert-success alert-dismissible fade show shadow" role="alert">
-                            <strong> Ok! </strong> {{ session()->get('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                    @endif
-
-                    <div class="col-lg-12">
-                        <div class="hstack gap-2 justify-content-end">
-                            <button type="submit" class="btn btn-primary">Güncelle</button>
-                        </div>
-                    </div>
-                </form>
-
+                @livewire('user.izin-yonetimi', ['user_id' => $id ])
             </div>
         </div>
     </div>
-    @endif
-    <!--end col-->
 
 
 </div>

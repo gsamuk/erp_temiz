@@ -155,6 +155,7 @@ class TalepOlustur extends Component
             $dm = new DemandDetail;
 
             $dm->demand_id = $demand_no;
+            $dm->stock_code = $this->kod[$in];
             $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
             $dm->unit_code = $this->birim[$in];

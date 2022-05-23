@@ -9,6 +9,7 @@ use App\Models\Demand;
 
 class TalepListesi extends Component
 {
+    protected $listeners = ['postAdded' => 'incrementPostCount'];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -16,7 +17,7 @@ class TalepListesi extends Component
     public $no_search;
     public $warehouse_search;
 
-    public $status = 10; // hepsi gelir
+    public $status = 99; // hepsi gelir
     public $talep_detay_id;
 
 
@@ -43,6 +44,9 @@ class TalepListesi extends Component
                 return $query->where('demand.status', $this->status);
             })
             ->when(($this->status == 0), function ($query) {
+                return $query->where('demand.status', $this->status);
+            })
+            ->when(($this->status == 9), function ($query) {
                 return $query->where('demand.status', $this->status);
             })
 

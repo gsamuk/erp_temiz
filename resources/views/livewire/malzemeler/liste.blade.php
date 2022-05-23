@@ -1,6 +1,49 @@
 <div>
 
+    @if($item_id)
+    <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div class="modal-body m-0">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h5 class="text-danger">{{ $item->stock_name }}</h5>
+                            <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
+                            <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
+                            <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
+                            <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else
+                                    0 @endif </b> </small>
+                            <hr>
+                            <h5>Son Satınalma Tutarları</h5>
+                            <small>1.500 X Adet ABC Ltd. 25.10.2021</small><br>
+                            <small>1.400 X Adet</small><br>
+                            <small>1.500 X Adet</small><br>
+                            <small>1.600 X Adet</small><br>
+                        </div>
 
+                        @if($item_photos)
+                        <div class="col-lg-8">
+                            <div class="row ">
+                                @foreach ($item_photos as $p)
+                                <div class=" col-xxl-6 col-xl-6 col-sm-12">
+                                    <img class=" img-fluid mx-auto border p-1 m-2"
+                                        src="{{ asset('storage/images/items/'.$p->foto_path) }}">
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <div class="card">
         <div class="card-header">
@@ -74,10 +117,7 @@
                             @if($ch)
                             <th class="sort" data-sort="name" scope="col" style="width:55px;"></th>
                             @endif
-
                             <th class="sort" data-sort="name" scope="col">Malzeme</th>
-
-
                             @if($details)
                             <th class="sort" data-sort="name" scope="col">Stok</th>
                             <th class="sort" data-sort="name" scope="col">Ort. Fiyat</th>

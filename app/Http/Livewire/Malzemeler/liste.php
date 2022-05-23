@@ -24,6 +24,7 @@ class Liste extends Component
 
     public $foto_ref; // malzeme ref id
     public $item_photos;
+    public $item_id;
 
     protected $listeners  = ['setLine'];
 
@@ -64,9 +65,6 @@ class Liste extends Component
             })
             ->orderByDesc('stock_name')
             ->paginate(12);
-        if ($this->search) {
-            dd(DB::getQueryLog());
-        }
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();
@@ -82,9 +80,13 @@ class Liste extends Component
     }
 
 
-    public function foto($ref)
+
+
+    public function foto($id)
     {
-        $this->foto_ref = $ref;
-        $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $ref)->get();
+        $this->item_id = $id;
+        $this->item = LogoItems::find($id);
+        $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $id)->get();
+        $this->dispatchBrowserEvent('ShowMalzemeFotoModal');
     }
 }

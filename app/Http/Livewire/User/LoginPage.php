@@ -5,7 +5,6 @@ namespace App\Http\Livewire\User;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use App\Models\LogoUserTokens;
 use App\Models\Users;
 
 
@@ -66,15 +65,6 @@ class LoginPage extends Component
         $user = Users::where('users.user_name', $this->user_name)
             ->where('users.password', $this->password)
             ->where('users.is_active', 1)
-            ->join('Authorizations', 'users.id', '=', 'authorizations.user_id')
-            ->select(
-                'users.*',
-                'authorizations.purchase_view',
-                'authorizations.sale_view',
-                'authorizations.purchase_approve',
-                'authorizations.sale_approve',
-                'authorizations.is_admin'
-            )
             ->first();
 
         if ($user) {

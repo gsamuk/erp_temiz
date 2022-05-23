@@ -20,7 +20,4 @@
             console.log("CloseWin");   
       });
     });
-</script>
-
-
-@endsection
+</script>@endsection

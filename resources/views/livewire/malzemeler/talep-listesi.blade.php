@@ -29,8 +29,8 @@
 
                     <ul class="nav nav-tabs nav-tabs-custom nav-success  " role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link All py-3 @if($status == 10 ) active @endif " data-bs-toggle="tab"
-                                href="#" wire:click="set_status(10)" role="tab" aria-selected="true">
+                            <a class="nav-link All py-3 @if($status == 99 ) active @endif " data-bs-toggle="tab"
+                                href="#" wire:click="set_status(99)" role="tab" aria-selected="true">
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> Hepsi
                             </a>
                         </li>
@@ -48,6 +48,14 @@
                                 <i class="ri-checkbox-circle-line me-1 align-bottom"></i> İşleme Alındı
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link py-3 @if($status == 9) active @endif " data-bs-toggle="tab" href="#"
+                                wire:click="set_status(9)" role="tab" aria-selected="false">
+                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Reddedildi
+                            </a>
+                        </li>
+
 
                     </ul>
                     <div class="row">
@@ -92,18 +100,24 @@
                                             $d->user_name }}</a></td>
                                     <td class="owner"><b>{{ $cnt }} Adet</b></td>
 
-                                    <td class="owner">@if($d->status == 0) <span class="text-info">Bekliyor</span> @else
-                                        <span class="text-success">İşleme
-                                            Alındı</span> @endif
+                                    <td class="owner">
+                                        @if($d->status == 0) <span class="text-info">Beklemede</span>@endif
+                                        @if($d->status == 1) <span class="text-success">İşleme Alındı</span>@endif
+                                        @if($d->status == 9) <span class="text-danger">Reddedildi</span>@endif
+
+
                                     </td>
                                     <td class="owner">{{
                                         \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans()
                                         }}
                                     </td>
-                                    <td class="owner"><button
+                                    <td class="owner">
+                                        @if($d->status < 9) <button
                                             wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                             class="btn btn-sm btn-info btn-block">Detay <i
-                                                class="ri-arrow-right-s-line"></i></button></td>
+                                                class="ri-arrow-right-s-line"></i></button>
+                                            @endif
+                                    </td>
 
                                 </tr>
                                 @endforeach

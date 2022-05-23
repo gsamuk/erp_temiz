@@ -21,6 +21,20 @@
     window.addEventListener('ShowMalzemeFotoModal', event => {           
         $('#MalzemeFotoModal').modal('show');
     }); 
+
+
+    window.addEventListener('TalepRedToast', event => {                   
+        Toastify({
+            text: "Talep tamamen reddedildi.",
+            gravity: "top",  
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            position: "center",  
+            duration: 3000
+            }).showToast();
+    });    
+
 </script>
 
 @endsection

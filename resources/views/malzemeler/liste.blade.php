@@ -14,4 +14,9 @@
 @section('script')
 
 <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+<script>
+    window.addEventListener('ShowMalzemeFotoModal', event => {           
+        $('#MalzemeFotoModal').modal('show');
+    }); 
+</script>
 @endsection

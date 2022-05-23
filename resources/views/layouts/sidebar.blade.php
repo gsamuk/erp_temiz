@@ -43,7 +43,7 @@
 
 
 
-                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
@@ -52,55 +52,80 @@
                     <div class="collapse menu-dropdown" id="m3">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link" data-key="t-google">
-                                    Talep Oluştur
-                                </a>
-                            </li>
 
-                            <li class="nav-item">
-                                <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link" data-key="t-google">
-                                    Talep Listesi
-                                    <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
-                                    Malzeme Ekle
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
                                     Malzeme Listesi
                                 </a>
                             </li>
-
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-google">
-                                    Ambar Durum Raporu
+                                    Malzeme Ekle
                                 </a>
                             </li>
 
+
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
-                                    Minumum Stok Raporu
+                                <a href="#sidebarCrm" class="nav-link" data-bs-toggle="collapse" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCrm" data-key="t-level-2.2"> Malzeme
+                                    Talepleri
                                 </a>
+                                <div class="collapse menu-dropdown" id="sidebarCrm">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link"
+                                                data-key="t-level-3.1">
+                                                Talep Listesi
+                                                <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
+                                            </a>
+
+
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link"
+                                                data-key="t-level-3.2">
+                                                Talep Oluştur
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
+
+
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-google">
-                                    Malzeme Değer Raporu
+                                <a href="#sidebarCrm_" class="nav-link" data-bs-toggle="collapse" role="button"
+                                    aria-expanded="false" aria-controls="sidebarCrm_" data-key="t-level-2.2"> Malzeme
+                                    Raporları
                                 </a>
+                                <div class="collapse menu-dropdown" id="sidebarCrm_">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+
+                                            <a href="#" class="nav-link" data-key="t-google">
+                                                Ambar Durum Raporu
+                                            </a>
+
+
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link" data-key="t-google">
+                                                Minumum Stok Raporu
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
+
+
+
+
 
                         </ul>
                     </div>
                 </li>
-                @endif
 
-                
-                @if(Session::get('userData')->purchase_view == 1)
+
+
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m1" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
@@ -150,13 +175,13 @@
                         </ul>
                     </div>
                 </li>
-                @endif
 
 
 
 
 
-                @if(Session::get('userData')->sale_view == 1)
+
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m2" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
@@ -191,9 +216,9 @@
                         </ul>
                     </div>
                 </li>
-                @endif
 
-                @if(Session::get('userData')->sale_view == 1 || Session::get('userData')->purchase_view == 1)
+
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m4" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
@@ -234,7 +259,7 @@
                         </ul>
                     </div>
                 </li>
-                @endif
+
 
 
 
@@ -245,7 +270,7 @@
                 </li>
 
 
-                @if(Session::get('userData')->is_admin == 1)
+
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>Admin Yetki Alanı</span></li>
 
@@ -279,7 +304,7 @@
                         </ul>
                     </div>
                 </li>
-                @endif
+
             </ul>
 
 

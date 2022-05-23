@@ -45,13 +45,23 @@
     </div>
     @endif
 
+    @if (session()->has('success'))
+    <span class="text-info">
+        {{ session('success') }}
+    </span>
+    @endif
+
+    @if (session()->has('error'))
+    <span class="text-danger">
+        {{ session('error') }}
+    </span>
+    @endif
+
     @if($talep_detay)
 
     <div class="card">
         <div class="card-header">
-            <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep_id }}</small></h4>
-
-
+            <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
         </div>
 
         <div class="card-body">
@@ -61,7 +71,6 @@
                     <table class="table table-light align-middle table-sm table-striped ">
                         <thead>
                             <tr>
-
                                 <th scope="col" style="width:50px;">Foto</th>
                                 <th scope="col">Malzeme</th>
                                 <th scope="col">Talep </th>
@@ -127,30 +136,52 @@
                                     </td>
 
                                     <td>
-                                        <input type="hidden" x-data
-                                            x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
+                                        <input type="hidden" x-data @if($dt->status > 0) disabled @endif
+                                        x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        $item_detail }}')">
 
-                                        <input type="number" min="0"
-                                            wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
-                                            x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val,0,'.',',') }}')"
-                                            class="form-control">
+                                        <input type="number" min="0" @if($dt->status > 0) disabled @endif
+                                        wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
+                                        x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        number_format($val,0,'.',',') }}')"
+                                        class="form-control"
+                                        @if(isset($satinal[$dt->demand_id][$dt->id]) &&
+                                        isset($karsila[$dt->demand_id][$dt->id]) && $satinal[$dt->demand_id][$dt->id] ==
+                                        0 && $karsila[$dt->demand_id][$dt->id] == 0
+                                        ) style="border-color:#f06548;" @endif
+                                        wire:loading.attr="disabled"
+                                        >
                                     </td>
 
-                                    <td><input type="number" min="0"
-                                            wire:model="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
-                                            x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val2,0,'.',',') }}')"
-                                            class="form-control">
+                                    <td><input type="number" min="0" @if($dt->status > 0) disabled @endif
+                                        wire:model="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                        x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        number_format($val2,0,'.',',') }}')"
+                                        class="form-control"
+                                        @if(isset($satinal[$dt->demand_id][$dt->id]) &&
+                                        isset($karsila[$dt->demand_id][$dt->id]) && $satinal[$dt->demand_id][$dt->id] ==
+                                        0 && $karsila[$dt->demand_id][$dt->id] == 0
+                                        ) style="border-color:#f06548;" @endif
+                                        wire:loading.attr="disabled"
+                                        >
                                     </td>
 
-                                    <td><button wire:click="cikar({{ $dt->id }})"
-                                            class="btn btn-sm btn-danger">Çıkar</button></td>
-
+                                    <td><button wire:click="cikar({{ $dt->id }})" class="btn btn-sm btn-danger"
+                                            wire:loading.attr="disabled" @if($dt->status > 0) disabled
+                                            @endif>Çıkar</button></td>
                                     </tr>
                                     @endforeach
                         </tbody>
                     </table>
                 </div>
-
+                @if($talep->logo_fiche_ref > 0 || $talep->logo_po_ref > 0 )
+                <!-- Herhangi biri işelm görmüşse -->
+                <div class="col-lg-12">
+                    <div class="alert alert-success" role="alert">
+                        Bu Malzeme talebi işleme alınmıştır.
+                    </div>
+                </div>
+                @else
                 <div class="col-lg-12">
                     <div class="row">
 
@@ -159,6 +190,7 @@
                         <div class="col-lg-6">
                             <div class="p-3" style="background-color: rgb(235, 255, 236)">
                                 <h5><b>Stoktan Karşılama Listesi</b></h5>
+
                                 <table class="table border align-middle table-sm table-striped">
                                     <thead class="table-success">
                                         <tr>
@@ -169,13 +201,21 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                        $k_have = false;
+                                        $k_have = false; // stoktan karşılama malzemesi yok default
                                         @endphp
 
                                         @foreach($karsila[$talep_id] as $item_id => $miktar)
+
+                                        @php
+                                        // eğer malzeme talebine bir işlem yapılmadıysa
+                                        if($karsila[$talep_id][$item_id] == 0 && $satinal[$talep_id][$item_id] == 0){
+                                        $uyari = true;
+                                        }
+                                        @endphp
+
                                         @if($miktar > 0)
                                         @php
-                                        $k_have = true;
+                                        $k_have = true; // stoktan karşılama malzemesi var
                                         $itm = json_decode($talep_line[$talep_id][$item_id]);
                                         @endphp
                                         <tr>
@@ -189,7 +229,7 @@
                                         @if(!$k_have)
                                         <tr>
                                             <td colspan="3" class="p-3">
-                                                <center>Stoktan Karşılama istesi Boş</center>
+                                                <center>Stoktan Karşılama Listesi Boş</center>
                                             </td>
                                         </tr>
                                         @endif
@@ -217,14 +257,15 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                        $s_have = false;
+                                        $s_have = false; // satın alma malzemesi yok default
                                         @endphp
 
                                         @foreach($satinal[$talep_id] as $item_id => $miktar)
                                         @if($miktar > 0)
 
                                         @php
-                                        $s_have = true;
+                                        $s_have = true; // satın alma malzemesi var
+
                                         $itm = json_decode($talep_line[$talep_id][$item_id]);
                                         @endphp
                                         <tr>
@@ -253,16 +294,43 @@
                             yapmalıdır.
                         </div>
 
+
+                        @if($uyari)
+                        <div class="col-lg-12 mt-3">
+                            <div class="alert alert-danger mb-xl-0" role="alert">
+                                <strong> Dikkat </strong> Bazı malzemelerde işlem yapılmamıştır.
+                            </div>
+                        </div>
+                        @endif
+
+                        @if ($error)
+                        <div class="col-lg-12 mt-3">
+                            <div class="alert alert-danger" role="alert">
+                                {{ $error }}
+                            </div>
+                        </div>
+                        @endif
+
+
+
                         <div class="col-lg-12 mt-3">
                             @if(isset($s_have) && isset($k_have) )
                             @if($s_have || $k_have)
-                            <button wire:click="kaydet();" class="btn btn-success btn-lg">Onayla & Kaydet</button>
+                            <button wire:click="kaydet();" class="btn btn-success btn-lg"
+                                wire:loading.attr="disabled">Onayla & Kaydet</button>
+
                             @else
                             <button class="btn btn-danger btn-lg" disabled> Kaydet</button><br>
                             <small class="text-danger">Kaydedilecek veri yok, lütfen stoktan karşılama yada satınalma
                                 veri giriş alanlarını kullanın </small>
+
                             @endif
                             @endif
+
+                            <div wire:loading>
+                                <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
+                            </div>
+
                         </div>
                     </div>
 
@@ -271,7 +339,17 @@
                 </div>
 
 
+                @endif
+
+
+
+
+
             </div>
         </div>
         @endif
     </div>
+
+    <script>
+
+    </script>

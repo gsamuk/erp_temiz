@@ -23,7 +23,9 @@ Route::middleware([Kontrol::class])->group(function () {
     /// malzeme işlemleri
     Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
     Route::get('malzemeler/fotograf', [App\Http\Controllers\MalzemelerController::class, 'fotograf'])->name('malzemeler.fotograf'); // Malzeme Listesi
-
+    Route::get('malzeme/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzeme.talep_listesi');
+    Route::get('malzeme/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzeme.talep_olustur');
+    Route::get('malzeme/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzeme.talep_duzenle');
 
 
     Route::middleware([LogoTokenKontrol::class])->group(function () {
@@ -35,11 +37,6 @@ Route::middleware([Kontrol::class])->group(function () {
         Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
         Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
         Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
-
-
-        Route::get('malzeme/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzeme.talep_listesi');
-        Route::get('malzeme/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzeme.talep_olustur');
-        Route::get('malzeme/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzeme.talep_duzenle');
     });
 
 
@@ -49,6 +46,5 @@ Route::middleware([Kontrol::class])->group(function () {
     Route::get('/mobile', [App\Http\Controllers\HomeController::class, 'mobile'])->name('mobile');
     Route::get('/mobile/malzeme/talep_olustur', [App\Http\Controllers\HomeController::class, 'talep_olustur'])->name('mobile.malzeme.talep_olustur');
     Route::get('/mobile/malzeme/talepler', [App\Http\Controllers\HomeController::class, 'talepler'])->name('mobile.malzeme.talepler');
-
     Route::get('/mobile/malzeme/{sku}', [App\Http\Controllers\HomeController::class, 'malzeme_detay'])->name('mobile.malzeme.malzeme_detay');
 });

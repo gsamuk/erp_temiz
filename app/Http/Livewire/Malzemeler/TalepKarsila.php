@@ -7,11 +7,15 @@ use App\Models\DemandDetail;
 use App\Models\Demand;
 use App\Models\LogoItemsPhoto;
 use App\Models\LogoItems;
+use App\Http\Controllers\LogoRest;
+use Exception;
 
 class TalepKarsila extends Component
 {
+    public $talep;
     public $talep_detay;
     public $talep_id;
+    public $error;
 
     public $talep_line;
 
@@ -22,38 +26,165 @@ class TalepKarsila extends Component
     public $item;
     public $item_id;
     public $item_photos;
+    public $uyari = false;
+
 
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila'];
 
     public function TalepKarsila($id)
     {
+        $this->error = null;
         $this->talep_id = $id;
-        $this->talep_detay = DemandDetail::Where('demand_id', $id)->get();
+        $this->talep = Demand::find($id);
+        $this->talep_detay = DemandDetail::Where('demand_id', $id)->Where('status', '!=', 9)->get();
         if ($this->talep_detay->count() == 0) {
             $this->talep_detay = null;
         }
     }
 
+
     public function cikar($id)
     {
-        DemandDetail::Where('id', $id)->delete();
-        $count = DemandDetail::where('demand_id', $this->talep_id)->count();
+        $up = DemandDetail::find($id);
+        $up->status = 9;
+        $up->save();
+
+        $count = DemandDetail::Where('demand_id', $this->talep_id)->Where('status', '!=', 9)->count();
+
         if ($count == 0) {
-            Demand::Where('id', $this->talep_id)->delete();
+            $up = Demand::find($this->talep_id);
+            $up->status = 9;
+            $up->save();
             $this->talep_detay = null;
-            $this->karsila = null;
-            $this->satinal = null;
-        } else {
-            unset($this->karsila[$this->talep_id][$id]);
-            unset($this->satinal[$this->talep_id][$id]);
-            $this->TalepKarsila($this->talep_id);
+        }
+
+        unset($this->karsila[$this->talep_id][$id]);
+        unset($this->satinal[$this->talep_id][$id]);
+        $this->TalepKarsila($this->talep_id);
+
+        if ($count == 0) {
+            $this->dispatchBrowserEvent('TalepRedToast');
         }
     }
 
     public function kaydet()
     {
-        dd($this->karsila);
+        $sarf_items = array();
+        $satinal_items = array();
+        $logo_po_ref = null;
+        $logo_fiche_ref = null;
+        $this->error = null;
+
+
+        if ($this->karsila[$this->talep_id]) {
+            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+                    $item->status = 1; // stoktan karşılama
+                    $item->save();
+
+                    $sarf_items[] = [
+                        "ITEM_CODE" => $item->stock_code,
+                        "ITEMREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "TYPE" => 25,
+                        'QUANTITY' => $miktar,
+                    ];
+                }
+            }
+        }
+
+
+        if ($this->satinal[$this->talep_id]) {
+            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+
+                    if ($item->status == 1) { // eğer stoktan karşılama varsa
+                        $item->status = 3;  // hep stok hem satınalma statusu
+                    } else {
+                        $item->status = 2; // sadece satın alma statusu
+                    }
+
+                    $item->save();
+                    $satinal_items[] = [
+                        "STOCKREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "TYPE" => 0,
+                        'QUANTITY' => $miktar,
+                    ];
+                }
+            }
+        }
+
+        $sarf_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => "2021-05-21 10:10:00",
+            'GROUP' => 2,
+            'DOC_NUMBER' => "SF" . $this->talep_id,
+            "TYPE" => 12,
+            'IO_TYPE' => 3,
+            'SOURCE_WH' => 1,
+            'SOURCE_COST_GRP' => 1,
+            'TRANSACTIONS' => [
+                'items' => $sarf_items
+            ]
+        ];
+
+
+        $satinal_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => "2021-05-21 10:10:00",
+            'DOC_NUMBER' => "TLP" . $this->talep_id,
+            'CLIENTREF' => 7,
+            "TYPE" => 2,
+            'SOURCE_WH' => 1,
+            'TRANSACTIONS' => [
+                'items' => $satinal_items
+            ]
+        ];
+
+
+
+        if (count($sarf_items) > 0) {
+
+            $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
+
+            if ($logo_fiche_ref != null) {
+
+                $dm = Demand::find($this->talep_id);
+                $dm->logo_fiche_ref = $logo_fiche_ref;
+                $dm->save();
+            } else {
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
+            }
+        }
+
+        if (count($satinal_items) > 0) {
+
+            $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
+
+            if ($logo_po_ref != null) {
+                $dm = Demand::find($this->talep_id);
+                $dm->logo_po_ref = $logo_po_ref;
+                $dm->save();
+            } else {
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
+            }
+        }
+
+        if ($logo_po_ref == null && $logo_fiche_ref == NULL) {
+            $this->error = 'Logo Rest Hatasıi Lütfen Sistem Yöneticisi İle İrtibata Geçiniz.';
+        } else {
+            return $this->TalepKarsila($this->talep_id);
+        }
     }
 
     public function render()
