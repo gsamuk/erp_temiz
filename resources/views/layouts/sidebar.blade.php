@@ -40,13 +40,9 @@
                     </a>
                 </li>
 
-
-
-
-
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarMaps">
+                        aria-expanded="true" aria-controls="m3">
                         <i class="ri-stack-line"></i> <span>Malzeme Yönetimi </span>
                     </a>
                     <div class="collapse menu-dropdown" id="m3">
@@ -126,8 +122,6 @@
                         </ul>
                     </div>
                 </li>
-
-
 
 
                 <li class="nav-item">
@@ -216,8 +210,6 @@
                     </div>
                 </li>
 
-
-
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#m4" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarMaps">
@@ -258,9 +250,6 @@
                         </ul>
                     </div>
                 </li>
-
-
-
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/signout">

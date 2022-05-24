@@ -14,11 +14,6 @@ class Projects extends Component
     protected $paginationTheme = 'bootstrap';
     public $search = '';
 
-    public function addProject($code, $ref_id)
-    {
-        $this->emit('getProject', ['code' => $code, 'ref_id' => $ref_id]);
-    }
-
 
     public function render()
     {

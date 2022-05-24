@@ -2,12 +2,12 @@
 
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
             <div class="card">
 
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-xxl-6 col-sm-6 mb-1">
+                        <div class="col-xxl-4 col-sm-6 mb-1">
                             <div class="search-box">
                                 <input type="text" class="form-control search" wire:model="no_search"
                                     placeholder="Talep No">
@@ -15,13 +15,19 @@
                             </div>
                         </div>
 
-                        <div class="col-xxl-6 col-sm-6">
+                        <div class="col-xxl-5 col-sm-6">
                             <div class="search-box">
                                 <input type="text" class="form-control search" wire:model="user_search"
                                     placeholder="Talep Sahibi">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
+
+                        <div class="col-xxl-3">
+                            <a href="{{ route('malzeme.talep_olustur') }}" class="btn btn-primary "> <i
+                                    class="ri-stack-line"></i> Yeni Talep Oluştur</a>
+                        </div>
+
                     </div>
                 </div>
 
@@ -144,7 +150,7 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-7">
+        <div class="col-lg-6">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif

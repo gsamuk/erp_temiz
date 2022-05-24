@@ -136,11 +136,11 @@
                                     </td>
 
                                     <td>
-                                        <input type="hidden" x-data @if($dt->status > 0) disabled @endif
-                                        x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         $item_detail }}')">
 
-                                        <input type="number" min="0" @if($dt->status > 0) disabled @endif
+                                        <input type="number" min="0" @if($dt->status > 0 ) disabled
+                                        @endif
                                         wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
                                         x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         number_format($val,0,'.',',') }}')"

@@ -53,7 +53,7 @@ class Liste extends Component
         } else {
             $db = new LogoDb;
         }
-        DB::enableQueryLog();
+
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
@@ -64,7 +64,7 @@ class Liste extends Component
                 return $query->where('stock_type', $this->stur);
             })
             ->orderByDesc('stock_name')
-            ->paginate(12);
+            ->paginate(8);
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();

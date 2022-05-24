@@ -20,6 +20,7 @@ class TalepOlustur extends Component
     public $inputs = [];
     public $ref;
     public $kod;
+    public $ozelkod;
     public $aciklama;
     public $miktar;
     public $birim;

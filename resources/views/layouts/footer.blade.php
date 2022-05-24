@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-9">
                 <div class="text-sm-end d-none d-sm-block">
-                    Zeberced ERP
+                    Zeberced ERP {{ Route::currentRouteName()}}
                 </div>
             </div>
         </div>

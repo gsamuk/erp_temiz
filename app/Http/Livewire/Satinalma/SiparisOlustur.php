@@ -233,16 +233,18 @@ class SiparisOlustur extends Component
 
     public function getAccount($d) // seçilen müşteriyi  dinleyerek set ediyoruz 
     {
-        $this->account_code = $d['code'];
-        $this->account_name = $d['name'];
-        $this->account_ref_id = $d['ref_id'];
+        $d = json_decode($d);
+        $this->account_code = $d->account_code;
+        $this->account_name = $d->account_name;
+        $this->account_ref_id = $d->ref_id;
         $this->dispatchBrowserEvent('CloseModal');
     }
 
     public function getProject($d) // seçilen projeyi  dinleyerek set ediyoruz 
     {
-        $this->project_code = $d['code'];
-        $this->project_ref_id = $d['ref_id'];
+        $d = json_decode($d);
+        $this->project_code = $d->project_code;
+        $this->project_ref_id = $d->record;
         $this->dispatchBrowserEvent('CloseModal');
     }
 

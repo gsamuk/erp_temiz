@@ -4,7 +4,6 @@
 </IfModule>
 
 RewriteEngine On
-RewriteBase /erp
 
 RewriteCond %{REQUEST_FILENAME} -d [OR]
 RewriteCond %{REQUEST_FILENAME} -f

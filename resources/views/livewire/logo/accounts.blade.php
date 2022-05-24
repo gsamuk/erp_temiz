@@ -27,9 +27,8 @@
                         @foreach ($accounts as $account)
                         <tr>
                             <td class="owner">{{ $account->account_code }}</td>
-                            <td class="owner"><a
-                                    wire:click.prevent="addAccount('{{ $account->ref_id }}', '{{ $account->account_code }}', '{{ $account->account_name }}')"
-                                    href="#"><button class="btn btn-primary btn-sm"> Seç </button></a></td>
+                            <td class="owner"><a wire:click="$emit('getAccount', '{{ $account}}')" href="#"><button
+                                        class="btn btn-primary btn-sm"> Seç </button></a></td>
                             <td class="owner">{{ $account->account_name }}</td>
                             <td class="owner">{{ $account->account_type }}</td>
                         </tr>

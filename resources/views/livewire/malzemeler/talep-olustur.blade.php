@@ -41,6 +41,10 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-header ">
+                    <span class="float-end">
+                        <a href="{{ route('malzeme.talep_listesi') }}" class="btn btn-secondary btn-sm "> <i
+                                class="ri-stack-line"></i> Talep Listesi</a>
+                    </span>
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                             Talep @if($tid > 0) Düzenle @else Oluştur @endif</h5>
@@ -68,6 +72,7 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th style="width:20px;"></th>
+                                                <th style="width:70px;">Özel Kod</th>
                                                 <th style="width:70px;">Kodu</th>
                                                 <th style="width:300px;">Malzeme</th>
                                                 <th style="width:100px;">Miktar</th>
@@ -83,7 +88,21 @@
                                             @endphp
                                             @foreach ($inputs as $key => $value)
                                             <tr>
-                                                <th scope="row"> {{$s}} </th>
+                                                <td scope="row"> {{$s}} </td>
+
+
+
+                                                <td>
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" class="form-control border-dashed"
+                                                            readonly="readonly" name="ozelkod[{{ $value }}]"
+                                                            id="input_ozelkod_{{ $value }}"
+                                                            wire:click="$emit('setLine',{{ $value }})"
+                                                            wire:model="ozelkod.{{ $value }}" data-bs-toggle="modal"
+                                                            data-bs-target="#projectsModal">
+                                                    </div>
+                                                </td>
+
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <input type="text" class="form-control border-dashed"
@@ -94,6 +113,7 @@
                                                             data-bs-target="#malzemeModal">
                                                     </div>
                                                 </td>
+
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
@@ -157,7 +177,7 @@
                                             @endphp
                                             @endforeach
                                             <tr>
-                                                <th scope="row" colspan="6"></th>
+                                                <th scope="row" colspan="7"></th>
                                                 <td>
 
                                                     <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"

@@ -168,5 +168,5 @@
             </div>
         </div>
     </div>
-    {{ dump( Session::get('izinler')->where('name','is_admin') ) }}
+
 </div>
