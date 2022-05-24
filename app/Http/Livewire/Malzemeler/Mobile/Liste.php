@@ -30,6 +30,8 @@ class Liste extends Component
     public $malzeme;
     public $malzeme_units;
     public $malzeme_birim;
+    public $log = "log burada";
+    public $nfc_btn = true;
 
 
     public $talep_miktar = 1;
@@ -145,11 +147,11 @@ class Liste extends Component
         $this->dispatchBrowserEvent('CloseModal');
     }
 
-    public function getMalzeme($ref)
+    public function getMalzeme($sku)
     {
         $this->talep_miktar = 1;
-        $this->malzeme = LogoItems::where('logicalref', $ref)->first();
-        $this->malzeme_photos = LogoItemsPhoto::Where('logo_stockref', $ref)->get();
+        $this->malzeme = LogoItems::where('stock_code', "$sku")->first();
+        $this->malzeme_photos = LogoItemsPhoto::Where('logo_stockref', "$sku")->get();
         $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
         $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
         $this->dispatchBrowserEvent('ShowModal');

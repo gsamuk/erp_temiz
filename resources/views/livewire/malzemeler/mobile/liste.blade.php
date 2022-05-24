@@ -313,7 +313,7 @@
             @endphp
 
             <li style="background-color: aliceblue">
-                <a href="javascript:;" class="item p-0" wire:click="getMalzeme({{$m->logicalref}})">
+                <a href="javascript:;" class="item p-0" wire:click="getMalzeme({{$m->stock_code}})">
                     <div class="m-1">
                         @if($photo)
                         <img src="{{ asset('storage/images/items/thumb/'.$photo->foto_path) }}"
@@ -340,7 +340,7 @@
             <button class="btn btn-text-primary shadowed mr-1 mb-1" wire:click.prevent="loadMore">Devamını
                 Yükle</button>
 
-            <button id="writeButton" class="btn btn-success">NFC</button>
+            <button id="scanButton" class="btn btn-success">NFC SCAN</button>
             @endif
 
             <div wire:loading.table>
@@ -351,24 +351,63 @@
 
 
 
+        <div id="toast-11" class="toast-box toast-center bg-warning ">
+            <div class="in">
+                <img src="/mobile_assets/img/nfc_touch.png" style="width: 150px;">
+                <div class="text">
+                    Lütfen Malzeme Etiketine Dokundurun
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-text-light close-button">Kapat</button>
+        </div>
+
+
 
     </div>
     <script>
-        writeButton.addEventListener("click", async () => {
-      console.log("User clicked write button");
-
-      try {
         const ndef = new NDEFReader();
-        await ndef.write("Hello world!");
-        console.log("> Message written");
-      } catch (error) {
-        console.log("Argh! " + error);
-      }
-    });
 
-        document.addEventListener('livewire:load', function () {
-            livewire.emit('MalzemeGoster');
-         });
+       async function startScanning()  {            
+         try {
+            const ndef = new NDEFReader();
+            await ndef.scan();           
+
+            ndef.onreading = event => {
+            const message = event.message;
+            for (const record of message.records) {              
+                switch (record.recordType) {
+                case "text":
+                    
+                    const decoder = new TextDecoder(record.encoding);
+                    SKU = decoder.decode(record.data);
+                    @this.getMalzeme(SKU);                  
+                    break;              
+
+                default:                    
+                }
+             }
+            };
+
+            } catch (error) {
+                alert("Argh! " + error);
+             }
+        } 
+
+     
+
+        window.addEventListener('load', (event) => {
+            const nfcPermissionStatus = await navigator.permissions.query({ name: "nfc" });
+            if (nfcPermissionStatus.state === "granted") {            
+                startScanning();
+            } else {            
+                document.querySelector("#scanButton").style.display = "block";
+                document.querySelector("#scanButton").onclick = event => {                
+                    startScanning();
+                };
+            }
+
+        });
+         
     </script>
 
 </div>
