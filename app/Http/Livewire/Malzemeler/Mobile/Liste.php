@@ -32,6 +32,7 @@ class Liste extends Component
     public $malzeme_birim;
     public $log = "log burada";
     public $nfc_btn = true;
+    public $nfc_active = false;
 
 
     public $talep_miktar = 1;

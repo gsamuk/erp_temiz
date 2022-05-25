@@ -138,7 +138,7 @@
                             <div class="bg-light p-2 m-1">
                                 <div>
                                     <img class="img-thumbnail"
-                                        src="{{ asset('storage/images/items/thumb/'.$p->foto_path) }}">
+                                        src="{{ asset('public/storage/images/items/thumb/'.$p->foto_path) }}">
                                 </div>
                                 <div>
                                     <button wire:click="delete_photo({{ $p->id }}, '{{ $p->foto_path }}')"

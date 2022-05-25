@@ -76,8 +76,8 @@ class Fotograf extends Component
         $thumb_img->stream(); // <-- Key point
         $fname = $this->ref . "_" . $this->item->stock_code . "_" . $name;
 
-        $path = 'public/images/items';
-        $thumb_path = 'public/images/items/thumb';
+        $path = 'images/items';
+        $thumb_path = 'images/items/thumb';
 
         Storage::disk('local')->put($path . '/' . $fname, $img, 'public');
         Storage::disk('local')->put($thumb_path . '/' . $fname, $thumb_img, 'public');

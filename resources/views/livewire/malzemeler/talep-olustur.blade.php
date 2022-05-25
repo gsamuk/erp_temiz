@@ -252,7 +252,7 @@
                         <div class="col-4">
                             <div class="bg-light p-2 m-1">
                                 <div>
-                                    <img src="{{ asset('storage/images/items/thumb/'.$p['foto_path']) }}">
+                                    <img src="{{ asset('public/storage/images/items/thumb/'.$p['foto_path']) }}">
                                 </div>
                                 <div>
                                     <h6> {{ $p['stock_name'] }}</h6>

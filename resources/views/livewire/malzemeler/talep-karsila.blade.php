@@ -31,7 +31,7 @@
                                 @foreach ($item_photos as $p)
                                 <div class=" col-xxl-6 col-xl-6 col-sm-12">
                                     <img class=" img-fluid mx-auto border p-1 m-2"
-                                        src="{{ asset('storage/images/items/'.$p->foto_path) }}">
+                                        src="{{ asset('public/storage/images/items/'.$p->foto_path) }}">
                                 </div>
                                 @endforeach
                             </div>
@@ -106,12 +106,12 @@
                                         @if($photo)
                                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
                                             <img class="border"
-                                                src="{{ asset('storage/images/items/thumb/'.$photo->foto_path) }}"
+                                                src="{{ asset('public/storage/images/items/thumb/'.$photo->foto_path) }}"
                                                 style="height: 65px">
                                         </a>
                                         @else
                                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                                            <img class="border" style="height: 50px" src="/images/default.png">
+                                            <img class="border" style="height: 50px" src="/public/images/default.png">
                                         </a>
                                         @endif
                                     </td>

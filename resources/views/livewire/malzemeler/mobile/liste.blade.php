@@ -91,7 +91,7 @@
                                 <hr>
 
                                 @foreach ($malzeme_photos as $p)
-                                <img src="{{ asset('storage/images/items/thumb/'.$p->foto_path) }}" alt="image"
+                                <img src="{{ asset('public/storage/images/items/thumb/'.$p->foto_path) }}" alt="image"
                                     class="imaged border m-1" style="width:180px">
                                 @endforeach
                                 @endif
@@ -316,7 +316,7 @@
                 <a href="javascript:;" class="item p-0" wire:click="getMalzeme({{$m->stock_code}})">
                     <div class="m-1">
                         @if($photo)
-                        <img src="{{ asset('storage/images/items/thumb/'.$photo->foto_path) }}"
+                        <img src="{{ asset('public/storage/images/items/thumb/'.$photo->foto_path) }}"
                             class="border imaged w48">
                         @else
                         <img src="/mobile_assets/img/sample/photo/2.jpg" class="border imaged w48">
@@ -339,8 +339,11 @@
             @if($malzemeler->hasMorePages())
             <button class="btn btn-text-primary shadowed mr-1 mb-1" wire:click.prevent="loadMore">Devamını
                 Yükle</button>
-
-            <button id="scanButton" class="btn btn-success">NFC SCAN</button>
+            @if($nfc_btn)
+            <button id="scanButton" @if($nfc_active) disabled @endif class="btn btn-success">@if($nfc_active) NFC SCAN
+                Aktif @else NFC SCAN @endif
+            </button>
+            @endif
             @endif
 
             <div wire:loading.table>
@@ -365,13 +368,13 @@
 
     </div>
     <script>
-        const ndef = new NDEFReader();
-
-       async function startScanning()  {            
-         try {
+        scanButton.addEventListener("click", async () => {
+            toastbox('toast-11');  
+        try {
             const ndef = new NDEFReader();
             await ndef.scan();           
-
+            
+            @this.nfc_active = true;
             ndef.onreading = event => {
             const message = event.message;
             for (const record of message.records) {              
@@ -391,23 +394,15 @@
             } catch (error) {
                 alert("Argh! " + error);
              }
-        } 
+        });
 
      
 
-        window.addEventListener('load', (event) => {
-            const nfcPermissionStatus = await navigator.permissions.query({ name: "nfc" });
-            if (nfcPermissionStatus.state === "granted") {            
-                startScanning();
-            } else {            
-                document.querySelector("#scanButton").style.display = "block";
-                document.querySelector("#scanButton").onclick = event => {                
-                    startScanning();
-                };
+        document.addEventListener('livewire:load', function () {            
+            if (!("NDEFReader" in window)){
+                @this.nfc_btn = false;
             }
-
-        });
-         
+         });
     </script>
 
 </div>
