@@ -18,7 +18,10 @@ class TalepListesi extends Component
     public $warehouse_search;
 
     public $status = 99; // hepsi gelir
+
+    public $talep_satir_id;
     public $talep_detay_id;
+    public $talep_islem_id;
 
 
 
@@ -68,8 +71,19 @@ class TalepListesi extends Component
 
     public  function talep_detay($id)
     {
-        $this->talep_detay_id = $id; // seçili satırı renklendirme için
+        $this->talep_islem_id = null;
+        $this->talep_satir_id = $id; // seçili satırı renklendirme için
+        $this->talep_detay_id = $id;
         $this->emit('TalepKarsila', $id);
+    }
+
+
+    public  function talep_islem_detay($id)
+    {
+        $this->talep_detay_id = null;
+        $this->talep_satir_id = $id; // seçili satırı renklendirme için
+        $this->talep_islem_id = $id;
+        $this->emit('TalepIslem', $id);
     }
 
 
