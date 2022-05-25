@@ -152,26 +152,18 @@
                                         @endif
                                     </td>
 
-                                    <td class="owner"><a
-                                            wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
-                                            href="#">{{ $item->stock_code }}</a></td>
+                                    <td class="owner">
+                                        {{ $item->stock_code }}
+                                    </td>
 
                                     @if($ch)
-                                    <td class="owner"><a
-                                            wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
-                                            href="#"><button class="btn btn-success btn-sm"> Ekle </button></a></td>
+                                    <td class="owner">
+                                        <button wire:click.prevent="$emit('getItem', {{ $item }})"
+                                            class="btn btn-success btn-sm"> Ekle </button>
+                                    </td>
                                     @endif
                                     <td class="owner">
-                                        <a wire:click.prevent="addItem({{ $line }}, {{ $item->logicalref }} )"
-                                            href="#"><b>{{
-                                                $item->stock_name }}</b></a>
-                                        @if($foto_ref && $foto_ref ==$item->logicalref )
-                                        <br>
-                                        @foreach ($item_photos as $p)
-                                        <img src="{{ asset('storage/images/items/thumb/'.$p->foto_path) }}">
-                                        @endforeach
-
-                                        @endif
+                                        {{ $item->stock_name }}
                                     </td>
 
 

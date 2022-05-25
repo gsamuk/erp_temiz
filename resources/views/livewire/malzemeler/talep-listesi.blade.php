@@ -2,7 +2,7 @@
 
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="card">
 
                 <div class="card-header">
@@ -85,6 +85,8 @@
                                     <th scope="col" style="width:50px;">No</th>
                                     <th scope="col" style="width:100px;">Talep Yapan</th>
                                     <th scope="col" style="width:100px;">Malzeme </th>
+                                    <th scope="col" style="width:100px;">Özel Kod </th>
+                                    <th scope="col" style="width:100px;">Proje Kodu </th>
                                     <th scope="col">Durum</th>
                                     <th scope="col">Zamanı</th>
                                     <th scope="col" style="width:65px;"></th>
@@ -104,8 +106,9 @@
                                     <td class="owner"><a wire:click="set_username('{{ $d->user_name }}')"
                                             href="javascript:;">{{
                                             $d->user_name }}</a></td>
-                                    <td class="owner"><b>{{ $cnt }} Adet</b></td>
-
+                                    <td class="owner"><b>{{ $cnt }} Kalem</b></td>
+                                    <td class="owner">{{ $d->special_code }}</td>
+                                    <td class="owner">{{ $d->project_code }}</td>
                                     <td class="owner">
                                         @if($d->status == 0) <span class="text-info">Beklemede</span>@endif
                                         @if($d->status == 1) <span class="text-success">İşleme Alındı</span>@endif
@@ -150,7 +153,7 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-12 col-sm-12">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif

@@ -61,8 +61,10 @@
                                                             data-bs-toggle="modal" data-bs-target="#projectsModal"
                                                             class="form-control form-control-sm mb-1 rounded-0"
                                                             readonly="readonly">
-                                                        @error('project_code') <span class="error">{{ $message
-                                                            }}</span> @enderror
+
+                                                        @error('project_code')
+                                                        <span class="error"> {{ $message}}</span>
+                                                        @enderror
                                                     </div>
 
                                                 </div>
@@ -215,9 +217,8 @@
                                                         <input type="text" class="form-control border-dashed"
                                                             readonly="readonly" name="kod[{{ $value }}]"
                                                             id="input_kod_{{ $value }}"
-                                                            wire:click="$emit('setLine',{{ $value }})"
-                                                            wire:model="kod.{{ $value }}" data-bs-toggle="modal"
-                                                            data-bs-target="#malzemeModal">
+                                                            wire:click="SetLine({{ $value }},'#malzemeModal')"
+                                                            wire:model="kod.{{ $value }}">
                                                     </div>
                                                 </td>
 
@@ -226,9 +227,8 @@
                                                         <input type="text" class="form-control border-dashed"
                                                             readonly="readonly" name="aciklama[{{ $value }}]"
                                                             id="input_aciklama_{{ $value }}"
-                                                            wire:click="$emit('setLine',{{ $value }})"
-                                                            wire:model="aciklama.{{ $value }}" data-bs-toggle="modal"
-                                                            data-bs-target="#malzemeModal">
+                                                            wire:click="SetLine({{ $value }},'#malzemeModal')"
+                                                            wire:model="aciklama.{{ $value }}">
                                                     </div>
                                                 </td>
 
@@ -455,9 +455,7 @@
                 <div class="modal-body m-0">
                     @livewire('logo.projects')
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>

@@ -19,58 +19,58 @@ class TalepOlustur extends Component
     public $i = 0;
     public $inputs = [];
     public $ref;
+
+
+    public $special_code;
+    public $project_code;
+
     public $kod;
-    public $ozelkod;
     public $aciklama;
     public $miktar;
     public $birim;
-    public $project_ref_id;
-    public $project_code;
+
     public $desc;
-    public $warehouse;
+    public $warehouse = 0;
     public $birim_select = [];
     public $tid = 0; // talep  id
     public $item_photos;
 
 
     public $zaman;
-    public $belge_no;
+    public $demand_desc;
 
 
 
-    protected $listeners = ["getItem", "getProject"];
+    protected $listeners = ["getItem", "getOzelKod", "getProject"];
 
-    public function getProject($d) // seçilen projeyi  dinleyerek set ediyoruz 
+    public function mount()
     {
-        $this->project_code = $d['code'];
-        $this->project_ref_id = $d['ref_id'];
+        date_default_timezone_set('Europe/Istanbul');
+        $this->zaman = date("2021-m-d");
+    }
+
+    public function SetLine($d, $modal)
+    {
+        $this->line = $d;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
+    }
+
+    public function getOzelKod($d)
+    {
+        $d = json_decode($d);
+        $this->special_code = $d->special_code;
         $this->dispatchBrowserEvent('CloseModal');
     }
 
 
-    public function mount()
+    public function getProject($d)
     {
-
-        if ($this->tid > 0) {
-            $data = DbController::getTalep($this->tid);
-            $items = DbController::getTalepDetay($this->tid);
-            foreach ($items as $itm => $v) {
-                $this->i = $itm;
-                $this->inputs[] = $itm;
-                $this->aciklama[$itm] = $v->stock_name;
-                $this->kod[$itm] = $v->stock_code;
-                $this->miktar[$itm] = $v->quantity;
-                $this->desc[$itm] = $v->description;
-
-                $ml = LogoDb::where('stock_code', $v->stock_code)->first();
-                $this->ref[$itm] = $ml->logicalref;
-
-                $units = LogoUnits::Where('unitset_ref', $ml->unitset_ref)->get();
-                $this->birim_select[$itm] = $units;
-                $this->birim[$itm] = $v->unit_code;
-            }
-        }
+        $d = json_decode($d);
+        $this->project_code = $d->project_code;
+        $this->dispatchBrowserEvent('CloseModal');
     }
+
+
 
     public function render()
     {
@@ -83,11 +83,6 @@ class TalepOlustur extends Component
         );
     }
 
-
-    public function active_line($d)
-    {
-        $this->line = $d;
-    }
 
     public function add($i)
     {
@@ -108,9 +103,9 @@ class TalepOlustur extends Component
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
 
-        $this->line = $d["line"];
-        $item = LogoDb::where('logicalref', $d['ref'])->first();
-        $photos = LogoItemsPhoto::where('logo_stockref', $d['ref'])->first();
+        $item = (object) $d;
+
+        $photos = LogoItemsPhoto::where('logo_stockref', $item->logicalref)->first();
         if ($photos) {
             $this->item_photos[$this->line] = $photos;
         }
@@ -137,7 +132,10 @@ class TalepOlustur extends Component
         $demand = new Demand;
         $demand->company_id = 1;
         $demand->users_id = 1;
-        $demand->warehouse_no = 1;
+        $demand->warehouse_no = $this->warehouse;
+        $demand->demand_desc = $this->demand_desc;
+        $demand->project_code = $this->project_code;
+        $demand->special_code = $this->special_code;
         $demand->insert_time = $insert_time;
         $demand->save();
 
@@ -157,10 +155,13 @@ class TalepOlustur extends Component
 
             $dm->demand_id = $demand_no;
             $dm->stock_code = $this->kod[$in];
+
             $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
             $dm->unit_code = $this->birim[$in];
-            $dm->description = $this->desc[$in];
+            if (isset($this->desc[$in])) {
+                $dm->description = $this->desc[$in];
+            }
             $dm->insert_time = $insert_time;
             $dm->update_time = $insert_time;
             $dm->save();

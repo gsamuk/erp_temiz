@@ -118,16 +118,20 @@ class TalepKarsila extends Component
             }
         }
 
+
+        $demand = Demand::find($this->talep_id);
         $sarf_data = [
             'headers' => [
                 'Accept' => 'application/json',
             ],
             'DATE' => "2021-05-21 10:10:00",
             'GROUP' => 2,
+            "AUXIL_CODE" => $demand->special_code,
+            "PROJECTREF" => $demand->project_code,
             'DOC_NUMBER' => "SF" . $this->talep_id,
             "TYPE" => 12,
             'IO_TYPE' => 3,
-            'SOURCE_WH' => 1,
+            'SOURCE_WH' => $demand->warehouse_no,
             'SOURCE_COST_GRP' => 1,
             'TRANSACTIONS' => [
                 'items' => $sarf_items
@@ -143,7 +147,7 @@ class TalepKarsila extends Component
             'DOC_NUMBER' => "TLP" . $this->talep_id,
             'CLIENTREF' => 7,
             "TYPE" => 2,
-            'SOURCE_WH' => 1,
+            'SOURCE_WH' => $demand->warehouse_no,
             'TRANSACTIONS' => [
                 'items' => $satinal_items
             ]

@@ -44,6 +44,16 @@
 <!-- JAVASCRIPT -->
 @include('layouts.vendor-scripts')
 @livewireScripts
+
+<script>
+    window.addEventListener('OpenModal', event => {            
+        $(event.detail.ModalName).modal('show');
+    }); 
+    window.addEventListener('CloseModal', event => {            
+        $(event.detail.ModalName).modal('hide');
+    });
+
+</script>
 </body>
 
 </html>

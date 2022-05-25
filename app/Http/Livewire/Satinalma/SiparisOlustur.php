@@ -38,10 +38,14 @@ class SiparisOlustur extends Component
     protected $listeners = ["getItem", "getAccount", "getProject"];
 
 
+    public function SetLine($d, $modal)
+    {
+        $this->line = $d;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
+    }
+
     public function updated($name, $value)
     {
-
-
         $konum = strpos($name, 'birim_fiyat');
 
         if ($konum !== false) {
@@ -215,9 +219,7 @@ class SiparisOlustur extends Component
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
-
-        $this->line = $d["line"];
-        $item = LogoDb::where('logicalref', $d['ref'])->first();
+        $item = (object) $d;
 
         $units = LogoUnits::Where('unitset_ref', $item->unitset_ref)->get();
         $this->birim_select[$this->line] = $units;

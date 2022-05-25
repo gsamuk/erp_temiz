@@ -62,6 +62,7 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
+            <small>Açıklama : {{ $talep->demand_desc }}</small>
         </div>
 
         <div class="card-body">
@@ -87,6 +88,7 @@
                             $item_detail = App\Models\LogoItems::find($dt->logo_stock_ref);
                             $val = 0;
                             $val2 = 0;
+                            $disable="";
 
                             if($item_detail->onhand_quantity >= $dt->quantity){
                             $val = $dt->quantity;
@@ -99,8 +101,10 @@
 
                                 if($item_detail->onhand_quantity == 0){
                                 $val = 0;
+                                $disable="disabled"; // eğer stok yoksa karşılama input alanı disable edilir.
                                 $val2 = $dt->quantity;
                                 }
+
                                 if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } @endphp <tr>
                                     <td class="owner">
                                         @if($photo)
@@ -117,10 +121,10 @@
                                     </td>
 
                                     <td><b>{{ $item_detail->stock_name }}</b>
-                                        <br> <small>Stok Kodu: {{ $item_detail->stock_code
-                                            }}</small>
-                                        <br> <small class="text-danger">Talep Nedeni: {{ $dt->description
-                                            }}</small>
+                                        <br>
+                                        <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
+                                        <br> <small class="text-danger">Talep Nedeni: {{ $dt->description }}</small>
+
                                     </td>
                                     <td class="text-dark"><b style="font-size:1.2em">{{
                                             number_format($dt->quantity,0,'.',',')
@@ -139,8 +143,8 @@
                                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         $item_detail }}')">
 
-                                        <input type="number" min="0" @if($dt->status > 0 ) disabled
-                                        @endif
+                                        <input type="number" min="0" @if($dt->status > 0 ) disabled @endif {{ $disable
+                                        }}
                                         wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
                                         x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         number_format($val,0,'.',',') }}')"
