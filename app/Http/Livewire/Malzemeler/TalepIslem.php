@@ -16,6 +16,9 @@ class TalepIslem extends Component
     public $talep;
     public $talep_id;
     public $talep_detay;
+    public $talep_;
+    public $talep_sarf_detay;
+    public $talep_sarf_fisi;
 
 
     public $item;
@@ -33,6 +36,10 @@ class TalepIslem extends Component
         $this->talep_detay = DemandDetail::Where('demand_id', $id)->Where('status', '!=', 9)->get();
         if ($this->talep_detay->count() == 0) {
             $this->talep_detay = null;
+        }
+        if ($this->talep->logo_fiche_ref) { // sar fişi oluşmmuşmu
+            $this->talep_sarf_detay = LogoConsumpFicheDetail::Where('logicalref', $this->talep->logo_fiche_ref)->get();
+            $this->talep_sarf_fisi = LogoConsumpFiche::Where('loagicalref', $this->talep->logo_fiche_ref)->first();
         }
     }
 

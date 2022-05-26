@@ -4,8 +4,7 @@ namespace App\Http\Livewire\Malzemeler\Mobile;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\DB;
-use Livewire\WithFileUploads;
+
 use App\Models\LogoItems;
 use App\Models\LogoDb;
 use App\Models\LogoItemsPhoto;
@@ -14,6 +13,7 @@ use App\Models\MobileDemanDetailTemp;
 use Illuminate\Support\Facades\Session;
 use App\Models\Demand;
 use App\Models\DemandDetail;
+
 
 class Liste extends Component
 {
@@ -30,16 +30,25 @@ class Liste extends Component
     public $malzeme;
     public $malzeme_units;
     public $malzeme_birim;
+
     public $log = "log burada";
     public $nfc_btn = true;
     public $nfc_active = false;
+
+    public $special_code;
+
 
 
     public $talep_miktar = 1;
     public $talep_neden = "İhtiyaç";
 
 
-    protected $listeners = ['MalzemeGoster' => 'MalzemeGoster'];
+    protected $listeners = ["MalzemeGoster", "GetKod"];
+
+    public function GetKod($d)
+    {
+        $this->special_code = $d;
+    }
 
     public function MalzemeGoster()
     {

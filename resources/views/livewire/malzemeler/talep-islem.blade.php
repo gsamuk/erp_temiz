@@ -76,7 +76,7 @@
                                 <th scope="col">Malzeme</th>
                                 <th scope="col">Talep </th>
                                 <th scope="col">Stok</th>
-                                <th scope="col">Durum</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -118,16 +118,7 @@
                                     <br><small>{{ $dt->unit_code
                                         }}</small>
                                 </td>
-                                <td>
-                                    @if($dt->status == 1) <span class="text-success">Sarf Fişi </span> @endif
-                                    @if($dt->status == 2) <span class="text-info">Satınalma Sipariş Fişi
-                                    </span> @endif
-                                    @if($dt->status == 3) <span class="text-secondary">Sarf Fişi ve Satınalma Sipariş
-                                        Fişi
-                                    </span>
-                                    @endif
 
-                                </td>
 
                             </tr>
                             @endforeach
@@ -135,18 +126,85 @@
                     </table>
                 </div>
 
+                @if($talep_sarf_detay)
+                <div class="col-lg-12">
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="p-3" style="background-color: rgb(242, 247, 242)">
+                                <h5><b>Sarf Fişi Detayı</b></h5>
+                                <table class="table border align-middle table-sm table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th>Fiş No</th>
+                                            <td>: {{ $talep_sarf_fisi->loagicalref }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Döküman No</th>
+                                            <td>: {{ $talep_sarf_fisi->doc_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Depo</th>
+                                            <td>: {{ $talep_sarf_fisi->warehouse }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Özel Kod</th>
+                                            <td>: {{ $talep_sarf_fisi->special_code }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Fiş Zamanı</th>
+                                            <td>: {{ $talep_sarf_fisi->consump_date }}</td>
+                                        </tr>
 
 
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div class="p-3" style="background-color: rgb(235, 255, 236)">
+                                <h5><b>Sarf Fişi Malzemeleri</b></h5>
+                                <table class="table border align-middle table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Stok No</th>
+                                            <th scope="col">Malzeme</th>
+                                            <th scope="col">Miktar</th>
+                                            <th scope="col">Birim Tutar</th>
+                                            <th scope="col">Toplam Tutar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($talep_sarf_detay as $d)
+                                        <tr>
+                                            <td>{{ $d->stock_code }}</td>
+                                            <th>{{ $d->stock_name }}</th>
+                                            <th>{{ number_format($d->amount,0,'.',',') }} {{ $d->unit_code }}</th>
+                                            <td>{{ number_format($d->unit_price,2,'.',',') }} </td>
+                                            <td>{{ number_format($d->total_price,2,'.',',') }} </td>
+                                        </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+
+                                <button class="btn btn-sm btn-primary">Fişi Yazdır</button>
+                            </div>
+
+                        </div>
 
 
+                    </div>
+                    @endif
 
-
-
+                </div>
             </div>
+            @endif
         </div>
-        @endif
-    </div>
 
-    <script>
+        <script>
 
-    </script>
+        </script>

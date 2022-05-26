@@ -7,23 +7,20 @@
             role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header bg-secondary text-light">
+                    <div class="modal-header bg-info text-light">
                         <h5 class="modal-title text-light"> Malzeme Detayı </h5>
                         <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
                     </div>
 
-                    <div class="modal-body m-0 p-1">
-
+                    <div class="modal-body">
                         <ul class="nav nav-tabs style1 " role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#tab_talep" role="tab">Talep</a>
                             </li>
 
-
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tab_bilgi" role="tab">Malzeme Bilgisi</a>
                             </li>
-
                         </ul>
                         <div class="tab-content mt-1">
                             <div class="tab-pane fade show active  " id="tab_talep" role="tabpanel">
@@ -36,19 +33,19 @@
 
                                         <div class="row">
                                             <div class="col-6">
-                                                <div class="form-group boxed">
+                                                <div class="form-group m-0">
                                                     <div class="input-wrapper">
-                                                        <label class="label">Miktar</label>
                                                         <input type="number" wire:model="talep_miktar"
                                                             class="form-control" placeholder="Talep Miktarı Giriniz.">
+                                                        <div class="input-info">Miktar</div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="col-6">
-                                                <div class="form-group boxed ">
+                                                <div class="form-group m-0 ">
                                                     <div class="input-wrapper">
-                                                        <label class="label">Birim</label>
+
                                                         <select wire:model="malzeme_birim" class="form-control">
                                                             @if($malzeme_units)
                                                             @foreach($malzeme_units as $c)
@@ -57,18 +54,29 @@
                                                             @endforeach
                                                             @endif
                                                         </select>
+                                                        <div class="input-info">Birim</div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="col-12">
-
-
-                                                <div class="form-group boxed">
+                                                <div class="form-group m-0">
                                                     <div class="input-wrapper">
-                                                        <label class="label">Talep Nedeni</label>
+                                                        <input type="text" wire:model="special_code" data-toggle="modal"
+                                                            data-target="#KodRight" class="form-control">
+                                                        <div class="input-info">Özel Kod</div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-group m-0">
+                                                    <div class="input-wrapper">
                                                         <input type="text" wire:model="talep_neden"
                                                             class="form-control">
+                                                        <div class="input-info">Talep Nedeni</div>
                                                     </div>
                                                 </div>
 
@@ -226,6 +234,22 @@
                             </div>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Panel Right -->
+
+        <!-- Panel Right -->
+        <div class="modal fade panelbox panelbox-right" id="KodRight" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary text-light">
+                        <h4 class="modal-title text-light">Özel Kod Seç</h4>
+                        <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
+                    </div>
+                    <div class="modal-body p-0 ">
+                        @livewire('malzemeler.mobile.ozel-kodlar')
                     </div>
                 </div>
             </div>
