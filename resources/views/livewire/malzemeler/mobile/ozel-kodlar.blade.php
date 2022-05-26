@@ -41,5 +41,5 @@
 
         </div>
     </div>
-    Lütfen Kod arama bölümünü kullanınız
+    <div class="m-1"> Lütfen Kod arama bölümünü kullanınız</div>
 </div>

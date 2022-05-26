@@ -48,6 +48,7 @@ class Liste extends Component
     public function GetKod($d)
     {
         $this->special_code = $d;
+        $this->dispatchBrowserEvent('CloseModal', ['modal' => '#KodRight']);
     }
 
     public function MalzemeGoster()
@@ -59,7 +60,7 @@ class Liste extends Component
             $this->malzeme_photos = LogoItemsPhoto::Where('stock_code', $this->sku)->get();
             $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
             $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
-            $this->dispatchBrowserEvent('ShowModal');
+            $this->dispatchBrowserEvent('ShowModal', ['modal' => '#MyModal']);
         }
     }
 
@@ -113,7 +114,7 @@ class Liste extends Component
         $db->description = $this->talep_neden;
         $db->insert_time = date('Y-m-d H:i:s');
         $db->save();
-        $this->dispatchBrowserEvent('CloseModal');
+        $this->dispatchBrowserEvent('CloseModalAll');
     }
 
     public function sil($id)
@@ -121,19 +122,19 @@ class Liste extends Component
         MobileDemanDetailTemp::where('id', $id)->where('user_id', $this->user_id)->delete();
         $sayi = MobileDemanDetailTemp::where('user_id', 1)->count();
         if ($sayi == 0) {
-            $this->dispatchBrowserEvent('CloseModal');
+            $this->dispatchBrowserEvent('CloseModalAll');
         }
     }
 
 
     public function talep_ekle()
     {
-
         $insert_time = date('Y-m-d H:i:s');
         $demand = new Demand;
         $demand->company_id = 1;
         $demand->users_id = $this->user_id;
         $demand->warehouse_no = 1;
+        $demand->special_code = $this->special_code;
         $demand->insert_time = $insert_time;
         $demand->save();
         $demand_no = $demand->id; // eklenen id
@@ -154,16 +155,18 @@ class Liste extends Component
             $dm->save();
         }
         MobileDemanDetailTemp::where('user_id', $this->user_id)->delete();
-        $this->dispatchBrowserEvent('CloseModal');
+        $this->dispatchBrowserEvent('CloseModalAll');
     }
 
     public function getMalzeme($sku)
     {
+
         $this->talep_miktar = 1;
         $this->malzeme = LogoItems::where('stock_code', "$sku")->first();
-        $this->malzeme_photos = LogoItemsPhoto::Where('logo_stockref', "$sku")->get();
+        $this->malzeme_photos = LogoItemsPhoto::Where('stock_code', "$sku")->get();
+
         $this->malzeme_units = LogoUnits::Where('unitset_ref', $this->malzeme->unitset_ref)->get();
         $this->malzeme_birim = $this->malzeme_units[0]['unit_code'];
-        $this->dispatchBrowserEvent('ShowModal');
+        $this->dispatchBrowserEvent('ShowModal', ['modal' => '#MyModal']);
     }
 }

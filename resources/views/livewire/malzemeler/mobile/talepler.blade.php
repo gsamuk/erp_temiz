@@ -1,6 +1,23 @@
 <div>
 
     <div id="appCapsule">
+
+        <!-- Panel Right -->
+        <div class="modal fade panelbox panelbox-right" id="KodRight" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-secondary text-light">
+                        <h4 class="modal-title text-light">Özel Kod Seç</h4>
+                        <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
+                    </div>
+                    <div class="modal-body p-0 ">
+                        @livewire('malzemeler.mobile.ozel-kodlar')
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- * Panel Right -->
+
         <div class="section full mt-2">
             <div class="section-title">
                 <b>Malzeme Talepleriniz</b>

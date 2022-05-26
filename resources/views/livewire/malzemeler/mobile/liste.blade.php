@@ -7,100 +7,120 @@
             role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header bg-info text-light">
+                    <div class="modal-header bg-secondary text-light">
                         <h5 class="modal-title text-light"> Malzeme Detayı </h5>
                         <a href="javascript:;" data-dismiss="modal" class="btn btn-outline-light btn-sm">Kapat</a>
                     </div>
 
-                    <div class="modal-body">
-                        <ul class="nav nav-tabs style1 " role="tablist">
+                    <div class="modal-body p-0">
+                        <ul class="nav nav-tabs style1" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tab_talep" role="tab">Talep</a>
+                                <a class="nav-link active" data-toggle="tab" href="#tab_talep" role="tab">
+                                    <ion-icon name="list" wire:ignore></ion-icon>
+                                    Talep
+                                </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab_bilgi" role="tab">Malzeme Bilgisi</a>
+                                <a class="nav-link" data-toggle="tab" href="#tab_bilgi" role="tab">
+                                    <ion-icon name="information-circle" wire:ignore></ion-icon>
+                                    Bilgi
+                                </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#add_photo" role="tab">
+                                    <ion-icon name="camera-sharp" wire:ignore></ion-icon>
+                                    Fotoğraf
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#add_photo" role="tab">
+                                    <ion-icon name="layers-sharp" wire:ignore></ion-icon>
+                                    Stok
+                                </a>
+                            </li>
+
+
                         </ul>
-                        <div class="tab-content mt-1">
-                            <div class="tab-pane fade show active  " id="tab_talep" role="tabpanel">
-                                <div style="background-color:#f3f1f1;" class="p-3 mt-1">
-                                    <b class="text-danger" tyle="font-weight: bolder;">{{ $malzeme->stock_name
-                                        }}</b><br>
-                                    <small>Stok Kodu : {{ $malzeme->stock_code}}</small>
 
-                                    <form wire:submit.prevent="ekle()">
+                        <div class="tab-content p-0">
+                            <div class="tab-pane fade show active p-2" id="tab_talep" role="tabpanel">
 
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group m-0">
-                                                    <div class="input-wrapper">
-                                                        <input type="number" wire:model="talep_miktar"
-                                                            class="form-control" placeholder="Talep Miktarı Giriniz.">
-                                                        <div class="input-info">Miktar</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-6">
-                                                <div class="form-group m-0 ">
-                                                    <div class="input-wrapper">
-
-                                                        <select wire:model="malzeme_birim" class="form-control">
-                                                            @if($malzeme_units)
-                                                            @foreach($malzeme_units as $c)
-                                                            <option value="{{$c->unit_code}}"> {{$c->unit_code}}
-                                                            </option>
-                                                            @endforeach
-                                                            @endif
-                                                        </select>
-                                                        <div class="input-info">Birim</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <div class="form-group m-0">
-                                                    <div class="input-wrapper">
-                                                        <input type="text" wire:model="special_code" data-toggle="modal"
-                                                            data-target="#KodRight" class="form-control">
-                                                        <div class="input-info">Özel Kod</div>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="col-12">
-                                                <div class="form-group m-0">
-                                                    <div class="input-wrapper">
-                                                        <input type="text" wire:model="talep_neden"
-                                                            class="form-control">
-                                                        <div class="input-info">Talep Nedeni</div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mt-2">
-                                                    <button type="submit" class="btn btn-primary"> Ekle</button>
-                                                    <br><br>
-                                                    <small>Dikkat: Talep Listesinizi oluşturduktan sonra göndermeniz
-                                                        gereklidir.</small>
+                                <b class="text-danger" style="font-weight: bolder;">{{ $malzeme->stock_name
+                                    }}</b><br>
+                                <small>Stok Kodu : {{ $malzeme->stock_code}}</small>
+                                <form wire:submit.prevent="ekle()">
+                                    <div class="row">
+                                        <div class="col-6 mt-2">
+                                            <div class="form-group m-0">
+                                                <div class="input-wrapper">
+                                                    <input type="number" wire:model="talep_miktar" class="form-control"
+                                                        placeholder="Talep Miktarı Giriniz.">
+                                                    <div class="input-info">Miktar</div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                    </form>
-                                </div>
-                            </div>
+                                        <div class="col-6 mt-2">
+                                            <div class="form-group">
+                                                <div class="input-wrapper">
 
-                            <div class="tab-pane fade" id="tab_bilgi" role="tabpanel">
-                                Bilgi
+                                                    <select wire:model="malzeme_birim" class="form-control">
+                                                        @if($malzeme_units)
+                                                        @foreach($malzeme_units as $c)
+                                                        <option value="{{$c->unit_code}}"> {{$c->unit_code}}
+                                                        </option>
+                                                        @endforeach
+                                                        @endif
+                                                    </select>
+                                                    <div class="input-info">Birim</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-12">
+                                            <div class="form-group m-0">
+                                                <div class="input-wrapper">
+                                                    <input type="text" wire:model="talep_neden" class="form-control">
+                                                    <div class="input-info">Talep Nedeni</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-2">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <ion-icon name="add-circle" wire:ignore></ion-icon> Ekle
+                                                </button>
+                                                <br><br>
+                                                <small>Dikkat: Talep Listesinizi oluşturduktan sonra göndermeniz
+                                                    gereklidir.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+
                                 @if($malzeme_photos)
                                 <hr>
-
                                 @foreach ($malzeme_photos as $p)
-                                <img src="{{ asset('public/storage/images/items/thumb/'.$p->foto_path) }}" alt="image"
-                                    class="imaged border m-1" style="width:180px">
+                                <img src="{{asset('public/storage/images/items/thumb/'.$p->foto_path)}}" alt="image"
+                                    class="imaged border m-1" style="width:160px">
+                                @endforeach
+                                @endif
+
+                            </div>
+
+                            <div class="tab-pane fade p-2" id="tab_bilgi" role="tabpanel">
+                                <b class="text-danger" style="font-weight: bolder;">{{ $malzeme->stock_name }}</b><br>
+                                <small>Stok Kodu : {{ $malzeme->stock_code}}</small>
+                                @if($malzeme_photos)
+                                <hr>
+                                @foreach ($malzeme_photos as $p)
+                                <img src="{{asset('public/storage/images/items/thumb/'.$p->foto_path)}}" alt="image"
+                                    class="imaged border m-1" style="width:160px">
                                 @endforeach
                                 @endif
                             </div>
@@ -128,62 +148,87 @@
                     </div>
 
                     <div class="modal-body p-0 ">
-                        <div class="section full mt-1 mb-1">
-                            <div wire:loading.table>
-                                <div class="spinner-grow text-primary" role="status">
-                                </div>
-                            </div>
 
-                            @if($talep_listesi->count() > 0)
+                        <div class="section full mt-2 mb-2">
+                            <div class="wide-block pb-1 pt-2">
 
 
-                            <div class="table-responsive m-1">
-                                <table class="table table-sm table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" style="width:240px;">Malzeme</th>
-                                            <th scope="col">Miktar</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
 
-                                    <tbody>
-                                        @foreach($talep_listesi as $d)
-                                        @php
-                                        $item = App\Models\LogoItems::where('logicalref', $d->logo_stock_ref)->first();
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                <span class="text-danger"><b>{{ $item->stock_name }}</b></span>
-                                                <br>
-                                                <small> S.K : {{ $item->stock_code}} | Talep Nedeni : {{
-                                                    $d->description}}</small>
-                                            </td>
-                                            <td>{{ number_format($d->quantity,0,',','.') }} <small>
-                                                    {{$d->unit_code}} </small></td>
-                                            <td><button wire:click="sil({{ $d->id }})" class="btn btn-sm btn-link ">
-                                                    X
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <hr>
-                                <div class="p-1">
-                                    <button wire:click="talep_ekle();" class="btn btn-success">Talebi Gönder</button>
+                                <div class="form-group boxed">
+                                    <div class="input-wrapper">
 
-                                    <p><small>Malzeme Talep Listenizi göndermeden önce ekleme çıkarma
-                                            yapabilirsiniz.</small></p>
+                                        <input type="email" wire:model="special_code" class="form-control input-sm"
+                                            placeholder="Özel Kod Seç" data-toggle="modal" data-target="#KodRight">
+                                        <i class="clear-input">
+                                            <ion-icon name="close-circle"></ion-icon>
+                                        </i>
+                                    </div>
                                 </div>
 
+                                <div class="form-group boxed">
+                                    @if($talep_listesi->count() > 0)
+
+
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped  ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" style="width:240px;">Malzeme</th>
+                                                    <th scope="col">Miktar</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @foreach($talep_listesi as $d)
+                                                @php
+                                                $item = App\Models\LogoItems::where('logicalref',
+                                                $d->logo_stock_ref)->first();
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        <span class="text-danger"><b>{{ $item->stock_name
+                                                                }}</b></span>
+                                                        <br>
+                                                        <small> S.K : {{ $item->stock_code}} | Talep Nedeni : {{
+                                                            $d->description}}</small>
+                                                    </td>
+                                                    <td>{{ number_format($d->quantity,0,',','.') }} <small>
+                                                            {{$d->unit_code}}
+                                                        </small>
+                                                    </td>
+                                                    <td>
+                                                        <button wire:click="sil({{ $d->id }})"
+                                                            class="btn btn-sm btn-link "> X
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <hr>
+                                        <div class="p-1">
+                                            <button wire:click="talep_ekle();" class="btn btn-success">Talebi
+                                                Gönder</button>
+                                            <div><small>Malzeme Talep Listenizi göndermeden önce ekleme çıkarma
+                                                    yapabilirsiniz.</small></div>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="alert alert-info m-2" role="alert">
+                                        Talep Listeniz Boş.
+                                    </div>
+                                    @endif
+
+                                </div>
+
+
+
                             </div>
-                            @else
-                            <div class="alert alert-info m-2" role="alert">
-                                Talep Listeniz Boş.
-                            </div>
-                            @endif
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
@@ -264,7 +309,7 @@
                         <input type="text" class="form-control" placeholder="Malzeme Ara..."
                             wire:model.debunce.1000ms="search">
                         <i class="input-icon">
-                            <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline">
+                            <ion-icon name="search-outline" wire:ignore>
                             </ion-icon>
                         </i>
                     </div>
@@ -273,7 +318,7 @@
                         <input type="text" class="form-control ml-1" placeholder="Stok Kodu Ara..."
                             wire:model.debunce.1000ms="search_stock_code">
                         <i class="input-icon">
-                            <ion-icon name="search-outline" role="img" class="md hydrated" aria-label="search outline">
+                            <ion-icon name="search-outline" wire:ignore>
                             </ion-icon>
                         </i>
                     </div>
@@ -289,11 +334,14 @@
                 @if($talep_listesi->count() > 0)
                 <span class="badge badge-warning" style="margin-right:-10px; position: relative;">{{
                     $talep_listesi->count() }}</span>
-                <a href="#" class="btn btn-sm btn-danger rounded " data-toggle="modal" data-target="#TalepListModal">
-                    Talep Listeniz </a>
+                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#TalepListModal">
+                    <ion-icon name="list" wire:ignore></ion-icon>
+                    Talepler
+                </a>
                 @endif
-                <a href="#" class="btn btn-sm btn-secondary rounded " data-toggle="modal"
-                    data-target="#PanelRight">Filtre</a>
+                <a href="#" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#PanelRight">
+                    <ion-icon name="filter" wire:ignore></ion-icon>
+                </a>
             </div>
         </div>
 
@@ -361,11 +409,15 @@
 
         <div class="d-flex  ml-1 mb-2 mt-2">
             @if($malzemeler->hasMorePages())
-            <button class="btn btn-text-primary shadowed mr-1 mb-1" wire:click.prevent="loadMore">Devamını
-                Yükle</button>
+            <button class="btn btn-text-primary shadowed mr-1 mb-1" wire:click.prevent="loadMore">
+                <ion-icon name="menu" wire:ignore></ion-icon> Devamını
+                Yükle
+            </button>
             @if($nfc_btn)
-            <button id="scanButton" @if($nfc_active) disabled @endif class="btn btn-success">@if($nfc_active) NFC SCAN
-                Aktif @else NFC SCAN @endif
+            <button id="scanButton" @if($nfc_active) disabled @endif class="btn btn-success">
+                @if($nfc_active)
+                <ion-icon name="scan" wire:ignore></ion-icon> NFC SCAN Aktif @else <ion-icon name="scan" wire:ignore>
+                </ion-icon> NFC SCAN @endif
             </button>
             @endif
             @endif
@@ -418,15 +470,16 @@
             } catch (error) {
                 alert("Argh! " + error);
              }
-        });
-
-     
+        });    
 
         document.addEventListener('livewire:load', function () {            
             if (!("NDEFReader" in window)){
                 @this.nfc_btn = false;
             }
-         });
+         });       
+         
+         
+
     </script>
 
 </div>
