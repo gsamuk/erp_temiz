@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class LogoTransaction extends Model
 {
     use HasFactory;
-    protected $table = "logo_transaction"; // logo requeste ve response istekleri kayıt edilir.
+    protected $table = "logo_transaction"; // bizim taraf
     public $timestamps = false;
 }

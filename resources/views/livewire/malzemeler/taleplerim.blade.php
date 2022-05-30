@@ -127,7 +127,7 @@
 
                                         @if($d->status == 0)
                                         <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                            class="btn btn-sm btn-info btn-block">Karşılama <i
+                                            class="btn btn-sm btn-info btn-block">Detay <i
                                                 class="ri-arrow-right-s-line"></i></button>
                                         @endif
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\DbController;
 use App\Models\LogoItemsPhoto;
 use App\Models\Demand;
 use App\Models\DemandDetail;
+use App\Helpers\Erp;
 
 class TalepOlustur extends Component
 {
@@ -131,7 +132,7 @@ class TalepOlustur extends Component
 
         $demand = new Demand;
         $demand->company_id = 1;
-        $demand->users_id = 1;
+        $demand->users_id = Erp::user_id();
         $demand->warehouse_no = $this->warehouse;
         $demand->demand_desc = $this->demand_desc;
         $demand->project_code = $this->project_code;

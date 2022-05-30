@@ -59,7 +59,7 @@
             <div class="card">
                 <div class="card-header ">
                     <span class="float-end">
-                        <a href="{{ route('malzeme.talep_listesi') }}" class="btn btn-secondary btn-sm "> <i
+                        <a href="{{ route('malzemeler.talep_listesi') }}" class="btn btn-secondary btn-sm "> <i
                                 class="ri-stack-line"></i> Talep Listesi</a>
                     </span>
                     <div class="d-flex align-items-center">

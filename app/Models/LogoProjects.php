@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LogoProjects extends Model
 {
-    protected $table = 'lv_projects'; // 1 nolu firmanın verileri gelir
+    protected $table = 'lv_project_001'; // 1 nolu firmanın verileri gelir
 }

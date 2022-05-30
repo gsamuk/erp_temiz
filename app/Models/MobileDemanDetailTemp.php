@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MobileDemanDetailTemp extends Model
 {
-    protected $table = 'mobile_demand_detail_temp';
+    protected $table = 'mobile_demand_detail_temp'; // bizim taraf
     protected $primaryKey = 'id';
     public $timestamps = false;
 }

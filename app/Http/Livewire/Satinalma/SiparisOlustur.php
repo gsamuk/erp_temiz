@@ -246,7 +246,7 @@ class SiparisOlustur extends Component
     {
         $d = json_decode($d);
         $this->project_code = $d->project_code;
-        $this->project_ref_id = $d->record;
+        $this->project_ref_id = $d->project_ref;
         $this->dispatchBrowserEvent('CloseModal');
     }
 

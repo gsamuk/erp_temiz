@@ -20,7 +20,8 @@
             <div class="col-sm-3">
                 @if(Cookie::get('secili_firma_adi'))
                 <span class="text-success"> {{ Cookie::get('secili_firma_adi') }} | Firma No : {{
-                    Cookie::get('secili_firma') }}</span>
+                    Cookie::get('secili_firma') }} | Kod : {{
+                    Cookie::get('secili_db_kod') }} </span>
                 @endif
 
             </div>

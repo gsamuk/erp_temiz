@@ -5,11 +5,12 @@ namespace App\Http\Livewire\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\LogoTokenController;
+use App\Models\Company;
 
 
 class FirmaSec extends Component
 {
-    public $firma;
+    public $firma = 1;
     public $firma_adi;
     public $btn;
 
@@ -34,12 +35,18 @@ class FirmaSec extends Component
 
     public function store()
     {
+
         if ($this->firma == null || empty($this->firma)) {
             session()->flash('error', 'Lütfen Firma Seçin!');
         } else {
+            $firma = Company::Where("logo_firmnr", $this->firma)->first();
 
-            Cookie::queue(Cookie::make('secili_firma', $this->firma, 500000));
-            Cookie::queue(Cookie::make('secili_firma_adi', $this->firma_adi, 500000));
+
+            Cookie::make('secili_firma', $firma->logo_firmnr, 500000);
+            Cookie::make('secili_firma_adi', $firma->logo_firm_name, 500000);
+            Cookie::make('secili_db_kod', $firma->db_code, 500000);
+
+
             $token = LogoTokenController::getToken($this->firma);
             if ($token) {
                 $this->btn = false;

@@ -27,7 +27,7 @@ class HomeController extends Controller
 
     public function talep_olustur()
     {
-        return view('mobile_index');
+        return view('mobile_talep_olustur');
     }
 
     public function talepler()

@@ -9,12 +9,12 @@ class DbController extends Controller
 
     static function getSiparis($id)
     {
-        return DB::table('lv_purchase_order')->where('logicalref', '=', $id)->first();
+        return DB::table('lv_purchase_order_001')->where('logicalref', '=', $id)->first();
     }
 
     static function getSiparisDetay($id)
     {
-        return DB::table('lv_purchase_order_detail')->where('po_ficheref', '=', $id)->get();
+        return DB::table('lv_purchase_order_detail_001')->where('po_ficheref', '=', $id)->get();
     }
 
 

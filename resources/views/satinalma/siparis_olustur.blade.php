@@ -41,13 +41,7 @@
          $('#div_kdv').html(parseInt(net_tutar) - parseInt(toplam));
 
 
-    });
-
-    
-  
-
-    
-
+    }); 
 </script>
 
 @endsection

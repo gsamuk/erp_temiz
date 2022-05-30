@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LogoDemand extends Model
 {
     protected $primaryKey = 'logicalref';
-    protected $table = 'lv_demand_001'; // 1 nolu firmanın verileri gelir
+    protected $table = 'lv_demand_001';
 }

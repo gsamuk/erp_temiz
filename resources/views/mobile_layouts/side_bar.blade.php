@@ -27,7 +27,7 @@
                                 <ion-icon name="add-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                Malzeme Talebi Oluştur
+                                Talep Oluştur
                             </div>
                         </a>
                     </li>
@@ -38,7 +38,7 @@
                                 <ion-icon name="cube-outline"></ion-icon>
                             </div>
                             <div class="in">
-                                Malzeme Talepleriniz
+                                Talepleriniz
                             </div>
                         </a>
                     </li>

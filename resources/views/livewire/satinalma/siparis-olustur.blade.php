@@ -189,7 +189,6 @@
                                                 <th style="width:100px;">Birim Fiyat</th>
                                                 <th style="width:80px;">Kdv %</th>
                                                 <th style="width:80px;">Kdv</th>
-
                                                 <th style="width:100px;">Tutar</th>
                                                 <th style="width:120px;">Net Tutar</th>
                                                 <th>-</th>
@@ -393,11 +392,9 @@
                                 </div>
                                 @endif
 
-
                                 <div class="col-12 m-2 ">
-                                    <button type="submit" class="btn btn-success "> <i
-                                            class="mdi mdi-content-save"></i>Kaydet</button>
-
+                                    <button type="submit" class="btn btn-success ">
+                                        <i class="mdi mdi-content-save"></i>Kaydet</button>
                                     <div wire:loading>
                                         İşleniyor Lütfen Bekleyiniz...
                                     </div>
@@ -409,8 +406,6 @@
             </form>
         </div>
     </div>
-
-
 
 
     <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
@@ -458,4 +453,6 @@
             </div>
         </div>
     </div>
+
+
 </div>

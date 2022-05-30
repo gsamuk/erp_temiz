@@ -46,7 +46,10 @@
                         <i class="ri-stack-line"></i> <span>Malzeme Yönetimi </span>
                     </a>
                     <div class="collapse menu-dropdown" id="m3">
+
                         <ul class="nav nav-sm flex-column">
+
+
                             @if(Erp::izin('items_list'))
                             <li class="nav-item">
                                 <a href="{{ route('malzemeler') }}" class="nav-link" data-key="t-google">
@@ -72,20 +75,28 @@
                                     <ul class="nav nav-sm flex-column">
                                         @if(Erp::izin('items_demand'))
                                         <li class="nav-item">
-                                            <a href="{{ route('malzeme.talep_listesi') }}" class="nav-link"
+                                            <a href="{{ route('malzemeler.talep_listesi') }}" class="nav-link"
                                                 data-key="t-level-3.1">
                                                 Talep Listesi
                                                 <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
                                             </a>
                                         </li>
+                                        @endif
 
                                         <li class="nav-item">
-                                            <a href="{{ route('malzeme.talep_olustur') }}" class="nav-link"
+                                            <a href="{{ route('malzemeler.taleplerim') }}" class="nav-link"
+                                                data-key="t-level-3.2">
+                                                Taleplerim
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a href="{{ route('malzemeler.talep_olustur') }}" class="nav-link"
                                                 data-key="t-level-3.2">
                                                 Talep Oluştur
                                             </a>
                                         </li>
-                                        @endif
+
                                     </ul>
                                 </div>
                             </li>

@@ -88,6 +88,7 @@ class TalepKarsila extends Component
                         "ITEM_CODE" => $item->stock_code,
                         "ITEMREF" => $item->logo_stock_ref,
                         "UNIT_CODE" => $item->unit_code,
+                        "DESCRIPTION" => $item->description,
                         "TYPE" => 25,
                         'QUANTITY' => $miktar,
                     ];
@@ -127,7 +128,8 @@ class TalepKarsila extends Component
             'DATE' => "2021-05-21 10:10:00",
             'GROUP' => 2,
             "AUXIL_CODE" => $demand->special_code,
-            "PROJECTREF" => $demand->project_code,
+            "PROJECT_CODE" => $demand->project_code,
+            "FOOTNOTE1"  => $demand->demand_desc,
             'DOC_NUMBER' => "SF" . $this->talep_id,
             "TYPE" => 12,
             'IO_TYPE' => 3,

@@ -23,13 +23,14 @@ Route::middleware([Kontrol::class])->group(function () {
 
     /// malzeme işlemleri
     Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
+    Route::get('malzemeler/taleplerim', [App\Http\Controllers\MalzemelerController::class, 'taleplerim'])->name('malzemeler.taleplerim'); // Malzeme Listesi
     Route::get('malzemeler/fotograf', [App\Http\Controllers\MalzemelerController::class, 'fotograf'])->name('malzemeler.fotograf'); // Malzeme Listesi
-    Route::get('malzeme/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzeme.talep_listesi');
-    Route::get('malzeme/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzeme.talep_olustur');
-    Route::get('malzeme/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzeme.talep_duzenle');
+    Route::get('malzemeler/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzemeler.talep_listesi');
+    Route::get('malzemeler/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzemeler.talep_olustur');
+    Route::get('malzemeler/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzemeler.talep_duzenle');
 
 
-    Route::middleware([LogoTokenKontrol::class])->group(function () {
+    Route::middleware([LogoTokenKontrol::class])->group(function () { // logo rest token alınmış ise
         // Token Gerektiren işlemler Middleware Gereklidir
         // satın alma işlemleri
         Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');

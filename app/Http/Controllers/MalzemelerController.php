@@ -12,6 +12,11 @@ class MalzemelerController extends Controller
     }
 
 
+    public function taleplerim()
+    {
+        return view('malzemeler.taleplerim');
+    }
+
     public function talep_listesi()
     {
         return view('malzemeler.talep_listesi');

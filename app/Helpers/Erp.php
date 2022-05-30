@@ -14,4 +14,9 @@ class Erp
             return false;
         }
     }
+
+    public static function user_id()
+    {
+        return Session::get('userData')->id;
+    }
 }

@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class LogoOzelKod extends Model
 {
-    protected $table = 'lv_special_code'; // 1 nolu firmanın verileri gelir
+    protected $table = 'lv_special_code_001'; // 1 nolu firmanın verileri gelir
 }
