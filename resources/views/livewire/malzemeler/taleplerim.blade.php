@@ -22,8 +22,8 @@
                         </div>
 
                         <div class="col-xxl-4">
-                            <a href="{{ route('malzemeler.talep_olustur') }}" class="btn btn-primary "> <i
-                                    class="ri-stack-line"></i> Yeni Talep Oluştur</a>
+                            <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
+                                class="btn btn-primary "> <i class="ri-stack-line"></i> Yeni Talep Oluştur</a>
                         </div>
 
                     </div>

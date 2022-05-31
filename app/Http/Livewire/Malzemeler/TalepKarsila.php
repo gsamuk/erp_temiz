@@ -204,6 +204,6 @@ class TalepKarsila extends Component
         $this->item_id = $id;
         $this->item = LogoItems::find($id);
         $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $id)->get();
-        $this->dispatchBrowserEvent('ShowMalzemeFotoModal');
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#MalzemeFotoModal']);
     }
 }

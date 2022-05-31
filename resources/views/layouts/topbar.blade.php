@@ -61,7 +61,7 @@
                                     {{Session::get('userData')->surname}}</span>
 
                                 <span class="d-none d-xl-block ms-1 fs-12 text-success">
-                                    {{Cookie::get('secili_firma_adi')}}
+                                    {{Session::get('secili_firma_adi')}}
                                 </span>
                             </span>
                         </span>

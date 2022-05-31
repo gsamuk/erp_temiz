@@ -7,8 +7,15 @@ use Livewire\Component;
 class Dashboard extends Component
 {
 
-    public $d1;
-    public $d2;
+    public $page;
+
+    protected $listeners = ['SetPage'];
+
+    public function SetPage($page)
+    {
+        $this->page = $page;
+    }
+
 
     public function render()
     {

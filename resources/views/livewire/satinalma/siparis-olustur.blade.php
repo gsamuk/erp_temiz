@@ -16,8 +16,9 @@
                             <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                                 Sipariş Oluştur {{ $sid }}</h5>
                             <div class="flex-shrink-0">
-                                <a href="/satinalma/siparis" class="btn btn-success add-btn"><i
-                                        class="ri-store-2-fill align-bottom me-1"></i> Sipariş Listesi
+                                <a href="#" wire:click="$emit('SetPage', 'satinalma.siparis')"
+                                    class="btn btn-success add-btn"><i class="ri-store-2-fill align-bottom me-1"></i>
+                                    Sipariş Listesi
                                 </a>
 
                             </div>

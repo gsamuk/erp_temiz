@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Users;
 use App\Models\Authorizations;
 
-class UserListTable extends Component
+class UserList extends Component
 {
     public $name, $surname, $user_name, $password, $email, $logo_user, $logo_password;
     public $users;
@@ -34,7 +34,7 @@ class UserListTable extends Component
 
     public function render()
     {
-        return view('livewire.user.user-list-table');
+        return view('livewire.user.list');
     }
 
     public function updated($propertyName)

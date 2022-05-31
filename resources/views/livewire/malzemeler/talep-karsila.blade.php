@@ -90,6 +90,10 @@
                             $val2 = 0;
                             $disable="";
 
+                            $stok = $dt->quantity;
+
+
+
                             if($item_detail->onhand_quantity >= $dt->quantity){
                             $val = $dt->quantity;
                             }
@@ -143,29 +147,23 @@
                                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         $item_detail }}')">
 
-                                        <input type="number" min="0" @if($dt->status > 0 ) disabled @endif {{ $disable
-                                        }}
-                                        wire:model="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
-                                        x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        <input type="number" min="0" class="form-control" wire:loading.attr="disabled"
+                                            @if($dt->status > 0 ) disabled @endif
+                                        {{ $disable }}
+
+                                        wire:model.debunce.1000ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                        x-data x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         number_format($val,0,'.',',') }}')"
-                                        class="form-control"
-                                        @if(isset($satinal[$dt->demand_id][$dt->id]) &&
-                                        isset($karsila[$dt->demand_id][$dt->id]) && $satinal[$dt->demand_id][$dt->id] ==
-                                        0 && $karsila[$dt->demand_id][$dt->id] == 0
-                                        ) style="border-color:#f06548;" @endif
-                                        wire:loading.attr="disabled"
                                         >
                                     </td>
 
                                     <td><input type="number" min="0" @if($dt->status > 0) disabled @endif
-                                        wire:model="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
+
+                                        wire:model.debunce.1000ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
                                         x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         number_format($val2,0,'.',',') }}')"
+
                                         class="form-control"
-                                        @if(isset($satinal[$dt->demand_id][$dt->id]) &&
-                                        isset($karsila[$dt->demand_id][$dt->id]) && $satinal[$dt->demand_id][$dt->id] ==
-                                        0 && $karsila[$dt->demand_id][$dt->id] == 0
-                                        ) style="border-color:#f06548;" @endif
                                         wire:loading.attr="disabled"
                                         >
                                     </td>

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cookie;
 use Exception;
+use Illuminate\Support\Facades\Session;
 
 class LogoRest extends Controller
 {
@@ -24,11 +25,11 @@ class LogoRest extends Controller
             if ($sid > 0) {
                 $msg = "Sipariş Kaydı Düzenlendi";
                 $url = Self::rest_url('purchaseOrders/' . $sid);
-                $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->put($url, $data);
             } else {
                 $msg = "Yeni Sipariş Oluşturuldu";
                 $url = Self::rest_url('purchaseOrders');
-                $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->post($url, $data);
             }
 
 
@@ -51,7 +52,7 @@ class LogoRest extends Controller
         $id = $data['id'];
         try {
             $url = Self::rest_url('purchaseOrders/' . $id);
-            $response = Http::withToken(Cookie::get("logo_access_token"))->delete($url);
+            $response = Http::withToken(Session::get("logo_access_token"))->delete($url);
             if ($response->status() == 200 && $response->successful() == true) {
                 TransactionController::add($url, $data, $response->body());
                 return session()->flash('success', 'Başarılı Sipariş Silindi' . $response->json("INTERNAL_REFERENCE"));
@@ -80,7 +81,7 @@ class LogoRest extends Controller
 
         try {
             $url = Self::rest_url('purchaseOrders/' . $id);
-            $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $header);
+            $response = Http::withToken(Session::get("logo_access_token"))->put($url, $header);
             if ($response->status() == 200 && $response->successful() == true) {
                 TransactionController::add($url, $data, $response->body());
                 return session()->flash('success', 'Başarılı Sipariş Onaylandı' . $response->json("INTERNAL_REFERENCE"));
@@ -103,11 +104,11 @@ class LogoRest extends Controller
             if ($tid > 0) {
                 $msg = "Malzeme Talebi Düzenlendi";
                 $url = Self::rest_url('demandSlips/' . $tid);
-                $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->put($url, $data);
             } else {
                 $msg = "Yeni Malzeme Talep Oluşturuldu";
                 $url = Self::rest_url('demandSlips');
-                $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->post($url, $data);
             }
 
 
@@ -129,7 +130,7 @@ class LogoRest extends Controller
         $id = $data['id'];
         try {
             $url = Self::rest_url('demandSlips/' . $id);
-            $response = Http::withToken(Cookie::get("logo_access_token"))->delete($url);
+            $response = Http::withToken(Session::get("logo_access_token"))->delete($url);
             if ($response->status() == 200 && $response->successful() == true) {
                 TransactionController::add($url, $data, $response->body());
                 return session()->flash('success', 'Başarılı Malzeme Talebi Silindi' . $response->json("INTERNAL_REFERENCE"));
@@ -151,11 +152,11 @@ class LogoRest extends Controller
             if ($id > 0) {
                 $msg = "Sarf Fişi Düzenlendi";
                 $url = Self::rest_url('itemSlips/' . $id);
-                $response = Http::withToken(Cookie::get("logo_access_token"))->put($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->put($url, $data);
             } else {
                 $msg = "Yeni Sarf Fişi Oluşturuldu";
                 $url = Self::rest_url('itemSlips');
-                $response = Http::withToken(Cookie::get("logo_access_token"))->post($url, $data);
+                $response = Http::withToken(Session::get("logo_access_token"))->post($url, $data);
             }
 
 

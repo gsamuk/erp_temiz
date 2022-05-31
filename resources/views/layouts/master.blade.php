@@ -22,6 +22,7 @@
 <div id="layout-wrapper">
     @include('layouts.topbar')
     @include('layouts.sidebar')
+
     <!-- ============================================================== -->
     <!-- Start right Content here -->
     <!-- ============================================================== -->
@@ -46,12 +47,15 @@
 @livewireScripts
 
 <script>
-    window.addEventListener('OpenModal', event => {            
+    window.addEventListener('OpenModal', event => { 
+        console.log(event.detail);            
         $(event.detail.ModalName).modal('show');
     }); 
-    window.addEventListener('CloseModal', event => {            
+    window.addEventListener('CloseModal', event => {  
+        console.log(event.detail);            
         $(event.detail.ModalName).modal('hide');
-    });
+        $('.modal').modal('hide');
+    });    
 
 </script>
 </body>

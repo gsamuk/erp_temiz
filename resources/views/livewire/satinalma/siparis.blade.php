@@ -5,8 +5,8 @@
                 <h5 class="card-title   flex-grow-1"> <i class="ri-store-2-fill align-bottom me-1"></i> Satınalma
                     Siparişleri Listesi</h5>
                 <div class="flex-shrink-0">
-                    <a href="/satinalma/siparis_olustur" class="btn btn-info add-btn"><i
-                            class="ri-add-line align-bottom me-1"></i> Yeni Sipariş
+                    <a href="#" wire:click="$emit('SetPage', 'satinalma.siparis-olustur')"
+                        class="btn btn-info add-btn"><i class="ri-add-line align-bottom me-1"></i> Yeni Sipariş
                         Oluştur</a>
 
                 </div>

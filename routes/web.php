@@ -12,33 +12,13 @@ Route::get('signout', [App\Http\Controllers\LoginController::class, 'signout'])-
 Route::middleware([Kontrol::class])->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
-    /// user işlemleri    
-    Route::post('profil/post', [App\Http\Controllers\UserController::class, 'profil_post'])->name('profil.post');
-    Route::post('password/change', [App\Http\Controllers\UserController::class, 'password_change'])->name('profil.password_change_post');
-    Route::post('user/authorizations', [App\Http\Controllers\AuthorizationsController::class, 'set_authorizations'])->name('user.authorizations.post');
-    Route::get('users', [App\Http\Controllers\UserController::class, 'user_list'])->name("users");
 
-    Route::get('user/{id}', [App\Http\Controllers\UserController::class, 'user'])->name('user');
-    Route::get('firma_sec', [App\Http\Controllers\UserController::class, 'firma_sec'])->name("firma_sec");
-
-    /// malzeme işlemleri
-    Route::get('malzemeler', [App\Http\Controllers\MalzemelerController::class, 'index'])->name('malzemeler'); // Malzeme Listesi
-    Route::get('malzemeler/taleplerim', [App\Http\Controllers\MalzemelerController::class, 'taleplerim'])->name('malzemeler.taleplerim'); // Malzeme Listesi
-    Route::get('malzemeler/fotograf', [App\Http\Controllers\MalzemelerController::class, 'fotograf'])->name('malzemeler.fotograf'); // Malzeme Listesi
-    Route::get('malzemeler/talep_listesi', [App\Http\Controllers\MalzemelerController::class, 'talep_listesi'])->name('malzemeler.talep_listesi');
-    Route::get('malzemeler/talep', [App\Http\Controllers\MalzemelerController::class, 'talep_olustur'])->name('malzemeler.talep_olustur');
-    Route::get('malzemeler/talep_duzenle/{id}', [App\Http\Controllers\MalzemelerController::class, 'talep_duzenle'])->name('malzemeler.talep_duzenle');
 
 
     Route::middleware([LogoTokenKontrol::class])->group(function () { // logo rest token alınmış ise
         // Token Gerektiren işlemler Middleware Gereklidir
         // satın alma işlemleri
-        Route::get('satinalma/siparis', [App\Http\Controllers\SatinAlmaController::class, 'siparis'])->name('satinalma.siparis');
-        Route::get('satinalma/siparis_olustur', [App\Http\Controllers\SatinAlmaController::class, 'siparis_olustur'])->name('satinalma.siparis_olustur');
-        Route::get('satinalma/siparis_duzenle/{id}', [App\Http\Controllers\SatinAlmaController::class, 'siparis_duzenle'])->name('satinalma.siparis_duzenle');
-        Route::get('satinalma/irsaliye', [App\Http\Controllers\SatinAlmaController::class, 'irsaliye'])->name('satinalma.irsaliye');
-        Route::get('satinalma/fatura', [App\Http\Controllers\SatinAlmaController::class, 'fatura'])->name('satinalma.fatura');
-        Route::get('satinalma/onay', [App\Http\Controllers\SatinAlmaController::class, 'onay'])->name('satinalma.onay');
+
     });
 
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Users;
 use App\Models\LogoUserTokens;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cookie;
+
 use Exception;
 
 class LogoTokenController extends Controller
@@ -47,9 +47,10 @@ class LogoTokenController extends Controller
                         ]
                     );
 
-                    Cookie::queue(Cookie::make('logo_access_token', $logo->json("access_token"), 500000));
-                    Cookie::queue(Cookie::make('logo_refresh_token', $logo->json("refresh_token"), 500000));
-                    Cookie::queue(Cookie::make('logo_firma_id', $firma_id, 500000));
+                    Session::put('logo_access_token', $logo->json("access_token"));
+                    Session::put('logo_refresh_token', $logo->json("refresh_token"));
+                    Session::put('logo_firma_id', $firma_id);
+
                     TransactionController::add($url, $data, $logo->body());
                     return true;
                 } else {

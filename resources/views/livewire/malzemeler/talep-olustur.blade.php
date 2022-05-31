@@ -3,13 +3,11 @@
         label {
             color: rgb(65, 62, 62);
             font-size: 0.9em;
-
         }
     </style>
 
-    <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog  modal-xl">
+    <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -55,12 +53,12 @@
 
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-xl-6 col-md-12">
             <div class="card">
                 <div class="card-header ">
                     <span class="float-end">
-                        <a href="{{ route('malzemeler.talep_listesi') }}" class="btn btn-secondary btn-sm "> <i
-                                class="ri-stack-line"></i> Talep Listesi</a>
+                        <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
+                            class="btn btn-secondary btn-sm "> <i class="ri-stack-line"></i> Talep Listesi</a>
                     </span>
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
@@ -353,7 +351,7 @@
         </div>
 
         @if($item_photos)
-        <div class="col-lg-6">
+        <div class="col-xl-6 col-md-12">
             <div class="card">
                 <div class="card-header ">
                     <div class="d-flex align-items-center">

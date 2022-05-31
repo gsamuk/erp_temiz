@@ -4,6 +4,7 @@ namespace App\Http\Livewire\User;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\LogoTokenController;
 use App\Models\Company;
 
@@ -17,8 +18,8 @@ class FirmaSec extends Component
     public function mount()
     {
         $this->btn = true;
-        if (Cookie::has('secili_firma')) {
-            $this->firma = Cookie::get('secili_firma');
+        if (Session::has('secili_firma')) {
+            $this->firma = Session::get('secili_firma');
         }
     }
 
@@ -41,11 +42,9 @@ class FirmaSec extends Component
         } else {
             $firma = Company::Where("logo_firmnr", $this->firma)->first();
 
-
-            Cookie::make('secili_firma', $firma->logo_firmnr, 500000);
-            Cookie::make('secili_firma_adi', $firma->logo_firm_name, 500000);
-            Cookie::make('secili_db_kod', $firma->db_code, 500000);
-
+            session()->put('secili_firma', $firma->logo_firmnr);
+            session()->put('secili_firma_adi', $firma->logo_firm_name);
+            session()->put('secili_db_kod', $firma->db_code);
 
             $token = LogoTokenController::getToken($this->firma);
             if ($token) {

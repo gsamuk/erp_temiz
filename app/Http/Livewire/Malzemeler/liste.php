@@ -19,6 +19,7 @@ class Liste extends Component
     public $tur = '';
     public $stur = '';
     public $line = 0;
+
     public $ch = true; // true malzeme seçme butonu
     public $details = false; // true malzeme detay bilgileri gösterir
 
@@ -87,6 +88,6 @@ class Liste extends Component
         $this->item_id = $id;
         $this->item = LogoItems::find($id);
         $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $id)->get();
-        $this->dispatchBrowserEvent('ShowMalzemeFotoModal');
+        $this->dispatchBrowserEvent('OpenModal', 'ShowMalzemeFotoModal');
     }
 }

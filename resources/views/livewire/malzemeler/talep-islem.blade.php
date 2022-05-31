@@ -1,6 +1,7 @@
 <div>
 
     @if($item_id)
+
     <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-xl">

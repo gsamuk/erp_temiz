@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class LogoTokenKontrol
 {
@@ -16,7 +17,7 @@ class LogoTokenKontrol
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->hasCookie('logo_access_token')) {
+        if (Session::get('logo_access_token')) {
             return $next($request);
         } else {
             return redirect()->to('/firma_sec');

@@ -1,8 +1,36 @@
 <div>
-    <div class="card-header border-0">
-        <iframe title="Malzemeler" width="100%" height="900"
-            src="https://app.powerbi.com/view?r=eyJrIjoiM2ViZmU1MTYtNWQzOS00YWIzLTg0NDgtYjE1YTM3NTA3ZTM0IiwidCI6IjgxYWMzZmNiLTBlMzQtNDJmNS1iZThlLTdiOGQyMjg2MGUxYiIsImMiOjl9&pageName=ReportSection"
-            frameborder="0" allowFullScreen="true"></iframe>
+
+    @if($page == 'malzemeler.liste')
+    @livewire('malzemeler.liste', ['ch' => false])
+
+    @elseif($page == 'malzemeler.talep-listesi')
+    @livewire('malzemeler.talep-listesi')
+
+    @elseif($page == 'malzemeler.talep-olustur')
+    @livewire('malzemeler.talep-olustur')
+
+    @elseif($page == 'malzemeler.fotograf')
+    @livewire('malzemeler.fotograf')
+
+    @elseif($page == 'malzemeler.taleplerim')
+    @livewire('malzemeler.taleplerim')
+
+    @elseif($page == 'satinalma.siparis-olustur')
+    @livewire('satinalma.siparis-olustur')
+
+    @elseif($page == 'satinalma.siparis')
+    @livewire('satinalma.siparis')
+
+
+
+
+
+    @else
+    DashBoard
+    @endif
+
+    <div wire:loading>
+        Processing Payment...
     </div>
+    {{ $page }}
 </div>
-<!-- end row -->
