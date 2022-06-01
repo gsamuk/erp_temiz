@@ -26,6 +26,9 @@
     @livewire('satinalma.siparis')
 
 
+    @elseif($page == 'users.liste')
+    @livewire('users.liste')
+
     @else
     DashBoard
     @endif

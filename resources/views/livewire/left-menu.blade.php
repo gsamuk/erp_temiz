@@ -286,7 +286,8 @@
                         <div class="collapse menu-dropdown" id="sidebarMaps">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-key="t-google">
+                                    <a href="#" wire:click="$emit('SetPage', 'users.liste')" class="nav-link"
+                                        data-key="t-google">
                                         Kullanıcı Yönetimi
                                     </a>
                                 </li>

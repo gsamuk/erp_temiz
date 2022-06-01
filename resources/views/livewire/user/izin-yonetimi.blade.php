@@ -3,7 +3,6 @@
     <table class="table table-sm table-nowrap mb-0">
         <thead>
             <tr>
-
                 <th scope="col">İzin Grubu</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
