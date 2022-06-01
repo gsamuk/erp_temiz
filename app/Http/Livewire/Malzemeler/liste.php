@@ -80,7 +80,10 @@ class Liste extends Component
         ]);
     }
 
-
+    public function remove_foto()
+    {
+        $this->item_id = null;
+    }
 
 
     public function foto($id)

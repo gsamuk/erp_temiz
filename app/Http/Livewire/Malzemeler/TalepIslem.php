@@ -10,6 +10,9 @@ use App\Models\LogoItemsPhoto;
 use App\Models\LogoConsumpFiche;
 use App\Models\LogoConsumpFicheDetail;
 
+use App\Models\LogoPurchaseOrders;
+use App\Models\LogoPurchaseOrdersDetail;
+
 class TalepIslem extends Component
 {
     public $error;
@@ -19,6 +22,11 @@ class TalepIslem extends Component
     public $talep_;
     public $talep_sarf_detay;
     public $talep_sarf_fisi;
+
+    public $talep_satinalma_siparisi;
+    public $talep_satinalma_siparisi_detay;
+
+
 
 
     public $item;
@@ -40,6 +48,10 @@ class TalepIslem extends Component
         if ($this->talep->logo_fiche_ref) { // sar fişi oluşmmuşmu
             $this->talep_sarf_detay = LogoConsumpFicheDetail::Where('logicalref', $this->talep->logo_fiche_ref)->get();
             $this->talep_sarf_fisi = LogoConsumpFiche::Where('loagicalref', $this->talep->logo_fiche_ref)->first();
+        }
+
+        if ($this->talep->logo_po_ref) {
+            $this->talep_satinalma_siparisi_detay = LogoPurchaseOrdersDetail::Where("po_ficheref", $this->talep->logo_po_ref)->get();
         }
     }
 

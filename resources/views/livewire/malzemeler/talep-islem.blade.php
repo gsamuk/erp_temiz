@@ -1,7 +1,4 @@
 <div>
-
-    @if($item_id)
-
     <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-xl">
@@ -10,6 +7,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body m-0">
+                    @if($item_id)
                     <div class="row">
                         <div class="col-lg-4">
                             <h5 class="text-danger">{{ $item->stock_name }}</h5>
@@ -40,11 +38,11 @@
                         @endif
 
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    @endif
 
     @if (session()->has('success'))
     <span class="text-info">
@@ -59,15 +57,12 @@
     @endif
 
     @if($talep_detay)
-
     <div class="card">
         <div class="card-header">
             <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
             <small>Açıklama : {{ $talep->demand_desc }}</small>
         </div>
-
         <div class="card-body">
-
             <div class="row">
                 <div class="col-lg-12">
                     <table class="table table-light align-middle table-sm table-striped ">
@@ -77,7 +72,6 @@
                                 <th scope="col">Malzeme</th>
                                 <th scope="col">Talep </th>
                                 <th scope="col">Stok</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -119,8 +113,6 @@
                                     <br><small>{{ $dt->unit_code
                                         }}</small>
                                 </td>
-
-
                             </tr>
                             @endforeach
                         </tbody>
@@ -129,45 +121,37 @@
 
                 @if($talep_sarf_detay)
                 <div class="col-lg-12">
-
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="p-3" style="background-color: rgb(242, 247, 242)">
-                                <h5><b>Sarf Fişi Detayı</b></h5>
-                                <table class="table border align-middle table-sm table-striped">
-                                    <tbody>
-                                        <tr>
-                                            <th>Fiş No</th>
-                                            <td>: {{ $talep_sarf_fisi->loagicalref }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Döküman No</th>
-                                            <td>: {{ $talep_sarf_fisi->doc_number }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Depo</th>
-                                            <td>: {{ $talep_sarf_fisi->warehouse }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Özel Kod</th>
-                                            <td>: {{ $talep_sarf_fisi->special_code }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Fiş Zamanı</th>
-                                            <td>: {{ $talep_sarf_fisi->consump_date }}</td>
-                                        </tr>
-
-
-                                    </tbody>
-                                </table>
-                            </div>
-
+                            <table class="table border align-middle table-sm table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Fiş No</th>
+                                        <td>: {{ $talep_sarf_fisi->loagicalref }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Doc.No</th>
+                                        <td>: {{ $talep_sarf_fisi->doc_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Depo</th>
+                                        <td>: {{ $talep_sarf_fisi->warehouse }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Özel Kod</th>
+                                        <td>: {{ $talep_sarf_fisi->special_code }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fiş Zamanı</th>
+                                        <td>: {{ $talep_sarf_fisi->consump_date }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <div class="col-lg-8">
-                            <div class="p-3" style="background-color: rgb(235, 255, 236)">
-                                <h5><b>Sarf Fişi Malzemeleri</b></h5>
+                            <h5><b>Sarf Fişi Malzemeleri</b></h5>
+                            <div style="background-color: rgb(235, 255, 236)" class="p-1">
                                 <table class="table border align-middle table-sm table-striped">
                                     <thead>
                                         <tr>
@@ -191,21 +175,65 @@
 
                                     </tbody>
                                 </table>
-
                                 <button class="btn btn-sm btn-primary">Fişi Yazdır</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
 
+
+                @if($talep_satinalma_siparisi_detay)
+                <div class="col-lg-12">
+                    <br>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <table class="table border align-middle table-sm table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th>Fiş No</th>
+                                        <td>: {{ $talep->logo_po_ref }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
-
+                        <div class="col-lg-8">
+                            <h5><b>Satınalma Sipariş Fişi Malzemeleri</b></h5>
+                            <div style="background-color: rgb(250, 231, 213)" class="p-1">
+                                <table class="table border align-middle table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Stok No</th>
+                                            <th scope="col">Malzeme</th>
+                                            <th scope="col">Miktar</th>
+                                            <th scope="col">Birim Tutar</th>
+                                            <th scope="col">Toplam Tutar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($talep_satinalma_siparisi_detay as $d)
+                                        <tr>
+                                            <td>{{ $d->stock_code }}</td>
+                                            <th>{{ $d->stock_name }}</th>
+                                            <th>{{ number_format($d->quantity,0,'.',',') }} <small>{{ $d->unit_code }}
+                                                </small></th>
+                                            <th>{{ number_format($d->unit_price,2,'.',',') }}</th>
+                                            <th>{{ number_format($d->amount,2,'.',',') }}</th>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    @endif
-
                 </div>
+                @endif
             </div>
-            @endif
         </div>
-
-        <script>
-
-        </script>
+    </div>
+    @endif
+</div>

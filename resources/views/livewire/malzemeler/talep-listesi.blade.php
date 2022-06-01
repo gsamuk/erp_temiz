@@ -1,11 +1,11 @@
 <div>
     <div class="row">
-        <div class="col-lg-5 col-md-12 col-sm-12">
+        <div class="col-lg-4 col-md-12 col-sm-12">
             <div class="card">
 
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-xxl-4 col-sm-6 mb-1">
+                        <div class="col-4">
                             <div class="search-box">
                                 <input type="text" class="form-control search" wire:model="no_search"
                                     placeholder="Talep No">
@@ -13,7 +13,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xxl-4 col-sm-6">
+                        <div class="col-4">
                             <div class="search-box">
                                 <input type="text" class="form-control search" wire:model="user_search"
                                     placeholder="Talep Sahibi">
@@ -21,9 +21,10 @@
                             </div>
                         </div>
 
-                        <div class="col-xxl-4">
+                        <div class="col-4">
                             <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
-                                class="btn btn-primary "> <i class="ri-stack-line"></i> Yeni Talep Oluştur</a>
+                                class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-add-line "></i>
+                                Yeni Talep</a>
                         </div>
 
                     </div>
@@ -83,9 +84,6 @@
                                     <th scope="col" style="width:50px;">No</th>
                                     <th scope="col" style="width:100px;">Talep Yapan</th>
                                     <th scope="col" style="width:100px;">Malzeme </th>
-                                    <th scope="col" style="width:100px;">Özel Kod </th>
-
-                                    <th scope="col">Durum</th>
                                     <th scope="col">Zamanı</th>
                                     <th scope="col" style="width:65px;"></th>
                                 </tr>
@@ -105,30 +103,30 @@
                                             href="javascript:;">{{
                                             $d->user_name }}</a></td>
                                     <td class="owner"><b>{{ $cnt }} Kalem</b></td>
-                                    <td class="owner">{{ $d->special_code }}</td>
 
                                     <td class="owner">
-                                        @if($d->status == 0) <span class="text-info">Beklemede</span>@endif
-                                        @if($d->status == 1) <span class="text-success">İşleme Alındı</span>@endif
-                                        @if($d->status == 9) <span class="text-danger">Reddedildi</span>@endif
-
-
-                                    </td>
-                                    <td class="owner">{{
-                                        \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans()
-                                        }}
+                                        <small>
+                                            {{
+                                            \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans()
+                                            }}
+                                        </small>
                                     </td>
                                     <td class="owner">
                                         @if($d->status == 1)
                                         <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                             class="btn btn-sm btn-success btn-block">İşlem Detayı <i
-                                                class="ri-arrow-right-s-line"></i></button>
+                                                class="ri-arrow-right-s-fill "></i></button>
                                         @endif
 
                                         @if($d->status == 0)
                                         <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                             class="btn btn-sm btn-info btn-block">Karşılama <i
-                                                class="ri-arrow-right-s-line"></i></button>
+                                                class="ri-arrow-right-s-fill "></i></button>
+                                        @endif
+
+                                        @if($d->status == 9)
+                                        <button class="btn btn-soft-danger waves-effect waves-light" disabled>Reddedildi
+                                        </button>
                                         @endif
 
 
@@ -159,14 +157,14 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-7 col-md-12 col-sm-12">
+        <div class="col-lg-8 col-md-12 col-sm-12">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif
 
 
         @if($talep_islem_id)
-        <div class="col-lg-7 col-md-12 col-sm-12">
+        <div class="col-lg-8 col-md-12 col-sm-12">
             @livewire('malzemeler.talep-islem')
         </div>
         @endif

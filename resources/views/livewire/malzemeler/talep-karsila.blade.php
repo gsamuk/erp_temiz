@@ -1,6 +1,6 @@
 <div>
 
-    @if($item_id)
+
     <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-xl">
@@ -9,6 +9,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body m-0">
+                    @if($item_id)
                     <div class="row">
                         <div class="col-lg-4">
                             <h5 class="text-danger">{{ $item->stock_name }}</h5>
@@ -39,11 +40,12 @@
                         @endif
 
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    @endif
+
 
     @if (session()->has('success'))
     <span class="text-info">
@@ -62,11 +64,10 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
-            <small>Açıklama : {{ $talep->demand_desc }}</small>
+            <small>Açıklama : {{ $talep->demand_desc }}</small> {{ $item_id }}
         </div>
 
         <div class="card-body">
-
             <div class="row">
                 <div class="col-lg-12">
                     <table class="table table-light align-middle table-sm table-striped ">
@@ -89,11 +90,7 @@
                             $val = 0;
                             $val2 = 0;
                             $disable="";
-
                             $stok = $dt->quantity;
-
-
-
                             if($item_detail->onhand_quantity >= $dt->quantity){
                             $val = $dt->quantity;
                             }
@@ -157,12 +154,11 @@
                                         >
                                     </td>
 
-                                    <td><input type="number" min="0" @if($dt->status > 0) disabled @endif
-
+                                    <td>
+                                        <input type="number" min="0" @if($dt->status > 0) disabled @endif
                                         wire:model.debunce.1000ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
                                         x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         number_format($val2,0,'.',',') }}')"
-
                                         class="form-control"
                                         wire:loading.attr="disabled"
                                         >
@@ -292,10 +288,8 @@
                         @endif
                         <div class="col-lg-12 mt-3">
                             Yetkili personel stoktan karşılama yada satınalma veri giriş alanlarını değiştirerek kayıt
-                            işlemi
-                            yapmalıdır.
+                            işlemi yapmalıdır.
                         </div>
-
 
                         @if($uyari)
                         <div class="col-lg-12 mt-3">
@@ -312,8 +306,6 @@
                             </div>
                         </div>
                         @endif
-
-
 
                         <div class="col-lg-12 mt-3">
                             @if(isset($s_have) && isset($k_have) )
@@ -332,26 +324,15 @@
                             <div wire:loading>
                                 <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
                             </div>
-
                         </div>
                     </div>
-
-
-
                 </div>
-
-
                 @endif
-
-
-
-
-
             </div>
         </div>
-        @endif
     </div>
+    @endif
 
-    <script>
 
-    </script>
+
+</div>

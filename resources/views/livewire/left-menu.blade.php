@@ -30,8 +30,7 @@
         <div id="scrollbar">
             <div class="container-fluid">
 
-                <div id="two-column-menu">
-                </div>
+
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
@@ -49,9 +48,7 @@
                             <i class="ri-stack-line"></i> <span>Malzeme Yönetimi</span>
                         </a>
                         <div class="collapse menu-dropdown" id="m3">
-
                             <ul class="nav nav-sm flex-column">
-
 
                                 @if(Erp::izin('items_list'))
                                 <li class="nav-item">
@@ -64,7 +61,8 @@
 
                                 @if(Erp::izin('items_create'))
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-key="t-google">
+                                    <a href="#" wire:click="$emit('SetPage', 'malzemeler.ekle')" class="nav-link"
+                                        data-key="t-google">
                                         Malzeme Ekle
                                     </a>
                                 </li>

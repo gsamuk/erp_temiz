@@ -6,13 +6,13 @@
         }
     </style>
 
-    <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
+    <div id="malzemeModal" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen p-3">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <div class="modal-body m-0">
+                <div class="modal-body">
                     @livewire('malzemeler.liste', ['ch'=> true])
                 </div>
 
@@ -20,9 +20,8 @@
         </div>
     </div>
 
-    <div id="ozelKodModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog  modal-xl">
+    <div id="ozelKodModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
@@ -53,12 +52,18 @@
 
 
     <div class="row">
-        <div class="col-xl-6 col-md-12">
+        <div
+            class="@if($item_photos)  col-xl-7 col-lg-7 col-md-12 col-sm-12 @else col-xl-10 col-lg-10 col-sm-12 @endif">
             <div class="card">
                 <div class="card-header ">
                     <span class="float-end">
                         <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
-                            class="btn btn-secondary btn-sm "> <i class="ri-stack-line"></i> Talep Listesi</a>
+                            class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Talep
+                            Listesi</a>
+
+                        <a href="#" wire:click="$emit('SetPage', 'malzemeler.liste')"
+                            class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Malzeme
+                            Listesi</a>
                     </span>
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
@@ -70,136 +75,130 @@
                         @csrf
                         <div class="row">
 
-                            <div class="col-lg-12 col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-nowrap" style="width: 60%; min-width:800px">
-                                        <tr>
-                                            <th class="px-2">
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Tarih</label>
+                            <div class=" @if($item_photos) col-12 @else col-xl-10 col-lg-10 col-sm-12 @endif ">
+                                <table class="table table-sm table-nowrap">
+                                    <tr>
+                                        <th class="px-1">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Tarih</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="date" step="any" wire:model="zaman"
+                                                        class="form-control form-control-sm mb-1 rounded-0">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Proje Kodu</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="hidden" wire:model="project_ref_id">
+                                                    <input type="text" wire:model="project_code" name="proje_kodu"
+                                                        data-bs-toggle="modal" data-bs-target="#projectsModal"
+                                                        class="form-control form-control-sm mb-1 rounded-0"
+                                                        readonly="readonly">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Özel Kod</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="text" data-bs-toggle="modal" name="special_code"
+                                                        wire:model="special_code" data-bs-target="#ozelKodModal"
+                                                        class="form-control form-control-sm mb-1 rounded-0"
+                                                        readonly="readonly">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Açıklama</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <input type="text" name="demand_desc" wire:model="demand_desc"
+                                                        class="form-control form-control-sm mb-1 rounded-0">
+                                                </div>
+                                            </div>
+
+                                        </th>
+                                        <th class="px-1">
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">İş Yeri</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                        <select class="form-select">
+                                                            <option value="0" name="is_yeri" selected>000,
+                                                                Merkez</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-lg-8">
-                                                        <input type="date" step="any" wire:model="zaman"
-                                                            class="form-control form-control-sm mb-1 rounded-0">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Bölüm</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                        <select class="form-select">
+                                                            <option value="0" name="bolum" selected>000, Merkez
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Fabrika</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="input-group input-group-sm  mb-1 rounded-0">
+                                                        <select class="form-select">
+                                                            <option value="0" name="fabrika" selected>000,
+                                                                Merkez</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label class="form-label">Ambar</label>
+                                                </div>
+                                                <div class="col-lg-8">
+                                                    <div class="input-group input-group-sm ">
+                                                        <select wire:model="warehouse" name="warehouse"
+                                                            class="form-select">
+                                                            @foreach ($warehouses as $d)
+                                                            <option value="{{ $d->warehouse_no }}">{{
+                                                                $d->warehouse_name}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Proje Kodu</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <input type="hidden" wire:model="project_ref_id">
-                                                        <input type="text" wire:model="project_code" name="proje_kodu"
-                                                            data-bs-toggle="modal" data-bs-target="#projectsModal"
-                                                            class="form-control form-control-sm mb-1 rounded-0"
-                                                            readonly="readonly">
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Özel Kod</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <input type="text" data-bs-toggle="modal" name="special_code"
-                                                            wire:model="special_code" data-bs-target="#ozelKodModal"
-                                                            class="form-control form-control-sm mb-1 rounded-0"
-                                                            readonly="readonly">
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Açıklama</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <input type="text" name="demand_desc" wire:model="demand_desc"
-                                                            class="form-control form-control-sm mb-1 rounded-0">
-                                                    </div>
-                                                </div>
-
-                                            </th>
-
-
-                                            <th class="px-1">
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">İş Yeri</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                            <select class="form-select">
-                                                                <option value="0" name="is_yeri" selected>000,
-                                                                    Merkez</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Bölüm</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                            <select class="form-select">
-                                                                <option value="0" name="bolum" selected>000, Merkez
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Fabrika</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="input-group input-group-sm  mb-1 rounded-0">
-                                                            <select class="form-select">
-                                                                <option value="0" name="fabrika" selected>000,
-                                                                    Merkez</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <label class="form-label">Ambar</label>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="input-group input-group-sm ">
-                                                            <select wire:model="warehouse" name="warehouse"
-                                                                class="form-select">
-                                                                @foreach ($warehouses as $d)
-                                                                <option value="{{ $d->warehouse_no }}">{{
-                                                                    $d->warehouse_name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </table>
-                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </table>
                             </div>
 
 
                             <div class="col-lg-12 col-md-12 mt-4">
-
                                 <div class="table-responsive">
                                     <table class="table table-sm table-striped align-middle table-nowrap">
                                         <thead class="table-light">
                                             <tr>
                                                 <th style="width:20px;"></th>
-
                                                 <th style="width:70px;">S.Kodu</th>
                                                 <th style="width:300px;">Malzeme</th>
                                                 <th style="width:100px;">Miktar</th>
@@ -216,9 +215,6 @@
                                             @foreach ($inputs as $key => $value)
                                             <tr>
                                                 <td scope="row"> {{$s}} {{ $line }}</td>
-
-
-
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <input type="text" class="form-control border-dashed"
@@ -228,7 +224,6 @@
                                                             wire:model="kod.{{ $value }}">
                                                     </div>
                                                 </td>
-
 
                                                 <td>
                                                     <div class="input-group input-group-sm">
@@ -249,8 +244,6 @@
                                                     </div>
                                                 </td>
 
-
-
                                                 <td>
                                                     <div class="input-group input-group-sm">
                                                         <select name="birim[{{ $value }}]"
@@ -266,7 +259,6 @@
                                                     </div>
                                                 </td>
 
-
                                                 <td>
                                                     <div class="input-group input-group-sm ">
                                                         <input type="text" class="form-control border-dashed"
@@ -274,9 +266,6 @@
                                                             wire:model.lazy="desc.{{ $value }}">
                                                     </div>
                                                 </td>
-
-
-
 
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-danger"
@@ -292,9 +281,7 @@
                                             @endforeach
                                             <tr>
                                                 <th scope="row" colspan="6"></th>
-                                                <td>
-
-                                                    <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
+                                                <td> <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
                                                         wire:click.prevent="add({{$i}})"><i
                                                             class="mdi mdi-plus"></i></button>
                                                 </td>
@@ -335,7 +322,7 @@
                                         <button type="submit" class="btn btn-success" @if(!$inputs) disabled @endif> <i
                                                 class="mdi mdi-content-save"></i>Kaydet</button>
 
-                                        <div wire:loading>
+                                        <div wire:loading class="p-3">
                                             İşleniyor Lütfen Bekleyiniz...
                                         </div>
                                     </div>
@@ -351,22 +338,22 @@
         </div>
 
         @if($item_photos)
-        <div class="col-xl-6 col-md-12">
+        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
             <div class="card">
                 <div class="card-header ">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                             Seçili Malzeme Fotoğrafları</h5>
-
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         @foreach ($item_photos as $p)
-                        <div class="col-4">
-                            <div class="bg-light p-2 m-1">
+                        <div class="col-6">
+                            <div class="bg-light p-2">
                                 <div>
-                                    <img src="{{ asset('public/storage/images/items/thumb/'.$p['foto_path']) }}">
+                                    <img style="width:100%"
+                                        src="{{ asset('public/storage/images/items/'.$p['foto_path']) }}">
                                 </div>
                                 <div>
                                     <h6> {{ $p['stock_name'] }}</h6>

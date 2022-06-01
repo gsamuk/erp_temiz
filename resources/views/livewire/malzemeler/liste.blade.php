@@ -1,18 +1,21 @@
 <div>
     <div class="row">
-        <div class="col-xl-6 col-lg-12">
-            <div class="card">
-                <div class="card-header">
+        <div class="@if($item_id) col-xl-7 col-lg-7 col-md-12 col-sm-12 @else col-xl-12 @endif ">
+            <div class="card ff-secondary">
+                <div class="card-header p-2">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1"> <i class="ri-add-line align-bottom me-1"></i>
                             Malzemeler</h5>
                         <div class="flex-shrink-0">
-                            <button wire:click="detay_goster({{ !$details }})" class="btn btn-info add-btn"><i
+                            <button wire:click="detay_goster({{ !$details }})"
+                                class="btn btn-soft-primary waves-effect waves-light"><i
                                     class="ri-stack-fill  align-bottom me-1"></i> Detaylı Liste
                             </button>
                             @if(!$ch)
                             <a href="#" wire:click="$emit('SetPage', 'malzemeler.fotograf')"
-                                class="btn btn-success add-btn"><i class="ri-image-fill align-bottom me-1"></i> Fotoğraf
+                                class="btn btn-soft-primary waves-effect waves-light"><i
+                                    class="ri-image-fill align-bottom me-1"></i>
+                                Fotoğraf
                                 Yönetimi
                             </a>
                             @endif
@@ -20,8 +23,8 @@
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <div class="row mb-3">
+                <div class="card-body p-2">
+                    <div class="row mb-1">
                         <div class="col-md-2">
                             <div class="search-box">
                                 <input type="text" class="form-control search m-1" wire:model.debounce.500ms="code"
@@ -57,18 +60,13 @@
                                 @endforeach
                             </select>
                         </div>
-
-
                     </div>
 
-
-
                     <div class="table-responsive">
-                        <table class="table table-sm  align-middle  table-bordered  table-striped table-nowrap"
-                            id="itemTable" wire:loading.class="opacity-50">
+                        <table class="table table-sm  align-middle  table-striped table-nowrap" id="itemTable"
+                            wire:loading.class="opacity-50">
                             <thead class="table-light">
                                 <tr>
-
                                     <th class="sort" data-sort="kod" scope="col" style="width:55px;"></th>
                                     <th class="sort" data-sort="kod" scope="col" style="width:55px;">Kod</th>
 
@@ -82,9 +80,9 @@
                                     <th class="sort" data-sort="name" scope="col">S.Alma Miktarı</th>
                                     <th class="sort" data-sort="name" scope="col">S.Alma Tutarı</th>
                                     @endif
-
                                     <th class="sort" data-sort="tur" scope="col">Kart Tipi</th>
                                     <th class="sort" data-sort="tur" scope="col">Tür</th>
+                                    <th class="sort" data-sort="tur" scope="col">Detay</th>
                                 </tr>
 
                             </thead>
@@ -93,33 +91,41 @@
                                 @foreach ($items as $item)
                                 @php
                                 $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $item->logicalref)->first();
+                                $line ="";
+                                if(isset($item_id) && $item_id == $item->logicalref){
+                                $line = "bg-soft-primary";
+                                }
                                 @endphp
-                                <tr>
+                                <tr class="{{ $line }}">
                                     <td class="owner">
                                         @if($photo)
                                         <a href="#" wire:click="foto({{ $item->logicalref }})">
                                             <img src="{{ asset('public/storage/images/items/thumb/'.$photo->foto_path) }}"
-                                                style="height: 50px">
+                                                style="width: 50px">
                                         </a>
-
                                         @else
-                                        <img class="img-thumbnail" style="height: 50px"
-                                            src="{{ asset('/public/images/default.png')}}">
+                                        <a href="#" wire:click="foto({{ $item->logicalref }})">
+                                            <img style="width: 50px" src="{{ asset('/public/images/default.png')}}">
+                                        </a>
                                         @endif
                                     </td>
 
                                     <td class="owner">
+
                                         {{ $item->stock_code }}
+
                                     </td>
 
                                     @if($ch)
                                     <td class="owner">
                                         <button wire:click.prevent="$emit('getItem', {{ $item }})"
-                                            class="btn btn-success btn-sm"> Ekle </button>
+                                            class="btn btn-outline-danger btn-sm"> Ekle </button>
                                     </td>
                                     @endif
-                                    <td class="owner">
-                                        {{ $item->stock_name }}
+                                    <td>
+                                        <a href="#" wire:click="foto({{ $item->logicalref }})">
+                                            <b> {{ $item->stock_name }}</b>
+                                        </a>
                                     </td>
 
 
@@ -132,6 +138,11 @@
 
                                     <td class="owner">{{ $item->cardtype_name }}</td>
                                     <td class="owner">{{ $item->stock_type }}</td>
+                                    <td class="owner">
+                                        <a href="#" class="btn btn-soft-primary waves-effect waves-light btn-sm"
+                                            wire:click="foto({{ $item->logicalref }})">
+                                            Detay </a>
+                                    </td>
                                 </tr>
                                 @endforeach
 
@@ -147,48 +158,48 @@
             </div>
         </div>
 
-
         @if($item_id)
-        <div class="col-xl-6 col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <h5 class="text-danger">{{ $item->stock_name }}</h5>
-                            <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
-                            <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
-                            <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-                            <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else
-                                    0 @endif </b> </small>
-                            <hr>
-                            <h5>Son Satınalma Tutarları</h5>
-                            <small>1.500 X Adet ABC Ltd. 25.10.2021</small><br>
-                            <small>1.400 X Adet</small><br>
-                            <small>1.500 X Adet</small><br>
-                            <small>1.600 X Adet</small><br>
-                        </div>
+        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
 
-                        @if($item_photos)
-                        <div class="col-lg-8">
-                            <div class="row ">
-                                @foreach ($item_photos as $p)
-                                <div class=" col-xxl-6 col-xl-6 col-sm-12">
-                                    <img class=" img-fluid mx-auto border p-1 m-2"
-                                        src="{{ asset('public/storage/images/items/'.$p->foto_path) }}">
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endif
-
+            <div class="row bg-soft-info p-2  ff-secondary">
+                <div class="col-12">
+                    <div class="d-flex justify-content-end">
+                        <button wire:click="remove_foto()"
+                            class="btn btn-soft-primary waves-effect waves-light btn-sm">Kapat</button>
                     </div>
                 </div>
+
+                <div class="col-lg-5">
+                    <h5 class="text-danger">{{ $item->stock_name }}</h5>
+                    <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
+                    <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
+                    <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
+                    <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else 0 @endif
+                        </b>
+                    </small>
+                    <hr>
+                    <h5>Son Satınalma Tutarları</h5>
+                    <small>1.500 X Adet ABC Ltd. 25.10.2021</small><br>
+                    <small>1.400 X Adet</small><br>
+                    <small>1.500 X Adet</small><br>
+                    <small>1.600 X Adet</small><br>
+                </div>
+
+                @if($item_photos)
+                <div class="col-lg-7">
+                    <div class="row ">
+                        @foreach ($item_photos as $p)
+                        <div class="col-xxl-6 col-xl-6 col-sm-12">
+                            <img class=" img-fluid mx-auto border p-1 m-2"
+                                src="{{ asset('public/storage/images/items/'.$p->foto_path) }}">
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
             </div>
         </div>
         @endif
-
-
     </div>
-
-
 </div>

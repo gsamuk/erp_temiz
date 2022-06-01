@@ -15,6 +15,10 @@
     @elseif($page == 'malzemeler.taleplerim')
     @livewire('malzemeler.taleplerim')
 
+
+    @elseif($page == 'malzemeler.ekle')
+    @livewire('malzemeler.ekle')
+
     @elseif($page == 'satinalma.siparis-olustur')
     @livewire('satinalma.siparis-olustur')
 
@@ -22,15 +26,14 @@
     @livewire('satinalma.siparis')
 
 
-
-
-
     @else
     DashBoard
     @endif
 
     <div wire:loading>
-        Processing Payment...
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only">Yükleniyor...</span>
+        </div>
     </div>
-    {{ $page }}
+
 </div>
