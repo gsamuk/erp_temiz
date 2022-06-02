@@ -15,11 +15,7 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session()->has('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                    @endif
+
                     <div class="table-responsive">
                         <table class="table table-sm table-striped table-nowrap align-middle mb-0">
                             <thead class="table-light text-muted">

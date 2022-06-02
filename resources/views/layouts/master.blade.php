@@ -45,7 +45,7 @@
 <!-- JAVASCRIPT -->
 @include('layouts.vendor-scripts')
 @livewireScripts
-
+@stack('scripts')
 <script>
     window.addEventListener('OpenModal', event => { 
         console.log(event.detail);            
