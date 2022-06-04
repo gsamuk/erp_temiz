@@ -8,7 +8,7 @@ use App\Models\Demand;
 use App\Models\LogoItemsPhoto;
 use App\Models\LogoItems;
 use App\Http\Controllers\LogoRest;
-use Exception;
+
 
 class TalepKarsila extends Component
 {
@@ -16,6 +16,8 @@ class TalepKarsila extends Component
     public $talep_detay;
     public $talep_id;
     public $error;
+
+    public $for_manage = true; // yönetim durumu aktif , onay işlemleri aktif olur
 
     public $talep_line;
 

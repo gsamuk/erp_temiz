@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class UserCompany extends Model
 {
-    use HasFactory;
-    protected $table = "userCompany";
+
+    protected $primaryKey = 'id';
+    protected $table = "user_company";
     public $timestamps = false;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Users;
 use Livewire\Component;
 use App\Models\Permissions;
 use App\Models\UserPermissions;
+use App\Models\UserCompany;
 
 class IzinYonetimi extends Component
 {
@@ -22,7 +23,9 @@ class IzinYonetimi extends Component
     public function render()
     {
         $permissions = Permissions::orderby('group_name', 'asc')->get();
-        return view('livewire.users.izin-yonetimi', ['permissions' => $permissions]);
+        $user_company = UserCompany::Where('user_id', $this->user_id)->get();
+
+        return view('livewire.users.izin-yonetimi', ['permissions' => $permissions, 'user_company' => $user_company]);
     }
 
 

@@ -64,7 +64,7 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title mb-0 flex-grow-1">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
-            <small>Açıklama : {{ $talep->demand_desc }}</small> {{ $item_id }}
+            <small>Açıklama : {{ $talep->demand_desc }}</small> {{ $item_id }} > {{ $for_manage }}
         </div>
 
         <div class="card-body">
@@ -77,9 +77,11 @@
                                 <th scope="col">Malzeme</th>
                                 <th scope="col">Talep </th>
                                 <th scope="col">Stok</th>
+                                @if($for_manage)
                                 <th scope="col" style="width:90px;">Karşılanan</th>
                                 <th scope="col" style="width:90px;">Satınalma</th>
                                 <th scope="col" style="width:90px;"></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -139,7 +141,7 @@
                                         <br><small>{{ $dt->unit_code
                                             }}</small>
                                     </td>
-
+                                    @if($for_manage)
                                     <td>
                                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         $item_detail }}')">
@@ -166,7 +168,10 @@
 
                                     <td><button wire:click="cikar({{ $dt->id }})" class="btn btn-sm btn-danger"
                                             wire:loading.attr="disabled" @if($dt->status > 0) disabled
-                                            @endif>Çıkar</button></td>
+                                            @endif>Çıkar</button>
+                                    </td>
+                                    @endif
+
                                     </tr>
                                     @endforeach
                         </tbody>
@@ -180,6 +185,9 @@
                     </div>
                 </div>
                 @else
+
+
+                @if($for_manage)
                 <div class="col-lg-12">
                     <div class="row">
 
@@ -327,6 +335,11 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+
+
+
                 @endif
             </div>
         </div>

@@ -14,17 +14,9 @@
                         </div>
 
                         <div class="col-4">
-                            <div class="search-box">
-                                <input type="text" class="form-control search" wire:model="user_search"
-                                    placeholder="Talep Sahibi">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-
-                        <div class="col-4">
                             <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
-                                class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-add-line "></i>
-                                Yeni Talep</a>
+                                class="btn btn-soft-primary waves-effect waves-light">
+                                <i class="ri-add-line "></i> Yeni Talep</a>
                         </div>
 
                     </div>
@@ -82,7 +74,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col" style="width:50px;">No</th>
-                                    <th scope="col" style="width:100px;">Talep Yapan</th>
+
                                     <th scope="col" style="width:100px;">Malzeme </th>
                                     <th scope="col">Zamanı</th>
                                     <th scope="col" style="width:65px;"></th>
@@ -98,9 +90,6 @@
                                 @endphp
                                 <tr class="@if($d->id == $talep_satir_id) table-info @endif">
                                     <td class="owner">{{ $d->id }}</td>
-                                    <td class="owner"><a wire:click="set_username('{{ $d->user_name }}')"
-                                            href="javascript:;">{{
-                                            $d->user_name }}</a></td>
                                     <td class="owner"><b>{{ $cnt }} Kalem</b></td>
 
                                     <td class="owner">{{
@@ -145,6 +134,23 @@
 
             </div>
         </div>
+
+
+
+
+        @if($talep_detay_id)
+        <div class="col-lg-8 col-md-12 col-sm-12">
+            @livewire('malzemeler.talep-karsila', ['for_manage' => false])
+        </div>
+        @endif
+
+
+        @if($talep_islem_id)
+        <div class="col-lg-8 col-md-12 col-sm-12">
+            @livewire('malzemeler.talep-islem')
+        </div>
+        @endif
+
 
 
     </div>

@@ -1,51 +1,68 @@
 <div>
     <div class="row">
-        <div class="col-xxl-6">
+        <div class="col-xxl-4">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Malzeme Ekle</h4>
-
-                </div><!-- end card header -->
+                    <h4 class="card-title mb-0 flex-grow-1">
+                        Malzeme Ekle {{ $malzeme }}</h4>
+                </div>
 
                 <div class="card-body">
                     <div class="live-preview">
                         <form action="javascript:void(0);">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="firstNameinput" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" placeholder="Enter your firstname"
-                                            id="firstNameinput">
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="lastNameinput" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" placeholder="Enter your lastname"
-                                            id="lastNameinput">
-                                    </div>
-                                </div>
-                                <!--end col-->
 
-                                <div class="col-lg-12">
-                                    <div class="text-end">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <label for="malzeme" class="form-label">Malzeme Adı</label>
+                                        <input type="text" wire:model.debunce.500ms="malzeme" class="form-control"
+                                            placeholder="Malzeme Adı Yazınız" id="malzeme">
                                     </div>
                                 </div>
-                                <!--end col-->
                             </div>
-                            <!--end row-->
                         </form>
                     </div>
 
                 </div>
             </div>
-        </div> <!-- end col -->
+        </div>
+        @if($bul)
+        <div class="col-xxl-4">
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Benzer Stok Kartları</h4>
+                </div>
+                <div class="card-body">
+                    <div class="live-preview">
+                        <div class="row">
+                            <style>
+                                em {
+                                    color: Red;
+                                }
+                            </style>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <ul id="search1-results">
+                                        @foreach ($bul['hits'] as $b)
+                                        <li>{!! $b['_highlightResult']['stock_name']['value'] !!}
+                                            <small class="text-danger">
+                                                SKU : {{ $b['stock_code'] }}
+                                            </small>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+        @endif
 
     </div>
-    <!--end row-->
+
 
 
 </div>

@@ -14,4 +14,20 @@ class HomeController extends Controller
     {
         return view('index');
     }
+
+
+    public function mobile()
+    {
+        return view('mobile_index');
+    }
+
+    public function talep_olustur()
+    {
+        return view('mobile_talep_olustur');
+    }
+
+    public function talepler()
+    {
+        return view('mobile_talepler');
+    }
 }
