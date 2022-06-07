@@ -1,5 +1,4 @@
 <div>
-
     <table class="table table-sm table-nowrap mb-0">
         <thead>
             <tr>

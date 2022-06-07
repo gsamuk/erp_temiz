@@ -40,7 +40,7 @@
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
-
+                        @if(!$item_id)
                         <div class="col-md-3">
                             <select class="form-select m-1" wire:model="tur">
                                 <option value="">-- Cart Tipi Seç --</option>
@@ -60,6 +60,7 @@
                                 @endforeach
                             </select>
                         </div>
+                        @endif
                     </div>
 
                     <div class="table-responsive">
@@ -74,6 +75,7 @@
                                     <th class="sort" data-sort="name" scope="col" style="width:55px;"></th>
                                     @endif
                                     <th class="sort" data-sort="name" scope="col">Malzeme</th>
+                                    @if(!$item_id)
                                     @if($details)
                                     <th class="sort" data-sort="name" scope="col">Stok</th>
                                     <th class="sort" data-sort="name" scope="col">Ort. Fiyat</th>
@@ -82,6 +84,7 @@
                                     @endif
                                     <th class="sort" data-sort="tur" scope="col">Kart Tipi</th>
                                     <th class="sort" data-sort="tur" scope="col">Tür</th>
+                                    @endif
                                     <th class="sort" data-sort="tur" scope="col">Detay</th>
                                 </tr>
 
@@ -110,11 +113,7 @@
                                         @endif
                                     </td>
 
-                                    <td class="owner">
-
-                                        {{ $item->stock_code }}
-
-                                    </td>
+                                    <td class="owner"> {{ $item->stock_code }} </td>
 
                                     @if($ch)
                                     <td class="owner">
@@ -128,7 +127,7 @@
                                         </a>
                                     </td>
 
-
+                                    @if(!$item_id)
                                     @if($details)
                                     <td class="owner">{{ $item->onhand_quantity }}</td>
                                     <td class="owner">{{ number_format($item->average_price,2) }}</td>
@@ -138,6 +137,8 @@
 
                                     <td class="owner">{{ $item->cardtype_name }}</td>
                                     <td class="owner">{{ $item->stock_type }}</td>
+                                    @endif
+
                                     <td class="owner">
                                         <a href="#" class="btn btn-soft-primary waves-effect waves-light btn-sm"
                                             wire:click="foto({{ $item->logicalref }})">
@@ -161,7 +162,7 @@
         @if($item_id)
         <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
 
-            <div class="row bg-soft-info p-2  ff-secondary">
+            <div class="row bg-soft-warning p-2  ff-secondary">
                 <div class="col-12">
                     <div class="d-flex justify-content-end">
                         <button wire:click="remove_foto()"

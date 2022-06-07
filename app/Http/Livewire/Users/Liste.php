@@ -28,17 +28,25 @@ class Liste extends Component
     protected $rules = [
         'name' => 'required',
         'surname' => 'required',
-        'user_name' => 'required',
+        'user_name' => 'required|unique:users',
         'password' => 'required',
-        'email' => 'email',
+        'email' => 'required|email|unique:users',
     ];
     protected $messages = [
         'name.required' => 'Lütfen Ad Giriniz.',
         'surname.required' => 'Lütfen Soyad Giriniz.',
         'user_name.required' => 'Lütfen Kullanıcı Adı Giriniz.',
+        'user_name.unique' => 'Bu kullanıcı adı kullanılıyor',
         'password.required' => 'Lütfen Şifre Giriniz.',
         'email.email' => 'Geçersiz Email Adresi',
+        'email.unique' => 'E-mail Adresi Kullanılıyor',
     ];
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
 
     public function render()
     {

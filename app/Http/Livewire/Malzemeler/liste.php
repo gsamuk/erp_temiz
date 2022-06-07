@@ -49,12 +49,8 @@ class Liste extends Component
 
     public function render()
     {
-        if ($this->details) {
-            $db = new LogoItems;
-        } else {
-            $db = new LogoDb;
-        }
 
+        $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);

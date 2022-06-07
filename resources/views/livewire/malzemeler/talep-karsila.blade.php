@@ -197,7 +197,7 @@
                             <div class="p-3" style="background-color: rgb(235, 255, 236)">
                                 <h5><b>Stoktan Karşılama Listesi</b></h5>
 
-                                <table class="table border align-middle table-sm table-striped">
+                                <table class="table border align-middle table-sm table-striped" style="width: 100%">
                                     <thead class="table-success">
                                         <tr>
                                             <th scope="col">Kodu</th>
@@ -253,7 +253,7 @@
                         <div class="col-lg-6">
                             <div class="p-3" style="background-color: rgb(255, 250, 201)">
                                 <h5><b>Satın Alma Listesi</b></h5>
-                                <table class="table border align-middle table-sm table-striped ">
+                                <table class="table border align-middle table-sm table-striped " style="width: 100%">
                                     <thead class="table-warning">
                                         <tr>
                                             <th scope="col">Kodu</th>
