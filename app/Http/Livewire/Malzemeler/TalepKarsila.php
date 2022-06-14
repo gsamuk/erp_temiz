@@ -70,6 +70,48 @@ class TalepKarsila extends Component
         }
     }
 
+    public function unapproved(){
+
+        DemandDetail::Where("demand_id", $this->talep_id)->update(["apq" => null, "acq"=> null ]);
+  
+        $dm = Demand::find($this->talep_id);
+        $dm->approved = 0;
+        $dm->save();
+
+        $this->TalepKarsila($this->talep_id);
+    }
+
+    public function approved()
+    {
+
+
+        if ($this->karsila[$this->talep_id]) {
+            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+                    $item->acq = $miktar;
+                    $item->save();
+                }
+            }
+        }
+
+        if ($this->satinal[$this->talep_id]) {
+            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+                    $item->apq = $miktar;
+                    $item->save();
+                }
+            }
+        }
+
+        $dm = Demand::find($this->talep_id);
+        $dm->approved = 1;
+        $dm->save();
+
+        $this->TalepKarsila($this->talep_id);
+    }
+
     public function kaydet()
     {
         $sarf_items = array();

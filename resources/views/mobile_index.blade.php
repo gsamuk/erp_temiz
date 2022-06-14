@@ -13,44 +13,95 @@
         <div class="wide-block p-0">
 
             <div class="justify-content-center">
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
+                <!-- Iconed Multi Listview -->
 
-                            <td class="text-center">
-                                <a href="/mobile/malzeme/talep_olustur">
-                                    <span class="iconedbox iconedbox-lg text-primary">
-                                        <ion-icon name="add-circle"></ion-icon>
-                                    </span>
-                                    <h4> <strong>Talep Ekle</strong></h4>
+                <ul class="listview image-listview">
+
+
+
+                    <li class="multi-level">
+                        <a href="#" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="duplicate-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                <div>Talep Oluştur</div>
+                            </div>
+                        </a>
+                        <!-- sub menu -->
+                        <ul class="listview image-listview">
+                            <li>
+                                <a href="/mobile/malzeme/talep_olustur" class="item">
+                                    <div class="icon-box bg-dark">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Malzeme Talebi
+                                            <div class="text-muted  ">2 Bekleyen | 5 Onaylanan | 2 Red</div>
+                                        </div>
+                                    </div>
                                 </a>
-                            </td>
+                            </li>
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-secondary">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div> Araç Talebi
+                                            <div class="text-muted  ">1 Bekleyen | 4 Onaylanan | 3 Red</div>
 
-                            <td class="text-center">
-                                <a href="/mobile/malzeme/talepler">
-                                    <span class="iconedbox iconedbox-lg text-primary">
-                                        <ion-icon name="dice"></ion-icon>
-                                    </span>
-                                    <h4> Talep Listeniz</h4>
+                                        </div>
+                                    </div>
                                 </a>
-                            </td>
-
-
-                            <td class="text-center">
-                                <a href="#">
-                                    <span class="iconedbox iconedbox-lg text-primary">
-                                        <ion-icon name="notifications"></ion-icon>
-                                    </span>
-                                    <h4> Duyurular</h4>
+                            </li>
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-danger">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>İzin Talebi
+                                            <div class="text-muted  ">1 Bekleyen | 4 Onaylanan | 3 Red</div>
+                                        </div>
+                                    </div>
                                 </a>
-                            </td>
+                            </li>
+                        </ul>
+                        <!-- * sub menu -->
+                    </li>
 
-                        </tr>
+                    <li class="multi-level">
+                        <a href="#" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="cube-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                <div>Depo Sayım</div>
+                            </div>
+                        </a>
+                        <!-- sub menu -->
+                        <ul class="listview image-listview">
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-dark">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Sayım Başlat
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <!-- * sub menu -->
+                    </li>
 
 
-
-                    </tbody>
-                </table>
+                </ul>
+                <!-- * Iconed Multi Listview -->
             </div>
 
 

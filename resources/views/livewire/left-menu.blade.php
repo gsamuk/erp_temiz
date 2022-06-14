@@ -35,6 +35,11 @@
                     <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
 
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="/mobile">
+                            <i class="ri-smartphone-line "></i> <span>Mobil Versiyon</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#" wire:click="$emit('SetPage', '')">

@@ -22,6 +22,29 @@
                 <ul class="listview flush transparent no-line image-listview mt-2">
 
                     <li>
+                        <a href="/" class="item">
+                            <div class="icon-box bg-secondary">
+                                <ion-icon name="desktop-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Desktop Versiyon
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/mobile" class="item">
+                            <div class="icon-box bg-secondary">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                Ana Sayfa
+                            </div>
+                        </a>
+                    </li>
+
+
+                    <li>
                         <a href="/mobile/malzeme/talep_olustur" class="item">
                             <div class="icon-box bg-secondary">
                                 <ion-icon name="add-outline"></ion-icon>

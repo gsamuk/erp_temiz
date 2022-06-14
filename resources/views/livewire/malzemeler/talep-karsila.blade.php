@@ -92,85 +92,108 @@
                             $val = 0;
                             $val2 = 0;
                             $disable="";
+                            $disable2="";
                             $stok = $dt->quantity;
                             if($item_detail->onhand_quantity >= $dt->quantity){
                             $val = $dt->quantity;
                             }
 
-                            if($item_detail->onhand_quantity < $dt->quantity){
-                                $val = $item_detail->onhand_quantity;
-                                $val2 = $dt->quantity - $item_detail->onhand_quantity;
+                                if($item_detail->onhand_quantity < $dt->quantity){
+                                    $val = $item_detail->onhand_quantity;
+                                    $val2 = $dt->quantity - $item_detail->onhand_quantity;
                                 }
 
                                 if($item_detail->onhand_quantity == 0){
                                 $val = 0;
                                 $disable="disabled"; // eğer stok yoksa karşılama input alanı disable edilir.
                                 $val2 = $dt->quantity;
+                                } 
+
+                                if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } 
+                                
+                                if($dt->acq > 0 && $dt->acq != null ){
+                                    $val = $dt->acq;                                    
                                 }
 
-                                if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } @endphp <tr>
-                                    <td class="owner">
-                                        @if($photo)
-                                        <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                                            <img class="border"
-                                                src="{{ asset('public/storage/images/items/thumb/'.$photo->foto_path) }}"
-                                                style="height: 65px">
-                                        </a>
-                                        @else
-                                        <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                                            <img class="border" style="height: 50px" src="/public/images/default.png">
-                                        </a>
-                                        @endif
-                                    </td>
+                                if($dt->apq > 0 && $dt->apq != null){
+                                    $val2 = $dt->apq;                                    
+                                 }
 
-                                    <td><b>{{ $item_detail->stock_name }}</b>
-                                        <br>
-                                        <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
-                                        <br> <small class="text-danger">Talep Nedeni: {{ $dt->description }}</small>
+                                    @endphp
+                                    <tr>
+                                        <td class="owner">
+                                            @if($photo)
+                                            <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
+                                                <img class="border"
+                                                    src="{{ asset('public/storage/images/items/thumb/'.$photo->foto_path) }}"
+                                                    style="height: 65px">
+                                            </a>
+                                            @else
+                                            <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
+                                                <img class="border" style="height: 50px"
+                                                    src="/public/images/default.png">
+                                            </a>
+                                            @endif
+                                        </td>
 
-                                    </td>
-                                    <td class="text-dark"><b style="font-size:1.2em">{{
-                                            number_format($dt->quantity,0,'.',',')
-                                            }}</b>
-                                        <br><small>{{ $dt->unit_code
-                                            }}</small>
-                                    </td>
-                                    <td><b style="font-size:1.2em">{{
-                                            number_format($item_detail->onhand_quantity,0,'.',',')
-                                            }}</b>
-                                        <br><small>{{ $dt->unit_code
-                                            }}</small>
-                                    </td>
-                                    @if($for_manage)
-                                    <td>
-                                        <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                        <td><b>{{ $item_detail->stock_name }} {{ $val }} - {{ $val2 }}</b>
+                                            <br>
+                                            <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
+                                            <br> <small class="text-danger">Talep Nedeni: {{ $dt->description }}</small>
+
+                                        </td>
+                                        <td class="text-dark"><b style="font-size:1.2em">{{
+                                                number_format($dt->quantity,0,'.',',')
+                                                }}</b>
+                                            <br><small>{{ $dt->unit_code
+                                                }}</small>
+                                        </td>
+                                        <td><b style="font-size:1.2em">{{
+                                                number_format($item_detail->onhand_quantity,0,'.',',')
+                                                }}</b>
+                                            <br><small>{{ $dt->unit_code
+                                                }}</small>
+                                        </td>
+                                        @if($for_manage)
+                                        <td>
+                                            <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                         $item_detail }}')">
 
-                                        <input type="number" min="0" class="form-control" wire:loading.attr="disabled"
-                                            @if($dt->status > 0 ) disabled @endif
-                                        {{ $disable }}
+                                            <input type="number" min="0" class="form-control"
+                                                wire:loading.attr="disabled"
+                                                 @if($dt->status > 0 || $talep->approved == 1  ) disabled @endif
+                                                 {{ $disable }}
+                                                  
+                                            wire:model.debunce.1000ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                            x-data x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                            number_format($val,0,'.',',') }}')"
+                                            >
+                                        </td>
 
-                                        wire:model.debunce.1000ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
-                                        x-data x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
-                                        number_format($val,0,'.',',') }}')"
-                                        >
-                                    </td>
+                                        <td>
+                                            <input type="number" min="0" 
+                                            @if($dt->status > 0 || $talep->approved == 1  ) disabled @endif
+                                         
+                                            wire:model.debunce.1000ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                            x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
+                                            number_format($val2,0,'.',',') }}')"
+                                            class="form-control"
+                                            wire:loading.attr="disabled"
+                                            >
+                                        </td>
 
-                                    <td>
-                                        <input type="number" min="0" @if($dt->status > 0) disabled @endif
-                                        wire:model.debunce.1000ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
-                                        x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
-                                        number_format($val2,0,'.',',') }}')"
-                                        class="form-control"
-                                        wire:loading.attr="disabled"
-                                        >
-                                    </td>
+                                        <td>
+                                            @if($talep->approved == 1)
+                                            <span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i>
+                                                Onaylandı</span>
+                                                @else
+                                                <button wire:click="cikar({{ $dt->id }})" class="btn btn-sm btn-danger"
+                                                    wire:loading.attr="disabled" @if($dt->status > 0) disabled
+                                                    @endif>Çıkar</button>
+                                            @endif
 
-                                    <td><button wire:click="cikar({{ $dt->id }})" class="btn btn-sm btn-danger"
-                                            wire:loading.attr="disabled" @if($dt->status > 0) disabled
-                                            @endif>Çıkar</button>
-                                    </td>
-                                    @endif
+                                        </td>
+                                        @endif
 
                                     </tr>
                                     @endforeach
@@ -318,8 +341,24 @@
                         <div class="col-lg-12 mt-3">
                             @if(isset($s_have) && isset($k_have) )
                             @if($s_have || $k_have)
-                            <button wire:click="kaydet();" class="btn btn-success btn-lg"
-                                wire:loading.attr="disabled">Onayla & Kaydet</button>
+
+                            @if($talep->approved == 0)
+
+                            <button wire:click="approved();" class="btn btn-success btn-lg btn-label"
+                                wire:loading.attr="disabled"> <i
+                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> Listeyi
+                                Onayla</button>
+
+                            @else
+                            <button wire:click="kaydet();" class="btn btn-primary btn-lg btn-label"
+                                wire:loading.attr="disabled"> <i
+                                class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> Logo Fişi Oluştur</button>
+
+                                <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
+                                wire:loading.attr="disabled"> <i
+                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> 
+                                Onay İptal</button>  
+                            @endif
 
                             @else
                             <button class="btn btn-danger btn-lg" disabled> Kaydet</button><br>

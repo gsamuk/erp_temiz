@@ -1,6 +1,6 @@
 <div>
     <div class="row">
-        <div class="col-lg-4 col-md-12 col-sm-12">
+        <div class="col-lg-5 col-md-12 col-sm-12">
             <div class="card">
 
                 <div class="card-header">
@@ -57,7 +57,7 @@
                         <li class="nav-item">
                             <a class="nav-link py-3 @if($status == 9) active @endif " data-bs-toggle="tab" href="#"
                                 wire:click="set_status(9)" role="tab" aria-selected="false">
-                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Reddedildi
+                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Red
                             </a>
                         </li>
 
@@ -157,14 +157,14 @@
 
 
         @if($talep_detay_id)
-        <div class="col-lg-8 col-md-12 col-sm-12">
+        <div class="col-lg-7 col-md-12 col-sm-12">
             @livewire('malzemeler.talep-karsila')
         </div>
         @endif
 
 
         @if($talep_islem_id)
-        <div class="col-lg-8 col-md-12 col-sm-12">
+        <div class="col-lg-7 col-md-12 col-sm-12">
             @livewire('malzemeler.talep-islem')
         </div>
         @endif
