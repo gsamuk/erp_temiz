@@ -83,8 +83,9 @@
                                 <tr>
                                     <th scope="col" style="width:50px;">No</th>
                                     <th scope="col" style="width:100px;">Talep Yapan</th>
-                                    <th scope="col" style="width:100px;">Malzeme </th>
+
                                     <th scope="col">Zamanı</th>
+                                    <th scope="col">Onay</th>
                                     <th scope="col" style="width:65px;"></th>
                                 </tr>
                             </thead>
@@ -101,8 +102,9 @@
                                     <td class="owner">{{ $d->id }}</td>
                                     <td class="owner"><a wire:click="set_username('{{ $d->user_name }}')"
                                             href="javascript:;">{{
-                                            $d->user_name }}</a></td>
-                                    <td class="owner"><b>{{ $cnt }} Kalem</b></td>
+                                            $d->name }} {{
+                                            $d->surname }}</a></td>
+
 
                                     <td class="owner">
                                         <small>
@@ -110,6 +112,16 @@
                                             \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans()
                                             }}
                                         </small>
+                                    </td>
+                                    <td class="owner">
+                                        @if($d->approved == 1)
+                                        <span class="badge rounded-pill badge-outline-success">
+                                            Onaylandı</span>
+                                        @else
+                                        <span class="badge rounded-pill badge-outline-warning">
+                                            Bekliyor</span>
+                                        @endif
+
                                     </td>
                                     <td class="owner">
                                         @if($d->status == 1)
@@ -125,7 +137,8 @@
                                         @endif
 
                                         @if($d->status == 9)
-                                        <button class="btn btn-soft-danger waves-effect waves-light" disabled>Reddedildi
+                                        <button class="btn btn-sm btn-soft-danger btn-block waves-effect waves-light"
+                                            disabled>Red
                                         </button>
                                         @endif
 

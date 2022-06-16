@@ -44,6 +44,8 @@ class Taleplerim extends Component
             ->leftjoin('company', 'demand.company_id', '=', 'company.id')
             ->select(
                 'users.user_name',
+                'users.name',
+                'users.surname',
                 'company.company_name',
                 'demand.*',
             )

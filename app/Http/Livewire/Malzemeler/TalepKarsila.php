@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Malzemeler;
 use Livewire\Component;
 use App\Models\DemandDetail;
 use App\Models\Demand;
+use App\Models\DemandFiche;
 use App\Models\LogoItemsPhoto;
 use App\Models\LogoItems;
 use App\Http\Controllers\LogoRest;
@@ -16,6 +17,7 @@ class TalepKarsila extends Component
     public $talep_detay;
     public $talep_id;
     public $error;
+    public $iptal_sebep = "Gerekli Değil";
 
     public $for_manage = true; // yönetim durumu aktif , onay işlemleri aktif olur
 
@@ -30,7 +32,7 @@ class TalepKarsila extends Component
     public $item_photos;
     public $uyari = false;
 
-
+    public $iptal_id;
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila'];
 
@@ -45,11 +47,18 @@ class TalepKarsila extends Component
         }
     }
 
+    public function iptal($id)
+    {
+        $this->iptal_id = $id;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#iptalModal']);
+    }
+
 
     public function cikar($id)
     {
         $up = DemandDetail::find($id);
         $up->status = 9;
+        $up->cancel_reason = $this->iptal_sebep;
         $up->save();
 
         $count = DemandDetail::Where('demand_id', $this->talep_id)->Where('status', '!=', 9)->count();
@@ -68,12 +77,15 @@ class TalepKarsila extends Component
         if ($count == 0) {
             $this->dispatchBrowserEvent('TalepRedToast');
         }
+
+        $this->dispatchBrowserEvent('CloseModal');
     }
 
-    public function unapproved(){
+    public function unapproved()
+    {
 
-        DemandDetail::Where("demand_id", $this->talep_id)->update(["apq" => null, "acq"=> null ]);
-  
+        DemandDetail::Where("demand_id", $this->talep_id)->update(["approved_purchase" => null, "approved_consump" => null]);
+
         $dm = Demand::find($this->talep_id);
         $dm->approved = 0;
         $dm->save();
@@ -83,13 +95,11 @@ class TalepKarsila extends Component
 
     public function approved()
     {
-
-
         if ($this->karsila[$this->talep_id]) {
             foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
                 if ($miktar > 0) {
                     $item = DemandDetail::find($item_id);
-                    $item->acq = $miktar;
+                    $item->approved_consump = $miktar;
                     $item->save();
                 }
             }
@@ -99,7 +109,7 @@ class TalepKarsila extends Component
             foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
                 if ($miktar > 0) {
                     $item = DemandDetail::find($item_id);
-                    $item->apq = $miktar;
+                    $item->approved_purchase = $miktar;
                     $item->save();
                 }
             }
@@ -127,12 +137,14 @@ class TalepKarsila extends Component
                     $item = DemandDetail::find($item_id);
                     $item->status = 1; // stoktan karşılama
                     $item->save();
+                    $logo_item = LogoItems::find($item->logo_stock_ref);
 
                     $sarf_items[] = [
                         "ITEM_CODE" => $item->stock_code,
                         "ITEMREF" => $item->logo_stock_ref,
                         "UNIT_CODE" => $item->unit_code,
                         "DESCRIPTION" => $item->description,
+                        "PRICE" => $logo_item->average_price,
                         "TYPE" => 25,
                         'QUANTITY' => $miktar,
                     ];
@@ -207,8 +219,10 @@ class TalepKarsila extends Component
 
             if ($logo_fiche_ref != null) {
 
-                $dm = Demand::find($this->talep_id);
+                $dm = new DemandFiche;
+                $dm->demand_id = $this->talep_id;
                 $dm->logo_fiche_ref = $logo_fiche_ref;
+                $dm->insert_time = date('Y-m-d H:i:s');
                 $dm->save();
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
@@ -242,6 +256,11 @@ class TalepKarsila extends Component
         return view('livewire.malzemeler.talep-karsila');
     }
 
+
+    public function updatingKarsila($val, $key)
+    {
+        // dd($key);
+    }
 
     public function foto_goster($id)
     {

@@ -56,7 +56,19 @@
         $(event.detail.ModalName).modal('hide');
         $('.modal').modal('hide');
     });    
-
+    
+    
+    function imposeMinMax(el){
+    if(el.value != ""){
+        if(parseInt(el.value) < parseInt(el.min)){
+        el.value = el.min;
+        }
+        if(parseInt(el.value) > parseInt(el.max)){
+        el.value = parseInt(el.max);
+        }
+    }
+    }
+   
 </script>
 </body>
 

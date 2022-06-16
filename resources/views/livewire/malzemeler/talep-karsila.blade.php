@@ -2,7 +2,7 @@
 
 
     <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
+        aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,23 +11,58 @@
                 <div class="modal-body m-0">
                     @if($item_id)
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <h5 class="text-danger">{{ $item->stock_name }}</h5>
                             <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
                             <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
                             <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
+                            <small>REf : <b>{{ $item_id }}</b> </small><br>
                             <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else
                                     0 @endif </b> </small>
                             <hr>
+                            @php
+                            $son_satinalma = Illuminate\Support\Facades\DB::select(
+                            "
+                            Exec dbo.sp_get_last_purchase
+                            @company_id ='001',
+                            @term_id = '09',
+                            @rowcount = 5,
+                            @item_ref = ?
+                            ",
+                            array($item_id )
+                            );
+                            @endphp
+
+                            @if($son_satinalma )
                             <h5>Son Satınalma Tutarları</h5>
-                            <small>1.500 X Adet ABC Ltd. 25.10.2021</small><br>
-                            <small>1.400 X Adet</small><br>
-                            <small>1.500 X Adet</small><br>
-                            <small>1.600 X Adet</small><br>
+                            <table class="table table-sm table-nowrap table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Cari</th>
+                                        <th scope="col">Miktar</th>
+                                        <th scope="col">Birim Fiyat</th>
+                                        <th scope="col">Toplam</th>
+                                        <th scope="col">Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($son_satinalma as $s)
+                                    <tr>
+                                        <td>{{ $s->account_name }}</td>
+                                        <td>{{ number_format($s->quantity,0,'.',',') }} {{ $s->unit_code }}</td>
+                                        <td>{{ number_format($s->unit_price,2,'.',',') }}</td>
+                                        <td>{{ number_format($s->amount,2,'.',',') }}</td>
+                                        <td>{{ $s->po_date }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @endif
+
                         </div>
 
                         @if($item_photos)
-                        <div class="col-lg-8">
+                        <div class="col-lg-6">
                             <div class="row ">
                                 @foreach ($item_photos as $p)
                                 <div class=" col-xxl-6 col-xl-6 col-sm-12">
@@ -41,6 +76,31 @@
 
                     </div>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="iptalModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="fullscreeexampleModalLabel">Onay</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div class="modal-body m-0">
+                    @if($iptal_id)
+                    <div class="mb-3">
+                        <label for="customer-name" class="col-form-label">İptal Sebebi</label>
+                        <input wire:model.defer="iptal_sebep" type="text" class="form-control">
+                    </div>
+                    @endif
+                </div>
+
+                <div class="modal-footer">
+                    <button wire:click="cikar({{ $iptal_id }})" class="btn btn-primary">Onayla</button>
+                    <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
                 </div>
             </div>
         </div>
@@ -98,26 +158,26 @@
                             $val = $dt->quantity;
                             }
 
-                                if($item_detail->onhand_quantity < $dt->quantity){
-                                    $val = $item_detail->onhand_quantity;
-                                    $val2 = $dt->quantity - $item_detail->onhand_quantity;
+                            if($item_detail->onhand_quantity < $dt->quantity){
+                                $val = $item_detail->onhand_quantity;
+                                $val2 = $dt->quantity - $item_detail->onhand_quantity;
                                 }
 
                                 if($item_detail->onhand_quantity == 0){
                                 $val = 0;
                                 $disable="disabled"; // eğer stok yoksa karşılama input alanı disable edilir.
                                 $val2 = $dt->quantity;
-                                } 
-
-                                if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } 
-                                
-                                if($dt->acq > 0 && $dt->acq != null ){
-                                    $val = $dt->acq;                                    
                                 }
 
-                                if($dt->apq > 0 && $dt->apq != null){
-                                    $val2 = $dt->apq;                                    
-                                 }
+                                if($item_detail->onhand_quantity < 0){ $val=0; $val2=0; } if($dt->approved_consump > 0
+                                    && $dt->approved_consump !=
+                                    null ){
+                                    $val = $dt->approved_consump;
+                                    }
+
+                                    if($dt->approved_purchase > 0 && $dt->approved_purchase != null){
+                                    $val2 = $dt->approved_purchase;
+                                    }
 
                                     @endphp
                                     <tr>
@@ -136,10 +196,10 @@
                                             @endif
                                         </td>
 
-                                        <td><b>{{ $item_detail->stock_name }} {{ $val }} - {{ $val2 }}</b>
+                                        <td><b>{{ $item_detail->stock_name }}</b>
                                             <br>
                                             <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
-                                            <br> <small class="text-danger">Talep Nedeni: {{ $dt->description }}</small>
+                                            <small class="text-danger">Talep Nedeni : {{ $dt->description }}</small>
 
                                         </td>
                                         <td class="text-dark"><b style="font-size:1.2em">{{
@@ -160,21 +220,23 @@
                                         $item_detail }}')">
 
                                             <input type="number" min="0" class="form-control"
-                                                wire:loading.attr="disabled"
-                                                 @if($dt->status > 0 || $talep->approved == 1  ) disabled @endif
-                                                 {{ $disable }}
-                                                  
-                                            wire:model.debunce.1000ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                                max="{{ $item_detail->onhand_quantity }}" onkeyup=imposeMinMax(this)
+                                                wire:loading.attr="disabled" @if($dt->status > 0 ||
+                                            $talep->approved ==
+                                            1 ) disabled @endif
+                                            {{ $disable }}
+
+                                            wire:model.debunce.1500ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}"
                                             x-data x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                             number_format($val,0,'.',',') }}')"
                                             >
                                         </td>
 
                                         <td>
-                                            <input type="number" min="0" 
-                                            @if($dt->status > 0 || $talep->approved == 1  ) disabled @endif
-                                         
-                                            wire:model.debunce.1000ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
+                                            <input type="number" min="0" @if($dt->status > 0 || $talep->approved == 1 )
+                                            disabled @endif
+
+                                            wire:model.debunce.1500ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
                                             x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{
                                             number_format($val2,0,'.',',') }}')"
                                             class="form-control"
@@ -184,12 +246,16 @@
 
                                         <td>
                                             @if($talep->approved == 1)
-                                            <span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i>
+                                            <span class="badge badge-label bg-success"><i
+                                                    class="mdi mdi-circle-medium"></i>
                                                 Onaylandı</span>
-                                                @else
-                                                <button wire:click="cikar({{ $dt->id }})" class="btn btn-sm btn-danger"
-                                                    wire:loading.attr="disabled" @if($dt->status > 0) disabled
-                                                    @endif>Çıkar</button>
+                                            @else
+
+                                            <button wire:click="iptal({{ $dt->id }})" class="btn btn-sm btn-light"
+                                                wire:loading.attr="disabled" @if($dt->status > 0) disabled @endif >
+                                                Çıkar
+                                            </button>
+
                                             @endif
 
                                         </td>
@@ -352,12 +418,13 @@
                             @else
                             <button wire:click="kaydet();" class="btn btn-primary btn-lg btn-label"
                                 wire:loading.attr="disabled"> <i
-                                class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> Logo Fişi Oluştur</button>
+                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> Logo Fişi
+                                Oluştur</button>
 
-                                <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
+                            <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
                                 wire:loading.attr="disabled"> <i
-                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i> 
-                                Onay İptal</button>  
+                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                Onay İptal</button>
                             @endif
 
                             @else

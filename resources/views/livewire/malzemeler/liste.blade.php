@@ -161,46 +161,86 @@
 
         @if($item_id)
         <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-body">
 
-            <div class="row bg-soft-warning p-2  ff-secondary">
-                <div class="col-12">
-                    <div class="d-flex justify-content-end">
-                        <button wire:click="remove_foto()"
-                            class="btn btn-soft-primary waves-effect waves-light btn-sm">Kapat</button>
-                    </div>
-                </div>
-
-                <div class="col-lg-5">
-                    <h5 class="text-danger">{{ $item->stock_name }}</h5>
-                    <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
-                    <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
-                    <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-                    <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else 0 @endif
-                        </b>
-                    </small>
-                    <hr>
-                    <h5>Son Satınalma Tutarları</h5>
-                    <small>1.500 X Adet ABC Ltd. 25.10.2021</small><br>
-                    <small>1.400 X Adet</small><br>
-                    <small>1.500 X Adet</small><br>
-                    <small>1.600 X Adet</small><br>
-                </div>
-
-                @if($item_photos)
-                <div class="col-lg-7">
                     <div class="row ">
-                        @foreach ($item_photos as $p)
-                        <div class="col-xxl-6 col-xl-6 col-sm-12">
-                            <img class=" img-fluid mx-auto border p-1 m-2"
-                                src="{{ asset('public/storage/images/items/'.$p->foto_path) }}">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-end">
+                                <button wire:click="remove_foto()"
+                                    class="btn btn-soft-primary waves-effect waves-light btn-sm">Kapat</button>
+                            </div>
                         </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
 
+                        <div class="col-lg-12">
+                            <h5 class="text-danger">{{ $item->stock_name }}</h5>
+                            <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
+                            <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
+                            <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
+                            <small>Stok Miktarı : <b>@if($item->onhand_quantity > 0) {{ $item->onhand_quantity }} @else
+                                    0 @endif
+                                </b>
+                            </small>
+                            <hr>
+                            @php
+                            $son_satinalma = Illuminate\Support\Facades\DB::select(
+                            "
+                            Exec dbo.sp_get_last_purchase
+                            @company_id ='001',
+                            @term_id = '09',
+                            @rowcount = 5,
+                            @item_ref = ?
+                            ",
+                            array($item_id )
+                            );
+                            @endphp
+
+                            @if($son_satinalma )
+                            <h5>Son Satınalma Tutarları</h5>
+                            <table class="table table-sm table-nowrap table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Cari</th>
+                                        <th scope="col">Miktar</th>
+                                        <th scope="col">Birim Fiyat</th>
+                                        <th scope="col">Toplam</th>
+                                        <th scope="col">Tarih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($son_satinalma as $s)
+                                    <tr>
+
+                                        <td>{{ $s->account_name }}</td>
+                                        <td>{{ number_format($s->quantity,0,'.',',') }} {{ $s->unit_code }}</td>
+                                        <td>{{ number_format($s->unit_price,2,'.',',') }}</td>
+                                        <td>{{ number_format($s->amount,2,'.',',') }}</td>
+                                        <td>{{ $s->po_date }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @endif
+
+                        </div>
+
+                        @if($item_photos)
+                        <div class="col-lg-12">
+                            <div class="row ">
+                                @foreach ($item_photos as $p)
+                                <div class="col-xxl-6 col-xl-6 col-sm-12">
+                                    <img class=" img-fluid mx-auto border p-1 m-2"
+                                        src="{{ asset('public/storage/images/items/'.$p->foto_path) }}">
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+
+                </div>
             </div>
+            @endif
         </div>
-        @endif
     </div>
-</div>

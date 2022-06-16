@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="in">
                                         <div>Malzeme Talebi
-                                            <div class="text-muted  ">2 Bekleyen | 5 Onaylanan | 2 Red</div>
+
                                         </div>
                                     </div>
                                 </a>
@@ -49,8 +49,6 @@
                                     </div>
                                     <div class="in">
                                         <div> Araç Talebi
-                                            <div class="text-muted  ">1 Bekleyen | 4 Onaylanan | 3 Red</div>
-
                                         </div>
                                     </div>
                                 </a>
@@ -62,11 +60,43 @@
                                     </div>
                                     <div class="in">
                                         <div>İzin Talebi
-                                            <div class="text-muted  ">1 Bekleyen | 4 Onaylanan | 3 Red</div>
+
                                         </div>
                                     </div>
                                 </a>
                             </li>
+                        </ul>
+                        <!-- * sub menu -->
+                    </li>
+
+
+
+
+
+                    <li class="multi-level">
+                        <a href="#" class="item">
+                            <div class="icon-box bg-primary">
+                                <ion-icon name="cube-outline"></ion-icon>
+                            </div>
+                            <div class="in">
+                                <div>Arıza Bildirim</div>
+                            </div>
+                        </a>
+                        <!-- sub menu -->
+                        <ul class="listview image-listview">
+                            <li>
+                                <a href="#" class="item">
+                                    <div class="icon-box bg-dark">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </div>
+                                    <div class="in">
+                                        <div>Arıza Bildirimi Gönder
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
                         </ul>
                         <!-- * sub menu -->
                     </li>
@@ -98,8 +128,6 @@
                         </ul>
                         <!-- * sub menu -->
                     </li>
-
-
                 </ul>
                 <!-- * Iconed Multi Listview -->
             </div>
