@@ -2,7 +2,7 @@
     <table class="table table-sm table-nowrap mb-0">
         <thead>
             <tr>
-                <th scope="col">İzin Grubu {{ $user_id }}</th>
+
                 <th scope="col"></th>
                 <th scope="col">İzin Türü</th>
                 <th scope="col">-</th>
@@ -14,7 +14,7 @@
             $izin = App\Models\UserPermissions::where('user_id', $user_id)->Where('permission_id', $d->id)->first();
             @endphp
             <tr>
-                <td>{{ $d->group_name }}</td>
+
                 <td>@if($izin) <i class="ri-checkbox-circle-line align-middle text-success"></i> @else <i
                         class="ri-close-circle-line align-middle text-danger"></i> @endif</td>
                 <td>{{ $d->description }}</td>

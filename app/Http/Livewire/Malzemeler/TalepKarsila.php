@@ -216,14 +216,19 @@ class TalepKarsila extends Component
         if (count($sarf_items) > 0) {
 
             $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-
-            if ($logo_fiche_ref != null) {
+            
+            if ($logo_fiche_ref != null && $logo_fiche_ref > 0 ) {
 
                 $dm = new DemandFiche;
                 $dm->demand_id = $this->talep_id;
                 $dm->logo_fiche_ref = $logo_fiche_ref;
                 $dm->insert_time = date('Y-m-d H:i:s');
                 $dm->save();
+
+                $dm = Demand::find($this->talep_id);               
+                $dm->status = 1;
+                $dm->save();
+                
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
@@ -235,9 +240,12 @@ class TalepKarsila extends Component
             $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
 
             if ($logo_po_ref != null) {
+
                 $dm = Demand::find($this->talep_id);
                 $dm->logo_po_ref = $logo_po_ref;
+                $dm->status = 1;
                 $dm->save();
+
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);

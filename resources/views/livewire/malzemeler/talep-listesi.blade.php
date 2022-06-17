@@ -102,8 +102,7 @@
                                     <td class="owner">{{ $d->id }}</td>
                                     <td class="owner"><a wire:click="set_username('{{ $d->user_name }}')"
                                             href="javascript:;">{{
-                                            $d->name }} {{
-                                            $d->surname }}</a></td>
+                                            $d->name }} </a></td>
 
 
                                     <td class="owner">
