@@ -76,7 +76,7 @@ class TalepIslem extends Component
             "AUXIL_CODE" => $demand->special_code,
             "PROJECT_CODE" => $demand->project_code,
             "FOOTNOTE1"  => $demand->demand_desc,
-            'DOC_NUMBER' => "SF" . $this->talep_id,
+            'DOC_NUMBER' => "SF" . $this->talep_id."-1",
             "TYPE" => 12,
             'IO_TYPE' => 3,
             'SOURCE_WH' => $demand->warehouse_no,

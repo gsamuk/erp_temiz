@@ -112,6 +112,34 @@
   </div>
 
 
+  <div id="editLineModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Miktar Düzenle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body m-0">
+          @if ($edit_line_id)
+            <div class="mb-3">
+              <label for="customer-name" class="col-form-label">Yeni Miktarı Giriniz</label>
+              <input wire:model.defer="line_quantity" type="number" class="form-control">
+              <br>
+              {{ $line_item_name }}
+            </div>
+          @endif
+        </div>
+
+        <div class="modal-footer">
+          <button wire:click="update_line({{ $edit_line_id }})" class="btn btn-primary">Onayla</button>
+          <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   @if (session()->has('success'))
     <span class="text-info">
       {{ session('success') }}
@@ -143,8 +171,8 @@
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>
                   @if ($for_manage)
-                    <th scope="col" style="width:90px;">Karşılanan</th>
-                    <th scope="col" style="width:90px;">Satınalma</th>
+                    <th scope="col" style="width:90px;">Karşıla</th>
+                    <th scope="col" style="width:90px;">Satınal</th>
                     <th scope="col" style="width:90px;"></th>
                   @endif
                 </tr>
@@ -204,16 +232,21 @@
 
                     <td><b>{{ $item_detail->stock_name }}</b>
                       <br>
-                      <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
+                      <small>Stok Kodu: {{ $item_detail->stock_code }}</small><br>
                       <small class="text-danger">Talep Nedeni : {{ $dt->description }}</small>
 
                     </td>
-                    <td class="text-dark">
-                      <b style="font-size:1.2em">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
+                    <td>
+
+                      <b style="font-size:1.1em"
+                        class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
+                      <button class="btn btn-sm btn-ghost-info p-0"
+                        wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"><i
+                          class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i></button>
                       <br><small>{{ $dt->unit_code }}</small>
                     </td>
                     <td><b
-                        style="font-size:1.2em">{{ number_format($item_detail->onhand_quantity, 0, '.', ',') }}</b>
+                        style="font-size:1.1em">{{ number_format($item_detail->onhand_quantity, 0, '.', ',') }}</b>
                       <br><small>{{ $dt->unit_code }}</small>
                     </td>
                     @if ($for_manage)
@@ -241,7 +274,7 @@
                             Onaylandı
                           </span>
                         @else
-                          <button wire:click="iptal({{ $dt->id }})" class="btn btn-sm btn-light"
+                          <button wire:click="iptal({{ $dt->id }})" class="btn btn-sm btn-soft-danger"
                             wire:loading.attr="disabled" @if ($dt->status > 0) disabled @endif>
                             Çıkar
                           </button>

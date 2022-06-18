@@ -33,6 +33,13 @@ class TalepKarsila extends Component
     public $uyari = false;
 
     public $iptal_id;
+    
+    
+    // talep malzemei miktar edit
+    public $edit_line_id;
+    public $line_item;
+    public $line_item_name;
+    public $line_quantity; 
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila'];
 
@@ -125,7 +132,7 @@ class TalepKarsila extends Component
     public function kaydet()
     {
         $sarf_items = array();
-        $satinal_items = array();
+        $satinal_items = array(); 
         $logo_po_ref = null;
         $logo_fiche_ref = null;
         $this->error = null;
@@ -265,9 +272,22 @@ class TalepKarsila extends Component
     }
 
 
-    public function updatingKarsila($val, $key)
+    public function edit_line($id,$name)
     {
-        // dd($key);
+        $this->edit_line_id = $id;
+        $this->line_item_name = $name;
+        $this->line_item = DemandDetail::find($id);
+        $this->line_quantity = number_format($this->line_item->quantity,0,"","");
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#editLineModal']);
+        
+    }
+
+    public function update_line(){
+        $line =  DemandDetail::find($this->edit_line_id);
+        $line->quantity =  $this->line_quantity;
+        $line->save();
+        $this->dispatchBrowserEvent('CloseModal');
+        $this->TalepKarsila($this->talep_id);
     }
 
     public function foto_goster($id)
