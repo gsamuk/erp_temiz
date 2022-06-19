@@ -76,13 +76,13 @@ class TalepIslem extends Component
             "AUXIL_CODE" => $demand->special_code,
             "PROJECT_CODE" => $demand->project_code,
             "FOOTNOTE1"  => $demand->demand_desc,
-            'DOC_NUMBER' => "SF" . $this->talep_id."-1",
+            'DOC_NUMBER' => "SF" . $this->talep_id,
             "TYPE" => 12,
             'IO_TYPE' => 3,
             'SOURCE_WH' => $demand->warehouse_no,
             'SOURCE_COST_GRP' => 1,
             'TRANSACTIONS' => [
-                'items' => $sarf_items
+                'items' => $sarf_items 
             ]
         ];
 
@@ -97,6 +97,7 @@ class TalepIslem extends Component
                 $dm->logo_fiche_ref = $logo_fiche_ref;
                 $dm->insert_time = date('Y-m-d H:i:s');
                 $dm->save();
+
                 $this->sarf = null;
                 return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
             }

@@ -27,12 +27,21 @@ class Liste extends Component
     public $item_photos;
     public $item_id;
 
-    protected $listeners  = ['setLine'];
+    public $wh_id = 0;
+
+
+    protected $listeners  = ['setLine', 'setWh'];
 
     public function setLine($id) // hangi satırın seçildiğini listen yaparak alıoyuz siparis.blade i dinliyoruz
     {
         $this->line = $id;
     }
+
+    public function setWh($id) // hangi depo seçildyse
+    {
+        $this->wh_id = $id;
+    }
+
 
 
     public function addItem($line, $ref)
@@ -52,6 +61,7 @@ class Liste extends Component
 
         $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
+            ->where('wh_no', $this->wh_id)
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
             })

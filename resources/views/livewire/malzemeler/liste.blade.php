@@ -74,6 +74,7 @@
                                     @if($ch)
                                     <th class="sort" data-sort="name" scope="col" style="width:55px;"></th>
                                     @endif
+                                    <th class="sort" data-sort="name" scope="col">Depo</th>
                                     <th class="sort" data-sort="name" scope="col">Malzeme</th>
                                     @if(!$item_id)
                                     @if($details)
@@ -121,6 +122,8 @@
                                             class="btn btn-outline-danger btn-sm"> Ekle </button>
                                     </td>
                                     @endif
+
+                                    <td class="owner"> {{ $item->wh_name }} </td> 
                                     <td>
                                         <a href="#" wire:click="foto({{ $item->logicalref }})">
                                             <b> {{ $item->stock_name }}</b>

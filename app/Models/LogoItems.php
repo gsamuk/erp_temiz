@@ -10,6 +10,6 @@ use Laravel\Scout\Searchable;
 class LogoItems extends Model
 {
     use Searchable;
-    protected $table = 'lv_items_detail_001';
+    protected $table = 'lv_items_wh_001';
     protected $primaryKey = 'logicalref';
 }

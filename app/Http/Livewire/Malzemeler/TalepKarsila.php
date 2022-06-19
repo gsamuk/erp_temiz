@@ -135,7 +135,7 @@ class TalepKarsila extends Component
         $satinal_items = array(); 
         $logo_po_ref = null;
         $logo_fiche_ref = null;
-        $this->error = null;
+        $this->error = null; 
 
 
         if ($this->karsila[$this->talep_id]) {
@@ -252,6 +252,144 @@ class TalepKarsila extends Component
                 $dm->logo_po_ref = $logo_po_ref;
                 $dm->status = 1;
                 $dm->save();
+
+            } else {
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
+            }
+        }
+
+        if ($logo_po_ref == null && $logo_fiche_ref == NULL) {
+            $this->error = 'Logo Rest Hatasıi Lütfen Sistem Yöneticisi İle İrtibata Geçiniz.';
+        } else {
+            return $this->TalepKarsila($this->talep_id);
+        }
+    }
+
+
+    public function kaydet_transfer()
+    {
+              
+        $transfer_items = array();
+        $satinal_items = array(); 
+        $logo_po_ref = null;
+        $logo_fiche_ref = null;
+        $this->error = null; 
+
+
+        if ($this->karsila[$this->talep_id]) {
+            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+                    $item->status = 1; // stoktan karşılama
+                    $item->save();
+                    $logo_item = LogoItems::find($item->logo_stock_ref);
+
+                    $transfer_items[] = [
+                        "ITEM_CODE" => $item->stock_code,
+                        "ITEMREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "DESCRIPTION" => $item->description,
+                        "PRICE" => $logo_item->average_price,
+                        "TYPE" => 25,
+                        'QUANTITY' => $miktar,
+                    ];
+                }
+            }
+        }
+
+
+        if ($this->satinal[$this->talep_id]) {
+            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
+                if ($miktar > 0) {
+                    $item = DemandDetail::find($item_id);
+
+                    if ($item->status == 1) { // eğer stoktan karşılama varsa
+                        $item->status = 3;  // hep stok hem satınalma statusu
+                    } else {
+                        $item->status = 2; // sadece satın alma statusu
+                    }
+
+                    $item->save();
+                    $satinal_items[] = [
+                        "STOCKREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "TYPE" => 0,
+                        'QUANTITY' => $miktar,
+                    ];
+                }
+            }
+        }
+
+
+        $demand = Demand::find($this->talep_id);
+        $transfer_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => "2021-05-21 10:10:00",
+            'GROUP' => 3,
+            "SOURCE_WH" => $demand->warehouse_no,
+            "SOURCE_COST_GRP" => $demand->warehouse_no,
+            "DEST_WH" => $demand->dest_wh_no,
+            "DEST_COST_GRP" => $demand->dest_wh_no,            
+            'DOC_NUMBER' => "TR" . $this->talep_id,
+            "TYPE" => 25,
+            'IO_TYPE' => 2,          
+            'TRANSACTIONS' => [
+                'items' => $transfer_items
+            ]
+        ];
+
+
+        $satinal_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => "2021-05-21 10:10:00",
+            'DOC_NUMBER' => "TLP" . $this->talep_id,
+            'CLIENTREF' => 7,
+            "TYPE" => 2,
+            'SOURCE_WH' => $demand->warehouse_no,
+            'TRANSACTIONS' => [
+                'items' => $satinal_items
+            ]
+        ];
+
+
+
+        if (count($transfer_items) > 0) {
+
+            $logo_fiche_ref  = LogoRest::SarfFisiOlustur($transfer_data, 0);
+            
+            if ($logo_fiche_ref != null && $logo_fiche_ref > 0 ) {
+
+                $dm = new DemandFiche;
+                $dm->demand_id = $this->talep_id;
+                $dm->logo_fiche_ref = $logo_fiche_ref;
+                $dm->insert_time = date('Y-m-d H:i:s');
+                $dm->save();
+
+                $dm = Demand::find($this->talep_id);               
+                $dm->status = 1;
+                $dm->save();
+                
+            } else {
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
+                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
+            }
+        }
+
+        if (count($satinal_items) > 0) {
+
+            $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
+
+            if ($logo_po_ref != null) {
+
+                $dm = Demand::find($this->talep_id);
+                $dm->logo_po_ref = $logo_po_ref;
+                $dm->status = 1;
+                $dm->save(); 
 
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);

@@ -157,7 +157,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title flex-grow-1 mb-0">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
-        <small>Açıklama : {{ $talep->demand_desc }}</small> {{ $item_id }} > {{ $for_manage }}
+        <small>
+          @if ($talep->demand_type == 1)
+            <h5 class="text-info"> XXX Malzeme Talebi</h5>
+          @else
+            <h5 class="text-info">XXX den XXX e Malzeme Transeferi</h5>
+          @endif
+        </small>
       </div>
 
       <div class="card-body">
@@ -181,7 +187,9 @@
                 @foreach ($talep_detay as $dt)
                   @php
                     $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $dt->logo_stock_ref)->first();
-                    $item_detail = App\Models\LogoItems::find($dt->logo_stock_ref);
+                    $item_detail = App\Models\LogoItems::where('logicalref', $dt->logo_stock_ref)
+                        ->where('wh_no', $talep->warehouse_no)
+                        ->first();
                     $val = 0;
                     $val2 = 0;
                     $disable="";
@@ -434,11 +442,21 @@
                             Listeyi Onayla
                           </button>
                         @else
-                          <button wire:click="kaydet();" class="btn btn-primary btn-lg btn-label"
-                            wire:loading.attr="disabled"> <i
-                              class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
-                            Logo Fişi
-                            Oluştur</button>
+                          @if ($talep->demand_type == 1)
+                            <button wire:click="kaydet();" class="btn btn-info btn-lg btn-label"
+                              wire:loading.attr="disabled"> <i
+                                class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
+                              Sarf Fişi
+                              Oluştur
+                            </button>
+                          @else
+                            <button wire:click="kaydet_transfer();" class="btn btn-info btn-lg btn-label"
+                              wire:loading.attr="disabled"> <i
+                                class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
+                              Ambar Transfer Fişi
+                              Oluştur
+                            </button>
+                          @endif
 
                           <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
                             wire:loading.attr="disabled"> <i
@@ -469,6 +487,7 @@
       </div>
     </div>
   @endif
+
 
 
 

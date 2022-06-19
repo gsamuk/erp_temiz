@@ -31,7 +31,7 @@ class TalepOlustur extends Component
     public $birim;
 
     public $desc;
-    public $warehouse = 0;
+   
     public $birim_select = [];
     public $tid = 0; // talep  id
     public $item_photos;
@@ -40,9 +40,29 @@ class TalepOlustur extends Component
     public $zaman;
     public $demand_desc;
 
+    public $demand_type = 1;
+
+    public $warehouse = 0; // malzemenin çıktığı depo
+    public $sourcewh;  // malzemenin girdiği depo
+
 
 
     protected $listeners = ["getItem", "getOzelKod", "getProject"];
+
+   
+    public function updatedSourcewh($id){       
+       if($id == $this->warehouse){
+        dd("ddd");
+       }
+    }
+
+    public function updatedWarehouse($id){   
+        if($id == $this->sourcewh){
+            dd("ddd");
+           }
+
+        $this->emit('setWh', $id);
+    }
 
     public function mount()
     {
@@ -137,6 +157,11 @@ class TalepOlustur extends Component
         $demand->demand_desc = $this->demand_desc;
         $demand->project_code = $this->project_code;
         $demand->special_code = $this->special_code;
+        $demand->demand_type = $this->demand_type;
+
+        if($this->sourcewh){
+        $demand->dest_wh_no = $this->sourcewh;
+        }
         $demand->insert_time = $insert_time;
         $demand->save();
 
