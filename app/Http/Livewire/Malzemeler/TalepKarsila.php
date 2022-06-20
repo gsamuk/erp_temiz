@@ -33,13 +33,13 @@ class TalepKarsila extends Component
     public $uyari = false;
 
     public $iptal_id;
-    
-    
+
+
     // talep malzemei miktar edit
     public $edit_line_id;
     public $line_item;
     public $line_item_name;
-    public $line_quantity; 
+    public $line_quantity;
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila'];
 
@@ -98,6 +98,7 @@ class TalepKarsila extends Component
         $dm->save();
 
         $this->TalepKarsila($this->talep_id);
+        $this->emit('LoadDemandList');
     }
 
     public function approved()
@@ -127,23 +128,33 @@ class TalepKarsila extends Component
         $dm->save();
 
         $this->TalepKarsila($this->talep_id);
+        $this->emit('LoadDemandList');
     }
 
-    public function kaydet()
+    public function kaydet() // sarf içn
     {
         $sarf_items = array();
-        $satinal_items = array(); 
+        $satinal_items = array();
         $logo_po_ref = null;
         $logo_fiche_ref = null;
-        $this->error = null; 
+        $this->error = null;
+
+        // kontroller
+        $sarf = false;
+        $satinal = false;
+        $return_msg = "";
 
 
         if ($this->karsila[$this->talep_id]) {
             foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
                 if ($miktar > 0) {
+
+                    // status kontrolleri
                     $item = DemandDetail::find($item_id);
                     $item->status = 1; // stoktan karşılama
                     $item->save();
+                    ///
+
                     $logo_item = LogoItems::find($item->logo_stock_ref);
 
                     $sarf_items[] = [
@@ -163,15 +174,17 @@ class TalepKarsila extends Component
         if ($this->satinal[$this->talep_id]) {
             foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
                 if ($miktar > 0) {
-                    $item = DemandDetail::find($item_id);
 
+                    // status kontrolleri
+                    $item = DemandDetail::find($item_id);
                     if ($item->status == 1) { // eğer stoktan karşılama varsa
                         $item->status = 3;  // hep stok hem satınalma statusu
                     } else {
                         $item->status = 2; // sadece satın alma statusu
                     }
-
                     $item->save();
+                    ///
+
                     $satinal_items[] = [
                         "STOCKREF" => $item->logo_stock_ref,
                         "UNIT_CODE" => $item->unit_code,
@@ -223,22 +236,30 @@ class TalepKarsila extends Component
         if (count($sarf_items) > 0) {
 
             $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-            
-            if ($logo_fiche_ref != null && $logo_fiche_ref > 0 ) {
 
+            if ($logo_fiche_ref != null && $logo_fiche_ref > 0) {
+                $sarf = $logo_fiche_ref;
+                $return_msg .= "<br>Sarf Fişi Oluşturuldu " . $logo_fiche_ref;
+
+                // eğer logo fişi oluştuysa
                 $dm = new DemandFiche;
                 $dm->demand_id = $this->talep_id;
                 $dm->logo_fiche_ref = $logo_fiche_ref;
                 $dm->insert_time = date('Y-m-d H:i:s');
                 $dm->save();
+                // logo sarf fişi başarılı ise fiş kaydı ekleniyor.
 
-                $dm = Demand::find($this->talep_id);               
+                $dm = Demand::find($this->talep_id);
                 $dm->status = 1;
                 $dm->save();
-                
+                // Talep durumu işlem yapıldı (1) olarak set ediliyor.
+
             } else {
+                //eğer logo sarf fişi oluşturamazsa status değerlerini değişir
+                // daha önce sarf edildi olan status değerleri değiştiriliyor
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
+                ///
             }
         }
 
@@ -246,35 +267,41 @@ class TalepKarsila extends Component
 
             $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
 
-            if ($logo_po_ref != null) {
-
+            if ($logo_po_ref != null && $logo_po_ref > 0) {
+                $satinal = $logo_po_ref;
+                $return_msg .= "<br>Satınalma Fişi Oluşturuldu, Fiş No : " . $logo_po_ref;
+                // eğer talep malzemelerinde satın alma fişi oluştuysa
                 $dm = Demand::find($this->talep_id);
                 $dm->logo_po_ref = $logo_po_ref;
                 $dm->status = 1;
                 $dm->save();
+                // Talep durumu işlem yapıldı (1) olarak set ediliyor.
 
             } else {
+                //eğer logo satınalma fişi oluşturamazsa status değerlerini değişir
+                // daha önce satınalma yapıldı olan status değerleri değiştiriliyor
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
             }
         }
 
-        if ($logo_po_ref == null && $logo_fiche_ref == NULL) {
-            $this->error = 'Logo Rest Hatasıi Lütfen Sistem Yöneticisi İle İrtibata Geçiniz.';
+        if (!$sarf && !$satinal) {
+            $this->error = "Logo Fişleri Oluşturulamadı, Lütfen Firma Seçerek Tekrar Deneyiniz.";
         } else {
-            return $this->TalepKarsila($this->talep_id);
+
+            return session()->flash('success', $return_msg);
         }
     }
 
 
-    public function kaydet_transfer()
+    public function kaydet_transfer() // transfer için
     {
-              
+
         $transfer_items = array();
-        $satinal_items = array(); 
+        $satinal_items = array();
         $logo_po_ref = null;
         $logo_fiche_ref = null;
-        $this->error = null; 
+        $this->error = null;
 
 
         if ($this->karsila[$this->talep_id]) {
@@ -332,10 +359,10 @@ class TalepKarsila extends Component
             "SOURCE_WH" => $demand->warehouse_no,
             "SOURCE_COST_GRP" => $demand->warehouse_no,
             "DEST_WH" => $demand->dest_wh_no,
-            "DEST_COST_GRP" => $demand->dest_wh_no,            
+            "DEST_COST_GRP" => $demand->dest_wh_no,
             'DOC_NUMBER' => "TR" . $this->talep_id,
             "TYPE" => 25,
-            'IO_TYPE' => 2,          
+            'IO_TYPE' => 2,
             'TRANSACTIONS' => [
                 'items' => $transfer_items
             ]
@@ -361,8 +388,8 @@ class TalepKarsila extends Component
         if (count($transfer_items) > 0) {
 
             $logo_fiche_ref  = LogoRest::SarfFisiOlustur($transfer_data, 0);
-            
-            if ($logo_fiche_ref != null && $logo_fiche_ref > 0 ) {
+
+            if ($logo_fiche_ref != null && $logo_fiche_ref > 0) {
 
                 $dm = new DemandFiche;
                 $dm->demand_id = $this->talep_id;
@@ -370,10 +397,9 @@ class TalepKarsila extends Component
                 $dm->insert_time = date('Y-m-d H:i:s');
                 $dm->save();
 
-                $dm = Demand::find($this->talep_id);               
+                $dm = Demand::find($this->talep_id);
                 $dm->status = 1;
                 $dm->save();
-                
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
@@ -389,8 +415,7 @@ class TalepKarsila extends Component
                 $dm = Demand::find($this->talep_id);
                 $dm->logo_po_ref = $logo_po_ref;
                 $dm->status = 1;
-                $dm->save(); 
-
+                $dm->save();
             } else {
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
                 DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
@@ -410,17 +435,17 @@ class TalepKarsila extends Component
     }
 
 
-    public function edit_line($id,$name)
+    public function edit_line($id, $name)
     {
         $this->edit_line_id = $id;
         $this->line_item_name = $name;
         $this->line_item = DemandDetail::find($id);
-        $this->line_quantity = number_format($this->line_item->quantity,0,"","");
+        $this->line_quantity = number_format($this->line_item->quantity, 0, "", "");
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#editLineModal']);
-        
     }
 
-    public function update_line(){
+    public function update_line()
+    {
         $line =  DemandDetail::find($this->edit_line_id);
         $line->quantity =  $this->line_quantity;
         $line->save();

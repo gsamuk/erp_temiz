@@ -1,10 +1,5 @@
 <div>
-  <style>
-    label {
-      color: rgb(65, 62, 62);
-      font-size: 0.9em;
-    }
-  </style>
+
 
   <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen p-3">
@@ -36,7 +31,7 @@
 
 
   <div id="projectsModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
+       style="display: none;">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -53,25 +48,22 @@
 
   <div class="row">
     <div
-      class="@if ($item_photos) col-xl-7 col-lg-7 col-md-12 col-sm-12 @else col-xl-10 col-lg-10 col-sm-12 @endif">
+         class="@if ($item_photos) col-xl-7 col-lg-7 col-md-12 col-sm-12 @else col-xl-10 col-lg-10 col-sm-12 @endif">
       <div class="card">
         <div class="card-header">
           <span class="float-end">
             <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
-              class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Talep
+               class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Talep
               Listesi</a>
 
             <a href="#" wire:click="$emit('SetPage', 'malzemeler.liste')"
-              class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Malzeme
+               class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Malzeme
               Listesi</a>
           </span>
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0"> <i class="ri-add-line me-1 align-bottom"></i>
-              Talep @if ($tid > 0)
-                Düzenle
-              @else
-                Oluştur
-              @endif
+              Malzeme Talebi Oluştur
+
             </h5>
           </div>
         </div>
@@ -90,7 +82,7 @@
                         </div>
                         <div class="col-lg-8">
                           <input type="date" step="any" wire:model="zaman"
-                            class="form-control form-control-sm rounded-0 mb-1">
+                                 class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                       </div>
 
@@ -101,8 +93,8 @@
                         <div class="col-lg-8">
                           <input type="hidden" wire:model="project_ref_id">
                           <input type="text" wire:model="project_code" name="proje_kodu" data-bs-toggle="modal"
-                            data-bs-target="#projectsModal" class="form-control form-control-sm rounded-0 mb-1"
-                            readonly="readonly">
+                                 data-bs-target="#projectsModal" class="form-control form-control-sm rounded-0 mb-1"
+                                 readonly="readonly">
                         </div>
 
                       </div>
@@ -113,8 +105,8 @@
                         </div>
                         <div class="col-lg-8">
                           <input type="text" data-bs-toggle="modal" name="special_code" wire:model="special_code"
-                            data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1"
-                            readonly="readonly">
+                                 data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1"
+                                 readonly="readonly">
                         </div>
                       </div>
 
@@ -125,7 +117,7 @@
                         </div>
                         <div class="col-lg-8">
                           <input type="text" name="demand_desc" wire:model="demand_desc"
-                            class="form-control form-control-sm rounded-0 mb-1">
+                                 class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                       </div>
 
@@ -134,11 +126,11 @@
 
                       <div class="row">
                         <div class="col-lg-4">
-                          <label class="form-label">Talep Tipi</label>
+                          <label class="form-label">Malzeme Talep Tipi</label>
                         </div>
                         <div class="col-lg-8">
-                          <div class="input-group input-group-sm rounded-0 mb-1">
-                            <select class="form-select" wire:model="demand_type">
+                          <div class="input-group input-group-sm">
+                            <select wire:model="demand_type">
                               <option value="1">Depodan Malzeme Talebi</option>
                               <option value="2">Depolar Arası Malzeme Transferi</option>
                             </select>
@@ -146,15 +138,13 @@
                         </div>
                       </div>
 
-
-
-                      <div class="row">
+                      <div class="row mt-1">
                         <div class="col-lg-4">
-                          <label class="form-label">Kaynak Depo</label>
+                          <label class="form-label">Kaynak Depo (İstenen)</label>
                         </div>
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
-                            <select wire:model="warehouse" name="warehouse" class="form-select">
+                            <select wire:model="warehouse" name="warehouse">
                               @foreach ($warehouses as $d)
                                 <option value="{{ $d->warehouse_no }}">
                                   {{ $d->warehouse_name }}
@@ -168,13 +158,13 @@
 
                       @if ($demand_type == 2)
 
-                        <div class="row">
+                        <div class="row mt-1">
                           <div class="col-lg-4">
-                            <label class="form-label">Teslim Depo</label>
+                            <label class="form-label">Teslim Depo (İsteyen)</label>
                           </div>
                           <div class="col-lg-8">
                             <div class="input-group input-group-sm">
-                              <select wire:model="sourcewh" name="sourcewh" class="form-select">
+                              <select wire:model="destwh" name="destwh">
                                 @foreach ($warehouses as $d)
                                   <option value="{{ $d->warehouse_no }}">
                                     {{ $d->warehouse_name }}
@@ -186,7 +176,6 @@
 
                         </div>
                       @endif
-
                     </th>
                   </tr>
                 </table>
@@ -214,37 +203,37 @@
                       @endphp
                       @foreach ($inputs as $key => $value)
                         <tr>
-                          <td scope="row"> {{ $s }} {{ $line }}</td>
+                          <td scope="row"> {{ $s }}</td>
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="text" class="form-control border-dashed" readonly="readonly"
-                                name="kod[{{ $value }}]" id="input_kod_{{ $value }}"
-                                wire:click="SetLine({{ $value }},'#malzemeModal')"
-                                wire:model="kod.{{ $value }}">
+                                     name="kod[{{ $value }}]" id="input_kod_{{ $value }}"
+                                     wire:click="SetLine({{ $value }},'#malzemeModal')"
+                                     wire:model="kod.{{ $value }}">
                             </div>
                           </td>
 
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="text" class="form-control border-dashed" readonly="readonly"
-                                name="aciklama[{{ $value }}]" id="input_aciklama_{{ $value }}"
-                                wire:click="SetLine({{ $value }},'#malzemeModal')"
-                                wire:model="aciklama.{{ $value }}">
+                                     name="aciklama[{{ $value }}]" id="input_aciklama_{{ $value }}"
+                                     wire:click="SetLine({{ $value }},'#malzemeModal')"
+                                     wire:model="aciklama.{{ $value }}">
                             </div>
                           </td>
 
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="number" step="any" class="form-control border-dashed"
-                                id="miktar_{{ $value }}" name="miktar[{{ $value }}]"
-                                wire:model.defer="miktar.{{ $value }}">
+                                     id="miktar_{{ $value }}" name="miktar[{{ $value }}]"
+                                     wire:model.defer="miktar.{{ $value }}">
                             </div>
                           </td>
 
                           <td>
                             <div class="input-group input-group-sm">
                               <select name="birim[{{ $value }}]"
-                                wire:model.defer="birim.{{ $value }}">
+                                      wire:model.defer="birim.{{ $value }}">
                                 @if (isset($birim_select[$value]))
                                   @foreach ($birim_select[$value] as $b)
                                     <option value="{{ $b['unit_code'] }}">
@@ -259,14 +248,15 @@
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="text" class="form-control border-dashed" id="desc_{{ $value }}"
-                                name="desc[{{ $value }}]" wire:model.lazy="desc.{{ $value }}">
+                                     name="desc[{{ $value }}]" wire:model.lazy="desc.{{ $value }}">
                             </div>
                           </td>
 
                           <td>
                             <button class="btn btn-sm btn-outline-danger" wire:loading.attr="disabled"
-                              wire:click.prevent="remove({{ $key }}, {{ $value }})"><i
-                                class="mdi mdi-delete"></i></button>
+                                    wire:click.prevent="remove({{ $key }}, {{ $value }})"><i
+                                 class="mdi mdi-delete"></i>
+                            </button>
                           </td>
                         </tr>
 
@@ -276,8 +266,10 @@
                       @endforeach
                       <tr>
                         <th scope="row" colspan="6"></th>
-                        <td> <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
-                            wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i></button>
+                        <td>
+                          <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
+                                  wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i>
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -293,7 +285,7 @@
                       <div class="alert alert-danger alert-dismissible fade show shadow">
                         {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"
-                          aria-label="Close"></button>
+                                aria-label="Close"></button>
                       </div>
                     </div>
                   @endif
@@ -361,4 +353,9 @@
       </div>
     @endif
   </div>
+
+
+
+
+
 </div>

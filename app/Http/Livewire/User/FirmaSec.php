@@ -49,7 +49,7 @@ class FirmaSec extends Component
             $token = LogoTokenController::getToken($this->firma);
             if ($token) {
                 $this->btn = false;
-                session()->flash('message', 'Geçiş Yapıldı, lütfen sayfayı yenileyiniz! ');
+                session()->flash('message', 'Geçiş Yapıldı, bu pencereyi kapatabilirsiniz. ');
             } else {
                 $this->btn = true;
                 session()->flash('error', 'Sorun, Lütfen logları kontrol ediniz. ');

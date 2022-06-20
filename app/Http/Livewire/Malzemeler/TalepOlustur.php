@@ -19,8 +19,8 @@ class TalepOlustur extends Component
     public $line = 0;
     public $i = 0;
     public $inputs = [];
-    public $ref;
 
+    public $ref;
 
     public $special_code;
     public $project_code;
@@ -31,7 +31,7 @@ class TalepOlustur extends Component
     public $birim;
 
     public $desc;
-   
+
     public $birim_select = [];
     public $tid = 0; // talep  id
     public $item_photos;
@@ -43,29 +43,30 @@ class TalepOlustur extends Component
     public $demand_type = 1;
 
     public $warehouse = 0; // malzemenin çıktığı depo
-    public $sourcewh;  // malzemenin girdiği depo
+    public $destwh;  // malzemenin girdiği depo
 
 
 
     protected $listeners = ["getItem", "getOzelKod", "getProject"];
 
-   
-    public function updatedSourcewh($id){       
-       if($id == $this->warehouse){
-        dd("ddd");
-       }
-    }
-
-    public function updatedWarehouse($id){   
-        if($id == $this->sourcewh){
-            dd("ddd");
-           }
-
+    public function updatedWarehouse($id)
+    {
         $this->emit('setWh', $id);
+
+        $this->kod = null;
+        $this->aciklama = null;
+        $this->miktar = null;
+        $this->birim = null;
+        $this->birim_select = [];
+
+        $this->line = 0;
+        $this->i = 0;
+        $this->inputs = [];
     }
 
     public function mount()
     {
+        $this->add(1);
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("2021-m-d");
     }
@@ -140,14 +141,16 @@ class TalepOlustur extends Component
         $this->aciklama[$this->line] = $item->stock_name;
         $this->desc[$this->line] = "İhtiyaç";
         $this->miktar[$this->line] = 1; // test verisi
-
-
         $this->dispatchBrowserEvent('CloseModal');
     }
 
 
     public function store()
     {
+        if ($this->warehouse == $this->destwh && $this->demand_type == 2) {
+            return session()->flash('error', 'Transfer için depoları farklı seçmelisiniz.');
+        }
+
         $insert_time = date('Y-m-d H:i:s');
 
         $demand = new Demand;
@@ -159,8 +162,8 @@ class TalepOlustur extends Component
         $demand->special_code = $this->special_code;
         $demand->demand_type = $this->demand_type;
 
-        if($this->sourcewh){
-        $demand->dest_wh_no = $this->sourcewh;
+        if ($this->destwh) {
+            $demand->dest_wh_no = $this->destwh;
         }
         $demand->insert_time = $insert_time;
         $demand->save();

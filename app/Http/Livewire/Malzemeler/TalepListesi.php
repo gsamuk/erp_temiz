@@ -9,7 +9,7 @@ use App\Models\Demand;
 
 class TalepListesi extends Component
 {
-    protected $listeners = ['postAdded' => 'incrementPostCount'];
+    protected $listeners = ['LoadDemandList' => '$refresh'];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -22,7 +22,6 @@ class TalepListesi extends Component
     public $talep_satir_id;
     public $talep_detay_id;
     public $talep_islem_id;
-
 
 
     public function set_status($status)
