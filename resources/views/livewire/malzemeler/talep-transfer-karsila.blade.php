@@ -2,6 +2,7 @@
   <div wire:loading class="m-2">
     <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
   </div>
+
   <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -145,10 +146,20 @@
 
     <div class="card">
       <div class="card-header">
-        @php
-          $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
-        @endphp
-        <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+
+        @if ($talep->demand_type == 1)
+          @php
+            $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
+          @endphp
+          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+        @else
+          @php
+            $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
+            $w2 = App\Models\LogoWarehouses::where('warehouse_no', $talep->dest_wh_no)->first();
+          @endphp
+          <h5 class="text-info">{{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
+            {{ $w2->warehouse_name }} Malzeme Transferi</h5>
+        @endif
         <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
@@ -232,8 +243,10 @@
                       <br>
                       <small>Stok Kodu: {{ $item_detail->stock_code }}</small><br>
                       <small class="text-danger">Talep Nedeni : {{ $dt->description }}</small>
+
                     </td>
                     <td>
+
                       <b style="font-size:1.1em"
                          class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
                       <button class="btn btn-sm btn-ghost-info p-0"
@@ -248,8 +261,9 @@
                     @if ($for_manage)
                       <td>
                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
+
                         <input type="number" min="0" class="form-control"
-                               max="{{ $item_detail->onhand_quantity }}" _onkeyup="imposeMinMax(this)"
+                               max="{{ $item_detail->onhand_quantity }}" onkeyup=imposeMinMax(this)
                                wire:loading.attr="disabled" @if ($dt->status > 0 || $talep->approved == 1) disabled @endif
                                {{ $disable }}
                                wire:model.debunce.1500ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
@@ -298,7 +312,7 @@
                     @if (isset($karsila[$talep_id]))
                       <div class="col-lg-6">
                         <div class="p-3" style="background-color: rgb(235, 255, 236)">
-                          <h5><b>Stoktan Karşılama Listesi</b></h5>
+                          <h5><b>Depo Transfer Listesi</b></h5>
 
                           <table class="table-sm table-striped table border align-middle" style="width: 100%">
                             <thead class="table-success">
@@ -399,7 +413,7 @@
 
 
                   <div class="col-lg-12 mt-3">
-                    Yetkili personel stoktan karşılama yada satınalma veri giriş alanlarını
+                    Yetkili personel ambar transferi yada satınalma veri giriş alanlarını
                     değiştirerek kayıt işlemi yapmalıdır.
                   </div>
 

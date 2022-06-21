@@ -80,10 +80,10 @@
                   <tr>
                     <th scope="col"></th>
                     <th scope="col">No</th>
-                    <th scope="col" style="width:100px;">Talep Yapan</th>
+                    <th scope="col" style="width:100px;">Talep Eden</th>
                     <th scope="col">Zamanı</th>
-                    <th scope="col">Onay</th>
-                    <th scope="col" style="width:65px;"></th>
+                    <th scope="col">Durumu</th>
+                    <th scope="col" style="width:65px;">İşlem</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -98,9 +98,9 @@
                     <tr class="@if ($d->id == $talep_satir_id) table-info @endif">
                       <td class="owner">
                         @if ($d->demand_type == 1)
-                          <i class="bx bx-move-horizontal text-info"></i>
+                          <i class="ri-increase-decrease-line ri-xl text-info"></i>
                         @else
-                          <i class="bx bx-transfer text-danger"></i>
+                          <i class="ri-swap-box-line ri-xl text-warning"></i>
                         @endif
                       </td>
                       <td class="owner">{{ $d->id }}</td>
@@ -123,20 +123,34 @@
 
                       </td>
                       <td class="owner">
-                        @if ($d->status == 1)
-                          <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-success btn-block">İşlem Detayı <i
+                        @if ($d->status == 1 && $d->demand_type == 1)
+                          <button wire:click="talep_sarf_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                                  class="btn btn-sm btn-success btn-block" style="width:150px">Talep İşlem Detayı <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
-                        @if ($d->status == 0)
-                          <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-info btn-block">Karşılama <i
+                        @if ($d->status == 0 && $d->demand_type == 1)
+                          <button wire:click="talep_sarf_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                                  class="btn btn-sm btn-info btn-block" style="width:150px">Depo Malzeme Talebi <i
+                               class="ri-arrow-right-s-fill"></i></button>
+                        @endif
+
+
+
+                        @if ($d->status == 1 && $d->demand_type == 2)
+                          <button wire:click="talep_transfer_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                                  class="btn btn-sm btn-success btn-block" style="width:150px">Transfer İşlem Detayı <i
+                               class="ri-arrow-right-s-fill"></i></button>
+                        @endif
+
+                        @if ($d->status == 0 && $d->demand_type == 2)
+                          <button wire:click="talep_transfer_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                                  class="btn btn-sm btn-warning btn-block" style="width:150px">Depo Transfer Talebi <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 9)
-                          <button class="btn btn-sm btn-soft-danger btn-block waves-effect waves-light" disabled>Red
+                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Red
                           </button>
                         @endif
 
@@ -166,21 +180,29 @@
       </div>
     </div>
 
+    <div class="col-lg-7 col-md-12 col-sm-12">
 
-    @if ($talep_detay_id)
-      <div class="col-lg-7 col-md-12 col-sm-12">
+      @if ($talep_sarf_detay_id)
         @livewire('malzemeler.talep-karsila')
-      </div>
-    @endif
+      @endif
 
-
-    @if ($talep_islem_id)
-      <div class="col-lg-7 col-md-12 col-sm-12">
+      @if ($talep_sarf_islem_id)
         @livewire('malzemeler.talep-islem')
-      </div>
-    @endif
+      @endif
 
+      @if ($talep_transfer_detay_id)
+        @livewire('malzemeler.talep-transfer-karsila')
+      @endif
 
+      @if ($talep_transfer_islem_id)
+        @livewire('malzemeler.talep-transfer-islem')
+      @endif
+
+      @if ($talep_satir_id)
+        @livewire('malzemeler.talep-notlar')
+      @endif
+
+    </div>
 
   </div>
 

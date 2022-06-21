@@ -1,6 +1,4 @@
 <div>
-
-
   <div id="malzemeModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen p-3">
       <div class="modal-content">

@@ -1,5 +1,7 @@
 <div>
-
+  <div wire:loading class="m-2">
+    <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
+  </div>
 
   <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -85,33 +87,6 @@
     </div>
   </div>
 
-  <div id="setStatusModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Durum</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-        </div>
-        <div class="modal-body m-0">
-          @if ($stock_code)
-            <div class="mb-3">
-              <label for="customer-name" class="col-form-label">Durum Giriniz</label>
-              <input wire:model.defer="status_text" type="text" class="form-control">
-              <br>
-              <small>Örnek : 10 gün içinde Türkiye'den gelecek </small>
-            </div>
-          @endif
-        </div>
-
-        <div class="modal-footer">
-          <button wire:click="update_status({{ $stock_code }})" class="btn btn-primary">Onayla</button>
-          <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 
   @if ($talep_detay)
     <div class="card">
@@ -178,7 +153,7 @@
 
           @php
             $demand_fiche = Illuminate\Support\Facades\DB::select(
-                "Exec dbo.sp_get_consump_fiche
+                "Exec dbo.sp_get_transfer_fiche
                 @company_id ='001',
                 @term_id = '09',
                 @detail = 1,
@@ -190,8 +165,8 @@
 
           @if ($demand_fiche)
             <div class="col-lg-12 mb-2">
-              <h6><b>Depodan Karşılanan Malzeme Listesi (Sarf Fişleri)</b></h6>
-              <div class="p-1">
+              <h6><b>Depodan Transfer olan Malzeme Listesi (Transfer Fişleri) </b></h6>
+              <div style="background-color: rgb(243, 246, 241)" class="p-1">
                 <table class="table-sm table-striped table border align-middle">
                   <thead>
                     <tr>
@@ -237,21 +212,20 @@
 
           @if ($incompletedDemand->count() > 0)
 
-
             <div class="col-lg-12 mt-2">
-              <h6><b>Karşılanmayı Bekleyen Malzeme Listesi</b></h6>
-              <div class="p-1">
+              <h6><b>Transfer Bekleyen Malzeme Listesi</b></h6>
+              <div style="background-color: rgb(255, 251, 247)" class="p-1">
                 <table class="table-sm table-striped table border align-middle">
                   <thead>
                     <tr>
                       <th scope="col"></th>
                       <th scope="col">Stok No</th>
                       <th scope="col">Malzeme</th>
-                      <th scope="col">Talep</th>
+                      <th scope="col">Talep Edilen</th>
                       <th scope="col">Karşılanan</th>
-                      <th scope="col">Stok Bekleyen </th>
+                      <th scope="col">Fark </th>
                       <th scope="col">Stok </th>
-                      <th scope="col">Durum </th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -271,24 +245,15 @@
                                      value="{{ $d->diff }}" class="form-check-input">
                             @else
                             @endif
-
                           </td>
 
                           <td>{{ $d->stock_code }}</td>
-                          <td>{{ $item->stock_name }}
-                            @if ($d->status_desc)
-                              <br> <small class="text-danger"> <i class="ri-error-warning-line"></i>
-                                {{ $d->status_desc }}</small>
-                            @endif
-                          </td>
+                          <td>{{ $item->stock_name }}</td>
                           <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
                             </small></td>
                           <td>{{ number_format($d->consump, 0, '.', ',') }}</td>
                           <td>{{ number_format($d->diff, 0, '.', ',') }}</td>
                           <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
-                          <td><button class="btn btn-sm"
-                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">...</button>
-                          </td>
                         </tr>
                       @endif
                     @endforeach
@@ -298,7 +263,7 @@
 
                 @if ($sarf_btn)
                   <button class="btn btn-primary m-1" wire:click="sarf_olustur" wire:loading.attr="disabled">Seçili
-                    Olanları Teslim Et</button>
+                    Olanları Transfer Et</button>
                   <div wire:loading>
                     <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
                   </div>
@@ -316,7 +281,7 @@
                   @endif
 
                   <br>
-                  <span class="text-dark m-1">Satınalma işlemi gerçekleşip malzeme stoklara yansıdığında sarf
+                  <span class="text-dark m-1">Satınalma işlemi gerçekleşip malzeme stoklara yansıdığında transfer
                     oluşturabilirsiniz.</span>
                 @endif
 
@@ -331,8 +296,4 @@
       </div>
     </div>
   @endif
-
-  <div wire:loading>
-    <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-  </div>
 </div>

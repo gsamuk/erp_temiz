@@ -62,11 +62,12 @@ class Liste extends Component
         $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->where('wh_no', $this->wh_id)
+            ->where('onhand_quantity', '>=', 0)
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
             })
             ->when($this->code, function ($query) {
-                return $query->where('stock_code', $this->code);
+                return $query->where('stock_code', 'like', '%' . $this->code . '%');
             })->when($this->stur, function ($query) {
                 return $query->where('stock_type', $this->stur);
             })

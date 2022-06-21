@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Session;
+use App\Models\Users;
 
 class Erp
 {
@@ -18,5 +19,10 @@ class Erp
     public static function user_id()
     {
         return Session::get('userData')->id;
+    }
+
+    public static function user($id)
+    {
+        return Users::find($id);
     }
 }

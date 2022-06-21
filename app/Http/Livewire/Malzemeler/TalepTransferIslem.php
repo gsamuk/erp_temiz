@@ -12,7 +12,7 @@ use App\Models\DemandFiche;
 use App\Models\IncompletedDemand;
 
 
-class TalepIslem extends Component
+class TalepTransferIslem extends Component
 {
     public $error;
     public $talep;
@@ -27,13 +27,9 @@ class TalepIslem extends Component
 
     public $sarf = array();
 
-    // malzeme durum statusu değiştirmek için
-    public $stock_code;
-    public $status_text;
+    protected $listeners = ['TalepTransferIslem'];
 
-    protected $listeners = ['TalepIslem'];
-
-    public function TalepIslem($id)
+    public function TalepTransferIslem($id)
     {
 
         $this->error = null;
@@ -110,7 +106,7 @@ class TalepIslem extends Component
 
     public function render()
     {
-        return view('livewire.malzemeler.talep-islem');
+        return view('livewire.malzemeler.talep-transfer-islem');
     }
 
     public function foto_goster($id)
@@ -119,21 +115,5 @@ class TalepIslem extends Component
         $this->item = LogoItems::find($id);
         $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $id)->get();
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#MalzemeFotoModal']);
-    }
-
-    public function status_pop($stock_code, $desc)
-    {
-        $this->stock_code = $stock_code;
-        $this->status_text = $desc;
-        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#setStatusModal']);
-    }
-
-    public function update_status()
-    {
-        $up = DemandDetail::Where("stock_code", $this->stock_code)
-            ->where("demand_id", $this->talep_id)->first();
-        $up->status_desc = $this->status_text;
-        $up->save();
-        $this->dispatchBrowserEvent('CloseModal');
     }
 }

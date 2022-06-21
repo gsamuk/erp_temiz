@@ -74,8 +74,9 @@
                                     @if($ch)
                                     <th class="sort" data-sort="name" scope="col" style="width:55px;"></th>
                                     @endif
-                                    <th class="sort" data-sort="name" scope="col">Depo</th>
+                                   
                                     <th class="sort" data-sort="name" scope="col">Malzeme</th>
+                                     <th class="sort" data-sort="name" scope="col">Depo</th>
                                     @if(!$item_id)
                                     @if($details)
                                     <th class="sort" data-sort="name" scope="col">Stok</th>
@@ -117,18 +118,17 @@
                                     <td class="owner"> {{ $item->stock_code }} </td>
 
                                     @if($ch)
-                                    <td class="owner">
+                                    <td class="owner"> 
                                         <button wire:click.prevent="$emit('getItem', {{ $item }})"
                                             class="btn btn-outline-danger btn-sm"> Ekle </button>
                                     </td>
-                                    @endif
-
-                                    <td class="owner"> {{ $item->wh_name }} </td> 
+                                    @endif                                   
                                     <td>
                                         <a href="#" wire:click="foto({{ $item->logicalref }})">
                                             <b> {{ $item->stock_name }}</b>
                                         </a>
                                     </td>
+                                     <td class="owner"> {{ $item->wh_name }} </td> 
 
                                     @if(!$item_id)
                                     @if($details)
