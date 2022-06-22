@@ -166,7 +166,7 @@
           @if ($demand_fiche)
             <div class="col-lg-12 mb-2">
               <h6><b>Depodan Transfer olan Malzeme Listesi (Transfer Fişleri) </b></h6>
-              <div style="background-color: rgb(243, 246, 241)" class="p-1">
+              <div style="background-color:#f2faf2;" class="p-2">
                 <table class="table-sm table-striped table border align-middle">
                   <thead>
                     <tr>
@@ -204,6 +204,48 @@
             </div>
           @endif
 
+          @if ($talep->logo_po_ref)
+            @php
+              $satinalma = App\Models\LogoPurchaseOrdersDetail::Where('po_ficheref', $talep->logo_po_ref)->get();
+            @endphp
+
+            @if ($satinalma->count() > 0)
+              <div class="col-lg-12 mt-2">
+                <h6><b>Satınalma Malzeme Listesi</b></h6>
+                <div style="background-color:#faf2f2;" class="p-2">
+                  <table class="table-sm table-striped table border align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col">Fiş No</th>
+                        <th scope="col">Belge No</th>
+                        <th scope="col">Stok No</th>
+                        <th scope="col">Malzeme</th>
+                        <th scope="col">Miktar</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($satinalma as $d)
+                        <tr>
+                          <td>{{ $d->po_ficheno }}</td>
+                          <td>{{ $d->document_no }}</td>
+                          <td>{{ $d->stock_code }}</td>
+                          <td>{{ $d->stock_name }}</td>
+                          <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
+                            </small>
+                          </td>
+                        </tr>
+                      @endforeach
+
+                    </tbody>
+                  </table>
+                  <small>Dikkat: Satınalma fişi öneri niteliğinde oluşmuştur, fişin düzenlemesi gereklidir.</small>
+                </div>
+              </div>
+            @endif
+          @endif
+
+
 
           @php
             $incompletedDemand = App\Models\IncompletedDemand::Where('demand_id', $talep_id)->get();
@@ -211,7 +253,6 @@
           @endphp
 
           @if ($incompletedDemand->count() > 0)
-
             <div class="col-lg-12 mt-2">
               <h6><b>Transfer Bekleyen Malzeme Listesi</b></h6>
               <div style="background-color: rgb(255, 251, 247)" class="p-1">
@@ -225,11 +266,9 @@
                       <th scope="col">Karşılanan</th>
                       <th scope="col">Fark </th>
                       <th scope="col">Stok </th>
-
                     </tr>
                   </thead>
                   <tbody>
-
                     @foreach ($incompletedDemand as $d)
                       @if ($d->diff > 0)
                         @php
@@ -262,7 +301,8 @@
                 </table>
 
                 @if ($sarf_btn)
-                  <button class="btn btn-primary m-1" wire:click="sarf_olustur" wire:loading.attr="disabled">Seçili
+                  <button class="btn btn-primary m-1" wire:click="transfer_olustur"
+                          wire:loading.attr="disabled">Seçili
                     Olanları Transfer Et</button>
                   <div wire:loading>
                     <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
@@ -280,9 +320,7 @@
                     </div>
                   @endif
 
-                  <br>
-                  <span class="text-dark m-1">Satınalma işlemi gerçekleşip malzeme stoklara yansıdığında transfer
-                    oluşturabilirsiniz.</span>
+
                 @endif
 
               </div>

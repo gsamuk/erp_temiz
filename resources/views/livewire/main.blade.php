@@ -5,7 +5,7 @@
     <div class="col-xl-4 col-md-6">
       <div class="card card-height-100">
         <div class="card-header align-items-center d-flex">
-          <h4 class="card-title flex-grow-1 mb-0">Projects Status</h4>
+          <h4 class="card-title flex-grow-1 mb-0">Onay Bekleyen Talepler</h4>
           <div class="flex-shrink-0">
             <div class="dropdown card-header-dropdown">
               <a class="dropdown-btn text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -77,7 +77,7 @@
     <div class="col-xxl-4">
       <div class="card">
         <div class="card-header align-items-center d-flex">
-          <h4 class="card-title flex-grow-1 mb-0">Team Members</h4>
+          <h4 class="card-title flex-grow-1 mb-0">Talepte Bulunanlar</h4>
           <div class="flex-shrink-0">
             <div class="dropdown card-header-dropdown">
               <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true"

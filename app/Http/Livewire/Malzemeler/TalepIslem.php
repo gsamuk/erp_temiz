@@ -103,6 +103,14 @@ class TalepIslem extends Component
                 $dm->save();
 
                 $this->sarf = null;
+
+                $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
+                if ($kalan == 0) {
+                    $d = Demand::find($this->talep_id);
+                    $d->status = 2;
+                    $d->save();
+                }
+
                 return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
             }
         }

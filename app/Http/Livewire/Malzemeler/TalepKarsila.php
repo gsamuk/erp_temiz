@@ -19,6 +19,8 @@ class TalepKarsila extends Component
     public $error;
     public $iptal_sebep = "Gerekli Değil";
 
+
+
     public $for_manage = true; // yönetim durumu aktif , onay işlemleri aktif olur
 
     public $talep_line;
@@ -130,6 +132,7 @@ class TalepKarsila extends Component
         $this->TalepKarsila($this->talep_id);
         $this->emit('LoadDemandList');
     }
+
 
     public function kaydet() // sarf içn
     {
@@ -293,167 +296,6 @@ class TalepKarsila extends Component
         }
     }
 
-    public function kaydet_transfer() // sarf içn
-    {
-        $sarf_items = array();
-        $satinal_items = array();
-        $logo_po_ref = null;
-        $logo_fiche_ref = null;
-        $this->error = null;
-
-        // kontroller
-        $sarf = false;
-        $satinal = false;
-        $return_msg = "";
-
-
-        if ($this->karsila[$this->talep_id]) {
-            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
-
-                    // status kontrolleri
-                    $item = DemandDetail::find($item_id);
-                    $item->status = 1; // stoktan karşılama
-                    $item->save();
-                    ///
-
-                    $logo_item = LogoItems::find($item->logo_stock_ref);
-
-                    $sarf_items[] = [
-                        "ITEM_CODE" => $item->stock_code,
-                        "ITEMREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "DESCRIPTION" => $item->description,
-                        "PRICE" => $logo_item->average_price,
-                        "TYPE" => 25,
-                        'QUANTITY' => $miktar,
-                    ];
-                }
-            }
-        }
-
-
-        if ($this->satinal[$this->talep_id]) {
-            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
-
-                    // status kontrolleri
-                    $item = DemandDetail::find($item_id);
-                    if ($item->status == 1) { // eğer stoktan karşılama varsa
-                        $item->status = 3;  // hep stok hem satınalma statusu
-                    } else {
-                        $item->status = 2; // sadece satın alma statusu
-                    }
-                    $item->save();
-                    ///
-
-                    $satinal_items[] = [
-                        "STOCKREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "TYPE" => 0,
-                        'QUANTITY' => $miktar,
-                    ];
-                }
-            }
-        }
-
-
-        $demand = Demand::find($this->talep_id);
-        $sarf_data = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => "2021-05-21 10:10:00",
-            'GROUP' => 3,
-            "SOURCE_WH" => $demand->warehouse_no,
-            "SOURCE_COST_GRP" => $demand->warehouse_no,
-            "DEST_WH" => $demand->dest_wh_no,
-            "DEST_COST_GRP" => $demand->dest_wh_no,
-            'DOC_NUMBER' => "TR" . $this->talep_id,
-            "TYPE" => 25,
-            'IO_TYPE' => 2,
-            'TRANSACTIONS' => [
-                'items' => $sarf_items
-            ]
-        ];
-
-
-        $satinal_data = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => "2021-05-21 10:10:00",
-            'DOC_NUMBER' => "TLP" . $this->talep_id,
-            'CLIENTREF' => 7,
-            "TYPE" => 2,
-            'SOURCE_WH' => $demand->warehouse_no,
-            'TRANSACTIONS' => [
-                'items' => $satinal_items
-            ]
-        ];
-
-
-
-        if (count($sarf_items) > 0) {
-
-            $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-
-            if ($logo_fiche_ref != null && $logo_fiche_ref > 0) {
-                $sarf = $logo_fiche_ref;
-                $return_msg .= "<br>Ambar Transfer Fişi Oluşturuldu " . $logo_fiche_ref;
-
-                // eğer logo fişi oluştuysa
-                $dm = new DemandFiche;
-                $dm->demand_id = $this->talep_id;
-                $dm->logo_fiche_ref = $logo_fiche_ref;
-                $dm->demand_type = 1; // sarf fişi tipi
-                $dm->insert_time = date('Y-m-d H:i:s');
-                $dm->save();
-                // logo sarf fişi başarılı ise fiş kaydı ekleniyor.
-
-                $dm = Demand::find($this->talep_id);
-                $dm->status = 1;
-                $dm->save();
-                // Talep durumu işlem yapıldı (1) olarak set ediliyor.
-
-            } else {
-                //eğer logo sarf fişi oluşturamazsa status değerlerini değişir
-                // daha önce sarf edildi olan status değerleri değiştiriliyor
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
-                ///
-            }
-        }
-
-        if (count($satinal_items) > 0) {
-
-            $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
-
-            if ($logo_po_ref != null && $logo_po_ref > 0) {
-                $satinal = $logo_po_ref;
-                $return_msg .= "<br>Satınalma Fişi Oluşturuldu, Fiş No : " . $logo_po_ref;
-                // eğer talep malzemelerinde satın alma fişi oluştuysa
-                $dm = Demand::find($this->talep_id);
-                $dm->logo_po_ref = $logo_po_ref;
-                $dm->status = 1;
-                $dm->save();
-                // Talep durumu işlem yapıldı (1) olarak set ediliyor.
-
-            } else {
-                //eğer logo satınalma fişi oluşturamazsa status değerlerini değişir
-                // daha önce satınalma yapıldı olan status değerleri değiştiriliyor
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
-            }
-        }
-
-        if (!$sarf && !$satinal) {
-            $this->error = "Logo Fişleri Oluşturulamadı, Lütfen Firma Seçerek Tekrar Deneyiniz.";
-        } else {
-
-            return session()->flash('success', $return_msg);
-        }
-    }
 
 
     public function render()

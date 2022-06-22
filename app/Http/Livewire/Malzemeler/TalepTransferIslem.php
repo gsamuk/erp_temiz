@@ -31,7 +31,6 @@ class TalepTransferIslem extends Component
 
     public function TalepTransferIslem($id)
     {
-
         $this->error = null;
         $this->talep_id = $id;
         $this->talep = Demand::find($id);
@@ -42,9 +41,9 @@ class TalepTransferIslem extends Component
     }
 
 
-    public function sarf_olustur()
+    public function transfer_olustur()
     {
-        $sarf_items = array();
+        $transfer_items = array();
 
         if (count($this->sarf) == 0) {
             return session()->flash('error', 'Lütfen Malzeme Seçiniz');
@@ -55,13 +54,17 @@ class TalepTransferIslem extends Component
                 $demand_item = IncompletedDemand::Where('demand_id', $this->talep_id)->where('stock_code', $stock_code)->first();
                 $item = LogoItems::Where("stock_code", "$stock_code")->first();
 
-                $sarf_items[] = [
+                $demand = Demand::find($this->talep_id);
+
+                $transfer_items[] = [
                     "ITEM_CODE" => $item->stock_code,
                     "ITEMREF" => $item->logicalref,
                     "UNIT_CODE" => $demand_item->unit_code,
                     "PRICE" => $item->average_price,
                     "TYPE" => 25,
                     'QUANTITY' => $miktar,
+                    'SOURCEINDEX' =>  $demand->warehouse_no,
+                    'DESTINDEX' => $demand->dest_wh_no,
                 ];
             }
         }
@@ -72,25 +75,25 @@ class TalepTransferIslem extends Component
                 'Accept' => 'application/json',
             ],
             'DATE' => "2021-05-21 10:10:00",
-            'GROUP' => 2,
-            "AUXIL_CODE" => $demand->special_code,
-            "PROJECT_CODE" => $demand->project_code,
-            "FOOTNOTE1"  => $demand->demand_desc,
-            'DOC_NUMBER' => "SF" . $this->talep_id,
-            "TYPE" => 12,
-            'IO_TYPE' => 3,
-            'SOURCE_WH' => $demand->warehouse_no,
-            'SOURCE_COST_GRP' => 1,
+            'GROUP' => 3,
+            "SOURCE_WH" => $demand->warehouse_no,
+            "SOURCE_COST_GRP" => $demand->warehouse_no,
+            "DEST_WH" => $demand->dest_wh_no,
+            "DEST_COST_GRP" => $demand->dest_wh_no,
+            'DOC_NUMBER' => "TR" . $this->talep_id,
+            "TYPE" => 25,
+            'IO_TYPE' => 2,
             'TRANSACTIONS' => [
-                'items' => $sarf_items
+                'items' => $transfer_items
             ]
         ];
 
 
-        if (count($sarf_items) > 0) {
+        if (count($transfer_items) > 0) {
 
             $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-            if ($logo_fiche_ref != null) {
+
+            if ($logo_fiche_ref != null && $logo_fiche_ref > 0) {
 
                 $dm = new DemandFiche;
                 $dm->demand_id = $this->talep_id;
@@ -99,6 +102,14 @@ class TalepTransferIslem extends Component
                 $dm->save();
 
                 $this->sarf = null;
+
+                $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
+                if ($kalan == 0) {
+                    $d = Demand::find($this->talep_id);
+                    $d->status = 2;
+                    $d->save();
+                }
+
                 return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
             }
         }

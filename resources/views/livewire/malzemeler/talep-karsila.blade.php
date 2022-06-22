@@ -1,7 +1,5 @@
 <div>
-  <div wire:loading class="m-2">
-    <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-  </div>
+
   <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
@@ -427,34 +425,31 @@
                     </div>
                   @endif
 
+                  <div wire:loading>
+                    <div class="col-lg-12 mt-3">
+                      <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
+                    </div>
+                  </div>
+
                   <div class="col-lg-12 mt-3">
+
                     @if (isset($s_have) && isset($k_have))
                       @if ($s_have || $k_have)
 
                         @if ($talep->approved == 0)
-                          <button wire:click="approved();" class="btn btn-success btn-lg btn-label"
-                                  wire:loading.attr="disabled">
+                          <button wire:click="approved" wire:loading.attr="disabled"
+                                  class="btn btn-success btn-label">
                             <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
                             Listeyi Onayla
                           </button>
                         @else
-                          @if ($talep->demand_type == 1)
-                            <button wire:click="kaydet();" class="btn btn-info btn-lg btn-label"
-                                    wire:loading.attr="disabled">
-                              <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                              Logo Fişi Oluştur (Sarf)
-                            </button>
-                          @else
-                            <button wire:click="kaydet_transfer();" class="btn btn-info btn-lg btn-label"
-                                    wire:loading.attr="disabled">
-                              <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
-                              Logo Fişi Oluştur (Transfer)
-                            </button>
-                          @endif
+                          <button wire:click="kaydet" wire:loading.attr="disabled" class="btn btn-info btn-label">
+                            <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
+                            Logo Fişi Oluştur (Sarf)
+                          </button>
 
-                          <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
-                                  wire:loading.attr="disabled"> <i
-                               class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
+                          <button wire:click="unapproved" wire:loading.attr="disabled"
+                                  class="btn btn-soft-danger btn-sm position-absolute end-0 top-50">
                             Onay İptal</button>
                         @endif
                       @else
@@ -465,12 +460,9 @@
                       @endif
 
                     @endif
-
-                    <div wire:loading>
-                      <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-                    </div>
-
                   </div>
+
+
                 </div>
               </div>
             @endif

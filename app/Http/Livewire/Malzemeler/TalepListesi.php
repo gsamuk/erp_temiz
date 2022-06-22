@@ -52,6 +52,9 @@ class TalepListesi extends Component
             ->when(($this->status == 0), function ($query) {
                 return $query->where('demand.status', $this->status);
             })
+            ->when(($this->status == 2), function ($query) {
+                return $query->where('demand.status', $this->status);
+            })
             ->when(($this->status == 9), function ($query) {
                 return $query->where('demand.status', $this->status);
             })

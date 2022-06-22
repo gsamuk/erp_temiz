@@ -28,19 +28,19 @@
           </div>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-2">
 
           <ul class="nav nav-tabs nav-tabs-custom nav-success" role="tablist">
             <li class="nav-item">
               <a class="nav-link All @if ($status == 99) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(99)" role="tab" aria-selected="true">
-                <i class="ri-store-2-fill me-1 align-bottom"></i> Hepsi
+                <i class=" ri-stack-line  me-1 align-bottom"></i> Hepsi
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link @if ($status == 0) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(0)" role="tab" aria-selected="false">
-                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> Beklemede
+                <i class="ri-hand-coin-line me-1 align-bottom"></i> Beklemede
               </a>
             </li>
 
@@ -48,14 +48,21 @@
             <li class="nav-item">
               <a class="nav-link @if ($status == 1) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(1)" role="tab" aria-selected="false">
-                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> İşleme Alındı
+                <i class="ri-download-2-line me-1 align-bottom"></i> İşlemde
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link @if ($status == 2) active @endif py-3" data-bs-toggle="tab"
+                 href="#" wire:click="set_status(2)" role="tab" aria-selected="false">
+                <i class="ri-thumb-up-line me-1 align-bottom"></i> Tamamlandı
               </a>
             </li>
 
             <li class="nav-item">
               <a class="nav-link @if ($status == 9) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(9)" role="tab" aria-selected="false">
-                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Red
+                <i class=" ri-thumb-down-line me-1 align-bottom"></i>Red
               </a>
             </li>
 
@@ -93,6 +100,7 @@
                       if ($cnt == 0) {
                           continue;
                       }
+                      
                     @endphp
 
                     <tr class="@if ($d->id == $talep_satir_id) table-info @endif">
@@ -114,16 +122,21 @@
                       </td>
                       <td class="owner">
                         @if ($d->approved == 1)
-                          <span class="badge rounded-pill badge-outline-success">
-                            Onaylandı</span>
+                          @if ($d->status == 2)
+                            <span class="badge rounded-pill badge-outline-primary">
+                              Tamamlandı</span>
+                          @else
+                            <span class="badge rounded-pill badge-outline-success">
+                              Onaylandı</span>
+                          @endif
                         @else
                           <span class="badge rounded-pill badge-outline-warning">
-                            Bekliyor</span>
+                            Onay Bekliyor</span>
                         @endif
 
                       </td>
                       <td class="owner">
-                        @if ($d->status == 1 && $d->demand_type == 1)
+                        @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 1)
                           <button wire:click="talep_sarf_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-success btn-block" style="width:150px">Talep İşlem Detayı <i
                                class="ri-arrow-right-s-fill"></i></button>
@@ -136,11 +149,10 @@
                         @endif
 
 
-
-                        @if ($d->status == 1 && $d->demand_type == 2)
+                        @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 2)
                           <button wire:click="talep_transfer_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-success btn-block" style="width:150px">Transfer İşlem Detayı <i
-                               class="ri-arrow-right-s-fill"></i></button>
+                                  class="btn btn-sm btn-success btn-block" style="width:150px">Transfer İşlem Detayı
+                            <i class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 0 && $d->demand_type == 2)

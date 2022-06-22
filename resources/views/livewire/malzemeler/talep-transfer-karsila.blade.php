@@ -1,7 +1,4 @@
 <div>
-  <div wire:loading class="m-2">
-    <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-  </div>
 
   <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -17,7 +14,7 @@
                 <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
                 <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
                 <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-                <small>REf : <b>{{ $item_id }}</b> </small><br>
+                <small>Ref : <b>{{ $item_id }}</b> </small><br>
                 <small>Stok Miktarı : <b>
                     @if ($item->onhand_quantity > 0)
                       {{ $item->onhand_quantity }}
@@ -146,20 +143,13 @@
 
     <div class="card">
       <div class="card-header">
+        @php
+          $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
+          $w2 = App\Models\LogoWarehouses::where('warehouse_no', $talep->dest_wh_no)->first();
+        @endphp
+        <h5 class="text-info">{{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
+          {{ $w2->warehouse_name }} Malzeme Transferi</h5>
 
-        @if ($talep->demand_type == 1)
-          @php
-            $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
-          @endphp
-          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
-        @else
-          @php
-            $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
-            $w2 = App\Models\LogoWarehouses::where('warehouse_no', $talep->dest_wh_no)->first();
-          @endphp
-          <h5 class="text-info">{{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
-            {{ $w2->warehouse_name }} Malzeme Transferi</h5>
-        @endif
         <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
@@ -446,29 +436,20 @@
                       @if ($s_have || $k_have)
 
                         @if ($talep->approved == 0)
-                          <button wire:click="approved();" class="btn btn-success btn-lg btn-label"
+                          <button wire:click="approved();" class="btn btn-success btn-label"
                                   wire:loading.attr="disabled">
                             <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
                             Listeyi Onayla
                           </button>
                         @else
-                          @if ($talep->demand_type == 1)
-                            <button wire:click="kaydet();" class="btn btn-info btn-lg btn-label"
-                                    wire:loading.attr="disabled">
-                              <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                              Logo Fişi Oluştur (Sarf)
-                            </button>
-                          @else
-                            <button wire:click="kaydet_transfer();" class="btn btn-info btn-lg btn-label"
-                                    wire:loading.attr="disabled">
-                              <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
-                              Logo Fişi Oluştur (Transfer)
-                            </button>
-                          @endif
+                          <button wire:click="kaydet_transfer();" class="btn btn-info btn-label"
+                                  wire:loading.attr="disabled">
+                            <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
+                            Logo Fişi Oluştur (Transfer)
+                          </button>
 
-                          <button wire:click="unapproved();" class="btn btn-soft-danger btn-lg btn-label"
-                                  wire:loading.attr="disabled"> <i
-                               class="ri-check-double-line label-icon fs-16 me-2 align-middle"></i>
+                          <button wire:click="unapproved" wire:loading.attr="disabled"
+                                  class="btn btn-soft-danger btn-sm position-absolute end-0 top-50">
                             Onay İptal</button>
                         @endif
                       @else
