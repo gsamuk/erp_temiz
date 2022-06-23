@@ -144,8 +144,14 @@
     <div class="card">
       <div class="card-header">
         @php
-          $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
-          $w2 = App\Models\LogoWarehouses::where('warehouse_no', $talep->dest_wh_no)->first();
+          $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
+              ->where('company_no', 1)
+              ->first();
+          
+          $w2 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->dest_wh_no")
+              ->where('company_no', 1)
+              ->first();
+          
         @endphp
         <h5 class="text-info">{{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
           {{ $w2->warehouse_name }} Malzeme Transferi</h5>
@@ -300,7 +306,7 @@
 
                   @if (isset($karsila))
                     @if (isset($karsila[$talep_id]))
-                      <div class="col-lg-6">
+                      <div class="col-lg-12 mt-3">
                         <div class="p-3" style="background-color: rgb(235, 255, 236)">
                           <h5><b>Depo Transfer Listesi</b></h5>
 
@@ -357,7 +363,7 @@
 
                   @if (isset($satinal))
                     @if (isset($satinal[$talep_id]))
-                      <div class="col-lg-6">
+                      <div class="col-lg-12 mt-3">
                         <div class="p-3" style="background-color: rgb(255, 250, 201)">
                           <h5><b>Satın Alma Listesi</b></h5>
                           <table class="table-sm table-striped table border align-middle" style="width: 100%">

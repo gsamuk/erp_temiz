@@ -96,6 +96,7 @@ class TalepOlustur extends Component
 
     public function render()
     {
+        // 1 Nolu firmanın depoları gelir
         $data = LogoWarehouses::where('company_no', '1')->get();
         return view(
             'livewire.malzemeler.talep-olustur',

@@ -36,6 +36,9 @@ class TalepKarsila extends Component
 
     public $iptal_id;
 
+    // TESt
+    public $konay; // karşılama miktar onayı
+    public $sonay; // satın alma miktar onayı
 
     // talep malzemei miktar edit
     public $edit_line_id;
@@ -43,7 +46,7 @@ class TalepKarsila extends Component
     public $line_item_name;
     public $line_quantity;
 
-    protected $listeners = ['TalepKarsila' => 'TalepKarsila'];
+    protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'AllRefresh' => '$refresh'];
 
     public function TalepKarsila($id)
     {
@@ -55,6 +58,21 @@ class TalepKarsila extends Component
             $this->talep_detay = null;
         }
     }
+
+    public function updatedKonay($value, $id) // karşılama miktarı onayı trigger when updated
+    {
+        $d = DemandDetail::find($id);
+        $d->approved_consump = $value;
+        $d->save();
+    }
+
+    public function updatedSonay($value, $id) // satın alma miktarı onayı trigger when updated
+    {
+        $d = DemandDetail::find($id);
+        $d->approved_purchase = $value;
+        $d->save();
+    }
+
 
     public function iptal($id)
     {
@@ -93,44 +111,30 @@ class TalepKarsila extends Component
     public function unapproved()
     {
 
-        DemandDetail::Where("demand_id", $this->talep_id)->update(["approved_purchase" => null, "approved_consump" => null]);
+        DemandDetail::Where("demand_id", $this->talep_id)->update(
+            [
+                "approved_purchase" => null,
+                "approved_consump" => null
+            ]
+        );
 
         $dm = Demand::find($this->talep_id);
         $dm->approved = 0;
         $dm->save();
-
+        $this->konay = null;
+        $this->sonay = null;
         $this->TalepKarsila($this->talep_id);
-        $this->emit('LoadDemandList');
+        $this->emit('AllRefresh');
     }
 
     public function approved()
     {
-        if ($this->karsila[$this->talep_id]) {
-            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
-                    $item = DemandDetail::find($item_id);
-                    $item->approved_consump = $miktar;
-                    $item->save();
-                }
-            }
-        }
-
-        if ($this->satinal[$this->talep_id]) {
-            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
-                    $item = DemandDetail::find($item_id);
-                    $item->approved_purchase = $miktar;
-                    $item->save();
-                }
-            }
-        }
-
         $dm = Demand::find($this->talep_id);
         $dm->approved = 1;
         $dm->save();
 
         $this->TalepKarsila($this->talep_id);
-        $this->emit('LoadDemandList');
+        $this->emit('AllRefresh');
     }
 
 
@@ -147,57 +151,54 @@ class TalepKarsila extends Component
         $satinal = false;
         $return_msg = "";
 
+        $onayli_sarf = DemandDetail::Where('demand_id', $this->talep_id)->Where('approved_consump', '>', '0')
+            ->get();
+        if ($onayli_sarf->count() > 0) {
+            foreach ($onayli_sarf as $item) {
 
-        if ($this->karsila[$this->talep_id]) {
-            foreach ($this->karsila[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
+                $_item = DemandDetail::find($item->id);
+                $_item->status = 1; // stoktan karşılama
+                $_item->save();
 
-                    // status kontrolleri
-                    $item = DemandDetail::find($item_id);
-                    $item->status = 1; // stoktan karşılama
-                    $item->save();
-                    ///
-
-                    $logo_item = LogoItems::find($item->logo_stock_ref);
-
-                    $sarf_items[] = [
-                        "ITEM_CODE" => $item->stock_code,
-                        "ITEMREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "DESCRIPTION" => $item->description,
-                        "PRICE" => $logo_item->average_price,
-                        "TYPE" => 25,
-                        'QUANTITY' => $miktar,
-                    ];
-                }
+                $logo_item = LogoItems::find($item->logo_stock_ref);
+                $sarf_items[] = [
+                    "ITEM_CODE" => $item->stock_code,
+                    "ITEMREF" => $item->logo_stock_ref,
+                    "UNIT_CODE" => $item->unit_code,
+                    "DESCRIPTION" => $item->description,
+                    "PRICE" => $logo_item->average_price,
+                    "TYPE" => 25,
+                    'QUANTITY' => $item->approved_consump,
+                ];
             }
         }
 
 
-        if ($this->satinal[$this->talep_id]) {
-            foreach ($this->satinal[$this->talep_id] as $item_id => $miktar) {
-                if ($miktar > 0) {
+        $onayli_satinal = DemandDetail::Where('demand_id', $this->talep_id)->Where('approved_purchase', '>', '0')
+            ->get();
 
-                    // status kontrolleri
-                    $item = DemandDetail::find($item_id);
-                    if ($item->status == 1) { // eğer stoktan karşılama varsa
-                        $item->status = 3;  // hep stok hem satınalma statusu
-                    } else {
-                        $item->status = 2; // sadece satın alma statusu
-                    }
-                    $item->save();
-                    ///
-
-                    $satinal_items[] = [
-                        "STOCKREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "TYPE" => 0,
-                        'QUANTITY' => $miktar,
-                    ];
+        if ($onayli_satinal->count() > 0) {
+            foreach ($onayli_satinal as $item) {
+                // status kontrolleri
+                $_item = DemandDetail::find($item->id);
+                if ($_item->status == 1) { // eğer stoktan karşılama varsa
+                    $_item->status = 3;  // hep stok hem satınalma statusu
+                } else {
+                    $_item->status = 2; // sadece satın alma statusu
                 }
+                $_item->save();
+                ///
+
+                $satinal_items[] = [
+                    "STOCKREF" => $item->logo_stock_ref,
+                    "UNIT_CODE" => $item->unit_code,
+                    "TYPE" => 0,
+                    'QUANTITY' => $item->approved_purchase,
+                ];
             }
         }
 
+        dd($satinal_items);
 
         $demand = Demand::find($this->talep_id);
         $sarf_data = [

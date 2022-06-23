@@ -116,9 +116,20 @@
   @if ($talep_detay)
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title flex-grow-1 mb-0">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
-        <small>Açıklama : {{ $talep->demand_desc }}</small>
+        @php
+          $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
+              ->where('company_no', 1)
+              ->first();
+        @endphp
+        <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+        <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
+            @if ($talep->demand_desc)
+              | {{ $talep->demand_desc }}
+            @endif
+          </small>
+        </h4>
       </div>
+
       <div class="card-body">
         <div class="row">
           <div class="col-lg-12">
@@ -331,8 +342,8 @@
                           <td>{{ number_format($d->consump, 0, '.', ',') }}</td>
                           <td>{{ number_format($d->diff, 0, '.', ',') }}</td>
                           <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
-                          <td><button class="btn btn-sm"
-                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">...</button>
+                          <td><button class="btn btn-sm btn-success"
+                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
                           </td>
                         </tr>
                       @endif

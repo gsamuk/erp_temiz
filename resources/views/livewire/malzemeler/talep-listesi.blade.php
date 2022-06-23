@@ -130,8 +130,14 @@
                               Onaylandı</span>
                           @endif
                         @else
-                          <span class="badge rounded-pill badge-outline-warning">
-                            Onay Bekliyor</span>
+                          @if ($d->status == 9)
+                          <span class="badge rounded-pill badge-outline-danger">
+                              Reddedildi</span>
+                          @else
+                            <span class="badge rounded-pill badge-outline-warning">
+                              Onay Bekliyor</span>
+                          @endif
+
                         @endif
 
                       </td>
@@ -162,7 +168,7 @@
                         @endif
 
                         @if ($d->status == 9)
-                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Red
+                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Talep Reddedildi
                           </button>
                         @endif
 

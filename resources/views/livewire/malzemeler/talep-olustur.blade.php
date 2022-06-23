@@ -88,11 +88,14 @@
                         <div class="col-lg-4">
                           <label class="form-label">Proje Kodu</label>
                         </div>
-                        <div class="col-lg-8">
+                        <div class="col-lg-7">
                           <input type="hidden" wire:model="project_ref_id">
                           <input type="text" wire:model="project_code" name="proje_kodu" data-bs-toggle="modal"
-                                 data-bs-target="#projectsModal" class="form-control form-control-sm rounded-0 mb-1"
-                                 readonly="readonly">
+                                 data-bs-target="#projectsModal" class="form-control form-control-sm rounded-0 mb-1">
+                        </div>
+                        <div class="col-lg-1">
+                          <a href="javascript:void(0);" @click="@this.set('project_code', '')"
+                             class="link-info fs-15 position-absolute start-0 top-0"><i class="ri-close-line"></i></a>
                         </div>
 
                       </div>
@@ -101,10 +104,13 @@
                         <div class="col-lg-4">
                           <label class="form-label">Özel Kod</label>
                         </div>
-                        <div class="col-lg-8">
+                        <div class="col-lg-7">
                           <input type="text" data-bs-toggle="modal" name="special_code" wire:model="special_code"
-                                 data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1"
-                                 readonly="readonly">
+                                 data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1">
+                        </div>
+                        <div class="col-lg-1">
+                          <a href="javascript:void(0);" @click="@this.set('special_code', '')"
+                             class="link-info fs-15 position-absolute start-0 top-0"><i class="ri-close-line"></i></a>
                         </div>
                       </div>
 

@@ -1,10 +1,18 @@
 <div>
 
-  <div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id="MalzemeFotoModal"
+       class="modal"
+       tabindex="-1"
+       role="dialog"
+       aria-labelledby="myModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"> </button>
         </div>
         <div class="modal-body m-0">
           @if ($item_id)
@@ -88,43 +96,67 @@
     </div>
   </div>
 
-  <div id="iptalModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div id="iptalModal"
+       class="modal"
+       tabindex="-1"
+       role="dialog"
+       aria-labelledby="myModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="fullscreeexampleModalLabel">Onay</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+          <h5 class="modal-title"
+              id="fullscreeexampleModalLabel">Onay</h5>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"> </button>
         </div>
         <div class="modal-body m-0">
           @if ($iptal_id)
             <div class="mb-3">
-              <label for="customer-name" class="col-form-label">İptal Sebebi</label>
-              <input wire:model.defer="iptal_sebep" type="text" class="form-control">
+              <label for="customer-name"
+                     class="col-form-label">İptal Sebebi</label>
+              <input wire:model.defer="iptal_sebep"
+                     type="text"
+                     class="form-control">
             </div>
           @endif
         </div>
 
         <div class="modal-footer">
-          <button wire:click="cikar({{ $iptal_id }})" class="btn btn-primary">Onayla</button>
-          <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+          <button wire:click="cikar({{ $iptal_id }})"
+                  class="btn btn-primary">Onayla</button>
+          <button class="btn btn-light"
+                  data-bs-dismiss="modal">Kapat</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="editLineModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  <div id="editLineModal"
+       class="modal"
+       tabindex="-1"
+       role="dialog"
+       aria-labelledby="myModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Miktar Düzenle</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"> </button>
         </div>
         <div class="modal-body m-0">
           @if ($edit_line_id)
             <div class="mb-3">
-              <label for="customer-name" class="col-form-label">Yeni Miktarı Giriniz</label>
-              <input wire:model.defer="line_quantity" type="number" class="form-control">
+              <label for="customer-name"
+                     class="col-form-label">Yeni Miktarı Giriniz</label>
+              <input wire:model.defer="line_quantity"
+                     type="number"
+                     class="form-control">
               <br>
               {{ $line_item_name }}
             </div>
@@ -132,8 +164,10 @@
         </div>
 
         <div class="modal-footer">
-          <button wire:click="update_line({{ $edit_line_id }})" class="btn btn-primary">Onayla</button>
-          <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+          <button wire:click="update_line({{ $edit_line_id }})"
+                  class="btn btn-primary">Onayla</button>
+          <button class="btn btn-light"
+                  data-bs-dismiss="modal">Kapat</button>
         </div>
       </div>
     </div>
@@ -144,14 +178,17 @@
     <div class="card">
       <div class="card-header">
         @php
-          $w1 = App\Models\LogoWarehouses::where('warehouse_no', $talep->warehouse_no)->first();
+          $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
+              ->where('company_no', 1)
+              ->first();
         @endphp
         <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
         <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
             @endif
-          </small></h4>
+          </small>
+        </h4>
       </div>
 
       <div class="card-body">
@@ -160,14 +197,18 @@
             <table class="table-light table-sm table-striped table align-middle">
               <thead>
                 <tr>
-                  <th scope="col" style="width:50px;">Foto</th>
+                  <th scope="col"
+                      style="width:50px;">Foto</th>
                   <th scope="col">Malzeme</th>
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>
                   @if ($for_manage)
-                    <th scope="col" style="width:90px;">Karşıla</th>
-                    <th scope="col" style="width:90px;">Satınal</th>
-                    <th scope="col" style="width:90px;"></th>
+                    <th scope="col"
+                        style="width:90px;">Karşıla</th>
+                    <th scope="col"
+                        style="width:90px;">Satınal</th>
+                    <th scope="col"
+                        style="width:90px;"></th>
                   @endif
                 </tr>
               </thead>
@@ -178,34 +219,44 @@
                     $item_detail = App\Models\LogoItems::where('logicalref', $dt->logo_stock_ref)
                         ->where('wh_no', $talep->warehouse_no)
                         ->first();
+                    
                     $val = 0;
                     $val2 = 0;
-                    $disable="";
-                    $disable2="";
-                    $stok = $dt->quantity;
+                    $disabled = '';
+                    
+                    // eğer stok talebi karşılıyorsa
                     if ($item_detail->onhand_quantity >= $dt->quantity) {
                         $val = $dt->quantity;
                     }
                     
+                    //eğer stok eldeki miktardan azsa
                     if ($item_detail->onhand_quantity < $dt->quantity) {
                         $val = $item_detail->onhand_quantity;
                         $val2 = $dt->quantity - $item_detail->onhand_quantity;
                     }
                     
+                    // eğer stok 0 ise
                     if ($item_detail->onhand_quantity == 0) {
                         $val = 0;
-                        $disable="disabled"; // eğer stok yoksa karşılama input alanı disable edilir.
                         $val2 = $dt->quantity;
+                    
+                        $disabled = 'disabled'; // alan disable ediliyor
                     }
                     
+                    // eğer stok eksi ise
                     if ($item_detail->onhand_quantity < 0) {
                         $val = 0;
                         $val2 = 0;
+                    
+                        $disabled = 'disabled'; // alan disable ediliyor
                     }
+                    
+                    // eğer onaylı karşılama varsa
                     if ($dt->approved_consump > 0 && $dt->approved_consump != null) {
                         $val = $dt->approved_consump;
                     }
                     
+                    //eğer onaylı satınalma varsa
                     if ($dt->approved_purchase > 0 && $dt->approved_purchase != null) {
                         $val2 = $dt->approved_purchase;
                     }
@@ -214,22 +265,25 @@
                   <tr>
                     <td class="owner">
                       @if ($photo)
-                        <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
+                        <a href="javascript:;"
+                           wire:click="foto_goster({{ $dt->logo_stock_ref }})">
                           <img class="border"
                                src="{{ asset('public/storage/images/items/thumb/' . $photo->foto_path) }}"
                                style="height: 65px">
                         </a>
                       @else
-                        <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                          <img class="border" style="height: 50px" src="/public/images/default.png">
+                        <a href="javascript:;"
+                           wire:click="foto_goster({{ $dt->logo_stock_ref }})">
+                          <img class="border"
+                               style="height: 50px"
+                               src="/public/images/default.png">
                         </a>
                       @endif
                     </td>
 
                     <td><b>{{ $item_detail->stock_name }}</b>
                       <br>
-                      <small>Stok Kodu: {{ $item_detail->stock_code }}</small><br>
-                      <small class="text-danger">Talep Nedeni : {{ $dt->description }}</small>
+                      <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
                     </td>
                     <td>
                       <b style="font-size:1.1em"
@@ -246,29 +300,38 @@
                     @if ($for_manage)
                       <td>
                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
-                        <input type="number" min="0" class="form-control"
-                               max="{{ $item_detail->onhand_quantity }}" _onkeyup="imposeMinMax(this)"
-                               wire:loading.attr="disabled" @if ($dt->status > 0 || $talep->approved == 1) disabled @endif
-                               {{ $disable }}
-                               wire:model.debunce.1500ms="karsila.{{ $dt->demand_id }}.{{ $dt->id }}" x-data
-                               x-init="@this.set('karsila.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val, 0, '.', ',') }}')">
+
+                        <input type="number" {{ $disabled }}
+                               @if ($talep->approved == 1) disabled @endif
+                               min="0"
+                               class="form-control"
+                               max="{{ $item_detail->onhand_quantity }}"
+                               wire:loading.attr="disabled"
+                               wire:model.debunce.500ms="konay.{{ $dt->id }}"
+                               x-init="@this.set('konay.{{ $dt->id }}', '{{ number_format($val, 0, '.', ',') }}')">
                       </td>
 
                       <td>
-                        <input type="number" min="0" @if ($dt->status > 0 || $talep->approved == 1) disabled @endif
-                               wire:model.debunce.1500ms="satinal.{{ $dt->demand_id }}.{{ $dt->id }}"
-                               x-init="@this.set('satinal.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ number_format($val2, 0, '.', ',') }}')" class="form-control" wire:loading.attr="disabled">
+                        <input type="number"
+                               @if ($talep->approved == 1) disabled @endif
+                               min="0"
+                               wire:model.debunce.500ms="sonay.{{ $dt->id }}"
+                               x-init="@this.set('sonay.{{ $dt->id }}', '{{ number_format($val2, 0, '.', ',') }}')"
+                               class="form-control"
+                               wire:loading.attr="disabled">
                       </td>
 
                       <td>
                         @if ($talep->approved == 1)
-                          <span class="badge badge-label bg-success">
+                          <span class="badge badge-label bg-info">
                             <i class="mdi mdi-circle-medium"></i>
-                            Onaylandı
+                            Onaylı
                           </span>
                         @else
-                          <button wire:click="iptal({{ $dt->id }})" class="btn btn-sm btn-soft-danger"
-                                  wire:loading.attr="disabled" @if ($dt->status > 0) disabled @endif>
+                          <button wire:click="iptal({{ $dt->id }})"
+                                  class="btn btn-sm btn-soft-danger"
+                                  wire:loading.attr="disabled"
+                                  @if ($dt->status > 0) disabled @endif>
                             Çıkar
                           </button>
                         @endif
@@ -280,10 +343,13 @@
               </tbody>
             </table>
           </div>
+
+
           @if ($talep->status == 1)
             <!-- Herhangi biri işelm görmüşse -->
             <div class="col-lg-12">
-              <div class="alert alert-success" role="alert">
+              <div class="alert alert-success"
+                   role="alert">
                 Bu Malzeme talebi işleme alınmıştır.
               </div>
             </div>
@@ -291,192 +357,151 @@
             @if ($for_manage)
               <div class="col-lg-12">
                 <div class="row">
+                  @php
+                    $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
+                        ->Where('approved_consump', '>', '0')
+                        ->get();
+                  @endphp
 
-                  @if (isset($karsila))
-                    @if (isset($karsila[$talep_id]))
-                      <div class="col-lg-6">
-                        <div class="p-3" style="background-color: rgb(235, 255, 236)">
-                          <h5><b>Stoktan Karşılama Listesi</b></h5>
-
-                          <table class="table-sm table-striped table border align-middle" style="width: 100%">
-                            <thead class="table-success">
-                              <tr>
-                                <th scope="col">Kodu</th>
-                                <th scope="col">Malzeme</th>
-                                <th scope="col">Miktar</th>
-                              </tr>
-                            </thead>
-                            <tbody>
+                  @if ($data->count() > 0)
+                    <div class="col-lg-12 mt-3">
+                      <div class="p-3"
+                           style="background-color: rgb(235, 255, 236)">
+                        <h5><b>Stoktan Karşılama Listesi</b></h5>
+                        <table class="table-sm table-striped table border align-middle">
+                          <thead class="table-success">
+                            <tr>
+                              <th scope="col">Kodu</th>
+                              <th scope="col">Malzeme</th>
+                              <th scope="col">Miktar</th>
+                              <th scope="col">Birim Tutar</th>
+                              <th scope="col">Toplam</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach ($data as $itm)
                               @php
-                                $k_have = false; // stoktan karşılama malzemesi yok default
+                                $item = App\Models\LogoItems::where('wh_no', "$talep->warehouse_no")
+                                    ->where('stock_code', "$itm->stock_code")
+                                    ->first();
+                                $toplam = $item->average_price * $itm->approved_consump;
                               @endphp
-
-                              @foreach ($karsila[$talep_id] as $item_id => $miktar)
-                                @php
-                                  // eğer malzeme talebine bir işlem yapılmadıysa
-                                  if ($karsila[$talep_id][$item_id] == 0 && $satinal[$talep_id][$item_id] == 0) {
-                                      $uyari = true;
-                                  }
-                                @endphp
-
-                                @if ($miktar > 0)
-                                  @php
-                                    $k_have = true; // stoktan karşılama malzemesi var
-                                    $itm = json_decode($talep_line[$talep_id][$item_id]);
-                                  @endphp
-                                  <tr>
-                                    <th scope="row">{{ $itm->stock_code }}
-                                    </th>
-                                    <td>{{ $itm->stock_name }} </td>
-                                    <td>{{ $miktar }} </td>
-                                  </tr>
-                                @endif
-                              @endforeach
-
-                              @if (!$k_have)
-                                <tr>
-                                  <td colspan="3" class="p-3">
-                                    <center>Stoktan Karşılama Listesi Boş</center>
-                                  </td>
-                                </tr>
-                              @endif
-
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    @endif
-                  @endif
-
-
-                  @if (isset($satinal))
-                    @if (isset($satinal[$talep_id]))
-                      <div class="col-lg-6">
-                        <div class="p-3" style="background-color: rgb(255, 250, 201)">
-                          <h5><b>Satın Alma Listesi</b></h5>
-                          <table class="table-sm table-striped table border align-middle" style="width: 100%">
-                            <thead class="table-warning">
                               <tr>
-                                <th scope="col">Kodu</th>
-                                <th scope="col">Malzeme</th>
-                                <th scope="col">Miktar</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @php
-                                $s_have = false; // satın alma malzemesi yok default
-                              @endphp
-
-                              @foreach ($satinal[$talep_id] as $item_id => $miktar)
-                                @if ($miktar > 0)
-                                  @php
-                                    $s_have = true; // satın alma malzemesi var
-                                    
-                                    $itm = json_decode($talep_line[$talep_id][$item_id]);
-                                  @endphp
-                                  <tr>
-                                    <th scope="row">{{ $itm->stock_code }}
-                                    </th>
-                                    <td>{{ $itm->stock_name }} </td>
-                                    <td>{{ $miktar }}</td>
-                                  </tr>
-                                @endif
-                              @endforeach
-                              @if (!$s_have)
-                                <td colspan="3" class="p-3">
-                                  <center>Satınalma Listesi Boş</center>
+                                <th scope="row">{{ $itm->stock_code }} </th>
+                                <td>{{ $item->stock_name }} </td>
+                                <td>{{ number_format($itm->approved_consump, 0, '', '') }}
+                                  <small>{{ $itm->unit_code }}</small>
                                 </td>
-                              @endif
-                            </tbody>
-                          </table>
 
-                        </div>
+                                <td> {{ number_format($item->average_price, 2, ',', '.') }} </td>
+                                <td>
+                                  {{ number_format($toplam, 2, ',', '.') }}
+                                </td>
+                              </tr>
+                            @endforeach
+
+                          </tbody>
+                        </table>
                       </div>
-                    @endif
+                    </div>
                   @endif
+
+
+                  @php
+                    $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
+                        ->Where('approved_purchase', '>', '0')
+                        ->get();
+                    
+                  @endphp
+
+
+                  @if ($data->count() > 0)
+                    <div class="col-lg-12 mt-3">
+                      <div class="p-3"
+                           style="background-color: rgb(255, 250, 201)">
+                        <h5><b>Satın Alma Listesi</b></h5>
+                        <table class="table-sm table-striped table border align-middle"
+                               style="width: 100%">
+                          <thead class="table-warning">
+                            <tr>
+                              <th scope="col">Kodu</th>
+                              <th scope="col">Malzeme</th>
+                              <th scope="col">Miktar</th>
+                              <th scope="col">Birim Tutar</th>
+                              <th scope="col">Toplam</th>
+                              <th scope="col">Firma</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+                            @foreach ($data as $itm)
+                              @php
+                                $item = App\Models\LogoItems::where('wh_no', "$talep->warehouse_no")
+                                    ->where('stock_code', "$itm->stock_code")
+                                    ->first();
+                                $toplam = $item->average_price * $itm->approved_purchase;
+                              @endphp
+                              <tr>
+                                <th scope="row">{{ $itm->stock_code }} </th>
+                                <td>{{ $item->stock_name }} </td>
+                                <td>{{ number_format($itm->approved_purchase, 0, '', '') }}
+                                  <small>{{ $itm->unit_code }}</small>
+                                </td>
+                                <td> {{ number_format($item->average_price, 2, ',', '.') }} </td>
+                                <td>
+                                  {{ number_format($toplam, 2, ',', '.') }}
+                                </td>
+
+                                <td><button class="btn btn-sm btn-soft-danger">Firma Seç</button></td>
+                              </tr>
+                            @endforeach
+
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+                  @endif
+
 
 
                   <div class="col-lg-12 mt-3">
-                    Yetkili personel stoktan karşılama yada satınalma veri giriş alanlarını
-                    değiştirerek kayıt işlemi yapmalıdır.
-                  </div>
 
-                  @if ($uyari)
-                    <div class="col-lg-12 mt-3">
-                      <div class="alert alert-danger mb-xl-0" role="alert">
-                        <strong> Dikkat </strong> Bazı malzemelerde işlem yapılmamıştır.
-                      </div>
-                    </div>
-                  @endif
+                    @if ($talep->approved == 0)
+                      <button wire:click="approved"
+                              wire:loading.attr="disabled"
+                              class="btn btn-success btn-label">
+                        <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
+                        Listeyi Onayla
+                      </button>
+                    @else
+                      <button wire:click="kaydet"
+                              wire:loading.attr="disabled"
+                              class="btn btn-info btn-label">
+                        <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
+                        Logo Fişi Oluştur (Sarf)
+                      </button>
 
-                  @if ($error)
-                    <div class="col-lg-12 mt-3">
-                      <div class="alert alert-danger" role="alert">
-                        {{ $error }}
-                      </div>
-                    </div>
-                  @endif
-
-                  @if (session()->has('success'))
-                    <div class="col-lg-12 mt-3">
-                      <div class="alert alert-success" role="alert">
-                        {{ session('success') }}
-                      </div>
-                    </div>
-                  @endif
-
-                  <div wire:loading>
-                    <div class="col-lg-12 mt-3">
-                      <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-                    </div>
-                  </div>
-
-                  <div class="col-lg-12 mt-3">
-
-                    @if (isset($s_have) && isset($k_have))
-                      @if ($s_have || $k_have)
-
-                        @if ($talep->approved == 0)
-                          <button wire:click="approved" wire:loading.attr="disabled"
-                                  class="btn btn-success btn-label">
-                            <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                            Listeyi Onayla
-                          </button>
-                        @else
-                          <button wire:click="kaydet" wire:loading.attr="disabled" class="btn btn-info btn-label">
-                            <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                            Logo Fişi Oluştur (Sarf)
-                          </button>
-
-                          <button wire:click="unapproved" wire:loading.attr="disabled"
-                                  class="btn btn-soft-danger btn-sm position-absolute end-0 top-50">
-                            Onay İptal</button>
-                        @endif
-                      @else
-                        <button class="btn btn-danger btn-lg" disabled> Kaydet</button><br>
-                        <small class="text-danger">Kaydedilecek veri yok, lütfen stoktan
-                          karşılama yada satınalma veri giriş alanlarını kullanın
-                        </small>
-                      @endif
-
+                      <button wire:click="unapproved"
+                              wire:loading.attr="disabled"
+                              class="btn btn-soft-danger btn-sm position-absolute end-0 top-50">
+                        Onay İptal</button>
                     @endif
-                  </div>
 
 
-                </div>
-              </div>
+
+
             @endif
-
-
-
 
           @endif
         </div>
+
+
       </div>
     </div>
+
+
   @endif
 
-
-
-
+  <div wire:loading.flex> İşleniyor...</div>
 </div>

@@ -91,8 +91,23 @@
   @if ($talep_detay)
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title flex-grow-1 mb-0">TALEP DETAYI <small>#{{ $talep->id }}</small></h4>
-        <small>Açıklama : {{ $talep->demand_desc }}</small>
+        @php
+          $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
+              ->where('company_no', 1)
+              ->first();
+          
+          $w2 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->dest_wh_no")
+              ->where('company_no', 1)
+              ->first();
+        @endphp
+        <h5 class="text-info">{{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
+          {{ $w2->warehouse_name }} Malzeme Transferi</h5>
+
+        <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
+            @if ($talep->demand_desc)
+              | {{ $talep->demand_desc }}
+            @endif
+          </small></h4>
       </div>
       <div class="card-body">
         <div class="row">
@@ -170,6 +185,7 @@
                 <table class="table-sm table-striped table border align-middle">
                   <thead>
                     <tr>
+                      <th scope="col">Fiş No</th>
                       <th scope="col">Belge No</th>
                       <th scope="col">Stok No</th>
                       <th scope="col">Malzeme</th>
@@ -183,6 +199,7 @@
                   <tbody>
                     @foreach ($demand_fiche as $d)
                       <tr>
+                        <td>{{ $d->fiche_no }}</td>
                         <td>{{ $d->doc_number }}</td>
                         <td>{{ $d->stock_code }}</td>
                         <td>{{ $d->stock_name }}</td>
@@ -200,6 +217,9 @@
                     @endforeach
                   </tbody>
                 </table>
+                <small class="text-danger"> {{ $w1->warehouse_name }} <i class="ri-share-forward-2-line"></i>
+                  {{ $w2->warehouse_name }}
+                  Malzeme Transferi Fişleri </small>
               </div>
             </div>
           @endif

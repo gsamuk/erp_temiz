@@ -75,6 +75,9 @@
                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#firma_secModal"><i
                                 class="mdi mdi-store-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Firma Seç</span></a>
+                        <a class="dropdown-item" href="/signout"><i
+                                class="ri-logout-box-r-line text-muted fs-16 align-middle me-1"></i> <span
+                                class="align-middle">Çıkış</span></a>        
                     </div>
                 </div>
 
