@@ -31,11 +31,11 @@ class TalepIslem extends Component
     public $stock_code;
     public $status_text;
 
-    protected $listeners = ['TalepIslem'];
+    protected $listeners = ['TalepIslem', 'RefreshTalepIslem' => '$refresh'];
+
 
     public function TalepIslem($id)
     {
-
         $this->error = null;
         $this->talep_id = $id;
         $this->talep = Demand::find($id);
@@ -110,7 +110,7 @@ class TalepIslem extends Component
                     $d->status = 2;
                     $d->save();
                 }
-
+                $this->emit('RefreshTalepListesi');
                 return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
             }
         }

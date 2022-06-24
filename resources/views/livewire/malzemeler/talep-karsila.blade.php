@@ -1,5 +1,6 @@
 <div>
 
+
   <div id="MalzemeFotoModal"
        class="modal"
        tabindex="-1"
@@ -173,6 +174,29 @@
     </div>
   </div>
 
+  <div id="FirmaSecModal"
+       class="modal"
+       tabindex="-1"
+       role="dialog"
+
+       aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"> </button>
+        </div>
+        <div class="modal-body m-0">
+          @if ($stock_code)
+            @livewire('logo.accounts')
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+
   @if ($talep_detay)
 
     <div class="card">
@@ -220,45 +244,16 @@
                         ->where('wh_no', $talep->warehouse_no)
                         ->first();
                     
-                    $val = 0;
-                    $val2 = 0;
-                    $disabled = '';
-                    
-                    // eğer stok talebi karşılıyorsa
-                    if ($item_detail->onhand_quantity >= $dt->quantity) {
-                        $val = $dt->quantity;
-                    }
-                    
-                    //eğer stok eldeki miktardan azsa
-                    if ($item_detail->onhand_quantity < $dt->quantity) {
-                        $val = $item_detail->onhand_quantity;
-                        $val2 = $dt->quantity - $item_detail->onhand_quantity;
-                    }
+                    $disabled = null;
                     
                     // eğer stok 0 ise
                     if ($item_detail->onhand_quantity == 0) {
-                        $val = 0;
-                        $val2 = $dt->quantity;
-                    
                         $disabled = 'disabled'; // alan disable ediliyor
                     }
                     
                     // eğer stok eksi ise
                     if ($item_detail->onhand_quantity < 0) {
-                        $val = 0;
-                        $val2 = 0;
-                    
                         $disabled = 'disabled'; // alan disable ediliyor
-                    }
-                    
-                    // eğer onaylı karşılama varsa
-                    if ($dt->approved_consump > 0 && $dt->approved_consump != null) {
-                        $val = $dt->approved_consump;
-                    }
-                    
-                    //eğer onaylı satınalma varsa
-                    if ($dt->approved_purchase > 0 && $dt->approved_purchase != null) {
-                        $val2 = $dt->approved_purchase;
                     }
                     
                   @endphp
@@ -307,18 +302,16 @@
                                class="form-control"
                                max="{{ $item_detail->onhand_quantity }}"
                                wire:loading.attr="disabled"
-                               wire:model.debunce.500ms="konay.{{ $dt->id }}"
-                               x-init="@this.set('konay.{{ $dt->id }}', '{{ number_format($val, 0, '.', ',') }}')">
+                               wire:model.lazy="konay.{{ $dt->id }}">
                       </td>
 
                       <td>
                         <input type="number"
                                @if ($talep->approved == 1) disabled @endif
                                min="0"
-                               wire:model.debunce.500ms="sonay.{{ $dt->id }}"
-                               x-init="@this.set('sonay.{{ $dt->id }}', '{{ number_format($val2, 0, '.', ',') }}')"
+                               wire:loading.attr="disabled"
                                class="form-control"
-                               wire:loading.attr="disabled">
+                               wire:model.lazy="sonay.{{ $dt->id }}">
                       </td>
 
                       <td>
@@ -331,7 +324,7 @@
                           <button wire:click="iptal({{ $dt->id }})"
                                   class="btn btn-sm btn-soft-danger"
                                   wire:loading.attr="disabled"
-                                  @if ($dt->status > 0) disabled @endif>
+                                  @if ($talep->status > 0) disabled @endif>
                             Çıkar
                           </button>
                         @endif
@@ -345,7 +338,7 @@
           </div>
 
 
-          @if ($talep->status == 1)
+          @if ($talep->status > 1)
             <!-- Herhangi biri işelm görmüşse -->
             <div class="col-lg-12">
               <div class="alert alert-success"
@@ -359,6 +352,7 @@
                 <div class="row">
                   @php
                     $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
+                        ->where('status', '!=', 9)
                         ->Where('approved_consump', '>', '0')
                         ->get();
                   @endphp
@@ -409,6 +403,7 @@
 
                   @php
                     $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
+                        ->where('status', '!=', 9)
                         ->Where('approved_purchase', '>', '0')
                         ->get();
                     
@@ -427,9 +422,9 @@
                               <th scope="col">Kodu</th>
                               <th scope="col">Malzeme</th>
                               <th scope="col">Miktar</th>
-                              <th scope="col">Birim Tutar</th>
-                              <th scope="col">Toplam</th>
-                              <th scope="col">Firma</th>
+
+                              <th scope="col">Satınalma Firması</th>
+                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -447,12 +442,12 @@
                                 <td>{{ number_format($itm->approved_purchase, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
-                                <td> {{ number_format($item->average_price, 2, ',', '.') }} </td>
-                                <td>
-                                  {{ number_format($toplam, 2, ',', '.') }}
-                                </td>
 
-                                <td><button class="btn btn-sm btn-soft-danger">Firma Seç</button></td>
+
+                                <td>{{ $itm->account_name }} </td>
+                                <td><button wire:loading.attr="disabled"
+                                          wire:click="firma_sec('{{ $itm->id }}','{{ $itm->stock_code }}')"
+                                          class="btn btn-sm btn-soft-danger">Firma Seç</button></td>
                               </tr>
                             @endforeach
 
@@ -499,6 +494,7 @@
 
       </div>
     </div>
+
 
 
   @endif

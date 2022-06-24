@@ -139,7 +139,6 @@
                   <th scope="col" style="width:50px;">Foto</th>
                   <th scope="col">Malzeme</th>
                   <th scope="col">Talep </th>
-
                   <th scope="col">Karşılanan</th>
                   <th scope="col">Satınalma</th>
                 </tr>
@@ -285,10 +284,10 @@
           @endif
 
 
-
-
           @php
-            $incompletedDemand = App\Models\IncompletedDemand::Where('demand_id', $talep_id)->get();
+            $incompletedDemand = App\Models\IncompletedDemand::Where('demand_id', $talep_id)
+                ->where('diff', '>', 0)
+                ->get();
             $sarf_btn = false;
           @endphp
 
@@ -313,40 +312,37 @@
                   <tbody>
 
                     @foreach ($incompletedDemand as $d)
-                      @if ($d->diff > 0)
-                        @php
-                          $item = App\Models\LogoItems::where('stock_code', $d->stock_code)->first();
-                        @endphp
-                        <tr class="@if ($item->onhand_quantity >= $d->diff) bg-soft-success @endif">
-                          <td>
-                            @if ($item->onhand_quantity >= $d->diff)
-                              @php
-                                $sarf_btn = true;
-                              @endphp
-                              <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
-                                     value="{{ $d->diff }}" class="form-check-input">
-                            @else
-                            @endif
+                      @php
+                        $item = App\Models\LogoItems::where('stock_code', $d->stock_code)->first();
+                      @endphp
+                      <tr class="@if ($item->onhand_quantity >= $d->diff) bg-soft-success @endif">
+                        <td>
+                          @if ($item->onhand_quantity >= $d->diff)
+                            @php
+                              $sarf_btn = true;
+                            @endphp
+                            <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
+                                   value="{{ $d->diff }}" class="form-check-input">
+                          @else
+                          @endif
+                        </td>
 
-                          </td>
-
-                          <td>{{ $d->stock_code }}</td>
-                          <td>{{ $item->stock_name }}
-                            @if ($d->status_desc)
-                              <br> <small class="text-danger"> <i class="ri-error-warning-line"></i>
-                                {{ $d->status_desc }}</small>
-                            @endif
-                          </td>
-                          <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
-                            </small></td>
-                          <td>{{ number_format($d->consump, 0, '.', ',') }}</td>
-                          <td>{{ number_format($d->diff, 0, '.', ',') }}</td>
-                          <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
-                          <td><button class="btn btn-sm btn-success"
-                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
-                          </td>
-                        </tr>
-                      @endif
+                        <td>{{ $d->stock_code }}</td>
+                        <td>{{ $item->stock_name }}
+                          @if ($d->status_desc)
+                            <br> <small class="text-danger"> <i class="ri-error-warning-line"></i>
+                              {{ $d->status_desc }}</small>
+                          @endif
+                        </td>
+                        <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
+                          </small></td>
+                        <td>{{ number_format($d->consump, 0, '.', ',') }}</td>
+                        <td>{{ number_format($d->diff, 0, '.', ',') }}</td>
+                        <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
+                        <td><button class="btn btn-sm btn-success"
+                                  wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
+                        </td>
+                      </tr>
                     @endforeach
 
                   </tbody>

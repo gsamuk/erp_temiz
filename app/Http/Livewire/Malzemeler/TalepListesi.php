@@ -9,7 +9,7 @@ use App\Models\Demand;
 
 class TalepListesi extends Component
 {
-    protected $listeners = ['LoadDemandList' => '$refresh', 'AllRefresh' => '$refresh'];
+    protected $listeners = ['LoadDemandList' => '$refresh', 'RefreshTalepListesi' => '$refresh'];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
