@@ -20,8 +20,6 @@ class TalepKarsila extends Component
     public $error;
     public $iptal_sebep = "Gerekli Değil";
 
-
-
     public $for_manage = true; // yönetim durumu aktif , onay işlemleri aktif olur
 
     public $talep_line;
@@ -105,7 +103,7 @@ class TalepKarsila extends Component
         $up->save();
 
         $count = DemandDetail::Where('demand_id', $this->talep_id)->Where('status', '!=', 9)->count();
-
+        // çıkarma işlemi sonrası sayılıyor
         if ($count == 0) {
             $up = Demand::find($this->talep_id);
             $up->status = 9;
@@ -113,9 +111,7 @@ class TalepKarsila extends Component
             $this->talep_detay = null;
             $this->emit('RefreshTalepListesi');
             $this->dispatchBrowserEvent('CloseModal');
-        }
-
-        if ($count > 0) {
+        } else {
             $this->dispatchBrowserEvent('CloseModal');
             $this->TalepKarsila($this->talep_id);
         }
@@ -142,177 +138,6 @@ class TalepKarsila extends Component
     }
 
 
-    public function _kaydet() // sarf içn
-    {
-
-        dd(DemandDetail::distinct()->Where('demand_id', $this->talep_id)->whereNotNull('account_code')->get(['account_code']));
-        $sarf_items = array();
-        $satinal_items = array();
-        $logo_po_ref = null;
-        $logo_fiche_ref = null;
-        $this->error = null;
-
-        // kontroller
-        $sarf = false;
-        $satinal = false;
-        $return_msg = "";
-
-        $onayli_sarf = DemandDetail::Where('demand_id', $this->talep_id)->Where('approved_consump', '>', '0')
-            ->get();
-        if ($onayli_sarf->count() > 0) {
-            foreach ($onayli_sarf as $item) {
-
-                $_item = DemandDetail::find($item->id);
-                $_item->status = 1; // stoktan karşılama
-                $_item->save();
-
-                $logo_item = LogoItems::find($item->logo_stock_ref);
-                $sarf_items[] = [
-                    "ITEM_CODE" => $item->stock_code,
-                    "ITEMREF" => $item->logo_stock_ref,
-                    "UNIT_CODE" => $item->unit_code,
-                    "DESCRIPTION" => $item->description,
-                    "PRICE" => $logo_item->average_price,
-                    "TYPE" => 25,
-                    'QUANTITY' => $item->approved_consump,
-                ];
-            }
-        }
-
-
-        $onayli_satinal = DemandDetail::Where('demand_id', $this->talep_id)->Where('approved_purchase', '>', '0')
-            ->get();
-
-        if ($onayli_satinal->count() > 0) {
-            foreach ($onayli_satinal as $item) {
-                // status kontrolleri
-                $_item = DemandDetail::find($item->id);
-                if ($_item->status == 1) { // eğer stoktan karşılama varsa
-                    $_item->status = 3;  // hep stok hem satınalma statusu
-                } else {
-                    $_item->status = 2; // sadece satın alma statusu
-                }
-                $_item->save();
-                ///
-
-                $satinal_items[] = [
-                    "STOCKREF" => $item->logo_stock_ref,
-                    "UNIT_CODE" => $item->unit_code,
-                    "TYPE" => 0,
-                    'QUANTITY' => $item->approved_purchase,
-                ];
-            }
-        }
-
-
-        $demand = Demand::find($this->talep_id);
-        $sarf_data = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => "2021-05-21 10:10:00",
-            'GROUP' => 2,
-            "AUXIL_CODE" => $demand->special_code,
-            "PROJECT_CODE" => $demand->project_code,
-            "FOOTNOTE1"  => $demand->demand_desc,
-            'DOC_NUMBER' => "SF" . $this->talep_id,
-            "TYPE" => 12,
-            'IO_TYPE' => 3,
-            'SOURCE_WH' => $demand->warehouse_no,
-            'SOURCE_COST_GRP' => 1,
-            'TRANSACTIONS' => [
-                'items' => $sarf_items
-            ]
-        ];
-
-
-        $satinal_data = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => "2021-05-21 10:10:00",
-            'DOC_NUMBER' => "TLP" . $this->talep_id,
-            'CLIENTREF' => 7,
-            "TYPE" => 2,
-            'SOURCE_WH' => $demand->warehouse_no,
-            'TRANSACTIONS' => [
-                'items' => $satinal_items
-            ]
-        ];
-
-
-
-        if (count($sarf_items) > 0) {
-
-            $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-
-            if ($logo_fiche_ref != null && $logo_fiche_ref > 0) {
-                $sarf = $logo_fiche_ref;
-                $return_msg .= " > Sarf Fişi Oluşturuldu " . $logo_fiche_ref;
-
-                // eğer logo fişi oluştuysa
-                $dm = new DemandFiche;
-                $dm->demand_id = $this->talep_id;
-                $dm->logo_fiche_ref = $logo_fiche_ref;
-                $dm->insert_time = date('Y-m-d H:i:s');
-                $dm->save();
-                // logo sarf fişi başarılı ise fiş kaydı ekleniyor.
-
-                $dm = Demand::find($this->talep_id);
-                $dm->status = 1;
-                $dm->save();
-                // Talep durumu işlem yapıldı (1) olarak set ediliyor.
-
-            } else {
-                //eğer logo sarf fişi oluşturamazsa status değerlerini değişir
-                // daha önce sarf edildi olan status değerleri değiştiriliyor
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 1)->update(["status" => 0]);
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 2]);
-                ///
-            }
-        }
-
-        if (count($satinal_items) > 0) {
-
-            $logo_po_ref  = LogoRest::SiparisOlustur($satinal_data, 0);
-
-            if ($logo_po_ref != null && $logo_po_ref > 0) {
-                $satinal = $logo_po_ref;
-                $return_msg .= " > Satınalma Fişi Oluşturuldu, Fiş No : " . $logo_po_ref;
-                // eğer talep malzemelerinde satın alma fişi oluştuysa
-                $dm = Demand::find($this->talep_id);
-                $dm->logo_po_ref = $logo_po_ref;
-                $dm->status = 1;
-                $dm->save();
-                // Talep durumu işlem yapıldı (1) olarak set ediliyor. 
-
-            } else {
-                //eğer logo satınalma fişi oluşturamazsa status değerlerini değişir
-                // daha önce satınalma yapıldı olan status değerleri değiştiriliyor
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 2)->update(["status" => 0]);
-                DemandDetail::Where("demand_id", $this->talep_id)->Where("status", 3)->update(["status" => 1]);
-            }
-        }
-
-        if (!$sarf && !$satinal) {
-            $this->error = "Logo Fişleri Oluşturulamadı, Lütfen Firma Seçerek Tekrar Deneyiniz.";
-        } else {
-
-
-            $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
-            if ($kalan == 0) {
-                $d = Demand::find($this->talep_id);
-                $d->status = 2;
-                $d->save();
-            }
-
-            $this->emit('RefreshTalepListesi');
-            $this->emit('RefreshTalepKarsila');
-            return session()->flash('success', $return_msg);
-        }
-    }
-
-
 
     public function render()
     {
@@ -322,9 +147,11 @@ class TalepKarsila extends Component
 
     public function kaydet()
     {
+
         $demand = Demand::find($this->talep_id);
         $sarf = $this->sarfet($demand);
 
+        // satınalma siparişleri seçilen carilere göre fişleri oluşturuluyor
         $satinal = false;
         $cari = DemandDetail::distinct()
             ->Where('demand_id', $this->talep_id)
@@ -338,11 +165,11 @@ class TalepKarsila extends Component
         }
 
         if ($sarf || $satinal) {
-
             $up = Demand::find($this->talep_id);
             $up->status = 1;
             $up->save();
             $this->emit('RefreshTalepListesi');
+            $this->TalepKarsila($this->talep_id);
         }
     }
 
@@ -370,7 +197,6 @@ class TalepKarsila extends Component
                 ];
             }
         }
-
 
         $sarf_data = [
             'headers' => [
@@ -400,8 +226,10 @@ class TalepKarsila extends Component
             $insert->fiche_type = 1; // sarf fişi
             $insert->insert_time = date('Y-m-d H:i:s');
             $insert->save();
+            $this->emit('Success', 'Sarf Fişi Oluşturuldu');
             return $ref;
         } else {
+            $this->emit('Error', 'Sarf Fişi Oluşturulamadı');
             return false;
         }
     }
@@ -448,8 +276,10 @@ class TalepKarsila extends Component
             $insert->fiche_type = 2; // satınalam fişi
             $insert->insert_time = date('Y-m-d H:i:s');
             $insert->save();
+            $this->emit('Success', 'Satınalma Fişi Oluşturuldu');
             return $ref;
         } else {
+            $this->emit('Error', 'Satınalma Fişi Oluşturulamadı');
             return false;
         }
     }
@@ -490,7 +320,6 @@ class TalepKarsila extends Component
 
     public function getAccount($data)
     {
-
         $data = json_decode($data);
         $up =  DemandDetail::find($this->s_item_id);
         $up->account_ref =  $data->ref_id;

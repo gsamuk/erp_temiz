@@ -34,7 +34,7 @@
             <li class="nav-item">
               <a class="nav-link All @if ($status == 99) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(99)" role="tab" aria-selected="true">
-                <i class=" ri-stack-line  me-1 align-bottom"></i> Hepsi
+                <i class="ri-stack-line me-1 align-bottom"></i> Hepsi
               </a>
             </li>
             <li class="nav-item">
@@ -62,7 +62,7 @@
             <li class="nav-item">
               <a class="nav-link @if ($status == 9) active @endif py-3" data-bs-toggle="tab"
                  href="#" wire:click="set_status(9)" role="tab" aria-selected="false">
-                <i class=" ri-thumb-down-line me-1 align-bottom"></i>Red
+                <i class="ri-thumb-down-line me-1 align-bottom"></i>Red
               </a>
             </li>
 
@@ -131,13 +131,12 @@
                           @endif
                         @else
                           @if ($d->status == 9)
-                          <span class="badge rounded-pill badge-outline-danger">
+                            <span class="badge rounded-pill badge-outline-danger">
                               Reddedildi</span>
                           @else
                             <span class="badge rounded-pill badge-outline-warning">
                               Onay Bekliyor</span>
                           @endif
-
                         @endif
 
                       </td>
@@ -168,7 +167,8 @@
                         @endif
 
                         @if ($d->status == 9)
-                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Talep Reddedildi
+                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Talep
+                            Reddedildi
                           </button>
                         @endif
 
