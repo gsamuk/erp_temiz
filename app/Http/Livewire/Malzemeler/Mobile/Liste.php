@@ -72,6 +72,7 @@ class Liste extends Component
     public function render()
     {
         $malzemeler = LogoItems::where('stock_name', 'like', '%' . $this->search . '%')
+            ->where('wh_no', 0)
             ->when(!empty($this->slc_item_type), function ($query) {
                 return $query->where('cardtype_name', $this->slc_item_type);
             })
@@ -133,7 +134,8 @@ class Liste extends Component
         $demand = new Demand;
         $demand->company_id = 1;
         $demand->users_id = $this->user_id;
-        $demand->warehouse_no = 1;
+        $demand->warehouse_no = 0;
+        $demand->demand_type = 1;
         $demand->special_code = $this->special_code;
         $demand->insert_time = $insert_time;
         $demand->save();

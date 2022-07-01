@@ -7,8 +7,21 @@
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
               ->first();
+          $w2 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->dest_wh_no")
+              ->where('company_no', 1)
+              ->first();
         @endphp
-        <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+
+        @if ($talep->demand_type == 1)
+          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+        @endif
+
+        @if ($talep->demand_type == 2)
+          <h5><span class="text-info"> {{ $w1->warehouse_name }} </span> <i class="ri-share-forward-2-line"></i>
+            <span class="text-danger">{{ $w2->warehouse_name }}</span> Malzeme Transferi
+          </h5>
+        @endif
+
         <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
@@ -36,6 +49,11 @@
                 </tr>
               </thead>
               <tbody>
+
+                @php
+                  $bir_islem = true;
+                @endphp
+
                 @foreach ($talep_detay as $dt)
                   @php
                     $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $dt->logo_stock_ref)->first();
@@ -55,15 +73,22 @@
                         $disabled = 'disabled'; // alan disable ediliyor
                     }
                     
+                    if ($dt->approved_consump > 0 || $dt->approved_purchase > 0) {
+                        $uyari = 'table-light';
+                    } else {
+                        $uyari = 'table-warning';
+                        $bir_islem = false;
+                    }
+                    
                   @endphp
-                  <tr>
+                  <tr class="{{ $uyari }}">
                     <td class="owner">
                       @if ($photo)
                         <a href="javascript:;"
                            wire:click="foto_goster({{ $dt->logo_stock_ref }})">
                           <img class="border"
                                src="{{ asset('public/storage/images/items/thumb/' . $photo->foto_path) }}"
-                               style="height: 45px">
+                               style="height: 35px">
                         </a>
                       @else
                         <a href="javascript:;"
@@ -75,7 +100,7 @@
                       @endif
                     </td>
 
-                    <td><b>{{ $item_detail->stock_name }}</b>
+                    <td><b>{{ $item_detail->stock_name }} </b>
                       <br>
                       <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
                     </td>
@@ -96,17 +121,18 @@
                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
 
                         <input type="number" {{ $disabled }}
-                               @if ($talep->approved == 1) disabled @endif
+
                                min="0"
                                class="form-control"
                                max="{{ $item_detail->onhand_quantity }}"
+                               onkeyup=imposeMinMax(this)
                                wire:loading.attr="disabled"
                                wire:model.lazy="konay.{{ $dt->id }}">
                       </td>
 
                       <td>
                         <input type="number"
-                               @if ($talep->approved == 1) disabled @endif
+
                                min="0"
                                wire:loading.attr="disabled"
                                class="form-control"
@@ -176,7 +202,10 @@
                                 $item = App\Models\LogoItems::where('wh_no', "$talep->warehouse_no")
                                     ->where('stock_code', "$itm->stock_code")
                                     ->first();
-                                $toplam = $item->average_price * $itm->approved_consump;
+                                if (isset($item->average_price)) {
+                                    $toplam = $item->average_price * $itm->approved_consump;
+                                }
+                                
                               @endphp
                               <tr>
                                 <th scope="row">{{ $itm->stock_code }} </th>
@@ -242,13 +271,20 @@
 
 
                                 <td>{{ $itm->account_name }} </td>
-                                <td><button wire:loading.attr="disabled"
+                                <td>
+                                  <button onclick="$('._btn').prop('disabled',true)"
                                           @if ($talep->status == 1) disabled @endif
-                                          wire:click="firma_sec('{{ $itm->id }}','{{ $itm->stock_code }}')"
-                                          class="btn btn-sm btn-soft-danger">Firma Seç</button></td>
+                                          wire:click="firma_sec('{{ $itm->id }}','{{ $item->logicalref }}')"
+                                          class="_btn btn btn-sm btn-soft-danger">Firma Seç</button>
+                                  @if ($itm->account_name)
+                                    <button onclick="$('._btn').prop('disabled',true)"
+                                            @if ($talep->status == 1) disabled @endif
+                                            wire:click="firma_iptal('{{ $itm->id }}')"
+                                            class="_btn btn btn-sm btn-soft-warning">İptal</button>
+                                  @endif
+                                </td>
                               </tr>
                             @endforeach
-
                           </tbody>
                         </table>
 
@@ -260,28 +296,35 @@
 
                   <div class="col-lg-12 mt-3">
 
-                    <div wire:loading.remove>
-                      @if ($talep->approved == 0)
-                        <button wire:click="approved"
-                                wire:loading.attr="disabled"
-                                class="btn btn-success btn-label">
+                    @if ($talep->approved == 0)
+                      @if ($bir_islem)
+                        <button wire:click="approved" onclick="$('._btn').prop('disabled',true)"
+                                class="_btn btn btn-success btn-label">
                           <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
                           Listeyi Onayla
                         </button>
                       @else
-                        <button wire:click="kaydet" wire:loading.remove
-                                @if ($talep->status == 1) disabled @endif
-                                class="btn btn-info btn-label">
-                          <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                          Logo Fişi Oluştur (Sarf)
-                        </button>
-
-                        <button wire:click="unapproved"
-                                wire:loading.attr="disabled" @if ($talep->status == 1) disabled @endif
-                                class="btn btn-soft-danger btn-sm position-absolute end-0 top-50">
-                          Onay İptal</button>
+                        <div class="alert alert-warning alert-borderless" role="alert">
+                          <strong>Dikkat : </strong> İşlem Gerektiren Malzemeler Mevcuttur,
+                          eğer bir malzeme sarfı, transferi yada satınalması yapılmayacaksa lütfen o malzemeyi listeden
+                          çıkarınız.
+                        </div>
                       @endif
-                    </div>
+                    @else
+                      <button wire:click="kaydet()"
+                              onclick="$('._btn').prop('disabled',true)"
+                              @if ($talep->status == 1) disabled @endif
+                              class="_btn btn btn-info btn-label">
+                        <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
+                        Logo Fişi Oluştur (Sarf)
+                      </button>
+
+                      <button wire:click="unapproved" onclick="$('._btn').prop('disabled',true)"
+                              @if ($talep->status == 1) disabled @endif
+                              class="_btn btn btn-light btn-sm">
+                        Onay İptal</button>
+                    @endif
+
 
                     <div wire:loading>
                       <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
@@ -454,7 +497,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
       </div>
       <div class="modal-body m-0">
-        @if ($stock_code)
+        @if ($item_ref)
           @livewire('logo.accounts')
         @endif
       </div>

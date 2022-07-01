@@ -47,10 +47,13 @@ class TalepKarsila extends Component
 
     // satınalma firması seç
     public $stock_code;
+    public $item_ref; // malzeme ref id
     public $s_item_id; // satın alma firması set edilecek item id
 
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getAccount' => 'getAccount', 'RefreshTalepKarsila' => '$refresh'];
+
+
 
     public function TalepKarsila($id)
     {
@@ -76,6 +79,7 @@ class TalepKarsila extends Component
         $d = DemandDetail::find($id);
         $d->approved_consump = $value;
         $d->save();
+        $this->TalepKarsila($this->talep_id);
     }
 
     public function updatedSonay($value, $id) // satın alma miktarı onayı trigger when updated
@@ -83,6 +87,7 @@ class TalepKarsila extends Component
         $d = DemandDetail::find($id);
         $d->approved_purchase = $value;
         $d->save();
+        $this->TalepKarsila($this->talep_id);
     }
 
 
@@ -165,8 +170,13 @@ class TalepKarsila extends Component
         }
 
         if ($sarf || $satinal) {
+            $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
             $up = Demand::find($this->talep_id);
-            $up->status = 1;
+            if ($kalan == 0) {
+                $up->status = 2;
+            } else {
+                $up->status = 1;
+            }
             $up->save();
             $this->emit('RefreshTalepListesi');
             $this->TalepKarsila($this->talep_id);
@@ -186,36 +196,79 @@ class TalepKarsila extends Component
         if ($sarf->count() > 0) {
             foreach ($sarf as $item) {
                 $logo_item = LogoItems::find($item->logo_stock_ref);
-                $rest_items[] = [
-                    "ITEM_CODE" => $item->stock_code,
-                    "ITEMREF" => $item->logo_stock_ref,
-                    "UNIT_CODE" => $item->unit_code,
-                    "DESCRIPTION" => $item->description,
-                    "PRICE" => $logo_item->average_price,
-                    "TYPE" => 25,
-                    'QUANTITY' => $item->approved_consump,
-                ];
+
+                // çok basit anlaması biraz dikkat
+                if ($demand->demand_type == 1) {
+                    $rest_items[] = [
+                        "ITEM_CODE" => $item->stock_code,
+                        "ITEMREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "DESCRIPTION" => $item->description,
+                        "PRICE" => $logo_item->average_price,
+                        "TYPE" => 25,
+                        'QUANTITY' => $item->approved_consump,
+                    ];
+                }
+                // eğer ambar tranferi ise
+                if ($demand->demand_type == 2) {
+                    $rest_items[] = [
+                        "ITEM_CODE" => $item->stock_code,
+                        "ITEMREF" => $item->logo_stock_ref,
+                        "UNIT_CODE" => $item->unit_code,
+                        "DESCRIPTION" => $item->description,
+                        "PRICE" => $logo_item->average_price,
+                        "TYPE" => 25,
+                        'QUANTITY' => $item->approved_consump,
+                        'SOURCEINDEX' =>  $demand->warehouse_no,
+                        'DESTINDEX' => $demand->dest_wh_no,
+                    ];
+                }
             }
         }
 
-        $sarf_data = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'DATE' => "2021-05-21 10:10:00",
-            'GROUP' => 2,
-            "AUXIL_CODE" => $demand->special_code,
-            "PROJECT_CODE" => $demand->project_code,
-            "FOOTNOTE1"  => $demand->demand_desc,
-            'DOC_NUMBER' => "SF" . $this->talep_id,
-            "TYPE" => 12,
-            'IO_TYPE' => 3,
-            'SOURCE_WH' => $demand->warehouse_no,
-            'SOURCE_COST_GRP' => 1,
-            'TRANSACTIONS' => [
-                'items' => $rest_items
-            ]
-        ];
+        // eğer bu talep bir sarf ise
+        if ($demand->demand_type == 1) {
+            $sarf_data = [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'DATE' => "2021-05-21 10:10:00",
+                'GROUP' => 2,
+                "AUXIL_CODE" => $demand->special_code,
+                "PROJECT_CODE" => $demand->project_code,
+                "FOOTNOTE1"  => $demand->demand_desc,
+                'DOC_NUMBER' => "SF" . $this->talep_id,
+                "TYPE" => 12,
+                'IO_TYPE' => 3,
+                'SOURCE_WH' => $demand->warehouse_no,
+                'SOURCE_COST_GRP' => 1,
+                'TRANSACTIONS' => [
+                    'items' => $rest_items
+                ]
+            ];
+        }
+
+        // eğer bu talep bir ambar transferi ise
+        if ($demand->demand_type == 2) {
+            $sarf_data = [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'DATE' => "2021-05-21 10:10:00",
+                'GROUP' => 3,
+                "SOURCE_WH" => $demand->warehouse_no,
+                "SOURCE_COST_GRP" => $demand->warehouse_no,
+                "DEST_WH" => $demand->dest_wh_no,
+                "DEST_COST_GRP" => $demand->dest_wh_no,
+                'DOC_NUMBER' => "TR" . $this->talep_id,
+                "TYPE" => 25,
+                'IO_TYPE' => 2,
+                'TRANSACTIONS' => [
+                    'items' => $rest_items
+                ]
+            ];
+        }
+
 
         $ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
         if ($ref != null && $ref > 0) {
@@ -226,10 +279,10 @@ class TalepKarsila extends Component
             $insert->fiche_type = 1; // sarf fişi
             $insert->insert_time = date('Y-m-d H:i:s');
             $insert->save();
-            $this->emit('Success', 'Sarf Fişi Oluşturuldu');
+            $this->emit('Success', 'Logo Fişi Oluşturuldu');
             return $ref;
         } else {
-            $this->emit('Error', 'Sarf Fişi Oluşturulamadı');
+            $this->emit('Error', 'Logo Fişi Oluşturulamadı');
             return false;
         }
     }
@@ -311,10 +364,22 @@ class TalepKarsila extends Component
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#MalzemeFotoModal']);
     }
 
-    public function firma_sec($item_id, $stock_code)
+
+    public function firma_iptal($item_id)
     {
+        $up = DemandDetail::find($item_id);
+        $up->account_ref =  null;
+        $up->account_name =  null;
+        $up->account_code = null;
+        $up->save();
+    }
+
+    public function firma_sec($item_id, $item_ref)
+    {
+
+        $this->emit('SetItemRef', $item_ref);
         $this->s_item_id = $item_id;
-        $this->stock_code = $stock_code;
+        $this->item_ref = $item_ref;
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#FirmaSecModal']);
     }
 

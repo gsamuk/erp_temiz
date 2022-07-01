@@ -90,7 +90,7 @@ class TalepListesi extends Component
     }
 
     // sarf
-    public function talep_sarf_detay($id)
+    public function talep_detay($id)
     {
         $this->id_reset($id);
         $this->talep_sarf_detay_id = $id;
@@ -98,27 +98,13 @@ class TalepListesi extends Component
     }
 
 
-    public  function talep_sarf_islem_detay($id)
+    public  function talep_islem_detay($id)
     {
         $this->id_reset($id);
         $this->talep_sarf_islem_id = $id;
         $this->emit('TalepIslem', $id);
     }
 
-    // transfer
-    public function talep_transfer_detay($id)
-    {
-        $this->id_reset($id);
-        $this->talep_transfer_detay_id = $id;
-        $this->emit('TalepTransferKarsila', $id);
-    }
-
-    public function talep_transfer_islem_detay($id)
-    {
-        $this->id_reset($id);
-        $this->talep_transfer_islem_id = $id;
-        $this->emit('TalepTransferIslem', $id);
-    }
 
     public function set_username($n)
     {

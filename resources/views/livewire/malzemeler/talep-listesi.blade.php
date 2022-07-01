@@ -142,26 +142,26 @@
                       </td>
                       <td class="owner">
                         @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 1)
-                          <button wire:click="talep_sarf_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                          <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-success btn-block" style="width:150px">Talep İşlem Detayı <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 0 && $d->demand_type == 1)
-                          <button wire:click="talep_sarf_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                          <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-info btn-block" style="width:150px">Depo Malzeme Talebi <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
 
                         @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 2)
-                          <button wire:click="talep_transfer_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                          <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-success btn-block" style="width:150px">Transfer İşlem Detayı
                             <i class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 0 && $d->demand_type == 2)
-                          <button wire:click="talep_transfer_detay({{ $d->id }}, '{{ $d->user_name }}')"
+                          <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-warning btn-block" style="width:150px">Depo Transfer Talebi <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
@@ -206,14 +206,6 @@
 
       @if ($talep_sarf_islem_id)
         @livewire('malzemeler.talep-islem')
-      @endif
-
-      @if ($talep_transfer_detay_id)
-        @livewire('malzemeler.talep-transfer-karsila')
-      @endif
-
-      @if ($talep_transfer_islem_id)
-        @livewire('malzemeler.talep-transfer-islem')
       @endif
 
       @if ($talep_satir_id)

@@ -11,7 +11,16 @@ class Accounts extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $search = '';
+    public $item_ref;
+    public $last_purchase;
 
+    protected $listeners = ['SetItemRef'];
+
+
+    public function SetItemRef($item_ref)
+    {
+        $this->item_ref = $item_ref;
+    }
 
 
     public function render()
@@ -22,6 +31,7 @@ class Accounts extends Component
 
         return view('livewire.logo.accounts', [
             'accounts' => $data,
+            'item_ref' => $this->item_ref,
         ]);
     }
 }

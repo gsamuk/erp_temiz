@@ -48,18 +48,13 @@ class TalepIslem extends Component
 
     public function sarf_olustur()
     {
-        $sarf_items = array();
-
-        if (count($this->sarf) == 0) {
-            return session()->flash('error', 'Lütfen Malzeme Seçiniz');
-        }
-
+        $rest_items = array();
         foreach ($this->sarf as $stock_code => $miktar) {
             if ($miktar > 0) {
                 $demand_item = IncompletedDemand::Where('demand_id', $this->talep_id)->where('stock_code', $stock_code)->first();
                 $item = LogoItems::Where("stock_code", "$stock_code")->first();
 
-                $sarf_items[] = [
+                $rest_items[] = [
                     "ITEM_CODE" => $item->stock_code,
                     "ITEMREF" => $item->logicalref,
                     "UNIT_CODE" => $demand_item->unit_code,
@@ -68,6 +63,10 @@ class TalepIslem extends Component
                     'QUANTITY' => $miktar,
                 ];
             }
+        }
+
+        if (count($rest_items) == 0) {
+            return session()->flash('error', 'Lütfen Malzeme Seçiniz');
         }
 
         $demand = Demand::find($this->talep_id);
@@ -86,35 +85,103 @@ class TalepIslem extends Component
             'SOURCE_WH' => $demand->warehouse_no,
             'SOURCE_COST_GRP' => 1,
             'TRANSACTIONS' => [
-                'items' => $sarf_items
+                'items' => $rest_items
             ]
         ];
 
+        $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
+        if ($logo_fiche_ref != null) {
 
-        if (count($sarf_items) > 0) {
+            $dm = new DemandFiche;
+            $dm->demand_id = $this->talep_id;
+            $dm->logo_fiche_ref = $logo_fiche_ref;
+            $dm->demand_type = 1;
+            $dm->fiche_type = 1;
+            $dm->insert_time = date('Y-m-d H:i:s');
+            $dm->save();
 
-            $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
-            if ($logo_fiche_ref != null) {
+            $this->sarf = null;
 
-                $dm = new DemandFiche;
-                $dm->demand_id = $this->talep_id;
-                $dm->logo_fiche_ref = $logo_fiche_ref;
-                $dm->insert_time = date('Y-m-d H:i:s');
-                $dm->save();
-
-                $this->sarf = null;
-
-                $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
-                if ($kalan == 0) {
-                    $d = Demand::find($this->talep_id);
-                    $d->status = 2;
-                    $d->save();
-                }
-                $this->emit('RefreshTalepListesi');
-                return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
+            $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
+            if ($kalan == 0) {
+                $d = Demand::find($this->talep_id);
+                $d->status = 2;
+                $d->save();
             }
+            $this->emit('RefreshTalepListesi');
+            return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
         }
     }
+
+    public function transfer_olustur()
+    {
+        $rest_items = array();
+        $demand = Demand::find($this->talep_id);
+        foreach ($this->sarf as $stock_code => $miktar) {
+            if ($miktar > 0) {
+                $demand_item = IncompletedDemand::Where('demand_id', $this->talep_id)->where('stock_code', $stock_code)->first();
+                $item = LogoItems::Where("stock_code", "$stock_code")->first();
+
+                $rest_items[] = [
+                    "ITEM_CODE" => $item->stock_code,
+                    "ITEMREF" => $item->logicalref,
+                    "UNIT_CODE" => $demand_item->unit_code,
+                    "PRICE" => $item->average_price,
+                    "TYPE" => 25,
+                    'QUANTITY' => $miktar,
+                    'SOURCEINDEX' =>  $demand->warehouse_no,
+                    'DESTINDEX' => $demand->dest_wh_no,
+                ];
+            }
+        }
+
+        if (count($rest_items) == 0) {
+            return session()->flash('error', 'Lütfen Malzeme Seçiniz');
+        }
+
+
+        $sarf_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => "2021-05-21 10:10:00",
+            'GROUP' => 3,
+            "SOURCE_WH" => $demand->warehouse_no,
+            "SOURCE_COST_GRP" => $demand->warehouse_no,
+            "DEST_WH" => $demand->dest_wh_no,
+            "DEST_COST_GRP" => $demand->dest_wh_no,
+            'DOC_NUMBER' => "TR" . $this->talep_id,
+            "TYPE" => 25,
+            'IO_TYPE' => 2,
+            'TRANSACTIONS' => [
+                'items' => $rest_items
+            ]
+        ];
+
+        $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
+        if ($logo_fiche_ref != null) {
+
+            $dm = new DemandFiche;
+            $dm->demand_id = $this->talep_id;
+            $dm->logo_fiche_ref = $logo_fiche_ref;
+            $dm->demand_type = 1;
+            $dm->fiche_type = 1;
+            $dm->insert_time = date('Y-m-d H:i:s');
+            $dm->save();
+
+            $this->sarf = null;
+
+            $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
+            if ($kalan == 0) {
+                $d = Demand::find($this->talep_id);
+                $d->status = 2;
+                $d->save();
+            }
+            $this->emit('RefreshTalepListesi');
+            return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
+        }
+    }
+
 
     public function render()
     {
