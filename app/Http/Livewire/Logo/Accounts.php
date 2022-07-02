@@ -12,14 +12,16 @@ class Accounts extends Component
     protected $paginationTheme = 'bootstrap';
     public $search = '';
     public $item_ref;
+    public $item_name;
     public $last_purchase;
 
     protected $listeners = ['SetItemRef'];
 
 
-    public function SetItemRef($item_ref)
+    public function SetItemRef($item)
     {
-        $this->item_ref = $item_ref;
+        $this->item_ref = $item['item_ref'];
+        $this->item_name = $item['item_name'];
     }
 
 

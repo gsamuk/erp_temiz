@@ -7,6 +7,7 @@ use App\Models\LogoItems;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\LogoItemsPhoto;
+use App\Models\LogoWarehouses;
 use DB;
 
 class Liste extends Component
@@ -27,7 +28,7 @@ class Liste extends Component
     public $item_photos;
     public $item_id;
 
-    public $wh_id = 0;
+    public $wh_id = '0';
 
 
     protected $listeners  = ['setLine', 'setWh'];
@@ -61,8 +62,11 @@ class Liste extends Component
 
         $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
-            ->where('wh_no', $this->wh_id)
-            ->where('onhand_quantity', '>=', 0)
+            ->where('onhand_quantity', '>=', '0')
+
+            ->when(($this->wh_id >= 0 && $this->wh_id != null), function ($query) {
+                return $query->where('wh_no', $this->wh_id);
+            })
             ->when($this->tur, function ($query) {
                 return $query->where('cardtype_name', $this->tur);
             })
@@ -76,12 +80,13 @@ class Liste extends Component
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();
-
+        $warehouses = LogoWarehouses::where('company_no', '1')->get();
 
         return view('livewire.malzemeler.liste', [
             'items' => $data,
             'item_type' => $item_type,
             'stock_type' => $stock_type,
+            'warehouses' => $warehouses,
             'ch' => $this->ch,
             'details' => $this->details
         ]);

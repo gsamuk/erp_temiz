@@ -16,7 +16,7 @@
         @endphp
 
         @if ($son_satinalma)
-          <h5>Son Satınalma Yapılan Cariler</h5>
+          <h5><b class="text-danger">{{ $item_ref }} | {{ $item_name }}</b> Son Satınalma Yapılan Cariler</h5>
           <div class="table-responsive">
             <table class="table-sm table-bordered table-striped table-nowrap table">
               <thead class="table-light">
@@ -36,6 +36,7 @@
                     <td>{{ $s->account_code }}</td>
                     <td>
                       <button data-bs-dismiss="modal"
+                              wire:click="$emit('getAccount_','{{ $s->account_ref }}')"
                               class="btn btn-success btn-sm"> Seç </button>
                     </td>
                     <td>{{ $s->account_name }}</td>
@@ -65,7 +66,7 @@
           </div>
         </div>
       </div>
-
+      <h5>Diğer Cariler</h5>
       <div class="table-responsive">
         <table class="table-sm table-bordered table-striped table-nowrap table"
                wire:loading.class="opacity-50">

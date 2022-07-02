@@ -10,7 +10,7 @@ use App\Models\LogoItemsPhoto;
 use App\Models\LogoItems;
 use App\Http\Controllers\LogoRest;
 use App\Models\IncompletedDemand;
-
+use App\Models\LogoAccounts;
 
 class TalepKarsila extends Component
 {
@@ -51,7 +51,7 @@ class TalepKarsila extends Component
     public $s_item_id; // satın alma firması set edilecek item id
 
 
-    protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getAccount' => 'getAccount', 'RefreshTalepKarsila' => '$refresh'];
+    protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getAccount' => 'getAccount', 'getAccount_' => 'getAccount_', 'RefreshTalepKarsila' => '$refresh'];
 
 
 
@@ -374,10 +374,9 @@ class TalepKarsila extends Component
         $up->save();
     }
 
-    public function firma_sec($item_id, $item_ref)
+    public function firma_sec($item_id, $item_ref, $item_name)
     {
-
-        $this->emit('SetItemRef', $item_ref);
+        $this->emit('SetItemRef', ['item_ref' => $item_ref, 'item_name' => $item_name]);
         $this->s_item_id = $item_id;
         $this->item_ref = $item_ref;
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#FirmaSecModal']);
@@ -390,6 +389,18 @@ class TalepKarsila extends Component
         $up->account_ref =  $data->ref_id;
         $up->account_name =  $data->account_name;
         $up->account_code =  $data->account_code;
+        $up->save();
+        $this->TalepKarsila($this->talep_id);
+        $this->dispatchBrowserEvent('CloseModal');
+    }
+
+    public function getAccount_($account_ref)
+    {
+        $cari = LogoAccounts::find($account_ref);
+        $up =  DemandDetail::find($this->s_item_id);
+        $up->account_ref =  $cari->ref_id;
+        $up->account_name =  $cari->account_name;
+        $up->account_code =  $cari->account_code;
         $up->save();
         $this->TalepKarsila($this->talep_id);
         $this->dispatchBrowserEvent('CloseModal');

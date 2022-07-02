@@ -196,9 +196,7 @@
           </div>
 
           @php
-            $incompletedDemand = App\Models\IncompletedDemand::Where('demand_id', $talep_id)
-                ->where('diff', '>', 0)
-                ->get();
+            $incompletedDemand = App\Models\IncompletedDemand::Where('demand_id', $talep_id)->get();
             $sarf_btn = false;
           @endphp
 
@@ -387,7 +385,7 @@
 
           @if ($demand_pfiche)
             <div class="col-lg-12 mt-2">
-              <h6><b>Satınalma Malzeme Listesi</b></h6>
+              <h6><b>Satınalma Sipariş Fişleri </b></h6>
               <div style="background-color:#faf2f2;" class="p-2">
                 <table class="table-sm table-striped table border align-middle">
                   <thead>

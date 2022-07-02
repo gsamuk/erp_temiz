@@ -149,6 +149,7 @@
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
                             <select wire:model="warehouse" name="warehouse">
+
                               @foreach ($warehouses as $d)
                                 <option value="{{ $d->warehouse_no }}">
                                   {{ $d->warehouse_name }}
@@ -169,6 +170,7 @@
                           <div class="col-lg-8">
                             <div class="input-group input-group-sm">
                               <select wire:model="destwh" name="destwh">
+
                                 @foreach ($warehouses as $d)
                                   <option value="{{ $d->warehouse_no }}">
                                     {{ $d->warehouse_name }}
