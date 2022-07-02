@@ -1,13 +1,14 @@
 <div>
   <div class="row">
-    <div class="col-lg-5 col-md-12 col-sm-12">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-5 col-xl-5 col-xxl-5">
       <div class="card">
 
         <div class="card-header">
           <div class="row">
             <div class="col-4">
               <div class="search-box">
-                <input type="text" class="form-control search" wire:model="no_search" placeholder="Talep No">
+                <input type="text" class="form-control search" wire:model.debunce.500ms="talep_id"
+                       placeholder="Talep No">
                 <i class="ri-search-line search-icon"></i>
               </div>
             </div>
@@ -87,10 +88,9 @@
                   <tr>
                     <th scope="col"></th>
                     <th scope="col">No</th>
-                    <th scope="col" style="width:100px;">Talep Eden</th>
-                    <th scope="col">Zamanı</th>
+                    <th scope="col">Talep Eden</th>
                     <th scope="col">Durumu</th>
-                    <th scope="col" style="width:65px;">İşlem</th>
+                    <th scope="col">İşlem</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,14 +112,14 @@
                         @endif
                       </td>
                       <td class="owner">{{ $d->id }}</td>
-                      <td class="owner"><a wire:click="set_username('{{ $d->user_name }}')"
-                           href="javascript:;">{{ $d->name }} <br><small> {{ $d->surname }}</small> </a>
-                      </td>
                       <td class="owner">
+                        <a wire:click="set_username('{{ $d->user_name }}')"
+                           href="javascript:;">{{ $d->name }} <small> {{ $d->surname }}</small> </a><br>
                         <small>
                           {{ \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans() }}
                         </small>
                       </td>
+
                       <td class="owner">
                         @if ($d->approved == 1)
                           @if ($d->status == 2)
@@ -186,8 +186,10 @@
             <div class="d-flex justify-content-end mt-3">
               {{ $data->links() }}
             </div>
+            <hr class="text-danger border-2 opacity-50">
 
-            Not: Malzeme taleplerinin işleme alınabilmesi için yetkili kişi tarafından onaylanması gerekir.
+            <samp> Not: Malzeme taleplerinin işleme alınabilmesi için yetkili kişi tarafından onaylanması
+              gerekir.</samp>
           @else
             <div class="m-3"> Talep Bulunamadı..</div>
           @endif
@@ -198,13 +200,13 @@
       </div>
     </div>
 
-    <div class="col-lg-7 col-md-12 col-sm-12">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-7 col-xl-7 col-xxl-7">
 
-      @if ($talep_sarf_detay_id)
+      @if ($talep_detay_id)
         @livewire('malzemeler.talep-karsila')
       @endif
 
-      @if ($talep_sarf_islem_id)
+      @if ($talep_islem_id)
         @livewire('malzemeler.talep-islem')
       @endif
 

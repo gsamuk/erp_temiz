@@ -14,18 +14,15 @@ class TalepListesi extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $user_search;
-    public $no_search;
-    public $warehouse_search;
+    public $talep_id; // talep no
+
 
     public $status = 99; // hepsi gelir
 
     public $talep_satir_id;
 
-    public $talep_sarf_detay_id;
-    public $talep_sarf_islem_id;
-
-    public $talep_transfer_detay_id;
-    public $talep_transfer_islem_id;
+    public $talep_detay_id;
+    public $talep_islem_id;
 
 
     public function set_status($status)
@@ -40,11 +37,12 @@ class TalepListesi extends Component
     public function render()
     {
         $data = Demand::orderBy('demand.id', 'desc')
-            ->when($this->no_search, function ($query) {
-                return $query->where('demand.id', $this->no_search);
+            ->when($this->talep_id, function ($query) {
+                return $query->where('demand.id', $this->talep_id);
             })
             ->when($this->user_search, function ($query) {
-                return $query->where('users.user_name', $this->user_search);
+                return $query->where('users.name', 'like', '%' . $this->user_search . '%')
+                    ->Orwhere('users.surname', 'like', '%' . $this->user_search . '%');
             })
             ->when(($this->status == 1), function ($query) {
                 return $query->where('demand.status', $this->status);
@@ -82,10 +80,8 @@ class TalepListesi extends Component
     public function id_reset($id)
     {
         $this->talep_satir_id = $id;
-        $this->talep_sarf_islem_id = null;
-        $this->talep_sarf_detay_id = null;
-        $this->talep_transfer_islem_id = null;
-        $this->talep_transfer_detay_id = null;
+        $this->talep_islem_id = null;
+        $this->talep_detay_id = null;
         $this->emit('SetDemandId', $id);
     }
 
@@ -93,7 +89,7 @@ class TalepListesi extends Component
     public function talep_detay($id)
     {
         $this->id_reset($id);
-        $this->talep_sarf_detay_id = $id;
+        $this->talep_detay_id = $id;
         $this->emit('TalepKarsila', $id);
     }
 
@@ -101,7 +97,7 @@ class TalepListesi extends Component
     public  function talep_islem_detay($id)
     {
         $this->id_reset($id);
-        $this->talep_sarf_islem_id = $id;
+        $this->talep_islem_id = $id;
         $this->emit('TalepIslem', $id);
     }
 

@@ -274,7 +274,7 @@
                                 <td>
                                   <button onclick="$('._btn').prop('disabled',true)"
                                           @if ($talep->status == 1) disabled @endif
-                                          wire:click="firma_sec('{{ $itm->id }}','{{ $item->logicalref }}')"
+                                          wire:click="firma_sec('{{ $itm->id }}','{{ $item->logicalref }}', '{{ $item->stock_name }}')"
                                           class="_btn btn btn-sm btn-soft-danger">Firma Seç</button>
                                   @if ($itm->account_name)
                                     <button onclick="$('._btn').prop('disabled',true)"
@@ -326,9 +326,7 @@
                     @endif
 
 
-                    <div wire:loading>
-                      <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-                    </div>
+
 
                   </div>
 
@@ -342,6 +340,11 @@
       </div>
 
   @endif
+
+  <div wire:loading>
+    <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
+  </div>
+
 </div>
 
 

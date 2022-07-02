@@ -42,7 +42,7 @@ class TalepOlustur extends Component
 
     public $demand_type = 1;
 
-    public $warehouse; // malzemenin çıktığı depo
+    public $warehouse = 0; // malzemenin çıktığı depo
     public $destwh;  // malzemenin girdiği depo
 
 
