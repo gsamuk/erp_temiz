@@ -10,6 +10,7 @@ use App\Models\UserCompany;
 class IzinYonetimi extends Component
 {
     public $user_id;
+    public $user;
 
     protected $listeners = ['getUserId'];
 
@@ -42,6 +43,12 @@ class IzinYonetimi extends Component
     public function cikar($id)
     {
         $cikar = UserPermissions::Where('user_id', $this->user_id)->Where('permission_id', $id);
+        $cikar->delete();
+    }
+
+    public function depo_izin_cikar($id)
+    {
+        $cikar = UserCompany::Where('user_id', $this->user_id)->Where('id', $id);
         $cikar->delete();
     }
 }

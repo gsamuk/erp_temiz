@@ -6,12 +6,21 @@ namespace App\Http\Livewire\Users;
 use Livewire\Component;
 use App\Models\Users;
 
+use Intervention\Image\Facades\Image;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class Liste extends Component
 {
+
+    use WithFileUploads;
+
     public $user;
     public $user_id;
-    public $create = false;
+
+    public $create_page = false;
+    public $update_page = false;
+    public $perms_page = false;
 
     public $confirm_delete;
 
@@ -23,15 +32,18 @@ class Liste extends Component
     public $email;
     public $logo_user;
     public $logo_password;
+    public $is_active;
 
+    public $photo;
 
     protected $rules = [
         'name' => 'required',
         'surname' => 'required',
-        'user_name' => 'required|unique:users',
+        'user_name' => 'required|unique:users,user_name',
         'password' => 'required',
-        'email' => 'required|email|unique:users',
+        'email' => 'required|email|unique:users,email',
     ];
+
     protected $messages = [
         'name.required' => 'Lütfen Ad Giriniz.',
         'surname.required' => 'Lütfen Soyad Giriniz.',
@@ -42,10 +54,6 @@ class Liste extends Component
         'email.unique' => 'E-mail Adresi Kullanılıyor',
     ];
 
-    public function updated($propertyName)
-    {
-        //$this->validateOnly($propertyName);
-    }
 
 
     public function render()
@@ -58,21 +66,41 @@ class Liste extends Component
     public function createUserForm()
     {
         $this->reset();
-        $this->create = true;
+        $this->resPage();
+        $this->create_page = true;
     }
 
+    public function resPage()
+    {
+        $this->create_page = false;
+        $this->perms_page = false;
+        $this->update_page = false;
+        $this->photo = null;
+    }
 
     public function updateUserForm($id)
     {
-        $this->create = false;
+        $this->resPage();
+        $this->update_page = true;
         $this->user_id = $id;
         $this->user = Users::find($id);
+        $this->is_active = $this->user->is_active;
+        $this->emit('getUserId', $id);
+    }
+
+    public function permUserForm($id)
+    {
+        $this->resPage();
+        $this->perms_page = true;
+        $this->user_id = $id;
+        $this->user = Users::find($id);
+        $this->is_active = $this->user->is_active;
         $this->emit('getUserId', $id);
     }
 
     public function store()
     {
-        $this->validate();
+        //$this->validate();
         $user = Users::find($this->user_id);
         $user->user_name = $this->user_name;
         $user->email = $this->email;
@@ -81,6 +109,7 @@ class Liste extends Component
         $user->surname = $this->surname;
         $user->logo_user = $this->logo_user;
         $user->logo_password = $this->logo_password;
+        $user->is_active = $this->is_active;
         $user->update_time = date('Y-m-d H:i:s');
         $user->save();
         session()->flash('store_message', 'Güncelleme Başarılı...');
@@ -125,5 +154,32 @@ class Liste extends Component
     {
         $this->resetErrorBag();
         $this->resetValidation();
+    }
+
+
+    public function foto_save()
+    {
+        $p = $this->photo;
+        $photo_name = $this->user_id . "_" . substr(uniqid(rand(), true), 8, 8) . "." . $p->getClientOriginalExtension();
+        $img = Image::make($p->getRealPath())->encode('jpg', 65)->fit(300, null, function ($c) {
+            $c->aspectRatio();
+            $c->upsize();
+        });
+        $path = 'images/users';
+        Storage::disk('local')->put($path . '/' . $photo_name, $img, 'public');
+
+        $user = Users::find($this->user_id);
+        $user->photo_path = $photo_name;
+        $user->save();
+        $this->photo = null;
+        return session()->flash('success', 'Fotoğraf Yüklendi...');
+    }
+
+    public function remove_photo()
+    {
+        $user = Users::find($this->user_id);
+        $user->photo_path = null;
+        $user->save();
+        $this->photo = null;
     }
 }
