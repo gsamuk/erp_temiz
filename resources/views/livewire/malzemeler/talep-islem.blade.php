@@ -15,52 +15,57 @@
                 <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
                 <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
                 <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-                <small>REf : <b>{{ $item_id }}</b> </small><br>
-                <small>Stok Miktarı : <b>
-                    @if ($item->onhand_quantity > 0)
-                      {{ $item->onhand_quantity }}
-                    @else
-                      0
-                    @endif
-                  </b> </small>
-                <hr>
-                @php
-                  $son_satinalma = Illuminate\Support\Facades\DB::select(
-                      "
+
+
+                @if (!$talep_owner)
+                  <small>Stok Miktarı : <b>
+                      @if ($item->onhand_quantity > 0)
+                        {{ $item->onhand_quantity }}
+                      @else
+                        0
+                      @endif
+                    </b>
+                  </small>
+                  <hr>
+                  @php
+                    $son_satinalma = Illuminate\Support\Facades\DB::select(
+                        "
                             Exec dbo.sp_get_last_purchase
                             @company_id ='001',
                             @term_id = '09',
                             @rowcount = 5,
                             @item_ref = ?
                             ",
-                      [$item_id],
-                  );
-                @endphp
+                        [$item_id],
+                    );
+                  @endphp
 
-                @if ($son_satinalma)
-                  <h5>Son Satınalma Tutarları</h5>
-                  <table class="table-sm table-nowrap table-striped table-bordered table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Cari</th>
-                        <th scope="col">Miktar</th>
-                        <th scope="col">Birim Fiyat</th>
-                        <th scope="col">Toplam</th>
-                        <th scope="col">Tarih</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach ($son_satinalma as $s)
+                  @if ($son_satinalma)
+                    <h5>Son Satınalma Tutarları</h5>
+                    <table class="table-sm table-nowrap table-striped table-bordered table">
+                      <thead>
                         <tr>
-                          <td>{{ $s->account_name }}</td>
-                          <td>{{ number_format($s->quantity, 0, '.', ',') }} {{ $s->unit_code }}</td>
-                          <td>{{ number_format($s->unit_price, 2, '.', ',') }}</td>
-                          <td>{{ number_format($s->amount, 2, '.', ',') }}</td>
-                          <td>{{ $s->po_date }}</td>
+                          <th scope="col">Cari</th>
+                          <th scope="col">Miktar</th>
+                          <th scope="col">Birim Fiyat</th>
+                          <th scope="col">Toplam</th>
+                          <th scope="col">Tarih</th>
                         </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        @foreach ($son_satinalma as $s)
+                          <tr>
+                            <td>{{ $s->account_name }}</td>
+                            <td>{{ number_format($s->quantity, 0, '.', ',') }} {{ $s->unit_code }}</td>
+                            <td>{{ number_format($s->unit_price, 2, '.', ',') }}</td>
+                            <td>{{ number_format($s->amount, 2, '.', ',') }}</td>
+                            <td>{{ $s->po_date }}</td>
+                          </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  @endif
+
                 @endif
 
               </div>
@@ -125,7 +130,7 @@
               ->first();
         @endphp
         @if ($talep->demand_type == 1)
-          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
         @endif
 
         @if ($talep->demand_type == 2)
@@ -214,14 +219,20 @@
                 <table class="table-sm table-striped table border align-middle">
                   <thead>
                     <tr>
-                      <th scope="col"></th>
+                      @if (!$talep_owner)
+                        <th scope="col"></th>
+                      @endif
                       <th scope="col">Stok No</th>
                       <th scope="col">Malzeme</th>
                       <th scope="col">Talep</th>
                       <th scope="col">Karşılanan</th>
                       <th scope="col">Bekleyen </th>
-                      <th scope="col">Stok </th>
-                      <th scope="col">Durum </th>
+
+                      @if (!$talep_owner)
+                        <th scope="col">Stok </th>
+                        <th scope="col">Durum </th>
+                      @endif
+
                     </tr>
                   </thead>
                   <tbody>
@@ -231,16 +242,18 @@
                         $item = App\Models\LogoItems::where('stock_code', $d->stock_code)->first();
                       @endphp
                       <tr class="@if ($item->onhand_quantity >= $d->diff) bg-soft-success @endif">
-                        <td>
-                          @if ($item->onhand_quantity >= $d->diff)
-                            @php
-                              $sarf_btn = true;
-                            @endphp
-                            <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
-                                   value="{{ $d->diff }}" class="form-check-input">
-                          @else
-                          @endif
-                        </td>
+                        @if (!$talep_owner)
+                          <td>
+                            @if ($item->onhand_quantity >= $d->diff)
+                              @php
+                                $sarf_btn = true;
+                              @endphp
+                              <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
+                                     value="{{ $d->diff }}" class="form-check-input">
+                            @else
+                            @endif
+                          </td>
+                        @endif
 
                         <td>{{ $d->stock_code }}</td>
                         <td>{{ $item->stock_name }}
@@ -253,17 +266,22 @@
                           </small></td>
                         <td>{{ number_format($d->consump, 0, '.', ',') }}</td>
                         <td>{{ number_format($d->diff, 0, '.', ',') }}</td>
-                        <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
-                        <td><button class="btn btn-sm btn-success"
-                                  wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
-                        </td>
+
+                        @if (!$talep_owner)
+                          <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
+                          <td>
+                            <button class="btn btn-sm btn-success"
+                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
+                          </td>
+                        @endif
+
                       </tr>
                     @endforeach
 
                   </tbody>
                 </table>
 
-                @if ($sarf_btn)
+                @if ($sarf_btn && !$talep_owner)
                   @if ($talep->demand_type == 1)
                     <button class="btn btn-primary m-1" wire:click="sarf_olustur" wire:loading.attr="disabled">
                       Seçili Olanları Teslim Et</button>
@@ -294,129 +312,145 @@
                 @endif
 
               </div>
+
+
+              @if ($talep_owner)
+                <div class="alert alert-warning" role="alert">
+                  Malzeme talebinizin bir kısmı karşılanmıştır, kalan miktar stoklara yansıdığında size bilgi
+                  verilecektir. </div>
+              @endif
+
             </div>
-          @endif
-
-
-          @php
-            
-            if ($talep->demand_type == 1) {
-                $demand_fiche = Illuminate\Support\Facades\DB::select(
-                    "Exec dbo.sp_get_consump_fiche
-                @company_id ='001',
-                @term_id = '09',
-                @detail = 1,
-                @fiche_no = '',
-                @demand_id = ?",
-                    [$talep_id],
-                );
-            } else {
-                $demand_fiche = Illuminate\Support\Facades\DB::select(
-                    "Exec dbo.sp_get_transfer_fiche
-                @company_id ='001',
-                @term_id = '09',
-                @detail = 1,
-                @fiche_no = '',
-                @demand_id = ?",
-                    [$talep_id],
-                );
-            }
-          @endphp
-
-
-          @if ($demand_fiche)
-            <div class="col-lg-12 mb-2">
-              <h6><b>Depodan Karşılanan Malzeme Listesi (@if ($talep->demand_type == 1)
-                    Sarf
-                  @else
-                    Transfer
-                  @endif Fişleri)</b></h6>
-              <div style="background-color:#f2faf2;" class="p-2">
-                <table class="table-sm table-striped table border align-middle">
-                  <thead>
-                    <tr>
-                      <th scope="col">Fiş No</th>
-                      <th scope="col">Belge No</th>
-                      <th scope="col">Stok No</th>
-                      <th scope="col">Malzeme</th>
-                      <th scope="col">Miktar</th>
-                      <th scope="col">Birim Fiyat</th>
-                      <th scope="col">Toplam</th>
-                      <th scope="col">Özel Kod</th>
-                      <th scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($demand_fiche as $d)
-                      <tr>
-                        <td>{{ $d->fiche_no }}</td>
-                        <td>{{ $d->doc_number }}</td>
-                        <td>{{ $d->stock_code }}</td>
-                        <td>{{ $d->stock_name }}</td>
-                        <td>{{ number_format($d->amount, 0, '.', ',') }} <small>{{ $d->unit_code }}</small>
-                        </td>
-                        <td>{{ number_format($d->unit_price, 2, '.', ',') }}</td>
-                        <td>{{ number_format($d->total_price, 2, '.', ',') }}</td>
-
-                        <td><small>{{ $d->special_code }}</small></td>
-                        <td>
-                          <a href="javascript:void(0);"><i class="ri-printer-line fs-17 lh-1 align-middle"></i></a>
-
-                        </td>
-                      </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+          @else
+            @if ($talep_owner)
+              <div class="col-lg-12 mt-2 mb-3">
+                <div class="alert alert-success" role="alert">
+                  Malzeme talebiniz tamamen karşılanmıştır.</div>
               </div>
-            </div>
+            @endif
+
           @endif
 
-          @php
-            $demand_pfiche = Illuminate\Support\Facades\DB::select(
-                "Exec dbo.sp_get_purchase_order
+          @if (!$talep_owner)
+            @php
+              
+              if ($talep->demand_type == 1) {
+                  $demand_fiche = Illuminate\Support\Facades\DB::select(
+                      "Exec dbo.sp_get_consump_fiche
+                @company_id ='001',
+                @term_id = '09',
+                @detail = 1,
+                @fiche_no = '',
+                @demand_id = ?",
+                      [$talep_id],
+                  );
+              } else {
+                  $demand_fiche = Illuminate\Support\Facades\DB::select(
+                      "Exec dbo.sp_get_transfer_fiche
+                @company_id ='001',
+                @term_id = '09',
+                @detail = 1,
+                @fiche_no = '',
+                @demand_id = ?",
+                      [$talep_id],
+                  );
+              }
+            @endphp
+
+
+            @if ($demand_fiche)
+              <div class="col-lg-12 mb-2">
+                <h6><b>Depodan Karşılanan Malzeme Listesi (@if ($talep->demand_type == 1)
+                      Logo Sarf
+                    @else
+                      Logo Transfer
+                    @endif Fişleri)</b></h6>
+                <div style="background-color:#d2f8d2;" class="p-2">
+                  <table class="table-sm table-striped table border align-middle">
+                    <thead>
+                      <tr>
+
+                        <th scope="col">Belge No</th>
+                        <th scope="col">Stok No</th>
+                        <th scope="col">Malzeme</th>
+                        <th scope="col">Miktar</th>
+                        <th scope="col">Br.Fiyat</th>
+                        <th scope="col">Toplam</th>
+                        <th scope="col">Özel Kod</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($demand_fiche as $d)
+                        <tr>
+
+                          <td>{{ $d->doc_number }}</td>
+                          <td>{{ $d->stock_code }}</td>
+                          <td><u>{{ $d->stock_name }}</u></td>
+                          <td>{{ number_format($d->amount, 0, '.', ',') }} <small>{{ $d->unit_code }}</small>
+                          </td>
+                          <td>{{ number_format($d->unit_price, 2, '.', ',') }}</td>
+                          <td>{{ number_format($d->total_price, 2, '.', ',') }}</td>
+
+                          <td><small>{{ $d->special_code }}</small></td>
+
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            @endif
+
+            @php
+              $demand_pfiche = Illuminate\Support\Facades\DB::select(
+                  "Exec dbo.sp_get_purchase_order
               @company_id ='001',
               @term_id = '09',
               @detail = 1,
               @fiche_no = '',
               @demand_id = ?",
-                [$talep_id],
-            );
-          @endphp
+                  [$talep_id],
+              );
+            @endphp
 
-          @if ($demand_pfiche)
-            <div class="col-lg-12 mt-2">
-              <h6><b>Satınalma Sipariş Fişleri </b></h6>
-              <div style="background-color:#faf2f2;" class="p-2">
-                <table class="table-sm table-striped table border align-middle">
-                  <thead>
-                    <tr>
-                      <th scope="col">Fiş No</th>
-                      <th scope="col">Belge No</th>
-                      <th scope="col">Firma</th>
-                      <th scope="col">Stok No</th>
-                      <th scope="col">Malzeme</th>
-                      <th scope="col">Miktar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($demand_pfiche as $d)
+            @if ($demand_pfiche)
+              <div class="col-lg-12 mt-2">
+                <h6><b>Satınalma Sipariş Fişleri </b></h6>
+                <div style="background-color:#faf2f2;" class="p-2">
+                  <table class="table-sm table-striped table border align-middle">
+                    <thead>
                       <tr>
-                        <td>{{ $d->po_ficheno }}</td>
-                        <td>{{ $d->document_no }}</td>
-                        <td>{{ $d->account_name }}</td>
-                        <td>{{ $d->stock_code }}</td>
-                        <td>{{ $d->stock_name }}</td>
-                        <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
-                          </small>
-                        </td>
-                      </tr>
-                    @endforeach
 
-                  </tbody>
-                </table>
-                <small>Dikkat: Satınalma fişi öneri niteliğinde oluşmuştur, fişin düzenlemesi gereklidir.</small>
+                        <th scope="col">Belge No</th>
+                        <th scope="col">Firma</th>
+                        <th scope="col">Stok No</th>
+                        <th scope="col">Malzeme</th>
+                        <th scope="col">Miktar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($demand_pfiche as $d)
+                        <tr>
+
+                          <td>{{ $d->document_no }}</td>
+                          <td>{{ $d->account_name }}</td>
+                          <td>{{ $d->stock_code }}</td>
+                          <td>{{ $d->stock_name }}</td>
+                          <td>{{ number_format($d->quantity, 0, '.', ',') }} <small>{{ $d->unit_code }}
+                            </small>
+                          </td>
+                        </tr>
+                      @endforeach
+
+                    </tbody>
+                  </table>
+                  <small>Dikkat: Satınalma fişi öneri niteliğinde oluşmuştur, fişin düzenlemesi gereklidir.</small>
+                </div>
               </div>
-            </div>
+            @endif
+
+
           @endif
         </div>
       </div>

@@ -113,7 +113,7 @@
                       </td>
                       <td class="owner">{{ $d->id }}</td>
                       <td class="owner">
-                        <a wire:click="set_username('{{ $d->user_name }}')"
+                        <a wire:click="set_username('{{ $d->name }}')"
                            href="javascript:;">{{ $d->name }} <small> {{ $d->surname }}</small> </a><br>
                         <small>
                           {{ \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans() }}

@@ -18,6 +18,7 @@ class TalepKarsila extends Component
     public $talep_detay;
     public $talep_id;
     public $error;
+    public $talep_owner = false;
     public $iptal_sebep = "Gerekli Değil";
 
     public $for_manage = true; // yönetim durumu aktif , onay işlemleri aktif olur
@@ -146,6 +147,9 @@ class TalepKarsila extends Component
 
     public function render()
     {
+        if ($this->talep_owner) {
+            $this->for_manage = false;
+        }
         return view('livewire.malzemeler.talep-karsila');
     }
 

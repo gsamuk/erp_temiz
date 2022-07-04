@@ -13,7 +13,7 @@
         @endphp
 
         @if ($talep->demand_type == 1)
-          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi</h5>
+          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
         @endif
 
         @if ($talep->demand_type == 2)
@@ -41,11 +41,11 @@
                   <th scope="col">Malzeme</th>
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>
-                  @if ($for_manage)
-                    <th scope="col" style="width:90px;">Karşıla</th>
-                    <th scope="col" style="width:90px;">Satınal</th>
-                    <th scope="col" style="width:90px;"></th>
-                  @endif
+
+                  <th scope="col" style="width:90px;">Karşıla</th>
+                  <th scope="col" style="width:90px;">Satınal</th>
+
+                  <th scope="col" style="width:90px;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -107,9 +107,12 @@
                     <td>
                       <b style="font-size:1.1em"
                          class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
-                      <button class="btn btn-sm btn-ghost-info p-0"
-                              wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"><i
-                           class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i></button>
+                      @if (!$talep_owner)
+                        <button class="btn btn-sm btn-ghost-info p-0"
+                                wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"><i
+                             class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i>
+                        </button>
+                      @endif
                       <br><small>{{ $dt->unit_code }}</small>
                     </td>
                     <td><b
@@ -132,29 +135,35 @@
 
                       <td>
                         <input type="number"
-
                                min="0"
                                wire:loading.attr="disabled"
                                class="form-control"
                                wire:model.lazy="sonay.{{ $dt->id }}">
                       </td>
-
-                      <td>
-                        @if ($talep->approved == 1)
-                          <span class="badge badge-label bg-info">
-                            <i class="mdi mdi-circle-medium"></i>
-                            Onaylı
-                          </span>
-                        @else
-                          <button wire:click="iptal({{ $dt->id }})"
-                                  class="btn btn-sm btn-soft-danger"
-                                  wire:loading.attr="disabled"
-                                  @if ($talep->status > 0) disabled @endif>
-                            Çıkar
-                          </button>
-                        @endif
+                    @else
+                      <td> {{ number_format($dt->approved_consump, 0, '.', ',') }}
+                        <br><small>{{ $dt->unit_code }}</small>
+                      </td>
+                      <td> {{ number_format($dt->approved_purchase, 0, '.', ',') }}
+                        <br><small>{{ $dt->unit_code }}</small>
                       </td>
                     @endif
+                    <td>
+                      @if ($talep->approved == 1)
+                        <span class="badge badge-label bg-info">
+                          <i class="mdi mdi-circle-medium"></i>
+                          Onaylı
+                        </span>
+                      @else
+                        <button wire:click="iptal({{ $dt->id }})"
+                                class="btn btn-sm btn-soft-danger"
+                                wire:loading.attr="disabled"
+                                @if ($talep->status > 0) disabled @endif>
+                          Çıkar
+                        </button>
+                      @endif
+                    </td>
+
 
                   </tr>
                 @endforeach
@@ -162,6 +171,14 @@
             </table>
           </div>
 
+          @if ($talep->approved == 1 && $talep_owner == true)
+            <div class="col-lg-12">
+              <div class="alert alert-success"
+                   role="alert">
+                Bu Malzeme talebi onaylanmıştır, İlgili depodan malzemelerinizi teslim alabilirsiniz.
+              </div>
+            </div>
+          @endif
 
           @if ($talep->status > 1)
             <!-- Herhangi biri işelm görmüşse -->
@@ -363,56 +380,60 @@
               <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
               <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
               <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-              <small>REf : <b>{{ $item_id }}</b> </small><br>
-              <small>Stok Miktarı : <b>
-                  @if ($item->onhand_quantity > 0)
-                    {{ $item->onhand_quantity }}
-                  @else
-                    0
-                  @endif
-                </b>
-              </small>
+
+              @if (!$talep_owner)
+                <small>Stok Miktarı : <b>
+                    @if ($item->onhand_quantity > 0)
+                      {{ $item->onhand_quantity }}
+                    @else
+                      0
+                    @endif
+                  </b>
+                </small>
 
 
-              <hr>
-              @php
-                $son_satinalma = Illuminate\Support\Facades\DB::select(
-                    "
+                <hr>
+                @php
+                  $son_satinalma = Illuminate\Support\Facades\DB::select(
+                      "
                                 Exec dbo.sp_get_last_purchase
                                 @company_id ='001',
                                 @term_id = '09',
                                 @rowcount = 5,
                                 @item_ref = ?
                                 ",
-                    [$item_id],
-                );
-              @endphp
+                      [$item_id],
+                  );
+                @endphp
 
-              @if ($son_satinalma)
-                <h5>Son Satınalma Tutarları</h5>
-                <table class="table-sm table-nowrap table-striped table-bordered table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Cari</th>
-                      <th scope="col">Miktar</th>
-                      <th scope="col">Birim Fiyat</th>
-                      <th scope="col">Toplam</th>
-                      <th scope="col">Tarih</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($son_satinalma as $s)
+                @if ($son_satinalma)
+                  <h5>Son Satınalma Tutarları</h5>
+                  <table class="table-sm table-nowrap table-striped table-bordered table">
+                    <thead>
                       <tr>
-                        <td>{{ $s->account_name }}</td>
-                        <td>{{ number_format($s->quantity, 0, '.', ',') }}
-                          {{ $s->unit_code }}</td>
-                        <td>{{ number_format($s->unit_price, 2, '.', ',') }}</td>
-                        <td>{{ number_format($s->amount, 2, '.', ',') }}</td>
-                        <td>{{ $s->po_date }}</td>
+                        <th scope="col">Cari</th>
+                        <th scope="col">Miktar</th>
+                        <th scope="col">Birim Fiyat</th>
+                        <th scope="col">Toplam</th>
+                        <th scope="col">Tarih</th>
                       </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      @foreach ($son_satinalma as $s)
+                        <tr>
+                          <td>{{ $s->account_name }}</td>
+                          <td>{{ number_format($s->quantity, 0, '.', ',') }}
+                            {{ $s->unit_code }}</td>
+                          <td>{{ number_format($s->unit_price, 2, '.', ',') }}</td>
+                          <td>{{ number_format($s->amount, 2, '.', ',') }}</td>
+                          <td>{{ $s->po_date }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                @endif
+
+
               @endif
 
             </div>

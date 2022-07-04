@@ -17,6 +17,8 @@ class TalepIslem extends Component
     public $error;
     public $talep;
     public $talep_id;
+    public $talep_owner = false;
+
     public $talep_detay;
     public $talep_;
     public $demand_fiche;

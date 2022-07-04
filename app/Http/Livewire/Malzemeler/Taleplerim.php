@@ -24,7 +24,8 @@ class Taleplerim extends Component
 
     public function render()
     {
-        $data = Demand::where('users_id', Erp::user_id())
+        $data = Demand::orderBy('demand.id', 'desc')
+            ->where('users_id', Erp::user_id())
             ->when($this->no_search, function ($query) {
                 return $query->where('demand.id', $this->no_search);
             })
