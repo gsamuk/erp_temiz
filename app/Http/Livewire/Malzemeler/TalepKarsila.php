@@ -211,6 +211,7 @@ class TalepKarsila extends Component
                         "PRICE" => $logo_item->average_price,
                         "TYPE" => 25,
                         'QUANTITY' => $item->approved_consump,
+                        'AUXIL_CODE' => $item->special_code,
                     ];
                 }
                 // eğer ambar tranferi ise
@@ -223,6 +224,7 @@ class TalepKarsila extends Component
                         "PRICE" => $logo_item->average_price,
                         "TYPE" => 25,
                         'QUANTITY' => $item->approved_consump,
+                        'AUXIL_CODE' => $item->special_code,
                         'SOURCEINDEX' =>  $demand->warehouse_no,
                         'DESTINDEX' => $demand->dest_wh_no,
                     ];

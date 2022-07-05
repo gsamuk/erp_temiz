@@ -71,7 +71,7 @@ class TalepOlustur extends Component
 
     public function mount()
     {
-        $this->add(1);
+        // $this->add(1);
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("2021-m-d");
     }
@@ -132,6 +132,7 @@ class TalepOlustur extends Component
         $i = $i + 1;
         $this->i = $i;
         array_push($this->inputs, $i);
+        $this->ozelkod[$i] = $this->special_code;
     }
 
     public function remove($i, $v)

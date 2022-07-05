@@ -41,10 +41,8 @@
                   <th scope="col">Stok Kodu / Malzeme</th>
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>
-
                   <th scope="col" style="width:90px;">Karşıla</th>
                   <th scope="col" style="width:90px;">Satınal</th>
-
                   <th scope="col" style="width:90px;"></th>
                 </tr>
               </thead>
@@ -126,7 +124,6 @@
                     @if ($for_manage)
                       <td>
                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
-
                         <input type="number" {{ $disabled }}
 
                                min="0"
@@ -195,8 +192,6 @@
           @else
             @if ($for_manage)
 
-
-
               <div class="col-lg-12">
                 <div class="row">
 
@@ -228,6 +223,7 @@
                             <tr>
                               <th scope="col">Kodu</th>
                               <th scope="col">Malzeme</th>
+                              <th scope="col">Özel Kod</th>
                               <th scope="col">Miktar</th>
                               <th scope="col">Birim Tutar</th>
                               <th scope="col">Toplam</th>
@@ -248,6 +244,7 @@
                               <tr>
                                 <td>{{ $itm->stock_code }} </td>
                                 <td>{{ $itm->stock_name }} </td>
+                                <td>{{ $itm->special_code }} </td>
                                 <td>{{ number_format($itm->approved_consump, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
@@ -288,7 +285,6 @@
                                 if ($itm->approved_purchase == 0 || $itm->approved_purchase == null) {
                                     continue;
                                 }
-                                
                                 $toplam = $itm->average_price * $itm->approved_purchase;
                               @endphp
                               <tr>
@@ -413,7 +409,7 @@
                                 Exec dbo.sp_get_last_purchase
                                 @company_id ='001',
                                 @term_id = '09',
-                                @rowcount = 5,
+                                @rowcount = 10,
                                 @item_ref = ?
                                 ",
                       [$item_id],

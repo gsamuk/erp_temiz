@@ -282,7 +282,7 @@
                         @endphp
                       @endforeach
                       <tr>
-                        <th scope="row" colspan="6"></th>
+                        <th scope="row" colspan="7"></th>
                         <td>
                           <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
                                   wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i>
