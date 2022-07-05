@@ -37,11 +37,14 @@
                 <td class="owner">{{ $d->special_code }}</td>
                 <td class="owner">
                   @if ($type == 1)
-                    <button wire:click="$emit('getOzelKod', '{{ $d }}')"
-                            class="btn btn-primary btn-sm"> Seç </button>
+                    <button data-bs-dismiss="modal" wire:click="$emit('getOzelKod', '{{ $d }}')"
+                            class="btn btn-primary btn-sm"> Seç
+                    </button>
                   @else
-                    <button wire:click="$emit('getOzelKodLine', '{{ $d }}')"
-                            class="btn btn-info btn-sm"> Seç </button>
+                    <button data-bs-dismiss="modal" wire:click="$emit('getOzelKodLine', '{{ $d }}' )"
+                            class="btn btn-info btn-sm">
+                      Seç
+                    </button>
                   @endif
                 </td>
                 <td class="owner">{{ $d->special_name }}</td>

@@ -51,14 +51,16 @@ class TalepKarsila extends Component
     public $item_ref; // malzeme ref id
     public $s_item_id; // satın alma firması set edilecek item id
 
+    public $ozel_kod_pop = false;
 
-    protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getAccount' => 'getAccount', 'getAccount_' => 'getAccount_', 'RefreshTalepKarsila' => '$refresh'];
+    protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getOzelKod' => 'getOzelKod', 'getAccount' => 'getAccount', 'getAccount_' => 'getAccount_', 'RefreshTalepKarsila' => '$refresh'];
 
 
 
     public function TalepKarsila($id)
     {
         $this->error = null;
+        $this->item_id = null;
         $this->talep_id = $id;
         $this->talep = Demand::find($id);
         $this->talep_detay = DemandDetail::Where('demand_id', $id)->Where('status', '!=', 9)->get();
@@ -142,8 +144,6 @@ class TalepKarsila extends Component
         $this->emit('RefreshTalepListesi');
         $this->TalepKarsila($this->talep_id);
     }
-
-
 
     public function render()
     {
@@ -357,6 +357,25 @@ class TalepKarsila extends Component
         $line->quantity =  $this->line_quantity;
         $line->save();
         $this->dispatchBrowserEvent('CloseModal');
+        $this->TalepKarsila($this->talep_id);
+    }
+
+
+    public function edit_ozel_kod($id) // özel kod pop
+    {
+        $this->edit_line_id = $id;
+        $this->ozel_kod_pop = true;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#ozelKodModal']);
+    }
+
+    public function getOzelKod($d) // update özel kod
+    {
+        $d = json_decode($d);
+        $line =  DemandDetail::find($this->edit_line_id);
+        $line->special_code =  $d->special_code;
+        $line->save();
+        $this->dispatchBrowserEvent('CloseModal');
+        $this->ozel_kod_pop = false;
         $this->TalepKarsila($this->talep_id);
     }
 

@@ -38,7 +38,7 @@
                 <tr>
                   <th scope="col"
                       style="width:50px;">Foto</th>
-                  <th scope="col">Malzeme</th>
+                  <th scope="col">Stok Kodu / Malzeme</th>
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>
 
@@ -100,9 +100,13 @@
                       @endif
                     </td>
 
-                    <td><b>{{ $item_detail->stock_name }} </b>
+                    <td><small>{{ $item_detail->stock_code }} > </small> <b> {{ $item_detail->stock_name }} </b>
                       <br>
-                      <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
+                      <small>Özel Kod: <span class="text-danger"> {{ $dt->special_code }} </span></small>
+                      <button class="btn btn-sm btn-ghost-info p-0"
+                              wire:click="edit_ozel_kod({{ $dt->id }})"><i
+                           class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i>
+                      </button>
                     </td>
                     <td>
                       <b style="font-size:1.1em"
@@ -190,18 +194,34 @@
             </div>
           @else
             @if ($for_manage)
+
+
+
               <div class="col-lg-12">
                 <div class="row">
+
                   @php
+                    $karsilama = false;
+                    $satinalma = false;
+                    
                     $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
                         ->where('status', '!=', 9)
-                        ->Where('approved_consump', '>', '0')
                         ->get();
+                    foreach ($data as $itm) {
+                        if ($itm->approved_consump > 0) {
+                            $karsilama = true;
+                        }
+                    
+                        if ($itm->approved_purchase > 0) {
+                            $satinalma = true;
+                        }
+                    }
                   @endphp
 
-                  @if ($data->count() > 0)
+                  <!-- Karşılama Listesi Başlangıç -->
+                  @if ($karsilama)
                     <div class="col-lg-12 mt-3">
-                      <div class="p-3" style="background-color: rgb(235, 255, 236)">
+                      <div class="p-1" style="background-color: rgb(235, 255, 236)">
                         <h5><b>Stoktan Karşılama Listesi</b></h5>
                         <table class="table-sm table-striped table border align-middle">
                           <thead class="table-success">
@@ -216,47 +236,38 @@
                           <tbody>
                             @foreach ($data as $itm)
                               @php
-                                $item = App\Models\LogoItems::where('wh_no', "$talep->warehouse_no")
-                                    ->where('stock_code', "$itm->stock_code")
-                                    ->first();
-                                if (isset($item->average_price)) {
-                                    $toplam = $item->average_price * $itm->approved_consump;
+                                
+                                if ($itm->approved_consump == 0 || $itm->approved_consump == null) {
+                                    continue;
                                 }
                                 
+                                if (isset($itm->average_price)) {
+                                    $toplam = $itm->average_price * $itm->approved_consump;
+                                }
                               @endphp
                               <tr>
-                                <th scope="row">{{ $itm->stock_code }} </th>
-                                <td>{{ $item->stock_name }} </td>
+                                <td>{{ $itm->stock_code }} </td>
+                                <td>{{ $itm->stock_name }} </td>
                                 <td>{{ number_format($itm->approved_consump, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
-
-                                <td> {{ number_format($item->average_price, 2, ',', '.') }} </td>
+                                <td> {{ number_format($itm->average_price, 2, ',', '.') }} </td>
                                 <td>
                                   {{ number_format($toplam, 2, ',', '.') }}
                                 </td>
                               </tr>
                             @endforeach
-
                           </tbody>
                         </table>
                       </div>
                     </div>
                   @endif
+                  <!-- Karşılama Listesi Son -->
 
 
-                  @php
-                    $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
-                        ->where('status', '!=', 9)
-                        ->Where('approved_purchase', '>', '0')
-                        ->get();
-                    
-                  @endphp
-
-
-                  @if ($data->count() > 0)
+                  @if ($satinalma)
                     <div class="col-lg-12 mt-3">
-                      <div class="p-3"
+                      <div class="p-1"
                            style="background-color: rgb(255, 250, 201)">
                         <h5><b>Satın Alma Listesi</b></h5>
                         <table class="table-sm table-striped table border align-middle"
@@ -274,24 +285,23 @@
 
                             @foreach ($data as $itm)
                               @php
-                                $item = App\Models\LogoItems::where('wh_no', "$talep->warehouse_no")
-                                    ->where('stock_code', "$itm->stock_code")
-                                    ->first();
-                                $toplam = $item->average_price * $itm->approved_purchase;
+                                if ($itm->approved_purchase == 0 || $itm->approved_purchase == null) {
+                                    continue;
+                                }
+                                
+                                $toplam = $itm->average_price * $itm->approved_purchase;
                               @endphp
                               <tr>
-                                <th scope="row">{{ $itm->stock_code }} </th>
-                                <td>{{ $item->stock_name }} </td>
+                                <td>{{ $itm->stock_code }} </td>
+                                <td>{{ $itm->stock_name }} </td>
                                 <td>{{ number_format($itm->approved_purchase, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
-
-
-                                <td>{{ $itm->account_name }} </td>
+                                <td><small>{{ $itm->account_name }}</small> </td>
                                 <td>
                                   <button onclick="$('._btn').prop('disabled',true)"
                                           @if ($talep->status == 1) disabled @endif
-                                          wire:click="firma_sec('{{ $itm->id }}','{{ $item->logicalref }}', '{{ $item->stock_name }}')"
+                                          wire:click="firma_sec('{{ $itm->id }}','{{ $itm->logo_stock_ref }}', '{{ $itm->stock_name }}')"
                                           class="_btn btn btn-sm btn-soft-danger">Firma Seç</button>
                                   @if ($itm->account_name)
                                     <button onclick="$('._btn').prop('disabled',true)"
@@ -309,8 +319,10 @@
                     </div>
                   @endif
 
+                  <!-- Satın Alma Listesi Son -->
 
 
+                  <!-- yönetim Butonları -->
                   <div class="col-lg-12 mt-3">
 
                     @if ($talep->approved == 0)
@@ -346,6 +358,8 @@
 
 
                   </div>
+                  <!-- yönetim Butonları son -->
+
 
                   <div class="col-lg-12 mt-3">
                     @livewire('malzemeler.response')
@@ -365,7 +379,7 @@
 </div>
 
 
-<div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="MalzemeFotoModal" class="modal" tabindex="-1" role="dialog"
      aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
@@ -485,7 +499,7 @@
   </div>
 </div>
 
-<div id="editLineModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="editLineModal" class="modal" tabindex="-1" role="dialog"
      aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -525,6 +539,23 @@
           @livewire('logo.accounts')
         @endif
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="ozelKodModal" class="modal" tabindex="-1" role="dialog"
+     aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+      </div>
+      <div class="modal-body m-0">
+        @if ($ozel_kod_pop)
+          @livewire('logo.ozel-kod')
+        @endif
+      </div>
+
     </div>
   </div>
 </div>

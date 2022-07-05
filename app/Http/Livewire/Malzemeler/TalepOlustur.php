@@ -29,6 +29,7 @@ class TalepOlustur extends Component
     public $aciklama;
     public $miktar;
     public $birim;
+    public $average_price;
     public $ozelkod; // satır bazlı
 
 
@@ -57,6 +58,7 @@ class TalepOlustur extends Component
 
         $this->kod = null;
         $this->aciklama = null;
+        $this->average_price = null;
         $this->miktar = null;
         $this->birim = null;
         $this->ozelkod = null;
@@ -159,6 +161,7 @@ class TalepOlustur extends Component
         $this->ref[$this->line] = $item->logicalref;
         $this->kod[$this->line] = $item->stock_code;
         $this->aciklama[$this->line] = $item->stock_name;
+        $this->average_price[$this->line] = $item->average_price;
         $this->desc[$this->line] = "İhtiyaç";
         $this->miktar[$this->line] = 1; // test verisi
         $this->dispatchBrowserEvent('CloseModal');
@@ -208,7 +211,13 @@ class TalepOlustur extends Component
             $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
             $dm->unit_code = $this->birim[$in];
-            $dm->special_code = $this->ozelkod[$in];
+
+            $dm->average_price = $this->average_price[$in];
+            $dm->stock_name = $this->aciklama[$in];
+
+            if (isset($this->ozelkod[$in])) {
+                $dm->special_code = $this->ozelkod[$in];
+            }
 
             if (isset($this->desc[$in])) {
                 $dm->description = $this->desc[$in];
