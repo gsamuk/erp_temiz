@@ -11,26 +11,33 @@
       <div class="row">
         <div class="col-lg-5">
           <div class="bg-light m-1 p-2">
-            <select class="form-select mb-1 mt-3" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            @php
+              $firmalar = App\Models\company::all();
+            @endphp
+
+            <select class="form-select mb-1 mt-3" wire:model="firma" aria-label="Default select example" disabled>
+              @foreach ($firmalar as $d)
+                <option value="{{ $d->id }}" selected>{{ $d->logo_firm_name }}</option>
+              @endforeach
             </select>
 
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            @php
+              $depolar = App\Models\LogoWarehouses::Where('company_no', $firma)->get();
+            @endphp
+
+            <select class="form-select" wire:model="depo" aria-label="Default select example">
+              @foreach ($depolar as $d)
+                <option value="{{ $d->warehouse_no }}">{{ $d->warehouse_name }}</option>
+              @endforeach
             </select>
-            <button class="btn btn-sm btn-success mt-2">İzin Ekle</button>
+            <button wire:click="depo_izin_ekle()" wire:loading.attr="disabled" class="btn btn-sm btn-success mt-2">İzin
+              Ekle</button>
           </div>
         </div>
 
         <div class="col-lg-7">
           @if ($user_company->count() > 0)
-            <table class="table-sm table-nowrap table">
+            <table class="table-sm table-nowrap table-striped table">
               <thead>
                 <tr>
                   <th scope="col">Firma</th>
@@ -56,6 +63,10 @@
                 @endforeach
               </tbody>
             </table>
+
+            <div class="text-info mt-3">Bu kullanıcının yetkili olduğu depolar.</div>
+          @else
+            <div class="text-danger mt-3">Bu kullanıcı için Depo izni eklenmedi.</div>
           @endif
         </div>
 
@@ -74,7 +85,7 @@
       </h4>
     </div>
     <div class="card-body">
-      <table class="table-sm table-nowrap table">
+      <table class="table-sm table-nowrap table-striped table">
         <thead>
           <tr>
             <th scope="col"></th>

@@ -12,6 +12,9 @@ class IzinYonetimi extends Component
     public $user_id;
     public $user;
 
+    public $firma = 1;
+    public $depo = "0";
+
     protected $listeners = ['getUserId'];
 
 
@@ -20,6 +23,15 @@ class IzinYonetimi extends Component
         $this->user_id = $id;
     }
 
+    public function updatedFirma($id)
+    {
+        $this->firma = $id;
+    }
+
+    public function updatedDepo($id)
+    {
+        $this->depo = $id;
+    }
 
     public function render()
     {
@@ -50,5 +62,15 @@ class IzinYonetimi extends Component
     {
         $cikar = UserCompany::Where('user_id', $this->user_id)->Where('id', $id);
         $cikar->delete();
+    }
+
+    public function depo_izin_ekle()
+    {
+        $ekle = new UserCompany();
+        $ekle->user_id = $this->user_id;
+        $ekle->company_id = $this->firma;
+        $ekle->warehouse_no = $this->depo;
+        $ekle->insert_time = date('Y-m-d H:i:s');
+        $ekle->save();
     }
 }

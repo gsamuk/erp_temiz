@@ -12,7 +12,15 @@ class OzelKod extends Component
     protected $paginationTheme = 'bootstrap';
     public $search_code = '';
     public $search_name = '';
+    public $type = 1;
 
+    protected $listeners = ["ozelKodType"];
+
+
+    public function ozelKodType($tip)
+    {
+        $this->type = $tip;
+    }
 
 
     public function render()

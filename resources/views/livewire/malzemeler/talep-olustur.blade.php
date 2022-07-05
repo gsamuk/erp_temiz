@@ -105,7 +105,8 @@
                           <label class="form-label">Özel Kod</label>
                         </div>
                         <div class="col-lg-7">
-                          <input type="text" data-bs-toggle="modal" name="special_code" wire:model="special_code"
+                          <input type="text" data-bs-toggle="modal" wire:click="$emit('ozelKodType', 1)"
+                                 name="special_code" wire:model="special_code"
                                  data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                         <div class="col-lg-1">
@@ -198,6 +199,7 @@
                         <th style="width:300px;">Malzeme</th>
                         <th style="width:100px;">Miktar</th>
                         <th style="width:100px;">Birim</th>
+                        <th style="width:150px;">Özel Kod</th>
                         <th style="width:200px;">Talep Nedeni</th>
                         <th> </th>
                       </tr>
@@ -248,6 +250,15 @@
                                   @endforeach
                                 @endif
                               </select>
+                            </div>
+                          </td>
+
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <input type="text" class="form-control border-dashed"
+                                     wire:click="_SetLine({{ $value }},'#ozelKodModal')"
+                                     name="ozelkod[{{ $value }}]" id="input_ozelkod_{{ $value }}"
+                                     wire:model="ozelkod.{{ $value }}">
                             </div>
                           </td>
 
@@ -359,8 +370,6 @@
       </div>
     @endif
   </div>
-
-
 
 
 
