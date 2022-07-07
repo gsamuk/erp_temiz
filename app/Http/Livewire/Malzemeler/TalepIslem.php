@@ -33,12 +33,17 @@ class TalepIslem extends Component
     public $stock_code;
     public $status_text;
 
+    /// fiş işlemleri
+    public $sarf_fis_ref;
+    public $satinalma_fis_ref;
+
     protected $listeners = ['TalepIslem', 'RefreshTalepIslem' => '$refresh'];
 
 
     public function TalepIslem($id)
     {
         $this->error = null;
+        $this->sarf_fis_ref = null;
         $this->talep_id = $id;
         $this->talep = Demand::find($id);
         $this->talep_detay = DemandDetail::Where('demand_id', $id)->Where('status', '!=', 9)->get();
@@ -212,5 +217,13 @@ class TalepIslem extends Component
         $up->status_desc = $this->status_text;
         $up->save();
         $this->dispatchBrowserEvent('CloseModal');
+    }
+
+
+    public function esitle($stock_code, $consump)
+    {
+        $up = DemandDetail::Where("stock_code", $stock_code)->where("demand_id", $this->talep_id)->first();
+        $up->quantity = $consump;
+        $up->save();
     }
 }

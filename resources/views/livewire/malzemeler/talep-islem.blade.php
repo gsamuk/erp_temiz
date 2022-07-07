@@ -142,6 +142,13 @@
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
             @endif
+            @if ($talep->special_code)
+              | Özel Kod : {{ $talep->special_code }}
+            @endif
+            @if ($talep->project_code)
+              | Proje Kodu : {{ $talep->project_code }}
+            @endif
+
           </small>
         </h4>
       </div>
@@ -270,8 +277,13 @@
                         @if (!$talep_owner)
                           <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
                           <td>
-                            <button class="btn btn-sm btn-success"
-                                    wire:click="status_pop({{ $d->stock_code }},'{{ $d->status_desc }}')">Durum</button>
+                            <button
+                                    class="btn btn-sm btn-success"
+                                    wire:click="status_pop('{{ $d->stock_code }}','{{ $d->status_desc }}')">Durum</button>
+                            @if ($d->consump > 0)
+                              <button wire:click="esitle('{{ $d->stock_code }}','{{ $d->consump }}')"
+                                      class="btn btn-sm btn-soft-danger">Eşitle</button>
+                            @endif
                           </td>
                         @endif
 
@@ -370,6 +382,7 @@
                     <thead>
                       <tr>
 
+                        <th scope="col">Fiş No</th>
                         <th scope="col">Belge No</th>
                         <th scope="col">Stok No</th>
                         <th scope="col">Malzeme</th>
@@ -378,12 +391,13 @@
                         <th scope="col">Toplam</th>
                         <th scope="col">Özel Kod</th>
 
+
                       </tr>
                     </thead>
                     <tbody>
                       @foreach ($demand_fiche as $d)
                         <tr>
-
+                          <td>{{ $d->fiche_no }}</td>
                           <td>{{ $d->doc_number }}</td>
                           <td>{{ $d->stock_code }}</td>
                           <td><u>{{ $d->stock_name }}</u></td>
@@ -391,7 +405,6 @@
                           </td>
                           <td>{{ number_format($d->unit_price, 2, '.', ',') }}</td>
                           <td>{{ number_format($d->total_price, 2, '.', ',') }}</td>
-
                           <td><small>{{ $d->special_code }}</small></td>
 
                         </tr>
@@ -422,6 +435,7 @@
                     <thead>
                       <tr>
 
+                        <th scope="col">Fiş No</th>
                         <th scope="col">Belge No</th>
                         <th scope="col">Firma</th>
                         <th scope="col">Stok No</th>
@@ -432,7 +446,7 @@
                     <tbody>
                       @foreach ($demand_pfiche as $d)
                         <tr>
-
+                          <td>{{ $d->po_ficheno }}</td>
                           <td>{{ $d->document_no }}</td>
                           <td>{{ $d->account_name }}</td>
                           <td>{{ $d->stock_code }}</td>
@@ -457,7 +471,12 @@
     </div>
   @endif
 
+
+
+
   <div wire:loading>
     <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
   </div>
+
+
 </div>

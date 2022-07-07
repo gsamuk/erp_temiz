@@ -199,7 +199,7 @@
                         <th style="width:300px;">Malzeme</th>
                         <th style="width:100px;">Miktar</th>
                         <th style="width:100px;">Birim</th>
-                        <th style="width:150px;">Özel Kod</th>
+
                         <th style="width:200px;">Talep Nedeni</th>
                         <th> </th>
                       </tr>
@@ -253,14 +253,7 @@
                             </div>
                           </td>
 
-                          <td>
-                            <div class="input-group input-group-sm">
-                              <input type="text" class="form-control border-dashed"
-                                     wire:click="_SetLine({{ $value }},'#ozelKodModal')"
-                                     name="ozelkod[{{ $value }}]" id="input_ozelkod_{{ $value }}"
-                                     wire:model="ozelkod.{{ $value }}">
-                            </div>
-                          </td>
+
 
                           <td>
                             <div class="input-group input-group-sm">
@@ -282,7 +275,7 @@
                         @endphp
                       @endforeach
                       <tr>
-                        <th scope="row" colspan="7"></th>
+                        <th scope="row" colspan="6"></th>
                         <td>
                           <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
                                   wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i>

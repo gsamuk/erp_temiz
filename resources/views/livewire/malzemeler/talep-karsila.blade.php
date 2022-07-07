@@ -22,9 +22,16 @@
           </h5>
         @endif
 
-        <h4 class="card-title flex-grow-1 mb-0"><small>#{{ $talep->id }}
+        <h4 class="card-title flex-grow-1 text-primary mb-0">
+          <small>NO : {{ $talep->id }}
             @if ($talep->demand_desc)
               | {{ $talep->demand_desc }}
+            @endif
+            @if ($talep->special_code)
+              | Özel Kod : {{ $talep->special_code }}
+            @endif
+            @if ($talep->project_code)
+              | Proje Kodu : {{ $talep->project_code }}
             @endif
           </small>
         </h4>
@@ -99,12 +106,7 @@
                     </td>
 
                     <td><small>{{ $item_detail->stock_code }} > </small> <b> {{ $item_detail->stock_name }} </b>
-                      <br>
-                      <small>Özel Kod: <span class="text-danger"> {{ $dt->special_code }} </span></small>
-                      <button class="btn btn-sm btn-ghost-info p-0"
-                              wire:click="edit_ozel_kod({{ $dt->id }})"><i
-                           class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i>
-                      </button>
+
                     </td>
                     <td>
                       <b style="font-size:1.1em"
@@ -217,7 +219,7 @@
                   @if ($karsilama)
                     <div class="col-lg-12 mt-3">
                       <div class="p-1" style="background-color: rgb(235, 255, 236)">
-                        <h5><b>Stoktan Karşılama Listesi</b></h5>
+                        <h5><b>Stoktan Karşılama Listesi </b> <small>(Onay Verilecekler)</small></h5>
                         <table class="table-sm table-striped table border align-middle">
                           <thead class="table-success">
                             <tr>
@@ -266,7 +268,7 @@
                     <div class="col-lg-12 mt-3">
                       <div class="p-1"
                            style="background-color: rgb(255, 250, 201)">
-                        <h5><b>Satın Alma Listesi</b></h5>
+                        <h5><b>Satın Alma Listesi</b> <small>(Onay Verilecekler)</small> </h5>
                         <table class="table-sm table-striped table border align-middle"
                                style="width: 100%">
                           <thead class="table-warning">
@@ -298,12 +300,12 @@
                                   <button onclick="$('._btn').prop('disabled',true)"
                                           @if ($talep->status == 1) disabled @endif
                                           wire:click="firma_sec('{{ $itm->id }}','{{ $itm->logo_stock_ref }}', '{{ $itm->stock_name }}')"
-                                          class="_btn btn btn-sm btn-soft-danger">Firma Seç</button>
+                                          class="_btn btn btn-sm btn-soft-danger m-0">Firma Seç</button>
                                   @if ($itm->account_name)
                                     <button onclick="$('._btn').prop('disabled',true)"
                                             @if ($talep->status == 1) disabled @endif
                                             wire:click="firma_iptal('{{ $itm->id }}')"
-                                            class="_btn btn btn-sm btn-soft-warning">İptal</button>
+                                            class="_btn btn btn-sm btn-soft-warning m-0">İptal</button>
                                   @endif
                                 </td>
                               </tr>
@@ -535,23 +537,6 @@
           @livewire('logo.accounts')
         @endif
       </div>
-    </div>
-  </div>
-</div>
-
-<div id="ozelKodModal" class="modal" tabindex="-1" role="dialog"
-     aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-      </div>
-      <div class="modal-body m-0">
-        @if ($ozel_kod_pop)
-          @livewire('logo.ozel-kod')
-        @endif
-      </div>
-
     </div>
   </div>
 </div>

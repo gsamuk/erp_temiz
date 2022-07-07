@@ -61,9 +61,7 @@ class TalepOlustur extends Component
         $this->average_price = null;
         $this->miktar = null;
         $this->birim = null;
-        $this->ozelkod = null;
         $this->birim_select = [];
-
         $this->line = 0;
         $this->i = 0;
         $this->inputs = [];
@@ -71,7 +69,7 @@ class TalepOlustur extends Component
 
     public function mount()
     {
-        // $this->add(1);
+        $this->add(1);
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("2021-m-d");
     }
@@ -84,12 +82,7 @@ class TalepOlustur extends Component
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
     }
 
-    public function _SetLine($d, $modal) // sadece satır özel kod için kullanılyor
-    {
-        $this->line = $d;
-        $this->emit('ozelKodType', 2);
-        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
-    }
+
 
     public function getOzelKod($d)
     {
@@ -98,12 +91,7 @@ class TalepOlustur extends Component
         $this->dispatchBrowserEvent('CloseModal');
     }
 
-    public function getOzelKodLine($d)
-    {
-        $d = json_decode($d);
-        $this->ozelkod[$this->line] = $d->special_code;
-        $this->dispatchBrowserEvent('CloseModal');
-    }
+
 
     public function getProject($d)
     {
@@ -132,14 +120,12 @@ class TalepOlustur extends Component
         $i = $i + 1;
         $this->i = $i;
         array_push($this->inputs, $i);
-        $this->ozelkod[$i] = $this->special_code;
     }
 
     public function remove($i, $v)
     {
         unset($this->inputs[$i]);
         unset($this->kod[$v]);
-        unset($this->ozelkod[$v]);
         unset($this->item_photos[$v]);
     }
 
@@ -216,9 +202,7 @@ class TalepOlustur extends Component
             $dm->average_price = $this->average_price[$in];
             $dm->stock_name = $this->aciklama[$in];
 
-            if (isset($this->ozelkod[$in])) {
-                $dm->special_code = $this->ozelkod[$in];
-            }
+
 
             if (isset($this->desc[$in])) {
                 $dm->description = $this->desc[$in];
