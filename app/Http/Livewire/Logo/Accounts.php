@@ -29,7 +29,7 @@ class Accounts extends Component
     {
         $data = LogoAccounts::where('account_name', 'like', '%' . $this->search . '%')
             ->orderByDesc('account_name')
-            ->paginate(10);
+            ->paginate(5);
 
         return view('livewire.logo.accounts', [
             'accounts' => $data,

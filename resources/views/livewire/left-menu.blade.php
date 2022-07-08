@@ -85,7 +85,7 @@
                           <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
                              class="nav-link" data-key="t-level-3.1">
                             Talep Listesi
-                            <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
+
                           </a>
                         </li>
                       @endif
@@ -165,17 +165,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    İrsaliyeler
-                  </a>
-                </li>
 
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Faturalar
-                  </a>
-                </li>
 
                 <li class="nav-item">
                   <a href="#" class="nav-link" data-key="t-google">

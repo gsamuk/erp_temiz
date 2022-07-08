@@ -18,6 +18,7 @@ Route::get('search', function () {
 Route::middleware([Kontrol::class])->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
+    Route::get('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
     Route::middleware([LogoTokenKontrol::class])->group(function () { // logo rest token alınmış ise
         // Token Gerektiren işlemler Middleware Gereklidir
         // satın alma işlemleri

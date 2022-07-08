@@ -16,7 +16,7 @@
         @endphp
 
         @if ($son_satinalma)
-          <h5><b class="text-danger">{{ $item_ref }} | {{ $item_name }}</b> Son Satınalma Yapılan Cariler</h5>
+          <h5> Son Satınalma Yapılan Cariler > <small class="text-danger"> {{ $item_name }} </small> </h5>
           <div class="table-responsive">
             <table class="table-sm table-bordered table-striped table-nowrap table">
               <thead class="table-light">
@@ -61,44 +61,53 @@
       <div class="row mb-3">
         <div class="col-md-5">
           <div class="search-box">
-            <input type="text" class="form-control search" wire:model="search" placeholder="Ünvan Ara">
+            <input type="text" class="form-control search" wire:model.debunce.500ms="search" placeholder="Ünvan Ara">
             <i class="ri-search-line search-icon"></i>
           </div>
         </div>
       </div>
-      <h5>Diğer Cariler</h5>
-      <div class="table-responsive">
-        <table class="table-sm table-bordered table-striped table-nowrap table"
-               wire:loading.class="opacity-50">
-          <thead class="table-light">
-            <tr>
-              <th scope="col" style="width:150px;">Kodu</th>
-              <th scope="col" style="width:50px;"></th>
-              <th scope="col">Ünvanı</th>
-              <th scope="col">Tip</th>
-            </tr>
-          </thead>
-          <tbody>
+      @if ($accounts->count() > 0)
+        <h5>Diğer Cariler @if ($item_name)
+            <small class="text-danger"> > {{ $item_name }} </small>
+          @endif
+        </h5>
 
-            @foreach ($accounts as $account)
+        <div class="table-responsive">
+
+          <table class="table-sm table-bordered table-striped table-nowrap table"
+                 wire:loading.class="opacity-50">
+            <thead class="table-light">
               <tr>
-                <td class="owner">{{ $account->account_code }}</td>
-                <td class="owner">
-                  <button data-bs-dismiss="modal" wire:click="$emit('getAccount', '{{ $account }}')"
-                          class="btn btn-primary btn-sm"> Seç </button>
-                </td>
-                <td class="owner">{{ $account->account_name }}</td>
-                <td class="owner">{{ $account->account_type }}</td>
+                <th scope="col" style="width:150px;">Kodu</th>
+                <th scope="col" style="width:50px;"></th>
+                <th scope="col">Ünvanı</th>
+                <th scope="col">Tip</th>
               </tr>
-            @endforeach
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
 
-      </div>
-      <div class="d-flex justify-content-end mt-3">
-        {{ $accounts->links() }}
-      </div>
+              @foreach ($accounts as $account)
+                <tr>
+                  <td class="owner">{{ $account->account_code }}</td>
+                  <td class="owner">
+                    <button data-bs-dismiss="modal" wire:click="$emit('getAccount', '{{ $account }}')"
+                            class="btn btn-primary btn-sm"> Seç </button>
+                  </td>
+                  <td class="owner">{{ $account->account_name }}</td>
+                  <td class="owner">{{ $account->account_type }}</td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
 
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+          {{ $accounts->links() }}
+        </div>
+      @else
+        Bulunamadı
+
+      @endif
     </div>
   </div>
 </div>

@@ -30,4 +30,9 @@ class HomeController extends Controller
     {
         return view('mobile_talepler');
     }
+
+    public function upload()
+    {
+        return view('image_upload');
+    }
 }

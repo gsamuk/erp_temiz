@@ -46,14 +46,16 @@
 <!-- JAVASCRIPT -->
 @include('layouts.vendor-scripts')
 @livewireScripts
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.js"
+        integrity="sha512-JCRiGqeZmFnnSl3E68K2QpL8Pwvp4PKAqekg41WWUfjqCnKJEv1DvZJdi76q/XFt6VzZ3V4bCE51NkDQ+dOJKA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @stack('scripts')
 <script>
   window.addEventListener('OpenModal', event => {
-    console.log(event.detail);
     $(event.detail.ModalName).modal('show');
   });
+
   window.addEventListener('CloseModal', event => {
-    console.log(event.detail);
     $(event.detail.ModalName).modal('hide');
     $('.modal').modal('hide');
   });

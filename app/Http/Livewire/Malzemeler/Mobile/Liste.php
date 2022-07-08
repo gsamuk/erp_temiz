@@ -112,7 +112,12 @@ class Liste extends Component
         $db->logo_stock_ref = $this->malzeme->logicalref;
         $db->quantity = $this->talep_miktar;
         $db->unit_code = $this->malzeme_birim;
+        $db->stock_name = $this->malzeme->stock_name;
+        $db->stock_code = $this->malzeme->stock_code;
+        $db->average_price = $this->malzeme->average_price;
+
         $db->description = $this->talep_neden;
+
         $db->insert_time = date('Y-m-d H:i:s');
         $db->save();
         $this->dispatchBrowserEvent('CloseModalAll');
@@ -151,6 +156,10 @@ class Liste extends Component
             $dm->logo_stock_ref = $d->logo_stock_ref;
             $dm->quantity = $d->quantity;
             $dm->unit_code = $d->unit_code;
+            $dm->stock_name = $d->stock_name;
+            $dm->stock_code = $d->stock_code;
+            $dm->average_price = $d->average_price;
+
             $dm->description = $d->description;
             $dm->insert_time = $insert_time;
             $dm->update_time = $insert_time;
