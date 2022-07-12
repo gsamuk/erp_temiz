@@ -4,6 +4,8 @@
     @livewire('malzemeler.liste', ['ch' => false])
   @elseif($page == 'malzemeler.talep-listesi')
     @livewire('malzemeler.talep-listesi')
+  @elseif($page == 'malzemeler.talep-malzeme-onay')
+    @livewire('malzemeler.talep-malzeme-onay')
   @elseif($page == 'malzemeler.talep-olustur')
     @livewire('malzemeler.talep-olustur')
   @elseif($page == 'malzemeler.fotograf')
@@ -28,4 +30,4 @@
     </div>
   </div>
 
-</div>
+</div

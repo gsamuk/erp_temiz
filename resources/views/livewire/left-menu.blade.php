@@ -85,10 +85,19 @@
                           <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
                              class="nav-link" data-key="t-level-3.1">
                             Talep Listesi
-
                           </a>
                         </li>
                       @endif
+
+                      @if (Erp::izin('items_demand'))
+                        <li class="nav-item">
+                          <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-malzeme-onay')"
+                             class="nav-link" data-key="t-level-3.1">
+                            Talep Onay
+                          </a>
+                        </li>
+                      @endif
+
 
                       <li class="nav-item">
                         <a href="#" wire:click="$emit('SetPage', 'malzemeler.taleplerim')"

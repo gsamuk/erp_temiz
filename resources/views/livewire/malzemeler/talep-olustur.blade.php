@@ -137,7 +137,8 @@
                           <div class="input-group input-group-sm">
                             <select wire:model="demand_type">
                               <option value="1">Depodan Malzeme Talebi</option>
-                              <option value="2">Depolar Arası Malzeme Transferi</option>
+                              <option value="2" @if ($auth_warehouses->count() == 0) disabled @endif>Depolar Arası
+                                Malzeme Transferi</option>
                             </select>
                           </div>
                         </div>
@@ -150,7 +151,6 @@
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
                             <select wire:model="warehouse" name="warehouse">
-
                               @foreach ($warehouses as $d)
                                 <option value="{{ $d->warehouse_no }}">
                                   {{ $d->warehouse_name }}
@@ -172,12 +172,18 @@
                             <div class="input-group input-group-sm">
                               <select wire:model="destwh" name="destwh">
 
-                                @foreach ($warehouses as $d)
+                                @foreach ($auth_warehouses as $d)
+                                  @php
+                                    $w = App\Models\LogoWarehouses::Where('company_no', '1')
+                                        ->Where('warehouse_no', $d->warehouse_no)
+                                        ->first();
+                                  @endphp
                                   <option value="{{ $d->warehouse_no }}">
-                                    {{ $d->warehouse_name }}
+                                    {{ $w->warehouse_name }}
                                   </option>
                                 @endforeach
                               </select>
+
                             </div>
                           </div>
 
@@ -199,7 +205,6 @@
                         <th style="width:300px;">Malzeme</th>
                         <th style="width:100px;">Miktar</th>
                         <th style="width:100px;">Birim</th>
-
                         <th style="width:200px;">Talep Nedeni</th>
                         <th> </th>
                       </tr>

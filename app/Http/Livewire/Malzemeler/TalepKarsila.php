@@ -125,6 +125,14 @@ class TalepKarsila extends Component
         }
     }
 
+
+    public function onaya_gonder($id)
+    {
+        $up = DemandDetail::find($id);
+        $up->status = 5;
+        $up->save();
+    }
+
     public function unapproved()
     {
         $dm = Demand::find($this->talep_id);
@@ -165,6 +173,7 @@ class TalepKarsila extends Component
         $cari = DemandDetail::distinct()
             ->Where('demand_id', $this->talep_id)
             ->Where('approved_purchase', '>', 0)
+            ->Where('status', '!=', 5)
             ->get(['account_code']);
 
         if ($cari->count() > 0) {
@@ -195,6 +204,7 @@ class TalepKarsila extends Component
         $rest_items = array();
         $sarf = DemandDetail::Where('demand_id', $this->talep_id)
             ->Where('approved_consump', '>', '0')
+            ->Where('status', '!=', 5)
             ->get();
 
         if ($sarf->count() > 0) {
@@ -298,6 +308,7 @@ class TalepKarsila extends Component
         // verilen cariye set edilmiş, onaylı satınalma malzemelerini getiriyoruz
         $items = DemandDetail::Where('demand_id', $this->talep_id)
             ->Where('approved_purchase', '>', 0)
+            ->Where('status', '!=', 5)
             ->where('account_code', $account_code)
             ->get();
 

@@ -55,6 +55,7 @@ class TalepIslem extends Component
 
     public function sarf_olustur()
     {
+
         $rest_items = array();
         foreach ($this->sarf as $stock_code => $miktar) {
             if ($miktar > 0) {

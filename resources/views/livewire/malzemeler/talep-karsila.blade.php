@@ -85,6 +85,10 @@
                         $bir_islem = false;
                     }
                     
+                    if ($dt->status == 5) {
+                        $uyari = 'table-success';
+                    }
+                    
                   @endphp
                   <tr class="{{ $uyari }}">
                     <td class="owner">
@@ -106,17 +110,13 @@
                     </td>
 
                     <td><small>{{ $item_detail->stock_code }} > </small> <b> {{ $item_detail->stock_name }} </b>
-
+                      @if ($dt->status == 5)
+                        <br><small class="text-danger">Yönetimin Onayına Gönderildi.. </small>
+                      @endif
                     </td>
                     <td>
                       <b style="font-size:1.1em"
                          class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
-                      @if (!$talep_owner)
-                        <button class="btn btn-sm btn-ghost-info p-0"
-                                wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"><i
-                             class="ri-edit-line fs-17 lh-1 m-1 align-middle"></i>
-                        </button>
-                      @endif
                       <br><small>{{ $dt->unit_code }}</small>
                     </td>
                     <td><b
@@ -152,19 +152,29 @@
                       </td>
                     @endif
                     <td>
-                      @if ($talep->approved == 1)
-                        <span class="badge badge-label bg-info">
-                          <i class="mdi mdi-circle-medium"></i>
-                          Onaylı
-                        </span>
-                      @else
-                        <button wire:click="iptal({{ $dt->id }})"
-                                class="btn btn-sm btn-soft-danger"
-                                wire:loading.attr="disabled"
-                                @if ($talep->status > 0) disabled @endif>
-                          Çıkar
-                        </button>
-                      @endif
+
+                      <div class="dropdown">
+                        <a href="#" role="button" id="drop_{{ $dt->id }}" data-bs-toggle="dropdown"
+                           aria-expanded="false" class="">
+                          <i class="ri-more-2-fill"></i>
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="drop_{{ $dt->id }}" style="">
+
+                          <li><a class="dropdown-item"
+                               wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
+                               href="#">Talep Miktarını Değiştir</a>
+                          </li>
+                          <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
+                               href="#">Yönetim Onayı İste</a></li>
+
+                          <li><a class="dropdown-item" wire:click="iptal({{ $dt->id }})" href="#">Listeden
+                              Çıkar</a>
+                          </li>
+
+                        </ul>
+                      </div>
+
                     </td>
 
 
@@ -203,6 +213,7 @@
                     
                     $data = App\Models\DemandDetail::Where('demand_id', $talep_id)
                         ->where('status', '!=', 9)
+                        ->where('status', '!=', 5)
                         ->get();
                     foreach ($data as $itm) {
                         if ($itm->approved_consump > 0) {
@@ -219,7 +230,7 @@
                   @if ($karsilama)
                     <div class="col-lg-12 mt-3">
                       <div class="p-1" style="background-color: rgb(235, 255, 236)">
-                        <h5><b>Stoktan Karşılama Listesi </b> <small>(Onay Verilecekler)</small></h5>
+                        <h5><b>Stoktan Karşılama Listesi </b> </h5>
                         <table class="table-sm table-striped table border align-middle">
                           <thead class="table-success">
                             <tr>
@@ -245,7 +256,12 @@
                               @endphp
                               <tr>
                                 <td>{{ $itm->stock_code }} </td>
-                                <td>{{ $itm->stock_name }} </td>
+                                <td>
+                                  {{ $itm->stock_name }}
+                                  @if ($itm->status == 5)
+                                    <br><span class="text-info">Yönetimin Onayını Bekliyor</span>
+                                  @endif
+                                </td>
                                 <td>{{ $itm->special_code }} </td>
                                 <td>{{ number_format($itm->approved_consump, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
@@ -268,7 +284,7 @@
                     <div class="col-lg-12 mt-3">
                       <div class="p-1"
                            style="background-color: rgb(255, 250, 201)">
-                        <h5><b>Satın Alma Listesi</b> <small>(Onay Verilecekler)</small> </h5>
+                        <h5><b>Satın Alma Listesi</b> </h5>
                         <table class="table-sm table-striped table border align-middle"
                                style="width: 100%">
                           <thead class="table-warning">
@@ -291,7 +307,11 @@
                               @endphp
                               <tr>
                                 <td>{{ $itm->stock_code }} </td>
-                                <td>{{ $itm->stock_name }} </td>
+                                <td>{{ $itm->stock_name }}
+                                  @if ($itm->status == 5)
+                                    <br><span class="text-info">Yönetimin Onayını Bekliyor</span>
+                                  @endif
+                                </td>
                                 <td>{{ number_format($itm->approved_purchase, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>

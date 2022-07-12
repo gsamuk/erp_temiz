@@ -4,14 +4,14 @@ namespace App\Http\Livewire\Malzemeler;
 
 use Livewire\Component;
 
-use App\Models\LogoDb;
+
 use App\Models\LogoUnits;
 use App\Models\LogoWarehouses;
-use App\Http\Controllers\LogoRest;
-use App\Http\Controllers\DbController;
+
 use App\Models\LogoItemsPhoto;
 use App\Models\Demand;
 use App\Models\DemandDetail;
+use App\Models\UserCompany;
 use App\Helpers\Erp;
 
 class TalepOlustur extends Component
@@ -105,11 +105,16 @@ class TalepOlustur extends Component
     public function render()
     {
         // 1 Nolu firmanın depoları gelir
-        $data = LogoWarehouses::where('company_no', '1')->get();
+        $warehouses = LogoWarehouses::where('company_no', '1')->get();
+        $auth_warehouses = UserCompany::where('company_id', '1')
+            ->Where('user_id', Erp::user_id())
+            ->get();
+
         return view(
             'livewire.malzemeler.talep-olustur',
             [
-                'warehouses' => $data,
+                'warehouses' => $warehouses,
+                'auth_warehouses' => $auth_warehouses,
             ]
         );
     }

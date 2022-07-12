@@ -171,8 +171,13 @@
                   @php
                     $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $dt->logo_stock_ref)->first();
                     $item_detail = App\Models\LogoItems::find($dt->logo_stock_ref);
+                    
+                    $uyari = 'table-light';
+                    if ($dt->status == 5) {
+                        $uyari = 'table-warning';
+                    }
                   @endphp
-                  <tr>
+                  <tr class="{{ $uyari }}">
                     <td class="owner">
                       @if ($photo)
                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
@@ -190,6 +195,14 @@
                     <td><b>{{ $item_detail->stock_name }}</b>
                       <br>
                       <small>Stok Kodu: {{ $item_detail->stock_code }}</small>
+                      @if ($dt->status == 5)
+                        <small class="text-danger"> > Yönetimin Onayını Bekliyor</small>
+                      @endif
+                      @if ($dt->status == 6)
+                        <small class="text-info"> > Yönetim Onayladı </small>
+                      @endif
+
+
                     </td>
                     <td class="text-dark"><b
                          style="font-size:1.2em">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
@@ -232,7 +245,7 @@
                       <th scope="col">Stok No</th>
                       <th scope="col">Malzeme</th>
                       <th scope="col">Talep</th>
-                      <th scope="col">Karşılanan</th>
+                      <th scope="col">Teslim</th>
                       <th scope="col">Bekleyen </th>
 
                       @if (!$talep_owner)
@@ -246,7 +259,10 @@
 
                     @foreach ($incompletedDemand as $d)
                       @php
-                        $item = App\Models\LogoItems::where('stock_code', $d->stock_code)->first();
+                        $item = App\Models\LogoItems::where('stock_code', $d->stock_code)
+                            ->where('wh_no', "$talep->warehouse_no")
+                            ->first();
+                        
                       @endphp
                       <tr class="@if ($item->onhand_quantity >= $d->diff) bg-soft-success @endif">
                         @if (!$talep_owner)
@@ -256,7 +272,9 @@
                                 $sarf_btn = true;
                               @endphp
                               <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
-                                     value="{{ $d->diff }}" class="form-check-input">
+                                     value="@if ($d->status == 6) {{ $d->approved }} @else {{ $d->diff }} @endif"
+                                     class="form-check-input"
+                                     @if ($d->status == 5) disabled @endif>
                             @else
                             @endif
                           </td>
@@ -277,12 +295,17 @@
                         @if (!$talep_owner)
                           <td>{{ number_format($item->onhand_quantity, 0, '.', ',') }}</td>
                           <td>
-                            <button
-                                    class="btn btn-sm btn-success"
-                                    wire:click="status_pop('{{ $d->stock_code }}','{{ $d->status_desc }}')">Durum</button>
-                            @if ($d->consump > 0)
-                              <button wire:click="esitle('{{ $d->stock_code }}','{{ $d->consump }}')"
-                                      class="btn btn-sm btn-soft-danger">Eşitle</button>
+
+                            @if ($d->status == 5)
+                              <small class="text-danger">Onay Bekliyor</small>
+                            @else
+                              <button
+                                      class="btn btn-sm btn-success"
+                                      wire:click="status_pop('{{ $d->stock_code }}','{{ $d->status_desc }}')">Durum</button>
+                              @if ($d->consump > 0)
+                                <button wire:click="esitle('{{ $d->stock_code }}','{{ $d->consump }}')"
+                                        class="btn btn-sm btn-soft-danger">Eşitle</button>
+                              @endif
                             @endif
                           </td>
                         @endif
