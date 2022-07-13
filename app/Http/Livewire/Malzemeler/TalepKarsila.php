@@ -131,6 +131,7 @@ class TalepKarsila extends Component
         $up = DemandDetail::find($id);
         $up->status = 5;
         $up->save();
+        $this->TalepKarsila($this->talep_id);
     }
 
     public function unapproved()

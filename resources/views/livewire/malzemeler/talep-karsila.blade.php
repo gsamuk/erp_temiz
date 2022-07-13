@@ -85,10 +85,6 @@
                         $bir_islem = false;
                     }
                     
-                    if ($dt->status == 5) {
-                        $uyari = 'table-success';
-                    }
-                    
                   @endphp
                   <tr class="{{ $uyari }}">
                     <td class="owner">
@@ -111,7 +107,11 @@
 
                     <td><small>{{ $item_detail->stock_code }} > </small> <b> {{ $item_detail->stock_name }} </b>
                       @if ($dt->status == 5)
-                        <br><small class="text-danger">Yönetimin Onayına Gönderildi.. </small>
+                        <br><small class="text-danger">Yönetimin Onayına Gönderildi... </small>
+                      @endif
+
+                      @if ($dt->status == 6)
+                        <br><small class="text-success">Yönetim Onayladı... </small>
                       @endif
                     </td>
                     <td>
@@ -165,9 +165,10 @@
                                wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
                                href="#">Talep Miktarını Değiştir</a>
                           </li>
-                          <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
-                               href="#">Yönetim Onayı İste</a></li>
-
+                          @if ($dt->status != 5)
+                            <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
+                                 href="#">Yönetim Onayı İste</a></li>
+                          @endif
                           <li><a class="dropdown-item" wire:click="iptal({{ $dt->id }})" href="#">Listeden
                               Çıkar</a>
                           </li>
