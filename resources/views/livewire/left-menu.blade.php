@@ -93,7 +93,7 @@
                         <li class="nav-item">
                           <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-malzeme-onay')"
                              class="nav-link" data-key="t-level-3.1">
-                            Talep Onay
+                            Malzeme Onay
                           </a>
                         </li>
                       @endif

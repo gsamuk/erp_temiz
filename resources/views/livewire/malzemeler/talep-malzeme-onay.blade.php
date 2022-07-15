@@ -17,17 +17,18 @@
           }
 
           table tr {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             padding: 5px;
             display: block;
-            border: 1px solid rgb(221, 219, 219);
+            border: 1px solid rgb(205, 205, 206);
+            border-left: 13px solid rgb(190, 192, 193);
           }
 
           table td {
             display: block;
             text-align: right;
+            font-size: 1.2em;
 
-            font-size: 1.1em;
             border-bottom: 1px dashed rgb(178, 174, 174);
           }
 
@@ -44,30 +45,30 @@
         }
       </style>
 
-      @if ($data->count() > 0)
-        <div class="row mb-2">
-          <div class="col-md-4">
-            <div class="search-box">
-              <input type="text" class="form-control search m-1" wire:model.debounce.500ms="owner"
-                     placeholder="Talep Sahibi Ara">
-              <i class="ri-search-line search-icon"></i>
-            </div>
-          </div>
 
-          <div class="col-md-4">
-            <div class="search-box">
-              <input type="text" class="form-control search m-1" wire:model.debounce.500ms="search"
-                     placeholder="Malzeme Adı Ara">
-              <i class="ri-search-line search-icon"></i>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div wire:loading>
-              <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
-            </div>
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <div class="search-box">
+            <input type="text" class="form-control search m-1" wire:model.debounce.500ms="owner"
+                   placeholder="Talep Sahibi Ara">
+            <i class="ri-search-line search-icon"></i>
           </div>
         </div>
 
+        <div class="col-md-4">
+          <div class="search-box">
+            <input type="text" class="form-control search m-1" wire:model.debounce.500ms="search"
+                   placeholder="Malzeme Adı Ara">
+            <i class="ri-search-line search-icon"></i>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div wire:loading>
+            <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> Lütfen Bekleyiniz...
+          </div>
+        </div>
+      </div>
+      @if ($data->count() > 0)
         <div class="table-responsive">
           <table class="table-sm table-striped table-nowrap table align-middle">
             <thead class="table-light">
@@ -185,8 +186,8 @@
                       $('#cons_{{ $dt->dt_id }}').val(),
                       $('#purc_{{ $dt->dt_id }}').val(),
                       )"
-                            class="btn btn-sm btn-soft-success">Onayla</button>
-                    <button wire:click="islem('{{ $dt->dt_id }}',9)" class="btn btn-sm btn-soft-danger">Red</button>
+                            class="btn btn-soft-success">Onayla</button>
+                    <button wire:click="islem('{{ $dt->dt_id }}',9)" class="btn btn-soft-danger">Red</button>
                   </td>
                 </tr>
               @endforeach

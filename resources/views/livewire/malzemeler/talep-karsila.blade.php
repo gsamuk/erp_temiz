@@ -50,7 +50,7 @@
                   <th scope="col">Stok</th>
                   <th scope="col" style="width:90px;">Karşıla</th>
                   <th scope="col" style="width:90px;">Satınal</th>
-                  <th scope="col" style="width:90px;"></th>
+                  <th scope="col" style="width:10px;"></th>
                 </tr>
               </thead>
               <tbody>
