@@ -1,24 +1,15 @@
-DirectoryIndex public/index.php
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews
-    </IfModule>
+Options +FollowSymLinks
+RewriteEngine On
 
-    RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/public/ 
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-  
- 
- 
-    RewriteRule ^vendor(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^mobile_assets(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^assets(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 
 
-    # Handle Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ public/index.php [L]
+
+RewriteRule ^(.*)$ /public/$1 
+#RewriteRule ^ index.php [L]
+RewriteRule ^(/)?$ public/index.php [L] 
 </IfModule>
