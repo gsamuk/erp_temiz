@@ -119,7 +119,7 @@
                     <td class="owner">
                       @if ($photo)
                         <a href="#" wire:click="foto({{ $item->logicalref }})">
-                          <img src="{{ asset('public/storage/images/items/thumb/' . $photo->foto_path) }}"
+                          <img src="{{ asset('files/images/items/thumb/' . $photo->foto_path) }}"
                                style="width: 50px">
                         </a>
                       @else
@@ -251,7 +251,7 @@
                     @foreach ($item_photos as $p)
                       <div class="col-xxl-6 col-xl-6 col-sm-12">
                         <img class="img-fluid m-2 mx-auto border p-1"
-                             src="{{ asset('public/storage/images/items/' . $p->foto_path) }}">
+                             src="{{ asset('files/images/items/' . $p->foto_path) }}">
                       </div>
                     @endforeach
                   </div>

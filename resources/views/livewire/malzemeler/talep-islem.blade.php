@@ -76,7 +76,7 @@
                     @foreach ($item_photos as $p)
                       <div class="col-xxl-6 col-xl-6 col-sm-12">
                         <img class="img-fluid m-2 mx-auto border p-1"
-                             src="{{ asset('public/storage/images/items/' . $p->foto_path) }}">
+                             src="{{ asset('files/images/items/' . $p->foto_path) }}">
                       </div>
                     @endforeach
                   </div>
@@ -182,7 +182,7 @@
                       @if ($photo)
                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
                           <img class="border"
-                               src="{{ asset('public/storage/images/items/thumb/' . $photo->foto_path) }}"
+                               src="{{ asset('files/images/items/thumb/' . $photo->foto_path) }}"
                                style="height: 45px">
                         </a>
                       @else

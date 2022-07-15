@@ -33,7 +33,7 @@
                           <div class="flex-shrink-0">
                             @if ($d->photo_path)
                               <img class="avatar-xs rounded-circle"
-                                   src="{{ asset('public/storage/images/users/' . $d->photo_path) }}">
+                                   src="{{ asset('files/images/users/' . $d->photo_path) }}">
                             @else
                               <img src="assets/images/users/avatar-3.jpg" alt=""
                                    class="avatar-xs rounded-circle">
@@ -215,7 +215,7 @@
 
             @if ($user->photo_path)
               <img class="img-thumbnail rounded-circle avatar-xl" alt="200x200"
-                   src="{{ asset('public/storage/images/users/' . $user->photo_path) }}">
+                   src="{{ asset('files/images/users/' . $user->photo_path) }}">
               <button wire:click="remove_photo()" class="btn btn-sm btn-light">Kaldır</button>
               <hr class="bg-danger border-top border-danger border-2">
             @endif

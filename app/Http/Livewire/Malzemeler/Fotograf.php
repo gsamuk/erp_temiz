@@ -100,8 +100,8 @@ class Fotograf extends Component
     {
         $img = LogoItemsPhoto::find($id);
         $img->delete();
-        unlink(storage_path('/app/public/images/items/') . $name);
-        unlink(storage_path('/app/public/images/items/thumb/') . $name);
+        unlink(public_path('/files/images/items/') . $name);
+        unlink(public_path('/files/images/items/thumb/') . $name);
         $this->get_foto($this->ref);
     }
 }

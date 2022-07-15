@@ -166,7 +166,7 @@ class Liste extends Component
             $c->upsize();
         });
         $path = 'images/users';
-        Storage::disk('local')->put($path . '/' . $photo_name, $img, 'public');
+        Storage::disk('public')->put($path . '/' . $photo_name, $img, 'public');
 
         $user = Users::find($this->user_id);
         $user->photo_path = $photo_name;
@@ -178,8 +178,11 @@ class Liste extends Component
     public function remove_photo()
     {
         $user = Users::find($this->user_id);
+        $file_path =  $user->photo_path;
         $user->photo_path = null;
         $user->save();
         $this->photo = null;
+
+        unlink(public_path('/files/images/users/') . $file_path);
     }
 }
