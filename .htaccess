@@ -10,13 +10,7 @@ DirectoryIndex public/index.php
     RewriteCond %{REQUEST_FILENAME} !-d
   
  
- 
-    RewriteRule ^vendor(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^mobile_assets(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^assets(/|$) /public%{REQUEST_URI} [L,NC,R=301,NE]
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
-
-
+  
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f

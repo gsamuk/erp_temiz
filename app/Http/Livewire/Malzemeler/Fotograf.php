@@ -79,8 +79,8 @@ class Fotograf extends Component
         $path = 'images/items';
         $thumb_path = 'images/items/thumb';
 
-        Storage::disk('local')->put($path . '/' . $fname, $img, 'public');
-        Storage::disk('local')->put($thumb_path . '/' . $fname, $thumb_img, 'public');
+        Storage::disk('public')->put($path . '/' . $fname, $img, 'public');
+        Storage::disk('public')->put($thumb_path . '/' . $fname, $thumb_img, 'public');
 
         $item = new LogoItemsPhoto;
 
