@@ -112,7 +112,7 @@
                       <div class="flex-shrink-0">
                         @if ($dt->photo_path)
                           <img class="avatar-xs rounded-circle"
-                               src="{{ asset('public/storage/images/users/' . $dt->photo_path) }}">
+                               src="{{ asset('files/images/users/' . $dt->photo_path) }}">
                         @else
                           <img src="assets/images/users/avatar-3.jpg" alt=""
                                class="avatar-xs rounded-circle">
