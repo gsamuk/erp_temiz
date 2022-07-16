@@ -65,12 +65,10 @@
                     $item_detail = App\Models\LogoItems::where('logicalref', $dt->logo_stock_ref)
                         ->where('wh_no', $talep->warehouse_no)
                         ->first();
-                    
-                    $disabled = null;
-                    
-                    if ($item_detail->onhand_quantity == null) {
-                        $item_detail->onhand_quantity = 0;
+                    if ($item_detail == null) {
+                        continue;
                     }
+                    $disabled = null;
                     
                     // eğer stok 0 ise
                     if ($item_detail->onhand_quantity == 0) {
