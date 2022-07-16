@@ -68,8 +68,8 @@
                     
                     $disabled = null;
                     
-                    if (item_detail->onhand_quantity == null) {
-                        item_detail->onhand_quantity = 0;
+                    if ($item_detail->onhand_quantity == null) {
+                        $item_detail->onhand_quantity = 0;
                     }
                     
                     // eğer stok 0 ise
