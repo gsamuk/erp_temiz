@@ -187,7 +187,7 @@
                         </a>
                       @else
                         <a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                          <img class="border" style="height: 30px" src="/public/images/default.png">
+                          <img class="border" style="height: 30px" src="images/default.png">
                         </a>
                       @endif
                     </td>

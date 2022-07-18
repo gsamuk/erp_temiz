@@ -124,7 +124,7 @@
                         </a>
                       @else
                         <a href="#" wire:click="foto({{ $item->logicalref }})">
-                          <img style="width: 50px" src="{{ asset('/public/images/default.png') }}">
+                          <img style="width: 50px" src="{{ asset('images/default.png') }}">
                         </a>
                       @endif
                     </td>

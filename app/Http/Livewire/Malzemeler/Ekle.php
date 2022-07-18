@@ -20,7 +20,7 @@ class Ekle extends Component
     {
         if ($val) {
             $bul = LogoItems::search($val)->raw();
-            //dd($bul);
+
 
             $this->bul = $bul;
         } else {

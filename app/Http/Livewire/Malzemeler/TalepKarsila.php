@@ -247,7 +247,7 @@ class TalepKarsila extends Component
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'DATE' => "2021-05-21 10:10:00",
+                'DATE' => date('Y-m-d H:i:s'),
                 'GROUP' => 2,
                 "AUXIL_CODE" => $demand->special_code,
                 "PROJECT_CODE" => $demand->project_code,
@@ -269,7 +269,7 @@ class TalepKarsila extends Component
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'DATE' => "2021-05-21 10:10:00",
+                'DATE' => date('Y-m-d H:i:s'),
                 'GROUP' => 3,
                 "SOURCE_WH" => $demand->warehouse_no,
                 "SOURCE_COST_GRP" => $demand->warehouse_no,
@@ -326,7 +326,7 @@ class TalepKarsila extends Component
             'headers' => [
                 'Accept' => 'application/json',
             ],
-            'DATE' => "2021-05-21 10:10:00",
+            'DATE' => date('Y-m-d H:i:s'),
             'DOC_NUMBER' => "TLP" . $this->talep_id,
             'CLIENTREF' => 7,
             'ARP_CODE' => $account_code,

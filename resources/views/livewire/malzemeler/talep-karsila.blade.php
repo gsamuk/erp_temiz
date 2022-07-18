@@ -430,8 +430,7 @@
                 <hr>
                 @php
                   $son_satinalma = Illuminate\Support\Facades\DB::select(
-                      "
-                                Exec dbo.sp_get_last_purchase
+                      "         Exec dbo.sp_get_last_purchase
                                 @company_id ='001',
                                 @term_id = '09',
                                 @rowcount = 10,
