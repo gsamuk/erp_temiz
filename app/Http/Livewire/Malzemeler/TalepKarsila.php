@@ -11,9 +11,12 @@ use App\Models\LogoItems;
 use App\Http\Controllers\LogoRest;
 use App\Models\IncompletedDemand;
 use App\Models\LogoAccounts;
+use App\Http\Controllers\Telegram;
+use App\Helpers\Erp;
 
 class TalepKarsila extends Component
 {
+
     public $talep;
     public $talep_detay;
     public $talep_id;
@@ -131,6 +134,28 @@ class TalepKarsila extends Component
         $up = DemandDetail::find($id);
         $up->status = 5;
         $up->save();
+
+
+        $miktar = Erp::nmf($up->quantity, 0);
+        $avg = Erp::nmf($up->average_price, 2);
+        $k_total = Erp::nmf($up->average_price * $up->approved_consump, 2);
+        $s_total = Erp::nmf($up->average_price * $up->approved_purchase, 2);
+
+        $msg = "
+* $up->stock_name *
+-----------------------------------
+Talep Edilen : $miktar $up->unit_code
+Birim Tutar : $avg
+-----------------------------------
+Depo Sarf : $up->approved_consump
+Sarf Toplamı : $k_total
+-----------------------------------
+Satınalma Miktar : $up->approved_purchase
+Satınalma Toplamı : $s_total
+-----------------------------------
+[Uyulamaya Git ](https://mobile.zeberced.net)
+";
+        Telegram::send_msg($msg);
         $this->TalepKarsila($this->talep_id);
     }
 

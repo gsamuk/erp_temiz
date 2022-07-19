@@ -239,6 +239,7 @@
                             <div class="input-group input-group-sm">
                               <input type="number" step="any" class="form-control border-dashed"
                                      id="miktar_{{ $value }}" name="miktar[{{ $value }}]"
+
                                      wire:model.defer="miktar.{{ $value }}">
                             </div>
                           </td>
@@ -282,7 +283,8 @@
                       <tr>
                         <th scope="row" colspan="6"></th>
                         <td>
-                          <button class="btn btn-sm btn-primary" wire:loading.attr="disabled"
+                          <button class="btn btn-sm btn-primary" wire:keydown.enter="add({{ $i }})"
+                                  wire:loading.attr="disabled"
                                   wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i>
                           </button>
                         </td>

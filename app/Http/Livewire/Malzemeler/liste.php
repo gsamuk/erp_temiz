@@ -33,7 +33,7 @@ class Liste extends Component
 
     protected $listeners  = ['setLine', 'setWh'];
 
-    public function setLine($id) // hangi satırın seçildiğini listen yaparak alıoyuz siparis.blade i dinliyoruz
+    public function setLine($id) // hangi satırın seçildiğini listen yaparak alıoyuz  dinliyoruz
     {
         $this->line = $id;
     }
@@ -43,10 +43,21 @@ class Liste extends Component
         $this->wh_id = $id;
     }
 
+    public function updatingSearch(): void
+    {
+        $this->code = "";
+        $this->resetPage();
+    }
 
+    public function updatingCode(): void
+    {
+        $this->search = "";
+        $this->resetPage();
+    }
 
     public function addItem($line, $ref)
     {
+
         $this->emit('getItem', ['line' => $line, 'ref' => $ref]);
         $this->dispatchBrowserEvent('SetDisable', ['line' => $line]);
     }
@@ -71,7 +82,7 @@ class Liste extends Component
                 return $query->where('cardtype_name', $this->tur);
             })
             ->when($this->code, function ($query) {
-                return $query->where('stock_code', 'like', '%' . $this->code . '%');
+                return $query->where('stock_code', $this->code);
             })->when($this->stur, function ($query) {
                 return $query->where('stock_type', $this->stur);
             })
@@ -91,6 +102,8 @@ class Liste extends Component
             'details' => $this->details
         ]);
     }
+
+
 
     public function remove_foto()
     {

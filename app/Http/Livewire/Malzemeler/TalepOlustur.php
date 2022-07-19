@@ -71,7 +71,7 @@ class TalepOlustur extends Component
     {
         $this->add(1);
         date_default_timezone_set('Europe/Istanbul');
-        $this->zaman = date("2021-m-d");
+        $this->zaman = date("Y-m-d");
     }
 
 
@@ -155,7 +155,7 @@ class TalepOlustur extends Component
         $this->aciklama[$this->line] = $item->stock_name;
         $this->average_price[$this->line] = $item->average_price;
         $this->desc[$this->line] = "İhtiyaç";
-        $this->miktar[$this->line] = 1; // test verisi
+        $this->miktar[$this->line] = 0; // test verisi
         $this->dispatchBrowserEvent('CloseModal');
     }
 

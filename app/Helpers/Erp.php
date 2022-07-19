@@ -25,4 +25,10 @@ class Erp
     {
         return Users::find($id);
     }
+
+
+    public static function nmf($n, $s = 0)
+    {
+        return number_format($n, $s, ',', '.');
+    }
 }
