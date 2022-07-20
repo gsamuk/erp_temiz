@@ -167,7 +167,7 @@
                                wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
                                href="#">Talep Miktarını Değiştir</a>
                           </li>
-                          @if ($dt->status != 5)
+                          @if ($dt->status != 5 && $for_manage)
                             <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
                                  href="#">Yönetim Onayı İste</a></li>
                           @endif

@@ -7,10 +7,14 @@
             <h5 class="card-title flex-grow-1 mb-0"> <i class="ri-add-line me-1 align-bottom"></i>
               Malzemeler</h5>
             <div class="flex-shrink-0">
-              <button wire:click="detay_goster({{ !$details }})"
-                      class="btn btn-soft-primary waves-effect waves-light"><i
-                   class="ri-stack-fill me-1 align-bottom"></i> Detaylı Liste
-              </button>
+
+              @if (Erp::izin('items_detailed_list'))
+                <button wire:click="detay_goster({{ !$details }})"
+                        class="btn btn-soft-primary waves-effect waves-light"><i
+                     class="ri-stack-fill me-1 align-bottom"></i> Detaylı Liste
+                </button>
+              @endif
+
               @if (!$ch)
                 <a href="#" wire:click="$emit('SetPage', 'malzemeler.fotograf')"
                    class="btn btn-soft-primary waves-effect waves-light"><i
@@ -176,14 +180,7 @@
                 <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
                 <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
                 <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-                <small>Stok Miktarı : <b>
-                    @if ($item->onhand_quantity > 0)
-                      {{ $item->onhand_quantity }}
-                    @else
-                      0
-                    @endif
-                  </b>
-                </small>
+
                 <hr>
                 @php
                   $son_satinalma = Illuminate\Support\Facades\DB::select(

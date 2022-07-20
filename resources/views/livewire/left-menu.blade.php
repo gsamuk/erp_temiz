@@ -36,14 +36,8 @@
 
 
           <li class="nav-item">
-            <a class="nav-link menu-link" href="/mobile">
-              <i class="ri-smartphone-line"></i> <span>Mobil Versiyon</span>
-            </a>
-          </li>
-
-          <li class="nav-item">
             <a class="nav-link menu-link" href="#" wire:click="$emit('SetPage', '')">
-              <i class="ri-dashboard-line"></i> <span>DashBoard</span>
+              <i class="ri-dashboard-line"></i> <span>Hızlı Erişim</span>
             </a>
           </li>
 
@@ -80,6 +74,7 @@
                   </a>
                   <div class="collapse menu-dropdown" id="sidebarCrm">
                     <ul class="nav nav-sm flex-column">
+
                       @if (Erp::izin('items_demand'))
                         <li class="nav-item">
                           <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
@@ -89,7 +84,7 @@
                         </li>
                       @endif
 
-                      @if (Erp::izin('items_demand'))
+                      @if (Erp::izin('items_demand_manage'))
                         <li class="nav-item">
                           <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-malzeme-onay')"
                              class="nav-link" data-key="t-level-3.1">
@@ -161,14 +156,14 @@
             <div class="collapse menu-dropdown" id="m1">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="#" wire:click="$emit('SetPage', 'satinalma.siparis-olustur')"
+                  <a href="#"
                      class="nav-link" data-key="t-google">
                     Sipariş Oluştur
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a href="#" wire:click="$emit('SetPage', 'satinalma.siparis')" class="nav-link"
+                  <a href="#" class="nav-link"
                      data-key="t-google">
                     Siparişler
                   </a>
@@ -266,8 +261,6 @@
                     Özel Rapor 2
                   </a>
                 </li>
-
-
               </ul>
             </div>
           </li>
