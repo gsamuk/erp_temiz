@@ -32,7 +32,7 @@
                         "
                             Exec dbo.sp_get_last_purchase
                             @company_id ='001',
-                            @term_id = '09',
+                            @term_id = '10',
                             @rowcount = 5,
                             @item_ref = ?
                             ",
@@ -272,7 +272,7 @@
                                 $sarf_btn = true;
                               @endphp
                               <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
-                                     value="@if ($d->status == 6) {{ $d->approved }} @else {{ $d->diff }} @endif"
+                                     value="{{ $d->diff }}"
                                      class="form-check-input"
                                      @if ($d->status == 5) disabled @endif>
                             @else
