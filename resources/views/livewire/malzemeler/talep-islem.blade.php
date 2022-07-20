@@ -442,7 +442,7 @@
               $demand_pfiche = Illuminate\Support\Facades\DB::select(
                   "Exec dbo.sp_get_purchase_order
               @company_id ='001',
-              @term_id = '09',
+              @term_id = '10',
               @detail = 1,
               @fiche_no = '',
               @demand_id = ?",

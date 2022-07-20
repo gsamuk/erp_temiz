@@ -432,7 +432,7 @@
                   $son_satinalma = Illuminate\Support\Facades\DB::select(
                       "         Exec dbo.sp_get_last_purchase
                                 @company_id ='001',
-                                @term_id = '09',
+                                @term_id = '10',
                                 @rowcount = 10,
                                 @item_ref = ?
                                 ",

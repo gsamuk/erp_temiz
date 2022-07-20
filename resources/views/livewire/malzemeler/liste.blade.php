@@ -190,7 +190,7 @@
                       "
                             Exec dbo.sp_get_last_purchase
                             @company_id ='001',
-                            @term_id = '09',
+                            @term_id = '10',
                             @rowcount = 5,
                             @item_ref = ?
                             ",
