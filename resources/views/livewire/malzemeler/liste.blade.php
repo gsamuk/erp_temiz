@@ -7,14 +7,6 @@
             <h5 class="card-title flex-grow-1 mb-0"> <i class="ri-add-line me-1 align-bottom"></i>
               Malzemeler</h5>
             <div class="flex-shrink-0">
-
-              @if (Erp::izin('items_detailed_list'))
-                <button wire:click="detay_goster({{ !$details }})"
-                        class="btn btn-soft-primary waves-effect waves-light"><i
-                     class="ri-stack-fill me-1 align-bottom"></i> Detaylı Liste
-                </button>
-              @endif
-
               @if (!$ch)
                 <a href="#" wire:click="$emit('SetPage', 'malzemeler.fotograf')"
                    class="btn btn-soft-primary waves-effect waves-light"><i
@@ -29,6 +21,23 @@
 
         <div class="card-body p-2">
           <div class="row mb-1">
+
+            <div class="col-md-4">
+              <div class="search-box" x-data x-init="$refs.search.focus()">
+                <input type="text" class="form-control search m-1" wire:model.debounce.500ms="search" x-ref="search"
+                       placeholder="Malzeme Adı Ara" style="text-transform: uppercase">
+                <i class="ri-search-line search-icon"></i>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="search-box">
+                <input type="text" class="form-control search m-1" wire:model.debounce.500ms="code"
+                       placeholder="Malzeme Kodu Ara">
+                <i class="ri-search-line search-icon"></i>
+              </div>
+            </div>
+
             @if (!$ch)
               <div class="col-md-4">
                 <select class="form-select m-1" wire:model="wh_id" name="wh_id">
@@ -42,22 +51,6 @@
               </div>
             @endif
 
-            <div class="col-md-4">
-              <div class="search-box">
-                <input type="text" class="form-control search m-1" wire:model.debounce.500ms="code"
-                       placeholder="Malzeme Kodu Ara">
-                <i class="ri-search-line search-icon"></i>
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <div class="search-box">
-                <input type="text" class="form-control search m-1" wire:model.debounce.500ms="search"
-                       placeholder="Malzeme Adı Ara" style="text-transform: uppercase">
-                <i class="ri-search-line search-icon"></i>
-              </div>
-            </div>
-
 
           </div>
           @if ($items->count() > 0)
@@ -66,8 +59,8 @@
                      wire:loading.class="opacity-50">
                 <thead class="table-light">
                   <tr>
-                    <th class="sort" data-sort="kod" scope="col" style="width:55px;"></th>
-                    <th class="sort" data-sort="kod" scope="col" style="width:55px;">Kod</th>
+
+                    <th class="sort" data-sort="kod" scope="col" style="width:55px;">SK</th>
 
                     @if ($ch)
                       <th class="sort" data-sort="name" scope="col" style="width:55px;"></th>
@@ -81,8 +74,6 @@
                         <th class="sort" data-sort="name" scope="col">Ort. Fiyat</th>
                         <th class="sort" data-sort="name" scope="col">S.Alma Miktarı</th>
                         <th class="sort" data-sort="name" scope="col">S.Alma Tutarı</th>
-                        <th class="sort" data-sort="tur" scope="col">Kart Tipi</th>
-                        <th class="sort" data-sort="tur" scope="col">Tür</th>
                       @endif
 
                     @endif
@@ -94,49 +85,36 @@
 
                   @foreach ($items as $item)
                     @php
-                      $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $item->logicalref)->first();
+                      
                       $line = '';
                       if (isset($item_id) && $item_id == $item->logicalref) {
                           $line = 'bg-soft-primary';
                       }
                     @endphp
                     <tr class="{{ $line }}">
-                      <td class="owner">
-                        @if ($photo)
-                          <a href="#" wire:click="foto({{ $item->logicalref }})">
-                            <img src="{{ asset('files/images/items/thumb/' . $photo->foto_path) }}"
-                                 style="width: 50px">
-                          </a>
-                        @else
-                          <a href="#" wire:click="foto({{ $item->logicalref }})">
-                            <img style="width: 50px" src="{{ asset('images/default.png') }}">
-                          </a>
-                        @endif
-                      </td>
+
 
                       <td class="owner"> {{ $item->stock_code }} </td>
 
                       @if ($ch)
                         <td class="owner">
                           <button wire:click.prevent="$emit('getItem', {{ $item }})"
-                                  class="btn btn-outline-danger btn-sm"> Ekle </button>
+                                  class="btn btn-success btn-sm"> Ekle </button>
                         </td>
                       @endif
+
                       <td>
-                        <a href="#" wire:click="foto({{ $item->logicalref }})">
-                          <b> {{ $item->stock_name }}</b>
-                        </a>
+                        <b> {{ $item->stock_name }}</b>
                       </td>
+
                       <td class="owner"> {{ $item->wh_name }} </td>
 
                       @if (!$item_id)
                         @if ($details)
-                          <td class="owner">{{ $item->onhand_quantity }}</td>
-                          <td class="owner">{{ number_format($item->average_price, 2) }}</td>
-                          <td class="owner">{{ $item->purchase_quantity }}</td>
-                          <td class="owner">{{ number_format($item->purchase_amount, 2) }}</td>
-                          <td class="owner">{{ $item->cardtype_name }}</td>
-                          <td class="owner">{{ $item->stock_type }}</td>
+                          <td class="owner text-danger"><b>{{ Erp::nmf($item->onhand_quantity) }}</b></td>
+                          <td class="owner text-info">{{ Erp::nmf($item->average_price, 2) }}</td>
+                          <td class="owner">{{ Erp::nmf($item->purchase_quantity) }}</td>
+                          <td class="owner">{{ Erp::nmf($item->purchase_amount, 2) }}</td>
                         @endif
                       @endif
 
@@ -176,52 +154,20 @@
               </div>
 
               <div class="col-lg-12">
+                @php
+                  $item = \App\Models\LogoItems::find($item_id);
+                  $item_photos = \App\Models\LogoItemsPhoto::Where('logo_stockref', $item_id)->get();
+                @endphp
+
                 <h5 class="text-danger">{{ $item->stock_name }}</h5>
                 <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
                 <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
                 <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
-
+                <small>Ref : <b>{{ $item_id }}</b> </small><br>
                 <hr>
-                @php
-                  $son_satinalma = Illuminate\Support\Facades\DB::select(
-                      "
-                            Exec dbo.sp_get_last_purchase
-                            @company_id ='001',
-                            @term_id = '10',
-                            @rowcount = 5,
-                            @item_ref = ?
-                            ",
-                      [$item_id],
-                  );
-                @endphp
-
-                @if ($son_satinalma)
-                  <h5>Son Satınalma Tutarları</h5>
-                  <table class="table-sm table-nowrap table-striped table-bordered table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Cari</th>
-                        <th scope="col">Miktar</th>
-                        <th scope="col">Birim Fiyat</th>
-                        <th scope="col">Toplam</th>
-                        <th scope="col">Tarih</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach ($son_satinalma as $s)
-                        <tr>
-
-                          <td>{{ $s->account_name }}</td>
-                          <td>{{ number_format($s->quantity, 0, '.', ',') }} {{ $s->unit_code }}</td>
-                          <td>{{ number_format($s->unit_price, 2, '.', ',') }}</td>
-                          <td>{{ number_format($s->amount, 2, '.', ',') }}</td>
-                          <td>{{ $s->po_date }}</td>
-                        </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                @endif
-
+                @livewire('malzemeler.son-satinalmalar', [
+                    'itemref' => $item_id,
+                ])
               </div>
 
               @if ($item_photos)

@@ -22,13 +22,16 @@ class Liste extends Component
     public $line = 0;
 
     public $ch = true; // true malzeme seçme butonu
-    public $details = false; // true malzeme detay bilgileri gösterir
+    public $details = true; // true malzeme detay bilgileri gösterir
 
+    public $item;
     public $foto_ref; // malzeme ref id
     public $item_photos;
     public $item_id;
 
     public $wh_id = '0';
+
+    public $pagination = 8;
 
 
     protected $listeners  = ['setLine', 'setWh'];
@@ -43,6 +46,15 @@ class Liste extends Component
         $this->wh_id = $id;
     }
 
+
+    public function updatedSearch($s): void
+    {
+        if (!empty($s)) {
+            $this->pagination = 50;
+        } else {
+            $this->pagination = 8;
+        }
+    }
     public function updatingSearch(): void
     {
         $this->code = "";
@@ -57,7 +69,6 @@ class Liste extends Component
 
     public function addItem($line, $ref)
     {
-
         $this->emit('getItem', ['line' => $line, 'ref' => $ref]);
         $this->dispatchBrowserEvent('SetDisable', ['line' => $line]);
     }
@@ -70,7 +81,6 @@ class Liste extends Component
 
     public function render()
     {
-
         $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
             ->where('onhand_quantity', '>=', '0')
@@ -87,7 +97,7 @@ class Liste extends Component
                 return $query->where('stock_type', $this->stur);
             })
             ->orderByDesc('stock_name')
-            ->paginate(8);
+            ->paginate($this->pagination);
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
         $stock_type = LogoDb::select('stock_type')->distinct()->get();
@@ -114,8 +124,7 @@ class Liste extends Component
     public function foto($id)
     {
         $this->item_id = $id;
-        $this->item = LogoItems::find($id);
-        $this->item_photos = LogoItemsPhoto::Where('logo_stockref', $id)->get();
+        $this->emit('SetRef', $id);
         $this->dispatchBrowserEvent('OpenModal', 'ShowMalzemeFotoModal');
     }
 }

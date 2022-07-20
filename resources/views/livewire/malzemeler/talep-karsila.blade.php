@@ -265,7 +265,7 @@
                                     <br><span class="text-info">Yönetimin Onayını Bekliyor</span>
                                   @endif
                                 </td>
-                                <td>{{ $itm->special_code }} </td>
+                                <td>{{ $talep->special_code }} </td>
                                 <td>{{ number_format($itm->approved_consump, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
@@ -372,7 +372,7 @@
                       <button wire:click="unapproved" onclick="$('._btn').prop('disabled',true)"
                               @if ($talep->status == 1) disabled @endif
                               class="_btn btn btn-light btn-sm">
-                        Onay İptal</button>
+                        Liste Onay İptal</button>
                     @endif
 
 

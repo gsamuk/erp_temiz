@@ -91,7 +91,8 @@
                         <div class="col-lg-7">
                           <input type="hidden" wire:model="project_ref_id">
                           <input type="text" wire:model="project_code" name="proje_kodu" data-bs-toggle="modal"
-                                 data-bs-target="#projectsModal" class="form-control form-control-sm rounded-0 mb-1">
+                                 data-bs-target="#projectsModal" readonly="readonly"
+                                 class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                         <div class="col-lg-1">
                           <a href="javascript:void(0);" @click="@this.set('project_code', '')"
@@ -106,7 +107,7 @@
                         </div>
                         <div class="col-lg-7">
                           <input type="text" data-bs-toggle="modal" wire:click="$emit('ozelKodType', 1)"
-                                 name="special_code" wire:model="special_code"
+                                 name="special_code" wire:model="special_code" readonly="readonly"
                                  data-bs-target="#ozelKodModal" class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                         <div class="col-lg-1">
@@ -202,11 +203,11 @@
                       <tr>
                         <th style="width:20px;"></th>
                         <th style="width:70px;">S.Kodu</th>
-                        <th style="width:300px;">Malzeme</th>
+                        <th style="width:350px;">Malzeme</th>
                         <th style="width:100px;">Miktar</th>
                         <th style="width:100px;">Birim</th>
-                        <th style="width:200px;">Talep Nedeni</th>
-                        <th> </th>
+                        <th>Talep Nedeni</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
