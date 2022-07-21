@@ -9,11 +9,7 @@ Route::get('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::post('/login_post', [App\Http\Controllers\LoginController::class, 'login_post'])->name('login.post');
 Route::get('signout', [App\Http\Controllers\LoginController::class, 'signout'])->name('signout');
 
-Route::get('search', function () {
-    $query = 'camera';
-    $articles = App\Models\LogoItems::search($query)->get();
-    return $articles;
-});
+
 
 Route::middleware([Kontrol::class])->group(function () {
 

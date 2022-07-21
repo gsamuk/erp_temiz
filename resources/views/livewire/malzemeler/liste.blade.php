@@ -176,7 +176,8 @@
                     @foreach ($item_photos as $p)
                       <div class="col-xxl-6 col-xl-6 col-sm-12">
                         <img class="img-fluid m-2 mx-auto border p-1"
-                             src="{{ asset('files/images/items/' . $p->foto_path) }}">
+                             src="https://mobile.zeberced.net/files/{{ $p->foto_path }}"
+                             _src="{{ asset('files/images/items/' . $p->foto_path) }}">
                       </div>
                     @endforeach
                   </div>
