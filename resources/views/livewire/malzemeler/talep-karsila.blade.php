@@ -35,6 +35,7 @@
             @endif
           </small>
         </h4>
+        <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button>
       </div>
 
       <div class="card-body">
@@ -101,13 +102,14 @@
                         <a href="javascript:;"
                            wire:click="foto_goster({{ $dt->logo_stock_ref }})">
                           <img class="border"
-                               style="height: 30px"
+                               style="height: 25px"
                                src="images/default.png">
                         </a>
                       @endif
                     </td>
 
-                    <td><small>{{ $item_detail->stock_code }} > </small> <b> {{ $item_detail->stock_name }} </b>
+                    <td><small>{{ $item_detail->stock_code }} > </small>
+                      <span class="text-primary">{{ $item_detail->stock_name }}</span>
                       @if ($dt->status == 5)
                         <br><small class="text-danger">Yönetimin Onayına Gönderildi... </small>
                       @endif
@@ -117,21 +119,16 @@
                       @endif
                     </td>
                     <td>
-                      <b style="font-size:1.1em"
-                         class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
-                      <br><small>{{ $dt->unit_code }}</small>
+                      <b class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
                     </td>
-                    <td><b
-                         style="font-size:1.1em">{{ number_format($item_detail->onhand_quantity, 0, '.', ',') }}</b>
-                      <br><small>{{ $dt->unit_code }}</small>
-                    </td>
+
+                    <td><b>{{ number_format($item_detail->onhand_quantity, 0, '.', ',') }}</b> </td>
                     @if ($for_manage)
                       <td>
                         <input type="hidden" x-data x-init="@this.set('talep_line.{{ $dt->demand_id }}.{{ $dt->id }}', '{{ $item_detail }}')">
                         <input type="number" {{ $disabled }}
-
                                min="0"
-                               class="form-control"
+                               class="form-control m-0 p-1"
                                max="{{ $item_detail->onhand_quantity }}"
                                onkeyup=imposeMinMax(this)
                                wire:loading.attr="disabled"
@@ -142,7 +139,7 @@
                         <input type="number"
                                min="0"
                                wire:loading.attr="disabled"
-                               class="form-control"
+                               class="form-control m-0 p-1"
                                wire:model.lazy="sonay.{{ $dt->id }}">
                       </td>
                     @else
@@ -157,7 +154,7 @@
 
                       <div class="dropdown">
                         <a href="#" role="button" id="drop_{{ $dt->id }}" data-bs-toggle="dropdown"
-                           aria-expanded="false" class="">
+                           aria-expanded="false" class="m-2">
                           <i class="ri-more-2-fill"></i>
                         </a>
 
@@ -374,9 +371,6 @@
                               class="_btn btn btn-light btn-sm">
                         Liste Onay İptal</button>
                     @endif
-
-
-
 
                   </div>
                   <!-- yönetim Butonları son -->

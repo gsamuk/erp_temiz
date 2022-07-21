@@ -7,7 +7,7 @@
   @elseif($page == 'malzemeler.talep-malzeme-onay')
     @livewire('malzemeler.talep-malzeme-onay')
   @elseif($page == 'malzemeler.talep-olustur')
-    @livewire('malzemeler.talep-olustur')
+    @livewire('malzemeler.talep-olustur', ['edit_id' => $edit_id])
   @elseif($page == 'malzemeler.fotograf')
     @livewire('malzemeler.fotograf')
   @elseif($page == 'malzemeler.taleplerim')

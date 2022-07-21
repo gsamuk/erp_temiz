@@ -149,7 +149,7 @@
               <div class="col-12">
                 <div class="d-flex justify-content-end">
                   <button wire:click="remove_foto()"
-                          class="btn btn-soft-primary waves-effect waves-light btn-sm">Kapat</button>
+                          class="btn btn-soft-danger waves-effect waves-light btn-sm">Kapat</button>
                 </div>
               </div>
 

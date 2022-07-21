@@ -38,6 +38,7 @@ class Liste extends Component
 
     public function setLine($id) // hangi satırın seçildiğini listen yaparak alıoyuz  dinliyoruz
     {
+        $this->item_id = null;
         $this->line = $id;
     }
 
@@ -50,25 +51,28 @@ class Liste extends Component
     public function updatedSearch($s): void
     {
         if (!empty($s)) {
-            $this->pagination = 50;
+            $this->pagination = 80;
         } else {
             $this->pagination = 8;
         }
     }
     public function updatingSearch(): void
     {
+        $this->item_id = null;
         $this->code = "";
         $this->resetPage();
     }
 
     public function updatingCode(): void
     {
+        $this->item_id = null;
         $this->search = "";
         $this->resetPage();
     }
 
     public function addItem($line, $ref)
     {
+
         $this->emit('getItem', ['line' => $line, 'ref' => $ref]);
         $this->dispatchBrowserEvent('SetDisable', ['line' => $line]);
     }

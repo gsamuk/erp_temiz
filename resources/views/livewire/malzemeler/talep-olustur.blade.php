@@ -60,13 +60,18 @@
           </span>
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0"> <i class="ri-add-line me-1 align-bottom"></i>
-              Malzeme Talebi Oluştur
+              Malzeme Talebi @if ($edit_id)
+                Düzenle
+              @else
+                Oluştur
+              @endif
 
             </h5>
           </div>
         </div>
         <div class="card-body">
-          <form wire:submit.prevent="store()">
+          <form
+                @if ($edit_id) wire:submit.prevent="edit()" @else wire:submit.prevent="store()" @endif>
             @csrf
             <div class="row">
 
@@ -323,9 +328,15 @@
                   @endif
 
                   <div class="col-12 m-2">
-                    <button type="submit" class="btn btn-success" @if (!$inputs) disabled @endif>
-                      <i class="mdi mdi-content-save"></i>Kaydet</button>
-
+                    @if ($edit_id)
+                      <button type="submit" class="btn btn-info" disabled
+                              @if (!$inputs) disabled @endif>
+                        <i class="mdi mdi-content-save"></i> Düzenle</button>
+                    @else
+                      <button type="submit" class="btn btn-success"
+                              @if (!$inputs) disabled @endif>
+                        <i class="mdi mdi-content-save"></i> Kaydet</button>
+                    @endif
                     <div wire:loading class="p-3">
                       İşleniyor Lütfen Bekleyiniz...
                     </div>

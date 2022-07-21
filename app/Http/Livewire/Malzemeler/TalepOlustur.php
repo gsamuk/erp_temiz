@@ -13,6 +13,7 @@ use App\Models\Demand;
 use App\Models\DemandDetail;
 use App\Models\UserCompany;
 use App\Helpers\Erp;
+use App\Models\LogoDb;
 
 class TalepOlustur extends Component
 {
@@ -48,9 +49,15 @@ class TalepOlustur extends Component
     public $warehouse = 0; // malzemenin çıktığı depo
     public $destwh;  // malzemenin girdiği depo
 
+    //// edit için
+    public $edit_id;
+
 
 
     protected $listeners = ["getItem", "getOzelKod", "getOzelKodLine", "getProject"];
+
+
+
 
     public function updatedWarehouse($id)
     {
@@ -69,9 +76,14 @@ class TalepOlustur extends Component
 
     public function mount()
     {
-        $this->add(1);
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("Y-m-d");
+
+        if ($this->edit_id) {
+            $this->LoadDemand();
+        } else {
+            $this->add(1);
+        }
     }
 
 
@@ -100,10 +112,49 @@ class TalepOlustur extends Component
         $this->dispatchBrowserEvent('CloseModal');
     }
 
+    public function LoadDemand()
+    {
+        if ($this->edit_id) {
+            $talep = Demand::find($this->edit_id);
+            $this->warehouse = $talep->warehouse_no;
+            $this->demand_desc =  $talep->demand_desc;
+            $this->project_code = $talep->project_code;
+            $this->special_code =  $talep->special_code;
+            $this->demand_type = $talep->demand_type;
+            if ($talep->dest_wh_no) {
+                $this->destwh = $talep->dest_wh_no;
+            }
+
+            $items = DemandDetail::Where('demand_id', $this->edit_id)->get();
+            foreach ($items as $i => $val) {
+                $this->i = $i;
+                $this->inputs[] = $i;
+                $this->kod[$i] = $val->stock_code;
+                $this->desc[$i] = $val->description;
+                $this->aciklama[$i] = $val->stock_name;
+                $this->ref[$i] =  $val->logo_stock_ref;
+                $this->miktar[$i] = Erp::nmf($val->quantity);
+                $this->birim[$i] =  $val->unit_code;
+                $this->average_price[$i] = $val->average_price;
+
+                $ml = LogoDb::where('stock_code', $val->stock_code)->first();
+                $units = LogoUnits::Where('unitset_ref', $ml->unitset_ref)->get();
+                $this->birim_select[$i] = $units;
+                $this->birim[$i] = $val->unit_code;
+
+
+                $photos = LogoItemsPhoto::where('logo_stockref', $ml->logicalref)->first();
+                if ($photos) {
+                    $this->item_photos[$i] = $photos;
+                }
+            }
+        }
+    }
 
 
     public function render()
     {
+
         // 1 Nolu firmanın depoları gelir
         $warehouses = LogoWarehouses::where('company_no', '1')->get();
         $auth_warehouses = UserCompany::where('company_id', '1')
@@ -138,9 +189,7 @@ class TalepOlustur extends Component
 
     public function getItem($d) // seçilen malzemeyi  dinleyerek set ediyoruz 
     {
-
         $item = (object) $d;
-
         $photos = LogoItemsPhoto::where('logo_stockref', $item->logicalref)->first();
         if ($photos) {
             $this->item_photos[$this->line] = $photos;
