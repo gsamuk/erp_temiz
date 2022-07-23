@@ -49,6 +49,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.js"
         integrity="sha512-JCRiGqeZmFnnSl3E68K2QpL8Pwvp4PKAqekg41WWUfjqCnKJEv1DvZJdi76q/XFt6VzZ3V4bCE51NkDQ+dOJKA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+        integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @stack('scripts')
 <script>
   window.addEventListener('OpenModal', event => {
@@ -62,9 +65,7 @@
 
 
   function imposeMinMax(el) {
-
     if (el.value != "" && parseInt(el.value) > 0) {
-
       if (parseInt(el.value) < parseInt(el.min)) {
         el.value = el.min;
       }
@@ -72,6 +73,12 @@
         el.value = parseInt(el.max);
       }
     }
+  }
+
+  function tarih(e) {
+    $(e).mask('00/00/0000', {
+      reverse: true
+    });
   }
 </script>
 </body>

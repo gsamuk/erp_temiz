@@ -84,7 +84,7 @@
                           <label class="form-label">Tarih</label>
                         </div>
                         <div class="col-lg-8">
-                          <input type="date" step="any" wire:model="zaman"
+                          <input type="text" wire:model.lazy="zaman" onclick="tarih(this)"
                                  class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                       </div>
@@ -384,7 +384,6 @@
       </div>
     @endif
   </div>
-
 
 
 </div>

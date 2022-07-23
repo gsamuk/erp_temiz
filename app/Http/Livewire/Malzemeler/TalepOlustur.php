@@ -77,7 +77,7 @@ class TalepOlustur extends Component
     public function mount()
     {
         date_default_timezone_set('Europe/Istanbul');
-        $this->zaman = date("Y-m-d");
+        $this->zaman = date("d/m/Y");
 
         if ($this->edit_id) {
             $this->LoadDemand();
