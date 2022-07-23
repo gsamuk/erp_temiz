@@ -41,7 +41,7 @@
                           </div>
                           <div class="flex-grow-1">
                             {{ $d->name }} {{ $d->surname }}<br>
-                            <small> {{ $d->user_name }}</small>
+                            <small> {{ $d->user_code }}</small>
                           </div>
                         </div>
                       </td>
@@ -151,6 +151,31 @@
                     @enderror
                     <i class="ri-mail-unread-line"></i>
                   </div>
+                </div>
+
+                <div class="col-xxl-12">
+                  <label for="user_code" class="col-form-label">Çalıştığı Birim</label>
+                  <select wire:model="user_code" x-data
+                          x-init="@this.set('user_code', '{{ $user->user_code }}')" id="user_code" class="form-select form-select-sm"
+                          aria-label=".form-select-sm">
+                    <option selected>-- Seçiniz --</option>
+                    <option>Kubwa / Kademe</option>
+                    <option>Kubwa / Tesis</option>
+                    <option>Kubwa / Oto Elektrik</option>
+                    <option>Kubwa / Yağ Bakım</option>
+                    <option>Kubwa / Kaynakhane</option>
+                    <option>Kubwa / Elektrik</option>
+                    <option>Jiwa / OSB</option>
+                    <option>Katanpe / Beton</option>
+                    <option>Katanpe / İnşaat</option>
+                    <option>Katanpe / Depo</option>
+                    <option>Kaduna / Depo</option>
+                    <option>Kaduna</option>
+                    <option>Kontagora</option>
+                    <option>Üst Yönetim</option>
+                    <option>Merkez Muhasebe</option>
+                    <option>Bilişim</option>
+                  </select>
                 </div>
 
                 <div class="col-xxl-12">

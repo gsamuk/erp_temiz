@@ -30,6 +30,7 @@ class Liste extends Component
     public $user_name;
     public $password;
     public $email;
+    public $user_code;
     public $logo_user;
     public $logo_password;
     public $is_active;
@@ -41,7 +42,7 @@ class Liste extends Component
         'surname' => 'required',
         'user_name' => 'required|unique:users,user_name',
         'password' => 'required',
-        'email' => 'required|email|unique:users,email',
+
     ];
 
     protected $messages = [
@@ -50,8 +51,7 @@ class Liste extends Component
         'user_name.required' => 'Lütfen Kullanıcı Adı Giriniz.',
         'user_name.unique' => 'Bu kullanıcı adı kullanılıyor',
         'password.required' => 'Lütfen Şifre Giriniz.',
-        'email.email' => 'Geçersiz Email Adresi',
-        'email.unique' => 'E-mail Adresi Kullanılıyor',
+
     ];
 
 
@@ -104,6 +104,7 @@ class Liste extends Component
         $user = Users::find($this->user_id);
         $user->user_name = $this->user_name;
         $user->email = $this->email;
+        $user->user_code = $this->user_code;
         $user->password = $this->password;
         $user->name = $this->name;
         $user->surname = $this->surname;
@@ -122,6 +123,7 @@ class Liste extends Component
         $user = new Users;
         $user->user_name = $this->user_name;
         $user->email = $this->email;
+        $user->user_code = $this->user_code;
         $user->password = $this->password;
         $user->name = $this->name;
         $user->surname = $this->surname;

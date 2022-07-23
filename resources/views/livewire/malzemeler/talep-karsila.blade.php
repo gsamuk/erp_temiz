@@ -2,7 +2,7 @@
 
   @if ($talep_detay)
     <div class="card">
-      <div class="card-header">
+      <div class="card-header p-2">
         @php
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
@@ -13,32 +13,27 @@
         @endphp
 
         @if ($talep->demand_type == 1)
-          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
+          <h6 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h6>
         @endif
 
         @if ($talep->demand_type == 2)
-          <h5><span class="text-info"> {{ $w1->warehouse_name }} </span> <i class="ri-share-forward-2-line"></i>
-            <span class="text-danger">{{ $w2->warehouse_name }}</span> Malzeme Transferi
-          </h5>
+          <h6><span class="text-info"> {{ $w1->warehouse_name }} </span> <i class="ri-share-forward-2-line"></i>
+            <span class="text-success">{{ $w2->warehouse_name }}</span> Malzeme Transferi
+          </h6>
         @endif
 
-        <h4 class="card-title flex-grow-1 text-primary mb-0">
-          <small>NO : {{ $talep->id }}
-            @if ($talep->demand_desc)
-              | {{ $talep->demand_desc }}
-            @endif
-            @if ($talep->special_code)
-              | Özel Kod : {{ $talep->special_code }}
-            @endif
-            @if ($talep->project_code)
-              | Proje Kodu : {{ $talep->project_code }}
-            @endif
-          </small>
-        </h4>
-        <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button>
+        @if ($talep->project_code)
+          <h6> Proje Kodu : {{ $talep->project_code }} </h5>
+        @endif
+
+
+        @if ($talep->special_code)
+          <h6 class="text-danger">Özel Kod : {{ $talep->special_code }}</h6>
+        @endif
+        <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
       </div>
 
-      <div class="card-body">
+      <div class="card-body p-2">
         <div class="row">
           <div class="col-lg-12">
             <table class="table-light table-sm table-striped table align-middle">
@@ -231,7 +226,7 @@
                   @if ($karsilama)
                     <div class="col-lg-12 mt-3">
                       <div class="p-1" style="background-color: rgb(235, 255, 236)">
-                        <h5><b>Stoktan Karşılama Listesi </b> </h5>
+                        <h5><b>Stoktan Karşılama Listesi (Sarf)</b> </h5>
                         <table class="table-sm table-striped table border align-middle">
                           <thead class="table-success">
                             <tr>
@@ -285,7 +280,7 @@
                     <div class="col-lg-12 mt-3">
                       <div class="p-1"
                            style="background-color: rgb(255, 250, 201)">
-                        <h5><b>Satın Alma Listesi</b> </h5>
+                        <h5><b>Satın Alma Siparişi Listesi</b> </h5>
                         <table class="table-sm table-striped table border align-middle"
                                style="width: 100%">
                           <thead class="table-warning">

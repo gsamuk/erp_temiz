@@ -81,10 +81,10 @@
                      wire:loading.class="opacity-50">
                 <thead class="table-light">
                   <tr>
-                    <th scope="col"></th>
+
                     <th scope="col">No</th>
                     <th scope="col">Zaman</th>
-                    <th scope="col">Durumu</th>
+                    <th scope="col">Durum</th>
                     <th scope="col">İşlem</th>
                   </tr>
                 </thead>
@@ -95,24 +95,13 @@
                       if ($cnt == 0) {
                           continue;
                       }
-                      
+                      $zaman = date('d-m > H:i', strtotime($d->insert_time));
                     @endphp
 
                     <tr class="@if ($d->id == $talep_satir_id) table-info @endif">
-                      <td class="owner">
-                        @if ($d->demand_type == 1)
-                          <i class="ri-increase-decrease-line ri-xl text-info"></i>
-                        @else
-                          <i class="ri-swap-box-line ri-xl text-warning"></i>
-                        @endif
-                      </td>
-                      <td class="owner">{{ $d->id }}</td>
-                      <td class="owner">
 
-                        <small>
-                          {{ \Carbon\Carbon::createFromTimeStamp(strtotime($d->insert_time))->diffForHumans() }}
-                        </small>
-                      </td>
+                      <td class="owner">{{ $d->id }}</td>
+                      <td class="owner">{{ $zaman }}</td>
 
                       <td class="owner">
                         @if ($d->approved == 1)
@@ -121,7 +110,7 @@
                               Tamamlandı</span>
                           @else
                             <span class="badge rounded-pill badge-outline-success">
-                              Onaylandı</span>
+                              İşleme Alındı</span>
                           @endif
                         @else
                           @if ($d->status == 9)
@@ -143,25 +132,25 @@
 
                         @if ($d->status == 0 && $d->demand_type == 1)
                           <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-info btn-block" style="width:150px">Depo Malzeme Talebi <i
+                                  class="btn btn-sm btn-info btn-block" style="width:150px"> Malzeme Talebi <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
 
                         @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 2)
                           <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-success btn-block" style="width:150px">Transfer İşlem Detayı
+                                  class="btn btn-sm btn-success btn-block" style="width:150px"> İşlem Detayı
                             <i class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 0 && $d->demand_type == 2)
                           <button wire:click="talep_detay({{ $d->id }}, '{{ $d->user_name }}')"
-                                  class="btn btn-sm btn-warning btn-block" style="width:150px">Depo Transfer Talebi <i
+                                  class="btn btn-sm btn-warning btn-block" style="width:150px"> Transfer Talebi <i
                                class="ri-arrow-right-s-fill"></i></button>
                         @endif
 
                         @if ($d->status == 9)
-                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>Talep
+                          <button class="btn btn-sm btn-soft- btn-block waves-effect waves-light" disabled>
                             Reddedildi
                           </button>
                         @endif
