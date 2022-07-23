@@ -165,6 +165,7 @@
                     <option>Kubwa / Yağ Bakım</option>
                     <option>Kubwa / Kaynakhane</option>
                     <option>Kubwa / Elektrik</option>
+                    <option>Kubwa / Merkez Depo</option>
                     <option>Jiwa / OSB</option>
                     <option>Katanpe / Beton</option>
                     <option>Katanpe / İnşaat</option>
