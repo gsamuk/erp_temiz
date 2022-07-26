@@ -239,7 +239,8 @@ class TalepOlustur extends Component
             return session()->flash('error', 'Transfer için depoları farklı seçmelisiniz.');
         }
 
-        $insert_time = date('Y-m-d H:i:s');
+        $date = str_replace('/', '-', $this->zaman);
+        $insert_time = date("Y-m-d", strtotime($date));
 
         $demand = new Demand;
         $demand->company_id = 1;

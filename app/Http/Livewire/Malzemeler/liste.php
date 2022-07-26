@@ -87,7 +87,7 @@ class Liste extends Component
     {
         $db = new LogoItems;
         $data = $db::where('stock_name', 'like', '%' . $this->search . '%')
-            ->where('onhand_quantity', '>=', '0')
+
 
             ->when(($this->wh_id >= 0 && $this->wh_id != null), function ($query) {
                 return $query->where('wh_no', $this->wh_id);
