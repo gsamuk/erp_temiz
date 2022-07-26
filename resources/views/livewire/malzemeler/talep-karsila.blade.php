@@ -68,12 +68,12 @@
                     
                     // eğer stok 0 ise
                     if ($item_detail->onhand_quantity == 0) {
-                        $disabled = 'disabled'; // alan disable ediliyor
+                        //$disabled = 'disabled'; // alan disable ediliyor
                     }
                     
                     // eğer stok eksi ise
                     if ($item_detail->onhand_quantity < 0) {
-                        $disabled = 'disabled'; // alan disable ediliyor
+                        // $disabled = 'disabled'; // alan disable ediliyor
                     }
                     
                     if ($dt->approved_consump > 0 || $dt->approved_purchase > 0) {
@@ -195,6 +195,10 @@
               <div class="alert alert-success"
                    role="alert">
                 Bu Malzeme talebi işleme alınmıştır.
+                <hr>
+                <button wire:click="$emit('IslemDetay', {{ $talep->id }})" class="btn btn-danger btn-lg">Fiş
+                  Detayına Git</button>
+
               </div>
             </div>
           @else

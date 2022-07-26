@@ -9,7 +9,7 @@ use App\Models\Demand;
 
 class TalepListesi extends Component
 {
-    protected $listeners = ['LoadDemandList' => '$refresh', 'RefreshTalepListesi' => '$refresh'];
+    protected $listeners = ['LoadDemandList' => '$refresh', 'RefreshTalepListesi' => '$refresh', 'IslemDetay'];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -93,6 +93,13 @@ class TalepListesi extends Component
         $this->emit('TalepKarsila', $id);
     }
 
+
+    public function IslemDetay($id)
+    {
+        $this->id_reset($id);
+        $this->talep_islem_id = $id;
+        $this->emit('TalepIslem', $id);
+    }
 
     public  function talep_islem_detay($id)
     {

@@ -48,7 +48,7 @@ class TalepOlustur extends Component
     public $demand_type = 1;
 
     public $warehouse = 0; // malzemenin çıktığı depo
-    public $destwh;  // malzemenin girdiği depo
+    public $destwh;  // malzemenin girdiği depo  
 
     //// edit için
     public $edit_id;
@@ -276,6 +276,7 @@ class TalepOlustur extends Component
 
             $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
+            $dm->approved_consump = $this->miktar[$in];
             $dm->special_code = $this->ozelkod[$in];
             $dm->unit_code = $this->birim[$in];
 
