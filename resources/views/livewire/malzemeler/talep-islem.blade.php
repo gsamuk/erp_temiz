@@ -276,7 +276,9 @@
                               <input type="checkbox" wire:model="sarf.{{ $d->stock_code }}" name="sarf_checkbox"
                                      value="{{ $d->diff }}"
                                      class="form-check-input"
-                                     @if ($d->status == 5) disabled @endif>
+                                     @if ($d->status == 5) disabled @endif
+
+                                     @if ($talep->demand_type == 1) style="display:none" @endif>
                             @else
                             @endif
                           </td>
@@ -301,6 +303,12 @@
                             @if ($d->status == 5)
                               <small class="text-danger">Onay Bekliyor</small>
                             @else
+                              <button @if ($talep->demand_type == 2) style="display:none" @endif
+                                      class="btn btn-sm btn-info"
+                                      wire:loading.attr="disabled"
+                                      @if ($item->onhand_quantity < $d->diff) disabled @endif
+                                      wire:click="tek_sarf_olustur('{{ $d->stock_code }}')">Sarf
+                                Et</button>
                               <button
                                       class="btn btn-sm btn-success"
                                       wire:click="status_pop('{{ $d->stock_code }}','{{ $d->status_desc }}')">Durum</button>
@@ -319,10 +327,7 @@
                 </table>
 
                 @if ($sarf_btn && !$talep_owner)
-                  @if ($talep->demand_type == 1)
-                    <button class="btn btn-primary m-1" wire:click="sarf_olustur" wire:loading.attr="disabled">
-                      Seçili Olanları Teslim Et</button>
-                  @else
+                  @if ($talep->demand_type == 2)
                     <button class="btn btn-primary m-1" wire:click="transfer_olustur" wire:loading.attr="disabled">
                       Seçili Olanları Transfer Et</button>
                   @endif

@@ -142,11 +142,17 @@
                         </div>
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
+                            @php
+                              if (Erp::izin('depo_admin')) {
+                                  $users = \App\Models\Users::Where('is_active', 1)->get();
+                              } else {
+                                  $users = \App\Models\Users::Where('is_active', 1)
+                                      ->Where('id', Erp::user_id())
+                                      ->get();
+                              }
+                              
+                            @endphp
                             <select wire:model="user_id">
-                              <option value="{{ Erp::user_id() }}">
-                                {{ $aktif_user->name }} {{ $aktif_user->surname }} /
-                                {{ $aktif_user->user_code }}
-                              </option>
                               @foreach ($users as $u)
                                 <option value="{{ $u->id }}"> {{ $u->name }} {{ $u->surname }} /
                                   {{ $u->user_code }}</option>

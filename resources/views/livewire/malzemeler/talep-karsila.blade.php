@@ -226,7 +226,7 @@
                   @if ($karsilama)
                     <div class="col-lg-12 mt-3">
                       <div class="p-1" style="background-color: rgb(235, 255, 236)">
-                        <h5><b>Stoktan Karşılama Listesi (Sarf)</b> </h5>
+                        <h5><b>Stoktan Karşılama Listesi </b> </h5>
                         <table class="table-sm table-striped table border align-middle">
                           <thead class="table-success">
                             <tr>
@@ -258,7 +258,7 @@
                                     <br><span class="text-info">Yönetimin Onayını Bekliyor</span>
                                   @endif
                                 </td>
-                                <td>{{ $talep->special_code }} </td>
+                                <td>{{ $itm->special_code }} </td>
                                 <td>{{ number_format($itm->approved_consump, 0, '', '') }}
                                   <small>{{ $itm->unit_code }}</small>
                                 </td>
@@ -344,7 +344,7 @@
                         <button wire:click="approved" onclick="$('._btn').prop('disabled',true)"
                                 class="_btn btn btn-success btn-label">
                           <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                          Listeyi Onayla
+                          Listeyi Kaydet
                         </button>
                       @else
                         <div class="alert alert-warning alert-borderless" role="alert">
@@ -359,13 +359,13 @@
                               @if ($talep->status == 1) disabled @endif
                               class="_btn btn btn-info btn-label">
                         <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                        Logo Fişi Oluştur (Sarf)
+                        Logo Fişi Oluştur
                       </button>
 
                       <button wire:click="unapproved" onclick="$('._btn').prop('disabled',true)"
                               @if ($talep->status == 1) disabled @endif
                               class="_btn btn btn-light btn-sm">
-                        Liste Onay İptal</button>
+                        Liste Kaydı İptal</button>
                     @endif
 
                   </div>

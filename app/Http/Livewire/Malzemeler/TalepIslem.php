@@ -53,7 +53,64 @@ class TalepIslem extends Component
     }
 
 
-    public function sarf_olustur()
+    public function tek_sarf_olustur($stock_code)
+    {
+        $demand_item = IncompletedDemand::Where('demand_id', $this->talep_id)->where('stock_code', $stock_code)->first();
+        $item = LogoItems::Where("stock_code", "$stock_code")->first();
+        $rest_items = array();
+        $rest_items[] = [
+            "ITEM_CODE" => $item->stock_code,
+            "ITEMREF" => $item->logicalref,
+            "UNIT_CODE" => $demand_item->unit_code,
+            "PRICE" => $item->average_price,
+            "TYPE" => 25,
+            'QUANTITY' => $demand_item->diff,
+        ];
+
+        $sarf_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => date('Y-m-d H:i:s'),
+            'GROUP' => 2,
+            "AUXIL_CODE" => $demand_item->special_code,
+            "PROJECT_CODE" => $this->talep->project_code,
+            "FOOTNOTE1"  => $this->talep->demand_desc,
+            'DOC_NUMBER' => "SF" . $this->talep_id,
+            "TYPE" => 12,
+            'IO_TYPE' => 3,
+            'SOURCE_WH' => $this->talep->warehouse_no,
+            'SOURCE_COST_GRP' => 1,
+            'TRANSACTIONS' => [
+                'items' => $rest_items
+            ]
+        ];
+
+
+        $logo_fiche_ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
+        if ($logo_fiche_ref != null) {
+
+            $dm = new DemandFiche;
+            $dm->demand_id = $this->talep_id;
+            $dm->logo_fiche_ref = $logo_fiche_ref;
+            $dm->demand_type = 1;
+            $dm->fiche_type = 1;
+            $dm->insert_time = date('Y-m-d H:i:s');
+            $dm->save();
+
+
+            $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
+            if ($kalan == 0) {
+                $d = Demand::find($this->talep_id);
+                $d->status = 2;
+                $d->save();
+            }
+            $this->emit('RefreshTalepListesi');
+            return session()->flash('success', 'Logo Sarf Fişi Oluşturuldu.');
+        }
+    }
+
+    public function coklu_sarf_olustur() /// kullanılmıyor
     {
 
         $rest_items = array();

@@ -55,8 +55,8 @@ class TalepOlustur extends Component
 
     // kullanıcılar
     public $user_id; // talep sahibi user_id
-    public $users;
-    public $aktif_user;
+
+
 
 
 
@@ -85,8 +85,7 @@ class TalepOlustur extends Component
     {
         $this->user_id = Erp::user_id(); // default 
 
-        $this->aktif_user = Erp::user(Erp::user_id());
-        $this->users = Users::Where('is_active', 1)->get();
+
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("d/m/Y");
 

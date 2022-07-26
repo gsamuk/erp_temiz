@@ -192,9 +192,14 @@ Satınalma Toplamı : $s_total
     {
 
         $demand = Demand::find($this->talep_id);
-        $sarf = $this->sarfet($demand);
+        $sp_code = DemandDetail::Where('demand_id', $this->talep_id)->distinct()
+            ->get('special_code');
+        foreach ($sp_code as $c) {
+            $sarf = $this->sarfet($demand, $c->special_code);
+        }
 
         // satınalma siparişleri seçilen carilere göre fişleri oluşturuluyor
+
         $satinal = false;
         $cari = DemandDetail::distinct()
             ->Where('demand_id', $this->talep_id)
@@ -225,12 +230,13 @@ Satınalma Toplamı : $s_total
 
 
 
-    public function sarfet($demand)
+    public function sarfet($demand, $special_code)
     {
         $rest_items = array();
         $sarf = DemandDetail::Where('demand_id', $this->talep_id)
             ->Where('approved_consump', '>', '0')
             ->Where('status', '!=', 5)
+            ->where('special_code', $special_code)
             ->get();
 
         if ($sarf->count() > 0) {
@@ -274,7 +280,7 @@ Satınalma Toplamı : $s_total
                 ],
                 'DATE' => date('Y-m-d H:i:s'),
                 'GROUP' => 2,
-                "AUXIL_CODE" => $demand->special_code,
+                "AUXIL_CODE" => $special_code,
                 "PROJECT_CODE" => $demand->project_code,
                 "FOOTNOTE1"  => $demand->demand_desc,
                 'DOC_NUMBER' => "SF" . $this->talep_id,
