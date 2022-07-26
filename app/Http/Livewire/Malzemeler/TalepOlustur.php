@@ -14,6 +14,7 @@ use App\Models\DemandDetail;
 use App\Models\UserCompany;
 use App\Helpers\Erp;
 use App\Models\LogoDb;
+use App\Models\Users;
 
 class TalepOlustur extends Component
 {
@@ -52,6 +53,11 @@ class TalepOlustur extends Component
     //// edit için
     public $edit_id;
 
+    // kullanıcılar
+    public $user_id; // talep sahibi user_id
+    public $users;
+    public $aktif_user;
+
 
 
     protected $listeners = ["getItem", "getOzelKod", "getOzelKodLine", "getProject"];
@@ -68,6 +74,7 @@ class TalepOlustur extends Component
         $this->average_price = null;
         $this->miktar = null;
         $this->birim = null;
+        $this->ozelkod = null;
         $this->birim_select = [];
         $this->line = 0;
         $this->i = 0;
@@ -76,6 +83,10 @@ class TalepOlustur extends Component
 
     public function mount()
     {
+        $this->user_id = Erp::user_id(); // default 
+
+        $this->aktif_user = Erp::user(Erp::user_id());
+        $this->users = Users::Where('is_active', 1)->get();
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("d/m/Y");
 
@@ -94,6 +105,12 @@ class TalepOlustur extends Component
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
     }
 
+    public function _SetLine($d, $modal)
+    {
+        $this->emit('ozelKodType', 2);
+        $this->line = $d;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => $modal]);
+    }
 
 
     public function getOzelKod($d)
@@ -103,6 +120,12 @@ class TalepOlustur extends Component
         $this->dispatchBrowserEvent('CloseModal');
     }
 
+    public function getOzelKodLine($d)
+    {
+        $d = json_decode($d);
+        $this->ozelkod[$this->line] = $d->special_code;
+        $this->dispatchBrowserEvent('CloseModal');
+    }
 
 
     public function getProject($d)
@@ -134,6 +157,7 @@ class TalepOlustur extends Component
                 $this->aciklama[$i] = $val->stock_name;
                 $this->ref[$i] =  $val->logo_stock_ref;
                 $this->miktar[$i] = Erp::nmf($val->quantity);
+                $this->ozelkod[$i] =  $val->special_code;
                 $this->birim[$i] =  $val->unit_code;
                 $this->average_price[$i] = $val->average_price;
 
@@ -205,6 +229,7 @@ class TalepOlustur extends Component
         $this->average_price[$this->line] = $item->average_price;
         $this->desc[$this->line] = "İhtiyaç";
         $this->miktar[$this->line] = 0; // test verisi
+        $this->ozelkod[$this->line] = $this->special_code;
         $this->dispatchBrowserEvent('CloseModal');
     }
 
@@ -219,7 +244,7 @@ class TalepOlustur extends Component
 
         $demand = new Demand;
         $demand->company_id = 1;
-        $demand->users_id = Erp::user_id();
+        $demand->users_id = $this->user_id;
         $demand->warehouse_no = $this->warehouse;
         $demand->demand_desc = $this->demand_desc;
         $demand->project_code = $this->project_code;
@@ -251,6 +276,7 @@ class TalepOlustur extends Component
 
             $dm->logo_stock_ref = $this->ref[$in];
             $dm->quantity = $this->miktar[$in];
+            $dm->special_code = $this->ozelkod[$in];
             $dm->unit_code = $this->birim[$in];
 
             $dm->average_price = $this->average_price[$in];

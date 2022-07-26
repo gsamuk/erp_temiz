@@ -135,6 +135,27 @@
                     </th>
                     <th class="px-1">
 
+
+                      <div class="row mb-4">
+                        <div class="col-lg-4">
+                          <label class="form-label">Talap Eden</label>
+                        </div>
+                        <div class="col-lg-8">
+                          <div class="input-group input-group-sm">
+                            <select wire:model="user_id">
+                              <option value="{{ Erp::user_id() }}">
+                                {{ $aktif_user->name }} {{ $aktif_user->surname }} /
+                                {{ $aktif_user->user_code }}
+                              </option>
+                              @foreach ($users as $u)
+                                <option value="{{ $u->id }}"> {{ $u->name }} {{ $u->surname }} /
+                                  {{ $u->user_code }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
                       <div class="row">
                         <div class="col-lg-4">
                           <label class="form-label">Malzeme Talep Tipi</label>
@@ -211,6 +232,8 @@
                         <th style="width:350px;">Malzeme</th>
                         <th style="width:100px;">Miktar</th>
                         <th style="width:100px;">Birim</th>
+                        <th>Özel Kod</th>
+                        <th> </th>
                         <th>Talep Nedeni</th>
                         <th></th>
                       </tr>
@@ -265,7 +288,18 @@
                             </div>
                           </td>
 
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <input type="text" class="form-control border-dashed"
 
+                                     id="ozelkod_{{ $value }}" name="ozelkod[{{ $value }}]"
+                                     wire:model.defer="ozelkod.{{ $value }}">
+                            </div>
+                          </td>
+                          <td>
+                            <a wire:click="_SetLine({{ $value }}, '#ozelKodModal')"
+                               class="btn btn-sm btn-success">Seç</a>
+                          </td>
 
                           <td>
                             <div class="input-group input-group-sm">
@@ -287,7 +321,7 @@
                         @endphp
                       @endforeach
                       <tr>
-                        <th scope="row" colspan="6"></th>
+                        <th scope="row" colspan="8"></th>
                         <td>
                           <button class="btn btn-sm btn-primary" wire:keydown.enter="add({{ $i }})"
                                   wire:loading.attr="disabled"
