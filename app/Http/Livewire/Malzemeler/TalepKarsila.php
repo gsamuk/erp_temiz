@@ -157,7 +157,7 @@ Satınalma Toplamı : $s_total
 -----------------------------------
 [Uyulamaya Git ](https://mobile.zeberced.net)
 ";
-        // Telegram::send_msg($msg);
+        Telegram::send_msg($msg);
         $this->TalepKarsila($this->talep_id);
     }
 
