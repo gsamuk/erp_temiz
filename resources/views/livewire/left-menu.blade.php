@@ -67,58 +67,20 @@
                   </li>
                 @endif
 
-                <li class="nav-item">
-                  <a href="#sidebarCrm" class="nav-link" data-bs-toggle="collapse" role="button"
-                     aria-expanded="false" aria-controls="sidebarCrm" data-key="t-level-2.2"> Malzeme
-                    Talepleri
-                  </a>
-                  <div class="collapse menu-dropdown" id="sidebarCrm">
-                    <ul class="nav nav-sm flex-column">
-
-                      @if (Erp::izin('items_demand'))
-                        <li class="nav-item">
-                          <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
-                             class="nav-link" data-key="t-level-3.1">
-                            Talep Listesi
-                          </a>
-                        </li>
-                      @endif
-
-                      @if (Erp::izin('items_demand_manage'))
-                        <li class="nav-item">
-                          <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-malzeme-onay')"
-                             class="nav-link" data-key="t-level-3.1">
-                            Malzeme Onay
-                          </a>
-                        </li>
-                      @endif
-
-
-                      <li class="nav-item">
-                        <a href="#" wire:click="$emit('SetPage', 'malzemeler.taleplerim')"
-                           class="nav-link" data-key="t-level-3.2">
-                          Taleplerim
-                        </a>
-                      </li>
-
-                      <li class="nav-item">
-                        <a href="#" class="nav-link"
-                           wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
-                           data-key="t-level-3.2">
-                          Talep Oluştur
-                        </a>
-                      </li>
-
-                    </ul>
-                  </div>
-                </li>
+                @if (Erp::izin('items_create'))
+                  <li class="nav-item">
+                    <a href="#" wire:click="$emit('SetPage', 'malzemeler.fotograf')" class="nav-link"
+                       data-key="t-google">
+                      Fotoğraf Yükle
+                    </a>
+                  </li>
+                @endif
 
                 @if (Erp::izin('items_reports'))
                   <li class="nav-item">
                     <a href="#sidebarCrm_" class="nav-link" data-bs-toggle="collapse" role="button"
                        aria-expanded="false" aria-controls="sidebarCrm_" data-key="t-level-2.2">
-                      Malzeme
-                      Raporları
+                      Malzeme Raporları
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarCrm_">
                       <ul class="nav nav-sm flex-column">
@@ -147,6 +109,53 @@
             </div>
           </li>
 
+          <li class="nav-item">
+            <a class="nav-link menu-link" href="#m3" data-bs-toggle="collapse" role="button"
+               aria-expanded="true" aria-controls="m3">
+              <i class="ri-survey-line"></i> <span>Talep Yönetimi</span>
+            </a>
+            <div class="collapse menu-dropdown" id="m3">
+              <ul class="nav nav-sm flex-column">
+
+                @if (Erp::izin('items_demand'))
+                  <li class="nav-item">
+                    <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
+                       class="nav-link" data-key="t-level-3.1">
+                      Talep Listesi
+                    </a>
+                  </li>
+                @endif
+
+                @if (Erp::izin('items_demand_manage'))
+                  <li class="nav-item">
+                    <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-malzeme-onay')"
+                       class="nav-link" data-key="t-level-3.1">
+                      Malzeme Onay
+                    </a>
+                  </li>
+                @endif
+
+
+                <li class="nav-item">
+                  <a href="#" wire:click="$emit('SetPage', 'malzemeler.taleplerim')"
+                     class="nav-link" data-key="t-level-3.2">
+                    Taleplerim
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a href="#" class="nav-link"
+                     wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
+                     data-key="t-level-3.2">
+                    Talep Oluştur
+                  </a>
+                </li>
+
+
+
+              </ul>
+            </div>
+          </li>
 
           <li class="nav-item">
             <a class="nav-link menu-link" href="#m1" data-bs-toggle="collapse" role="button"
@@ -265,11 +274,7 @@
             </div>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link menu-link" href="/signout">
-              <i class="ri-login-box-line"></i> <span>Çıkış</span>
-            </a>
-          </li>
+
 
           @if (Erp::izin('is_admin'))
             <li class="menu-title"><i class="ri-more-fill"></i> <span>Admin Yetki Alanı</span></li>

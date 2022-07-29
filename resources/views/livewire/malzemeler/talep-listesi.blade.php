@@ -29,41 +29,41 @@
           </div>
         </div>
 
-        <div class="card-body p-2">
+        <div class="card-body">
 
           <ul class="nav nav-tabs nav-tabs-custom nav-success" role="tablist">
             <li class="nav-item">
-              <a class="nav-link All @if ($status == 99) active @endif py-3" data-bs-toggle="tab"
+              <a class="nav-link All @if ($status == 99) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(99)" role="tab" aria-selected="true">
-                <i class="ri-stack-line me-1 align-bottom"></i> Hepsi
+                <i class="ri-stack-line me-1 ri-xl align-bottom"></i>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link @if ($status == 0) active @endif py-3" data-bs-toggle="tab"
+              <a class="nav-link @if ($status == 0) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(0)" role="tab" aria-selected="false">
-                <i class="ri-hand-coin-line me-1 align-bottom"></i> Beklemede
+                <i class="ri-hand-coin-line me-1 ri-xl align-bottom"></i>
               </a>
             </li>
 
 
             <li class="nav-item">
-              <a class="nav-link @if ($status == 1) active @endif py-3" data-bs-toggle="tab"
+              <a class="nav-link @if ($status == 1) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(1)" role="tab" aria-selected="false">
-                <i class="ri-download-2-line me-1 align-bottom"></i> İşlemde
+                <i class="ri-download-2-line me-1 ri-xl align-bottom"></i>
               </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link @if ($status == 2) active @endif py-3" data-bs-toggle="tab"
+              <a class="nav-link @if ($status == 2) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(2)" role="tab" aria-selected="false">
-                <i class="ri-thumb-up-line me-1 align-bottom"></i> Tamamlandı
+                <i class="ri-thumb-up-line me-1 ri-xl align-bottom"></i>
               </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link @if ($status == 9) active @endif py-3" data-bs-toggle="tab"
+              <a class="nav-link @if ($status == 9) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(9)" role="tab" aria-selected="false">
-                <i class="ri-thumb-down-line me-1 align-bottom"></i>Red
+                <i class="ri-thumb-down-line me-1 ri-xl align-bottom"></i>
               </a>
             </li>
 
@@ -116,9 +116,12 @@
                           @if ($d->status == 2)
                             <span class="badge rounded-pill badge-outline-primary">
                               Tamamlandı</span>
+                          @elseif($d->status == 1)
+                            <span class="badge rounded-pill badge-outline-info">
+                              İşleme Alındı</span>
                           @else
                             <span class="badge rounded-pill badge-outline-success">
-                              İşleme Alındı</span>
+                              Depo Onaylı</span>
                           @endif
                         @else
                           @if ($d->status == 9)

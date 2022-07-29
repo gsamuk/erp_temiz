@@ -75,6 +75,7 @@ class TalepOlustur extends Component
         $this->miktar = null;
         $this->birim = null;
         $this->ozelkod = null;
+        $this->item_photos = null;
         $this->birim_select = [];
         $this->line = 0;
         $this->i = 0;

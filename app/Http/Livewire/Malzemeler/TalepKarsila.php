@@ -118,6 +118,7 @@ class TalepKarsila extends Component
         if ($count == 0) {
             $up = Demand::find($this->talep_id);
             $up->status = 9;
+            $up->approved = 0;
             $up->save();
             $this->talep_detay = null;
             $this->emit('RefreshTalepListesi');
@@ -133,6 +134,7 @@ class TalepKarsila extends Component
     {
         $up = DemandDetail::find($id);
         $up->status = 5;
+        $up->submit_user_id = Erp::user_id();
         $up->save();
 
 
@@ -155,7 +157,7 @@ Satınalma Toplamı : $s_total
 -----------------------------------
 [Uyulamaya Git ](https://mobile.zeberced.net)
 ";
-        Telegram::send_msg($msg);
+        // Telegram::send_msg($msg);
         $this->TalepKarsila($this->talep_id);
     }
 
@@ -205,6 +207,8 @@ Satınalma Toplamı : $s_total
             ->Where('demand_id', $this->talep_id)
             ->Where('approved_purchase', '>', 0)
             ->Where('status', '!=', 5)
+            ->Where('status', '!=', 7)
+            ->Where('status', '!=', 9)
             ->get(['account_code']);
 
         if ($cari->count() > 0) {
@@ -236,6 +240,8 @@ Satınalma Toplamı : $s_total
         $sarf = DemandDetail::Where('demand_id', $this->talep_id)
             ->Where('approved_consump', '>', '0')
             ->Where('status', '!=', 5)
+            ->Where('status', '!=', 7)
+            ->Where('status', '!=', 9)
             ->where('special_code', $special_code)
             ->get();
 
@@ -278,7 +284,7 @@ Satınalma Toplamı : $s_total
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'DATE' => date('Y-m-d H:i:s'),
+                'DATE' => $demand->insert_time,
                 'GROUP' => 2,
                 "AUXIL_CODE" => $special_code,
                 "PROJECT_CODE" => $demand->project_code,
@@ -300,7 +306,7 @@ Satınalma Toplamı : $s_total
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'DATE' => date('Y-m-d H:i:s'),
+                'DATE' => $demand->insert_time,
                 'GROUP' => 3,
                 "SOURCE_WH" => $demand->warehouse_no,
                 "SOURCE_COST_GRP" => $demand->warehouse_no,
@@ -341,6 +347,8 @@ Satınalma Toplamı : $s_total
         $items = DemandDetail::Where('demand_id', $this->talep_id)
             ->Where('approved_purchase', '>', 0)
             ->Where('status', '!=', 5)
+            ->Where('status', '!=', 7)
+            ->Where('status', '!=', 9)
             ->where('account_code', $account_code)
             ->get();
 

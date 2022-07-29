@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light"
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="horizontal" data-topbar="light"
       data-sidebar="dark" data-sidebar-size="lg">
+
 
 <head>
   <meta charset="utf-8" />
-  <title>Dekatek Online ERP | Zeberced</title>
+  <title>ERP | Zeberced</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="Zeberced için hazırlanmış Logo Tiger ERP eklentisidir." name="description" />
   <meta content="Dekatek" name="author" />

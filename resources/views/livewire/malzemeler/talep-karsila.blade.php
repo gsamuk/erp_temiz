@@ -2,7 +2,7 @@
 
   @if ($talep_detay)
     <div class="card">
-      <div class="card-header p-2">
+      <div class="card-header">
         @php
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
@@ -33,7 +33,7 @@
         <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
       </div>
 
-      <div class="card-body p-2">
+      <div class="card-body">
         <div class="row">
           <div class="col-lg-12">
             <table class="table-light table-sm table-striped table align-middle">
@@ -53,6 +53,7 @@
 
                 @php
                   $bir_islem = true;
+                  $logo_fis = false;
                 @endphp
 
                 @foreach ($talep_detay as $dt)
@@ -78,9 +79,28 @@
                     
                     if ($dt->approved_consump > 0 || $dt->approved_purchase > 0) {
                         $uyari = 'table-light';
+                    
+                        if ($dt->status == 6 || $dt->status == 0) {
+                            $logo_fis = true;
+                        }
                     } else {
                         $uyari = 'table-warning';
-                        $bir_islem = false;
+                    
+                        if ($dt->status == 6 || $dt->status == 0) {
+                            $bir_islem = true;
+                        }
+                    }
+                    
+                    if ($dt->status == 7 || $dt->status == 5 || $dt->status == 6) {
+                        $disabled = 'disabled';
+                    }
+                    
+                    if ($talep->approved == 1) {
+                        $disabled = 'disabled';
+                    }
+                    
+                    if ($dt->approve_user_id > 0) {
+                        $approve_user = Erp::user($dt->approve_user_id);
                     }
                     
                   @endphp
@@ -106,13 +126,27 @@
 
                     <td><small>{{ $item_detail->stock_code }} > </small>
                       <span class="text-primary">{{ $item_detail->stock_name }}</span>
+
                       @if ($dt->status == 5)
-                        <br><small class="text-danger">Yönetimin Onayına Gönderildi... </small>
+                        <br><small class="text-info">Yönetimin Onayına Gönderildi... </small>
                       @endif
 
-                      @if ($dt->status == 6)
-                        <br><small class="text-success">Yönetim Onayladı... </small>
+                      @if ($dt->status == 6 && $dt->approve_user_id > 0)
+                        <br><small class="text-success">{{ $approve_user->name }} {{ $approve_user->surname }}
+                          tarafından Onayladı... </small>
+                        @if ($dt->approve_note)
+                          <br><small class="text-primary">"{{ $dt->approve_note }}" </small>
+                        @endif
                       @endif
+
+                      @if ($dt->status == 7 && $dt->approve_user_id > 0)
+                        <br><small class="text-danger">{{ $approve_user->name }} {{ $approve_user->surname }}
+                          tarafından Reddedildi... </small>
+                        @if ($dt->approve_note)
+                          <br><small class="text-primary">"{{ $dt->approve_note }} "</small>
+                        @endif
+                      @endif
+
                     </td>
                     <td>
                       <b class="text-danger">{{ number_format($dt->quantity, 0, '.', ',') }}</b>
@@ -125,14 +159,14 @@
                         <input type="number" {{ $disabled }}
                                min="0"
                                class="form-control m-0 p-1"
-                               max="{{ $item_detail->onhand_quantity }}"
-                               onkeyup=imposeMinMax(this)
+                               _max="{{ $item_detail->onhand_quantity }}"
+                               _onkeyup=imposeMinMax(this)
                                wire:loading.attr="disabled"
                                wire:model.lazy="konay.{{ $dt->id }}">
                       </td>
 
                       <td>
-                        <input type="number"
+                        <input type="number" {{ $disabled }}
                                min="0"
                                wire:loading.attr="disabled"
                                class="form-control m-0 p-1"
@@ -147,30 +181,34 @@
                       </td>
                     @endif
                     <td>
+                      @if ($dt->status == 0 && $talep->approved == 0)
+                        <div class="dropdown">
+                          <a href="#" role="button" id="drop_{{ $dt->id }}" data-bs-toggle="dropdown"
+                             aria-expanded="false" class="m-2">
+                            <i class="ri-more-2-fill"></i>
+                          </a>
 
-                      <div class="dropdown">
-                        <a href="#" role="button" id="drop_{{ $dt->id }}" data-bs-toggle="dropdown"
-                           aria-expanded="false" class="m-2">
-                          <i class="ri-more-2-fill"></i>
-                        </a>
+                          <ul class="dropdown-menu" aria-labelledby="drop_{{ $dt->id }}" style="">
 
-                        <ul class="dropdown-menu" aria-labelledby="drop_{{ $dt->id }}" style="">
+                            <li><a class="dropdown-item"
+                                 wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
+                                 href="#">Talep Miktarını Değiştir</a>
+                            </li>
+                            @if ($dt->status != 5 && $for_manage)
+                              <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
+                                   href="#">Yönetim Onayı İste</a></li>
+                            @endif
 
-                          <li><a class="dropdown-item"
-                               wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
-                               href="#">Talep Miktarını Değiştir</a>
-                          </li>
-                          @if ($dt->status != 5 && $for_manage)
-                            <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
-                                 href="#">Yönetim Onayı İste</a></li>
-                          @endif
-                          <li><a class="dropdown-item" wire:click="iptal({{ $dt->id }})" href="#">Listeden
-                              Çıkar</a>
-                          </li>
+                            <li><a class="dropdown-item" wire:click="iptal({{ $dt->id }})"
+                                 href="#">Listeden
+                                Çıkar</a>
+                            </li>
 
-                        </ul>
-                      </div>
+                          </ul>
 
+
+                        </div>
+                      @endif
                     </td>
 
 
@@ -358,13 +396,15 @@
                         </div>
                       @endif
                     @else
-                      <button wire:click="kaydet()"
-                              onclick="$('._btn').prop('disabled',true)"
-                              @if ($talep->status == 1) disabled @endif
-                              class="_btn btn btn-info btn-label">
-                        <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
-                        Logo Fişi Oluştur
-                      </button>
+                      @if ($logo_fis)
+                        <button wire:click="kaydet()"
+                                onclick="$('._btn').prop('disabled',true)"
+                                @if ($talep->status == 1) disabled @endif
+                                class="_btn btn btn-info btn-label">
+                          <i class="ri-check-double-line label-icon fs-16 me-2 align-middle"> </i>
+                          Logo Fişi Oluştur
+                        </button>
+                      @endif
 
                       <button wire:click="unapproved" onclick="$('._btn').prop('disabled',true)"
                               @if ($talep->status == 1) disabled @endif
@@ -384,6 +424,7 @@
           @endif
         </div>
       </div>
+    </div>
 
   @endif
 
@@ -527,7 +568,7 @@
           <div class="mb-3">
             <label for="customer-name"
                    class="col-form-label">Yeni Miktarı Giriniz</label>
-            <input wire:model.defer="line_quantity" type="number" class="form-control">
+            <input wire:model.defer="line_quantity" min="0" type="number" class="form-control">
             <br>
             {{ $line_item_name }}
           </div>

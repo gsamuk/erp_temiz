@@ -69,136 +69,198 @@
         </div>
       </div>
       @if ($data->count() > 0)
-        <div class="table-responsive">
-          <table class="table-sm table-striped table-nowrap table align-middle">
-            <thead class="table-light">
+
+        <table class="table-sm table-striped table-nowrap table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Talep Eden</th>
+              <th scope="col">Onaya Gönderen</th>
+              <th scope="col">Talep Türü</th>
+
+              <th scope="col">Malzeme</th>
+              <th scope="col">İstenen</th>
+              <th scope="col">Stok</th>
+
+              <th scope="col" style="width:90px;">Karşıla</th>
+              <th scope="col" style="width:90px;">Satınal</th>
+              <th scope="col">Birim Fiyatı</th>
+              <th scope="col">Toplam</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($data as $dt)
+              @php
+                
+                $item_detail = App\Models\LogoItems::where('logicalref', $dt->logo_stock_ref)
+                    ->where('wh_no', $dt->warehouse_no)
+                    ->first();
+                
+                $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$dt->warehouse_no")
+                    ->where('company_no', 1)
+                    ->first();
+                
+                $w2 = App\Models\LogoWarehouses::where('warehouse_no', "$dt->dest_wh_no")
+                    ->where('company_no', 1)
+                    ->first();
+                
+                $submit_user = null;
+                if ($dt->submit_user_id > 0) {
+                    $submit_user = Erp::user($dt->submit_user_id);
+                }
+                
+              @endphp
               <tr>
-                <th scope="col">Talep Eden</th>
-                <th scope="col">Talep Türü</th>
-                <th scope="col"></th>
-                <th scope="col">Malzeme</th>
-                <th scope="col">İstenen</th>
-                <th scope="col">Stok</th>
-
-                <th scope="col" style="width:90px;">Karşıla</th>
-                <th scope="col" style="width:90px;">Satınal</th>
-                <th scope="col">Birim Fiyatı</th>
-                <th scope="col">Toplam</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($data as $dt)
-                @php
-                  
-                  $item_detail = App\Models\LogoItems::where('logicalref', $dt->logo_stock_ref)
-                      ->where('wh_no', $dt->warehouse_no)
-                      ->first();
-                  
-                  $photo = App\Models\LogoItemsPhoto::where('logo_stockref', $dt->logo_stock_ref)->first();
-                  
-                  $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$dt->warehouse_no")
-                      ->where('company_no', 1)
-                      ->first();
-                  
-                  $w2 = App\Models\LogoWarehouses::where('warehouse_no', "$dt->dest_wh_no")
-                      ->where('company_no', 1)
-                      ->first();
-                  
-                @endphp
-                <tr>
-                  <td data-label="Talep Eden">
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="flex-shrink-0">
-                        @if ($dt->photo_path)
-                          <img class="avatar-xs rounded-circle"
-                               src="https://mobile.zeberced.net/files/{{ $dt->foto_path }}"
-                               _src="{{ asset('files/images/users/' . $dt->photo_path) }}">
-                        @else
-                          <img src="assets/images/users/avatar-3.jpg" alt=""
-                               class="avatar-xs rounded-circle">
-                        @endif
-                      </div>
-                      <div class="flex-grow-1">
-                        {{ $dt->name }} {{ $dt->surname }}
-                      </div>
+                <td data-label="Talep Eden">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="flex-shrink-0">
+                      @if ($dt->photo_path)
+                        <img class="avatar-xs rounded-circle"
+                             _src="https://mobile.zeberced.net/files/{{ $dt->foto_path }}"
+                             src="{{ asset('files/images/users/' . $dt->photo_path) }}">
+                      @else
+                        <img src="assets/images/users/avatar-3.jpg" alt=""
+                             class="avatar-xs rounded-circle">
+                      @endif
                     </div>
+                    <div class="flex-grow-1">
+                      {{ $dt->name }} <br>{{ $dt->surname }}
+                    </div>
+                  </div>
 
-                  </td>
-                  <td data-label="Talep Türü">
-                    @if ($dt->demand_type == 1)
-                      <small>
-                        Depo Sarf <br>{{ $w1->warehouse_name }}</small>
-                    @else
-                      <small> Depo Transfer <br>
-                        {{ $w1->warehouse_name }} > {{ $w2->warehouse_name }}
-                      </small>
-                    @endif
-                  </td>
-                  <td data-label="Foto">
-                    @if ($photo)
-                      <a href="javascript:;"
-                         wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                        <img class="border"
-                             src="https://mobile.zeberced.net/files/{{ $photo->foto_path }}"
-                             _src="{{ asset('files/images/items/thumb/' . $photo->foto_path) }}"
-                             style="height: 35px">
-                      </a>
-                    @endif
-                  </td>
+                </td>
 
-                  <td data-label="Malzeme">
-                    <b><a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
-                        {{ $dt->stock_name }} </a></b><br>
-                    <small class="text-warning">Neden: {{ $dt->description }}</small>
-                  </td>
 
-                  <td data-label="İstenen">{{ number_format($dt->quantity, 0, ',', '.') }}
-                    <br><small>{{ $dt->unit_code }}</small>
-                  </td>
-                  <td data-label="Stok" class="text-danger">
-                    {{ number_format($item_detail->onhand_quantity, 0, ',', '.') }}</td>
+                <td data-label="Onaya Gönderen">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="flex-shrink-0">
+                      @if ($submit_user->photo_path)
+                        <img class="avatar-xs rounded-circle"
+                             _src="https://mobile.zeberced.net/files/{{ $submit_user->foto_path }}"
+                             src="{{ asset('files/images/users/' . $submit_user->photo_path) }}">
+                      @else
+                        <img src="assets/images/users/avatar-3.jpg" alt=""
+                             class="avatar-xs rounded-circle">
+                      @endif
+                    </div>
+                    <div class="flex-grow-1">
+                      {{ $submit_user->name }} <br>{{ $submit_user->surname }}
+                    </div>
+                  </div>
 
-                  <td data-label="Karşıla">
-                    <input type="number" class="form-control" id="cons_{{ $dt->dt_id }}"
-                           @if ($item_detail->onhand_quantity == 0 || $dt->dt_status == 6) disabled @endif
-                           min="0"
-                           value="{{ number_format($dt->approved_consump, 0, ',', '.') }}"
-                           class="form-control"
-                           max="{{ $item_detail->onhand_quantity }}"
-                           onkeyup=imposeMinMax(this)>
-                  </td>
+                </td>
 
-                  <td data-label="Satınal">
-                    <input type="number" class="form-control" id="purc_{{ $dt->dt_id }}"
-                           @if ($dt->dt_status == 6) disabled @endif
-                           min="0"
-                           value="{{ number_format($dt->approved_purchase, 0, ',', '.') }}"
-                           class="form-control">
-                  </td>
+                <td data-label="Talep Türü">
+                  @if ($dt->demand_type == 1)
+                    <small>
+                      Depo Sarf <br>{{ $w1->warehouse_name }}</small>
+                  @else
+                    <small> Depo Transfer <br>
+                      {{ $w1->warehouse_name }} > {{ $w2->warehouse_name }}
+                    </small>
+                  @endif
+                </td>
 
-                  <td data-label="Birim Fiyatı">{{ number_format($dt->average_price, 2, ',', '.') }}</td>
-                  <td data-label="Toplam">
-                    {{ number_format($dt->approved_consump * $dt->average_price, 2, ',', '.') }}</td>
 
-                  <td data-label="Onay / Red">
+                <td data-label="Malzeme">
+                  <b><a href="javascript:;" wire:click="foto_goster({{ $dt->logo_stock_ref }})">
+                      {{ $dt->stock_name }} </a></b>
+                  @if ($dt->account_name)
+                    <br>
+                    <button wire:click="firma_sec({{ $dt->dt_id }}, {{ $dt->logo_stock_ref }}, '{{ $dt->stock_name }}')"
+                            class="btn btn-sm btn-outline-info">Değiştir</button>
+                    <small class="text-info">Firma: {{ $dt->account_name }}</small>
+                  @else
+                    <br>
+                    <button wire:click="firma_sec({{ $dt->dt_id }}, {{ $dt->logo_stock_ref }}, '{{ $dt->stock_name }}')"
+                            class="btn btn-sm btn-outline-info">Firma
+                      Seç</button>
+                  @endif
+                </td>
 
-                    <button wire:click="onay(
-                      '{{ $dt->dt_id }}', 
-                      $('#cons_{{ $dt->dt_id }}').val(),
-                      $('#purc_{{ $dt->dt_id }}').val(),
-                      )"
-                            class="btn btn-soft-success">Onayla</button>
-                    <button wire:click="islem('{{ $dt->dt_id }}',9)" class="btn btn-soft-danger">Red</button>
-                  </td>
-                </tr>
-              @endforeach
+                <td data-label="İstenen">{{ number_format($dt->quantity, 0, ',', '.') }}
+                  <br><small>{{ $dt->unit_code }}</small>
+                </td>
+                <td data-label="Stok" class="text-danger">
+                  {{ number_format($item_detail->onhand_quantity, 0, ',', '.') }}
+                  <br><small>{{ $dt->unit_code }}</small>
+                </td>
 
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-end mt-3">
-            {{ $data->links() }}
-          </div>
+                <td data-label="Karşıla">
+                  <input type="number" class="form-control" id="cons_{{ $dt->dt_id }}"
+                         @if ($item_detail->onhand_quantity == 0 || $dt->dt_status == 6) disabled @endif
+                         min="0"
+                         value="{{ number_format($dt->approved_consump, 0, ',', '.') }}"
+                         class="form-control"
+                         max="{{ $item_detail->onhand_quantity }}"
+                         onkeyup=imposeMinMax(this)>
+                </td>
+
+                <td data-label="Satınal">
+                  <input type="number" class="form-control" id="purc_{{ $dt->dt_id }}"
+                         @if ($dt->dt_status == 6) disabled @endif
+                         min="0"
+                         value="{{ number_format($dt->approved_purchase, 0, ',', '.') }}"
+                         class="form-control">
+                </td>
+
+                <td data-label="Birim Fiyatı">{{ number_format($dt->average_price, 2, ',', '.') }}</td>
+                <td data-label="Toplam">
+                  {{ number_format($dt->approved_consump * $dt->average_price, 2, ',', '.') }}</td>
+
+                <td data-label="Onay / Red">
+
+                  <div class="btn-group">
+                    <button type="button"
+                            wire:click="onay(
+                        '{{ $dt->dt_id }}', 
+                        $('#cons_{{ $dt->dt_id }}').val(),
+                        $('#purc_{{ $dt->dt_id }}').val(),
+                        )"
+                            class="btn btn-success">Onay</button>
+                    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item"
+                         wire:click="onay(
+                          '{{ $dt->dt_id }}', 
+                          $('#cons_{{ $dt->dt_id }}').val(),
+                          $('#purc_{{ $dt->dt_id }}').val(),
+                          )">
+                        Onayla</a>
+                      <a class="dropdown-item"
+                         wire:click="popup_onay('{{ $dt->dt_id }}',
+                         $('#cons_{{ $dt->dt_id }}').val(), 
+                         $('#purc_{{ $dt->dt_id }}').val(),
+                          6)">Not
+                        Ekle & Onayla</a>
+                    </div>
+                  </div>
+
+                  <div class="btn-group">
+                    <button type="button" wire:click="islem('{{ $dt->dt_id }}',7)"
+                            class="btn btn-danger">Red</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" wire:click="islem('{{ $dt->dt_id }}',7)">Reddet</a>
+                      <a class="dropdown-item" wire:click="popup_red('{{ $dt->dt_id }}',7)">Not
+                        Ekle
+                        & Reddet</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            @endforeach
+
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end mt-3">
+          {{ $data->links() }}
         </div>
       @else
         <!-- Secondary Alert -->
@@ -308,6 +370,60 @@
         </div>
         <div class="modal-body m-0">
           Detay
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="NotModal" class="modal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            @if ($pop_item_val == 6)
+              Onay
+            @else
+              Reddet
+            @endif
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body m-0">
+          @if ($pop_item_id)
+            <div class="mb-3">
+              <label for="customer-name" class="col-form-label">Bilgi Notu Yazabilirsiniz.</label>
+              <input wire:model.defer="bilgi_notu" type="text" class="form-control">
+            </div>
+          @endif
+        </div>
+
+        <div class="modal-footer">
+          @if ($pop_item_val == 6)
+            <button data-bs-dismiss="modal" wire:click="_onay()" class="btn btn-success">Onayla</button>
+          @endif
+
+          @if ($pop_item_val == 7)
+            <button data-bs-dismiss="modal" wire:click="_red()" class="btn btn-danger">Reddet</button>
+          @endif
+
+          <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="FirmaSecModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+        </div>
+        <div class="modal-body m-0">
+          @if ($item_ref)
+            @livewire('logo.accounts')
+          @endif
         </div>
       </div>
     </div>

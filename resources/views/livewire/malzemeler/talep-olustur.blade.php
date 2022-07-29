@@ -46,7 +46,7 @@
 
   <div class="row">
     <div
-         class="@if ($item_photos) col-xl-7 col-lg-7 col-md-12 col-sm-12 @else col-xl-10 col-lg-10 col-sm-12 @endif">
+         class="@if ($item_photos) col-xl-8 col-lg-8 col-md-12 col-sm-12 @else @endif">
       <div class="card">
         <div class="card-header">
           <span class="float-end">
@@ -78,7 +78,7 @@
               <div class="@if ($item_photos) col-12 @else col-xl-10 col-lg-10 col-sm-12 @endif">
                 <table class="table-sm table-nowrap table">
                   <tr>
-                    <th class="px-1">
+                    <th class="px-3">
                       <div class="row">
                         <div class="col-lg-4">
                           <label class="form-label">Tarih</label>
@@ -127,51 +127,28 @@
                           <label class="form-label">Açıklama</label>
                         </div>
                         <div class="col-lg-8">
-                          <input type="text" name="demand_desc" wire:model="demand_desc"
+                          <input type="text" name="demand_desc" wire:model.defer="demand_desc"
                                  class="form-control form-control-sm rounded-0 mb-1">
                         </div>
                       </div>
 
                     </th>
-                    <th class="px-1">
+                    <th class="px-3">
 
 
-                      <div class="row mb-4">
-                        <div class="col-lg-4">
-                          <label class="form-label">Talap Eden</label>
-                        </div>
-                        <div class="col-lg-8">
-                          <div class="input-group input-group-sm">
-                            @php
-                              if (Erp::izin('depo_admin')) {
-                                  $users = \App\Models\Users::Where('is_active', 1)->get();
-                              } else {
-                                  $users = \App\Models\Users::Where('is_active', 1)
-                                      ->Where('id', Erp::user_id())
-                                      ->get();
-                              }
-                              
-                            @endphp
-                            <select wire:model="user_id">
-                              @foreach ($users as $u)
-                                <option value="{{ $u->id }}"> {{ $u->name }} {{ $u->surname }} /
-                                  {{ $u->user_code }}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                      </div>
+
 
                       <div class="row">
                         <div class="col-lg-4">
-                          <label class="form-label">Malzeme Talep Tipi</label>
+                          <label class="form-label">Talep Tipi</label>
                         </div>
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
-                            <select wire:model="demand_type">
-                              <option value="1">Depodan Malzeme Talebi</option>
-                              <option value="2" @if ($auth_warehouses->count() == 0) disabled @endif>Depolar Arası
-                                Malzeme Transferi</option>
+                            <select wire:model="demand_type" class="form-select">
+                              <option value="1">1. Sarf - Depodan Malzeme Talebi</option>
+                              <option value="2" @if ($auth_warehouses->count() == 0) disabled @endif>2. Transfer -
+                                Depolar Arası Talep
+                              </option>
                             </select>
                           </div>
                         </div>
@@ -183,7 +160,7 @@
                         </div>
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
-                            <select wire:model="warehouse" name="warehouse">
+                            <select wire:model="warehouse" name="warehouse" class="form-select">
                               @foreach ($warehouses as $d)
                                 <option value="{{ $d->warehouse_no }}">
                                   {{ $d->warehouse_name }}
@@ -203,7 +180,7 @@
                           </div>
                           <div class="col-lg-8">
                             <div class="input-group input-group-sm">
-                              <select wire:model="destwh" name="destwh">
+                              <select wire:model="destwh" name="destwh" class="form-select">
 
                                 @foreach ($auth_warehouses as $d)
                                   @php
@@ -222,6 +199,35 @@
 
                         </div>
                       @endif
+
+
+                      <div class="row mt-1">
+                        <div class="col-lg-4">
+                          <label class="form-label">Talap Eden</label>
+                        </div>
+                        <div class="col-lg-8">
+                          <div class="input-group input-group-sm">
+                            @php
+                              if (Erp::izin('depo_admin')) {
+                                  $users = \App\Models\Users::Where('is_active', 1)->get();
+                              } else {
+                                  $users = \App\Models\Users::Where('is_active', 1)
+                                      ->Where('id', Erp::user_id())
+                                      ->get();
+                              }
+                              
+                            @endphp
+                            <select wire:model="user_id" class="form-select">
+                              @foreach ($users as $u)
+                                <option value="{{ $u->id }}"> {{ $u->name }} {{ $u->surname }} /
+                                  {{ $u->user_code }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+
                     </th>
                   </tr>
                 </table>
@@ -272,9 +278,8 @@
 
                           <td>
                             <div class="input-group input-group-sm">
-                              <input type="number" step="any" class="form-control border-dashed"
+                              <input type="number" step="any" min="0" class="form-control border-dashed"
                                      id="miktar_{{ $value }}" name="miktar[{{ $value }}]"
-
                                      wire:model.defer="miktar.{{ $value }}">
                             </div>
                           </td>
@@ -297,7 +302,6 @@
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="text" class="form-control border-dashed"
-
                                      id="ozelkod_{{ $value }}" name="ozelkod[{{ $value }}]"
                                      wire:model.defer="ozelkod.{{ $value }}">
                             </div>
@@ -327,13 +331,19 @@
                         @endphp
                       @endforeach
                       <tr>
-                        <th scope="row" colspan="8"></th>
-                        <td>
-                          <button class="btn btn-sm btn-primary" wire:keydown.enter="add({{ $i }})"
-                                  wire:loading.attr="disabled"
-                                  wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i>
-                          </button>
-                        </td>
+                        <th scope="row" colspan="7"></th>
+                        <th scope="row" colspan="2">
+                          <div class="d-grid gap-2">
+                            <button class="btn btn-info"
+                                    wire:keydown.enter="add({{ $i }})"
+                                    wire:loading.attr="disabled"
+                                    wire:click.prevent="add({{ $i }})"><i class="mdi mdi-plus"></i> Yeni
+                              Satır
+                              Ekle
+                            </button>
+                          </div>
+                        </th>
+
                       </tr>
                     </tbody>
                   </table>
@@ -393,7 +403,7 @@
     </div>
 
     @if ($item_photos)
-      <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
         <div class="card">
           <div class="card-header">
             <div class="d-flex align-items-center">

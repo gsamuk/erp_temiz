@@ -8,6 +8,8 @@ use App\Models\LogoItems;
 use App\Models\LogoItemsPhoto;
 
 use App\Models\DemandDetail;
+use App\Helpers\Erp;
+use App\Models\LogoAccounts;
 
 class TalepMalzemeOnay extends Component
 {
@@ -19,6 +21,20 @@ class TalepMalzemeOnay extends Component
     public $owner;
 
     public $item_id; // fotoğraf gösterimi
+
+    public $pop_item_id;
+    public $pop_item_val;
+    public $bilgi_notu;
+    /// 
+    public $cons;
+    public $purc;
+
+
+    public $s_item_id;
+    public $item_ref;
+
+    protected $listeners = ['getAccount' => 'getAccount', 'getAccount_' => 'getAccount_'];
+
 
     public function render()
     {
@@ -52,7 +68,9 @@ class TalepMalzemeOnay extends Component
     {
         $up = DemandDetail::find($id);
         $up->approved_consump = $c;
+        $up->approve_user_id = Erp::user_id();
         $up->approved_purchase = $p;
+        $up->approve_time = date('Y-m-d H:i:s');
         $up->status = 6;
         $up->save();
     }
@@ -62,6 +80,10 @@ class TalepMalzemeOnay extends Component
     {
         $up = DemandDetail::find($id);
         $up->status = $status;
+        $up->approve_user_id = Erp::user_id();
+        $up->approved_consump = 0;
+        $up->approved_purchase = 0;
+        $up->approve_time = date('Y-m-d H:i:s');
         $up->save();
     }
 
@@ -74,8 +96,80 @@ class TalepMalzemeOnay extends Component
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#MalzemeFotoModal']);
     }
 
-    public function talep_detay($id)
+
+
+
+    public function popup_red($id, $val)
     {
-        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#TalepDetayModal']);
+        $this->pop_item_id = $id;
+        $this->pop_item_val = $val;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#NotModal']);
+    }
+
+    public function popup_onay($id, $cons, $purc, $val)
+    {
+        $this->pop_item_id = $id;
+        $this->pop_item_val = $val;
+
+        $this->cons = $cons;
+        $this->purc = $purc;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#NotModal']);
+    }
+
+
+    public function _onay()
+    {
+        $up = DemandDetail::find($this->pop_item_id);
+        $up->status = 6;
+        $up->approve_note = $this->bilgi_notu;
+        $up->approve_user_id = Erp::user_id();
+        $up->approved_consump = $this->cons;
+        $up->approved_purchase = $this->purc;
+        $up->approve_time = date('Y-m-d H:i:s');
+        $up->save();
+    }
+
+
+
+    public function _red()
+    {
+        $up = DemandDetail::find($this->pop_item_id);
+        $up->status = 7;
+        $up->approve_note = $this->bilgi_notu;
+        $up->approve_user_id = Erp::user_id();
+        $up->approved_consump = 0;
+        $up->approved_purchase = 0;
+        $up->approve_time = date('Y-m-d H:i:s');
+        $up->save();
+    }
+
+    public function firma_sec($item_id, $item_ref, $item_name)
+    {
+        $this->emit('SetItemRef', ['item_ref' => $item_ref, 'item_name' => $item_name]);
+        $this->s_item_id = $item_id;
+        $this->item_ref = $item_ref;
+        $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#FirmaSecModal']);
+    }
+
+    public function getAccount_($account_ref)
+    {
+        $cari = LogoAccounts::find($account_ref);
+        $up =  DemandDetail::find($this->s_item_id);
+        $up->account_ref =  $cari->ref_id;
+        $up->account_name =  $cari->account_name;
+        $up->account_code =  $cari->account_code;
+        $up->save();
+        $this->dispatchBrowserEvent('CloseModal');
+    }
+
+    public function getAccount($data)
+    {
+        $data = json_decode($data);
+        $up =  DemandDetail::find($this->s_item_id);
+        $up->account_ref =  $data->ref_id;
+        $up->account_name =  $data->account_name;
+        $up->account_code =  $data->account_code;
+        $up->save();
+        $this->dispatchBrowserEvent('CloseModal');
     }
 }

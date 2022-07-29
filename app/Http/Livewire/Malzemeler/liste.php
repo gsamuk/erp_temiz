@@ -100,7 +100,7 @@ class Liste extends Component
             })->when($this->stur, function ($query) {
                 return $query->where('stock_type', $this->stur);
             })
-            ->orderByDesc('stock_name')
+            ->orderBy('stock_name')
             ->paginate($this->pagination);
 
         $item_type = LogoDb::select('cardtype_name')->distinct()->get();
