@@ -63,6 +63,7 @@ class TalepListesi extends Component
                 'users.user_name',
                 'users.name',
                 'users.surname',
+                'users.user_code',
                 'company.company_name',
                 'demand.*',
             )

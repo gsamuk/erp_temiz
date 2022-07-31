@@ -54,6 +54,8 @@ class TalepKarsila extends Component
     public $item_ref; // malzeme ref id
     public $s_item_id; // satın alma firması set edilecek item id
 
+    /// talep sahibi bilgileri
+    public $tuser;
 
 
     protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getOzelKod' => 'getOzelKod', 'getAccount' => 'getAccount', 'getAccount_' => 'getAccount_', 'RefreshTalepKarsila' => '$refresh'];
@@ -66,6 +68,7 @@ class TalepKarsila extends Component
         $this->item_id = null;
         $this->talep_id = $id;
         $this->talep = Demand::find($id);
+        $this->tuser = Erp::user($this->talep->users_id);
         $this->talep_detay = DemandDetail::Where('demand_id', $id)->Where('status', '!=', 9)->get();
         if (isset($this->talep_detay)) {
             if ($this->talep_detay->count() == 0) {

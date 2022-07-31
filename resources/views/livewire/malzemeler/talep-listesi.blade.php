@@ -1,9 +1,9 @@
 <div>
   <div class="row">
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-5 col-xl-5 col-xxl-5">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
       <div class="card">
 
-        <div class="card-header">
+        <div class="card-header p-2">
           <div class="row">
             <div class="col-4">
               <div class="search-box">
@@ -22,16 +22,16 @@
 
             <div class="col-4">
               <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
-                 class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-add-line"></i>
-                Yeni Talep</a>
+                 class="btn btn-soft-danger waves-effect waves-light"> <i class="ri-add-line"></i>
+                Yeni Talep Oluştur</a>
             </div>
 
           </div>
         </div>
 
-        <div class="card-body">
+        <div class="card-body pt-1">
 
-          <ul class="nav nav-tabs nav-tabs-custom nav-success" role="tablist">
+          <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
             <li class="nav-item">
               <a class="nav-link All @if ($status == 99) active @endif py-2" data-bs-toggle="tab"
                  href="#" wire:click="set_status(99)" role="tab" aria-selected="true">
@@ -88,7 +88,7 @@
                   <tr>
 
                     <th scope="col">No</th>
-                    <th scope="col">Talep Eden</th>
+                    <th scope="col">Talep Eden Birim</th>
                     <th scope="col">Zaman</th>
                     <th scope="col">Durum</th>
                     <th scope="col"></th>
@@ -107,8 +107,7 @@
                     <tr class="@if ($d->id == $talep_satir_id) table-primary @endif">
                       <td class="owner">{{ $d->id }}</td>
                       <td class="owner">
-                        <a wire:click="set_username('{{ $d->name }}')"
-                           href="javascript:;">{{ $d->name }} <small> {{ $d->surname }}</small> </a>
+                        {{ $d->user_code }}
                       </td>
                       <td class="owner">{{ $zaman }}</td>
                       <td class="owner">
@@ -135,6 +134,7 @@
 
                       </td>
                       <td class="owner">
+
                         @if (($d->status == 1 || $d->status == 2) && $d->demand_type == 1)
                           <button wire:click="talep_islem_detay({{ $d->id }}, '{{ $d->user_name }}')"
                                   class="btn btn-sm btn-success btn-block" style="width:150px">İşlem Detayı <i
@@ -166,7 +166,6 @@
                           </button>
                         @endif
 
-
                       </td>
 
                     </tr>
@@ -190,7 +189,7 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-7 col-xl-7 col-xxl-7">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
 
       @if ($talep_detay_id)
         @livewire('malzemeler.talep-karsila')

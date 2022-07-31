@@ -2,7 +2,7 @@
 
   @if ($talep_detay)
     <div class="card">
-      <div class="card-header">
+      <div class="card-header p-2 pb-1">
         @php
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
@@ -13,34 +13,31 @@
         @endphp
 
         @if ($talep->demand_type == 1)
-          <h6 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h6>
+          <h5 class="text-danger mb-1"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
         @endif
 
         @if ($talep->demand_type == 2)
-          <h6><span class="text-info"> {{ $w1->warehouse_name }} </span> <i class="ri-share-forward-2-line"></i>
+          <h5 class="mb-1"><span class="text-danger"> {{ $w1->warehouse_name }} </span> <i
+               class="ri-share-forward-2-line"></i>
             <span class="text-success">{{ $w2->warehouse_name }}</span> Malzeme Transferi
-          </h6>
+          </h5>
         @endif
 
         @if ($talep->project_code)
-          <h6> Proje Kodu : {{ $talep->project_code }} </h5>
+          Proje Kodu : <small class="text-info">{{ $talep->project_code }} </small><br>
         @endif
 
-
-        @if ($talep->special_code)
-          <h6 class="text-danger">Özel Kod : {{ $talep->special_code }}</h6>
-        @endif
+        Talep Eden : <small class="text-info">{{ $tuser->name }} {{ $tuser->surname }} - {{ $tuser->user_code }}</small>
         <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
       </div>
 
-      <div class="card-body">
+      <div class="card-body p-1">
         <div class="row">
           <div class="col-lg-12">
             <table class="table-light table-sm table-striped table align-middle">
               <thead>
                 <tr>
-                  <th scope="col"
-                      style="width:50px;">Foto</th>
+                  <th scope="col" style="width:50px;">Foto</th>
                   <th scope="col">Stok Kodu / Malzeme</th>
                   <th scope="col">Talep </th>
                   <th scope="col">Stok</th>

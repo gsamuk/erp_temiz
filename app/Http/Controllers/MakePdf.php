@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\LogoItems;
+use App\Models\LogoItemsPhoto;
 
 
 class MakePdf extends Controller
 {
 
-    public function make()
+    public function make($id = 0)
     {
-        $data = LogoItems::Where('wh_no', 0)->get()->take(10)->toArray();
+        $data = LogoItemsPhoto::where('id', '>', $id)->distinct()->get('logo_stockref');
         $pdf = PDF::loadView('htmlPdf', ['data' => $data]);
         return $pdf->download('pdfview.pdf');
     }

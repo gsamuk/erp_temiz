@@ -51,11 +51,7 @@
         <div class="card-header">
           <span class="float-end">
             <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-listesi')"
-               class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Talep
-              Listesi</a>
-
-            <a href="#" wire:click="$emit('SetPage', 'malzemeler.liste')"
-               class="btn btn-soft-primary waves-effect waves-light"> <i class="ri-stack-line"></i> Malzeme
+               class="btn btn-soft-danger waves-effect waves-light"> <i class="ri-stack-line"></i> Malzeme Talep
               Listesi</a>
           </span>
           <div class="d-flex align-items-center">
