@@ -11,7 +11,13 @@
 </head>
 
 <body>
-  <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
+
+  <div style="position: absolute;  left: 0px;  top: 0px;">
+    <img width="50" height="50"
+         src="data:image/png;base64,{{ DNS2D::getBarcodePNG("demand|$talep->id", 'QRCODE') }}" />
+  </div>
+
+
   <style>
     table.GeneratedTable {
       width: 100%;
@@ -55,30 +61,29 @@
     No : {{ $talep->id }} | Tarih : {{ date('d - m - Y') }}
   </div>
   @if ($talep->demand_type == 1)
-    <h4 style="text-align: center;">MALZEME TESLİM BELGESİ</h4>
+    <h4 style="text-align: center;">AMBAR MALZEME ÇIKIŞ FİŞİ</h4>
   @endif
   @if ($talep->demand_type == 2)
-    <h4 style="text-align: center;">DEPOLAR ARASI MALZEME TRANSFER BELGESİ</h4>
+    <h4 style="text-align: center;">AMBAR TRANSFER FİŞİ</h4>
   @endif
   <div>
     <table class="head_table">
       <tr>
         <td>Depo</td>
-        <td>: <b>{{ $depo->warehouse_name }}</b>
+        <td>: {{ $depo->warehouse_name }}
           @if ($talep->demand_type == 2)
-            <b>> {{ $depo_hedef->warehouse_name }} Malzeme Transferi </b>
+            > {{ $depo_hedef->warehouse_name }} Malzeme Transferi
           @endif
         </td>
 
       </tr>
       <tr>
         <td>Talep Sahibi</td>
-        <td><b>: Kademe / Ahmet Ceylan</b></td>
+        <td>: {{ $duser->user_code }} / {{ $duser->name }} {{ $duser->surname }} </td>
       </tr>
       <tr>
         <td>Talep Zamanı</td>
-        <td>: <b>10-05-2022 14:50</b></td>
-
+        <td>: {{ date('d-m-Y', strtotime($talep->insert_time)) }}</td>
       </tr>
     </table>
   </div>
@@ -110,9 +115,9 @@
             @endif
 
             @if ($loc)
-              <br>
               <small>
-                Lokasyon : #{{ $loc->aisle }}-{{ $loc->shelf }}-{{ $loc->bay }}-{{ $loc->bin }}</small>
+                | Lokasyon :
+                #{{ $loc->aisle }}-{{ $loc->shelf }}-{{ $loc->bay }}-{{ $loc->bin }}</small>
             @endif
           </td>
           <td style="text-align: center; "><b>{{ Erp::nmf($d->approved_consump) }}</b><br>
@@ -131,6 +136,9 @@
   <div style="float: right; margin:30px; margin-right:50px; font-size:12px;">
     <b>TESLİM ALAN</b>
   </div>
+
+
+
 
 </body>
 
