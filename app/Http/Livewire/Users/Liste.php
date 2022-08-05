@@ -60,8 +60,6 @@ class Liste extends Component
 
     ];
 
-
-
     public function render()
     {
         $data = Users::Where('id', '>', 0)
@@ -69,7 +67,7 @@ class Liste extends Component
                 return $query->where('name', 'like', '%' . $this->search . '%')
                     ->orwhere('surname', 'like', '%' . $this->search . '%')
                     ->orwhere('user_code', 'like', '%' . $this->search . '%');
-            })->paginate(3);
+            })->paginate(10);
         return view('livewire.users.liste', ['data' => $data]);
     }
 

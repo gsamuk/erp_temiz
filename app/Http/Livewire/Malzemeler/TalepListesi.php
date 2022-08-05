@@ -75,7 +75,7 @@ class TalepListesi extends Component
                 'company.company_name',
                 'demand.*',
             )
-            ->paginate(8);
+            ->paginate(12);
 
         return view('livewire.malzemeler.talep-listesi', [
             'data' => $data
