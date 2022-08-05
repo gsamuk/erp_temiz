@@ -157,11 +157,11 @@
                         <div class="col-lg-8">
                           <div class="input-group input-group-sm">
                             <select wire:model="warehouse" name="warehouse" class="form-select">
-                              @foreach ($warehouses as $d)
-                                <option value="{{ $d->warehouse_no }}">
-                                  {{ $d->warehouse_name }}
-                                </option>
-                              @endforeach
+                              <option value="0">Merkez Ana Depo</option>
+                              <option value="15">OSB Genel Y.Parca Deposu</option>
+                              <option value="18">KADUNA Ana Deposu</option>
+                              <option value="6">Katanpe Beton Y.Parca Deposu</option>
+                              <option value="22">KONTAGORA Ana Depo</option>
                             </select>
                           </div>
                         </div>
@@ -183,6 +183,10 @@
                                     $w = App\Models\LogoWarehouses::Where('company_no', '1')
                                         ->Where('warehouse_no', $d->warehouse_no)
                                         ->first();
+                                    if (!$this->destwh) {
+                                        $this->destwh = $d->warehouse_no;
+                                    }
+                                    
                                   @endphp
                                   <option value="{{ $d->warehouse_no }}">
                                     {{ $w->warehouse_name }}
@@ -298,6 +302,7 @@
                           <td>
                             <div class="input-group input-group-sm">
                               <input type="text" class="form-control border-dashed"
+
                                      id="ozelkod_{{ $value }}" name="ozelkod[{{ $value }}]"
                                      wire:model.defer="ozelkod.{{ $value }}">
                             </div>

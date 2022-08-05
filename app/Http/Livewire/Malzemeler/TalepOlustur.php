@@ -82,13 +82,17 @@ class TalepOlustur extends Component
         $this->inputs = [];
     }
 
-    public function mount()
+    public function defaultData()
     {
         $this->user_id = Erp::user_id(); // default 
-
-
         date_default_timezone_set('Europe/Istanbul');
         $this->zaman = date("d/m/Y");
+    }
+
+    public function mount()
+    {
+        $this->defaultData();
+
 
         if ($this->edit_id) {
             $this->LoadDemand();
@@ -295,6 +299,7 @@ class TalepOlustur extends Component
         }
 
         $this->reset();
+        $this->defaultData();
         return session()->flash('success', $demand_no . ' Belege Numaralı Malzeme Talebi Oluşturuldu.');
     }
 }

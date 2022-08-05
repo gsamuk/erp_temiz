@@ -121,7 +121,7 @@
 
   @if ($talep_detay)
     <div class="card">
-      <div class="card-header">
+      <div class="card-header p-2 pb-1">
         @php
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
@@ -130,31 +130,29 @@
               ->where('company_no', 1)
               ->first();
         @endphp
+
         @if ($talep->demand_type == 1)
-          <h5 class="text-info"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
+          <h5 class="text-danger mb-1"> {{ $w1->warehouse_name }} Malzeme Sarf Talebi </h5>
         @endif
 
         @if ($talep->demand_type == 2)
-          <h5><span class="text-info"> {{ $w1->warehouse_name }} </span> <i class="ri-share-forward-2-line"></i>
-            <span class="text-danger">{{ $w2->warehouse_name }}</span> Malzeme Transferi
+          <h5 class="mb-1"><span class="text-danger"> {{ $w1->warehouse_name }} </span> <i
+               class="ri-share-forward-2-line"></i>
+            <span class="text-success">{{ $w2->warehouse_name }}</span> Malzeme Transferi
           </h5>
         @endif
-        <h4 class="card-title flex-grow-1 text-primary mb-0"><small>#{{ $talep->id }}
-            @if ($talep->demand_desc)
-              | {{ $talep->demand_desc }}
-            @endif
-            @if ($talep->special_code)
-              | Özel Kod : {{ $talep->special_code }}
-            @endif
-            @if ($talep->project_code)
-              | Proje Kodu : {{ $talep->project_code }}
-            @endif
 
-          </small>
-        </h4>
+        @if ($talep->project_code)
+          Proje Kodu : <small class="text-info">{{ $talep->project_code }} </small><br>
+        @endif
+
+        Talep Eden : <small class="text-info">{{ $tuser->name }} {{ $tuser->surname }} - {{ $tuser->user_code }} |
+          Zaman
+          : {{ date('d-m-Y H:i', strtotime($talep->insert_time)) }} </small>
+        <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
       </div>
 
-      <div class="card-body">
+      <div class="card-body p-1">
         <div class="row">
           <div class="col-lg-12">
             <table class="table-light table-sm table-striped table align-middle">

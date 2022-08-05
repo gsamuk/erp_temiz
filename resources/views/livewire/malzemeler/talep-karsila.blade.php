@@ -3,6 +3,13 @@
   @if ($talep_detay)
     <div class="card">
       <div class="card-header p-2 pb-1">
+        @if ($talep->approved == 0)
+          <span class="float-end"><button title="Bu Talebi Sil"
+                    @click=" confirm('Bu Talep Silinecek emin misiniz?') ? @this.talepSil() : false"
+                    class="btn btn-sm btn-icon btn-outline-danger"> <i class="ri-delete-bin-5-line"></i> </button>
+          </span>
+        @endif
+
         @php
           $w1 = App\Models\LogoWarehouses::where('warehouse_no', "$talep->warehouse_no")
               ->where('company_no', 1)
@@ -13,7 +20,7 @@
         @endphp
 
         @if ($talep->demand_type == 1)
-          <h5 class="text-danger mb-1"> {{ $w1->warehouse_name }} Malzeme Talebi </h5>
+          <h5 class="text-danger mb-1"> {{ $w1->warehouse_name }} Malzeme Sarf Talebi</h5>
         @endif
 
         @if ($talep->demand_type == 2)
@@ -27,8 +34,11 @@
           Proje Kodu : <small class="text-info">{{ $talep->project_code }} </small><br>
         @endif
 
-        Talep Eden : <small class="text-info">{{ $tuser->name }} {{ $tuser->surname }} - {{ $tuser->user_code }}</small>
+        Talep Eden : <small class="text-info">{{ $tuser->name }} {{ $tuser->surname }} - {{ $tuser->user_code }}
+          > Zaman: {{ date('d-m-Y H:i', strtotime($talep->insert_time)) }} </small>
         <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
+
+
       </div>
 
       <div class="card-body p-1">
@@ -123,6 +133,9 @@
 
                     <td><small>{{ $item_detail->stock_code }} > </small>
                       <span class="text-primary">{{ $item_detail->stock_name }}</span>
+                      @if ($dt->special_code)
+                        <br><small class="text-danger">Özel Kod : {{ $dt->special_code }}</small>
+                      @endif
 
                       @if ($dt->status == 5)
                         <br><small class="text-info">Yönetimin Onayına Gönderildi... </small>
@@ -189,7 +202,7 @@
 
                             <li><a class="dropdown-item"
                                  wire:click="edit_line({{ $dt->id }},'{{ $item_detail->stock_name }}')"
-                                 href="#">Talep Miktarını Değiştir</a>
+                                 href="#">Miktar & Özel Kod Değiştir</a>
                             </li>
                             @if ($dt->status != 5 && $for_manage)
                               <li><a class="dropdown-item" wire:click="onaya_gonder({{ $dt->id }})"
@@ -197,13 +210,11 @@
                             @endif
 
                             <li><a class="dropdown-item" wire:click="iptal({{ $dt->id }})"
-                                 href="#">Listeden
-                                Çıkar</a>
+                                 href="#">Listeden Çıkar</a>
                             </li>
 
+
                           </ul>
-
-
                         </div>
                       @endif
                     </td>
@@ -211,6 +222,15 @@
 
                   </tr>
                 @endforeach
+                <tr>
+                  <td colspan="4">
+
+                  </td>
+                  <td colspan="3">
+                    <a target="_blank" href="/print/{{ $talep->id }}"
+                       class="btn btn-sm float-end btn-outline-primary">Listeyi Yazdır</a>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -352,15 +372,17 @@
                                 </td>
                                 <td><small>{{ $itm->account_name }}</small> </td>
                                 <td>
-                                  <button onclick="$('._btn').prop('disabled',true)"
-                                          @if ($talep->status == 1) disabled @endif
-                                          wire:click="firma_sec('{{ $itm->id }}','{{ $itm->logo_stock_ref }}', '{{ $itm->stock_name }}')"
-                                          class="_btn btn btn-sm btn-soft-danger m-0">Firma Seç</button>
-                                  @if ($itm->account_name)
+                                  @if ($talep->approved == 0)
                                     <button onclick="$('._btn').prop('disabled',true)"
                                             @if ($talep->status == 1) disabled @endif
-                                            wire:click="firma_iptal('{{ $itm->id }}')"
-                                            class="_btn btn btn-sm btn-soft-warning m-0">İptal</button>
+                                            wire:click="firma_sec('{{ $itm->id }}','{{ $itm->logo_stock_ref }}', '{{ $itm->stock_name }}')"
+                                            class="_btn btn btn-sm btn-soft-danger m-0">Firma Seç</button>
+                                    @if ($itm->account_name)
+                                      <button onclick="$('._btn').prop('disabled',true)"
+                                              @if ($talep->status == 1) disabled @endif
+                                              wire:click="firma_iptal('{{ $itm->id }}')"
+                                              class="_btn btn btn-sm btn-soft-warning m-0">İptal</button>
+                                    @endif
                                   @endif
                                 </td>
                               </tr>
@@ -447,6 +469,7 @@
               <small>Stok Kodu : <b>{{ $item->stock_code }}</b> </small><br>
               <small>Stok Tipi : <b>{{ $item->stock_type }}</b> </small><br>
               <small>Stok Kartı : <b>{{ $item->cardtype_name }}</b> </small><br>
+              <small>Ref : <b>{{ $item->logicalref }}</b> </small><br>
 
               @if (!$talep_owner)
                 <small>Stok Miktarı : <b>
@@ -552,29 +575,38 @@
   </div>
 </div>
 
-<div id="editLineModal" class="modal" tabindex="-1" role="dialog"
+<div id="editLineModal" class="modal" tabindex="-1" role="dialog" wire:ignore.self
      aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Miktar Düzenle</h5>
+        <h5 class="modal-title"> Düzenle {{ $line_item_name }} </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
       </div>
       <div class="modal-body m-0">
+
         @if ($edit_line_id)
           <div class="mb-3">
             <label for="customer-name"
-                   class="col-form-label">Yeni Miktarı Giriniz</label>
+                   class="col-form-label">Miktar</label>
             <input wire:model.defer="line_quantity" min="0" type="number" class="form-control">
-            <br>
-            {{ $line_item_name }}
+
+          </div>
+          <div class="mb-3">
+            <label for="customer-name"
+                   class="col-form-label">Özel Kod</label>
+            <input wire:model="lineSpcode" type="text" class="form-control">
+          </div>
+
+          <div class="mb-3">
+
           </div>
         @endif
       </div>
 
       <div class="modal-footer">
         <button data-bs-dismiss="modal" wire:click="update_line({{ $edit_line_id }})"
-                class="btn btn-primary">Onayla</button>
+                class="btn btn-primary">Kaydet</button>
         <button class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
       </div>
     </div>

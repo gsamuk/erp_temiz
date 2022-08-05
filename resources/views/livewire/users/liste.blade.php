@@ -11,13 +11,21 @@
         </div>
 
         <div class="card-body">
-
+          <div class="row mb-1">
+            <div class="col-md-6">
+              <div class="search-box">
+                <input type="text" class="form-control search m-1" wire:model.debounce.500ms="search" x-ref="search"
+                       placeholder="Kullanıcı Ara">
+                <i class="ri-search-line search-icon"></i>
+              </div>
+            </div>
+          </div>
           <div class="live-preview">
             <div class="table-responsive">
               <table class="table-nowrap table-sm mb-0 table align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th scope="col">ID</th>
+
                     <th scope="col">Ad Soyad</th>
                     <th scope="col">Durum</th>
                     <th scope="col"></th>
@@ -26,8 +34,6 @@
                 <tbody>
                   @foreach ($data as $d)
                     <tr class="@if ($user_id == $d->id) bg-soft-info @endif">
-                      <td><a href="#" class="fw-medium">#{{ $d->id }}</a></td>
-
                       <td>
                         <div class="d-flex align-items-center gap-2">
                           <div class="flex-shrink-0">
@@ -89,7 +95,9 @@
             </div>
             <!-- end table responsive -->
           </div>
-
+          <div class="d-flex justify-content-end mt-3">
+            {{ $data->links() }}
+          </div>
         </div><!-- end card-body -->
       </div><!-- end card -->
     </div><!-- end col -->
@@ -232,6 +240,8 @@
                 </div>
               </div>
             </form>
+
+
           </div><!-- end card-body -->
         </div><!-- end card -->
       </div>

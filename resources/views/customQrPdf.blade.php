@@ -6,7 +6,10 @@
     <table>
       @foreach ($data as $val => $d)
         @php
-          $item = App\Models\LogoItems::find($d->logo_stockref);
+          $item = App\Models\LogoItems::where('stock_code', $d)->first();
+          if (!$item) {
+              continue;
+          }
           
           if ($val % 2) {
           } else {

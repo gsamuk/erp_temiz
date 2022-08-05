@@ -22,13 +22,15 @@
             </select>
 
             @php
-              $depolar = App\Models\LogoWarehouses::Where('company_no', $firma)->get();
+              // $depolar = App\Models\LogoWarehouses::Where('company_no', $firma)->get();
             @endphp
 
             <select class="form-select" wire:model="depo" aria-label="Default select example">
-              @foreach ($depolar as $d)
-                <option value="{{ $d->warehouse_no }}">{{ $d->warehouse_name }}</option>
-              @endforeach
+              <option value="0">Merkez Ana Depo</option>
+              <option value="15">OSB Genel Y.Parca Deposu</option>
+              <option value="18">KADUNA Ana Deposu</option>
+              <option value="6">Katanpe Beton Y.Parca Deposu</option>
+              <option value="22">KONTAGORA Ana Depo</option>
             </select>
             <button wire:click="depo_izin_ekle()" wire:loading.attr="disabled" class="btn btn-sm btn-success mt-2">İzin
               Ekle</button>

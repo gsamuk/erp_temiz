@@ -1,29 +1,32 @@
 <div>
   <div class="row">
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-5 col-xl-5 col-xxl-5">
       <div class="card">
 
         <div class="card-header p-2">
+
           <div class="row">
-            <div class="col-4">
-              <div class="search-box">
-                <input type="text" class="form-control search" wire:model.debunce.500ms="talep_id"
-                       placeholder="Talep No">
-                <i class="ri-search-line search-icon"></i>
-              </div>
+            <div class="col-3">
+              <input type="text" class="form-control search" wire:model.debunce.500ms="talep_id"
+                     placeholder="Talep No">
             </div>
 
-            <div class="col-4">
-              <div class="search-box">
-                <input type="text" class="form-control search" wire:model="user_search" placeholder="Talep Sahibi">
-                <i class="ri-search-line search-icon"></i>
-              </div>
+            <div class="col-3">
+              <input type="text" class="form-control search" wire:model="user_search" placeholder="Birim">
             </div>
 
-            <div class="col-4">
+            <div class="col-3">
+              <select class="form-select mb-3" wire:model="talep_tip" aria-label="Default select example">
+                <option selected value="">Hepsi</option>
+                <option value="1">Sarf Talepleri</option>
+                <option value="2">Transfer Talepleri</option>
+              </select>
+            </div>
+
+            <div class="col-3">
               <a href="#" wire:click="$emit('SetPage', 'malzemeler.talep-olustur')"
-                 class="btn btn-soft-danger waves-effect waves-light"> <i class="ri-add-line"></i>
-                Yeni Talep Oluştur</a>
+                 class="btn btn-soft-danger waves-effect waves-light">
+                Talep Oluştur</a>
             </div>
 
           </div>
@@ -86,9 +89,9 @@
                      wire:loading.class="opacity-50">
                 <thead class="table-light">
                   <tr>
-
                     <th scope="col">No</th>
-                    <th scope="col">Talep Eden Birim</th>
+                    <th scope="col">Tip</th>
+                    <th scope="col">Birim</th>
                     <th scope="col">Zaman</th>
                     <th scope="col">Durum</th>
                     <th scope="col"></th>
@@ -101,11 +104,18 @@
                       if ($cnt == 0) {
                           continue;
                       }
-                      $zaman = date('d-m > H:i', strtotime($d->insert_time));
+                      $zaman = date('d-m-Y', strtotime($d->insert_time));
                     @endphp
 
                     <tr class="@if ($d->id == $talep_satir_id) table-primary @endif">
                       <td class="owner">{{ $d->id }}</td>
+                      <td>
+                        @if ($d->demand_type == 1)
+                          <span class="text-info">Sarf</span>
+                        @elseif($d->demand_type == 2)
+                          <span class="text-danger">Transfer</span>
+                        @endif
+                      </td>
                       <td class="owner">
                         {{ $d->user_code }}
                       </td>
@@ -189,7 +199,7 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-7 col-xl-7 col-xxl-7">
 
       @if ($talep_detay_id)
         @livewire('malzemeler.talep-karsila')

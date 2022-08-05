@@ -13,6 +13,7 @@ use App\Models\IncompletedDemand;
 use App\Models\LogoAccounts;
 use App\Http\Controllers\Telegram;
 use App\Helpers\Erp;
+use App\Models\LogoOzelKod;
 
 class TalepKarsila extends Component
 {
@@ -48,6 +49,9 @@ class TalepKarsila extends Component
     public $line_item;
     public $line_item_name;
     public $line_quantity;
+    public $lineSpcode;
+    public $lineSpcodeList;
+
 
     // satınalma firması seç
     public $stock_code;
@@ -61,6 +65,17 @@ class TalepKarsila extends Component
     protected $listeners = ['TalepKarsila' => 'TalepKarsila', 'getOzelKod' => 'getOzelKod', 'getAccount' => 'getAccount', 'getAccount_' => 'getAccount_', 'RefreshTalepKarsila' => '$refresh'];
 
 
+
+
+    public function updatedLineSpcode($d)
+    {
+        $data = LogoOzelKod::where('special_code', 'like', '%' . $d . '%')->take(10)->get();
+        if ($data->count() > 0) {
+            $this->lineSpcodeList = $data;
+        } else {
+            $this->lineSpcodeList = null;
+        }
+    }
 
     public function TalepKarsila($id)
     {
@@ -99,6 +114,17 @@ class TalepKarsila extends Component
         $this->TalepKarsila($this->talep_id);
     }
 
+    public function talepSil()
+    {
+        $dt = DemandDetail::where('demand_id', $this->talep_id)->delete();
+        if ($dt) {
+
+            $dm = Demand::find($this->talep_id);
+            $dm->delete();
+            $this->emit('ListReset');
+            $this->talep_detay = null;
+        }
+    }
 
     public function iptal($id)
     {
@@ -124,7 +150,7 @@ class TalepKarsila extends Component
             $up->approved = 0;
             $up->save();
             $this->talep_detay = null;
-            $this->emit('RefreshTalepListesi');
+            $this->emit('ListReset');
             $this->dispatchBrowserEvent('CloseModal');
         } else {
             $this->dispatchBrowserEvent('CloseModal');
@@ -160,7 +186,7 @@ Satınalma Toplamı : $s_total
 -----------------------------------
 [Uyulamaya Git ](https://mobile.zeberced.net)
 ";
-        Telegram::send_msg($msg);
+        // Telegram::send_msg($msg);
         $this->TalepKarsila($this->talep_id);
     }
 
@@ -195,17 +221,21 @@ Satınalma Toplamı : $s_total
 
     public function kaydet()
     {
+        $sarf = false;
+        $transfer = false;
+        $satinal = false;
 
         $demand = Demand::find($this->talep_id);
-        $sp_code = DemandDetail::Where('demand_id', $this->talep_id)->distinct()
-            ->get('special_code');
-        foreach ($sp_code as $c) {
-            $sarf = $this->sarfet($demand, $c->special_code);
+        if ($demand->demand_type == 1) { // eğer sarf fiş ise
+            $sp_code = DemandDetail::Where('demand_id', $this->talep_id)->distinct()
+                ->get('special_code');
+            foreach ($sp_code as $c) {
+                $sarf = $this->sarfet($demand, $c->special_code);
+            }
+        } else if ($demand->demand_type == 2) { // eğer transfer fişi ise
+            $transfer = $this->transfer($demand);
         }
 
-        // satınalma siparişleri seçilen carilere göre fişleri oluşturuluyor
-
-        $satinal = false;
         $cari = DemandDetail::distinct()
             ->Where('demand_id', $this->talep_id)
             ->Where('approved_purchase', '>', 0)
@@ -220,7 +250,7 @@ Satınalma Toplamı : $s_total
             }
         }
 
-        if ($sarf || $satinal) {
+        if ($sarf || $transfer || $satinal) {
             $kalan = IncompletedDemand::where('demand_id', $this->talep_id)->count();
             $up = Demand::find($this->talep_id);
             if ($kalan == 0) {
@@ -234,7 +264,70 @@ Satınalma Toplamı : $s_total
         }
     }
 
+    public function transfer($demand)
+    {
+        $rest_items = array();
+        $sarf = DemandDetail::Where('demand_id', $this->talep_id)
+            ->Where('approved_consump', '>', '0')
+            ->Where('status', '!=', 5)
+            ->Where('status', '!=', 7)
+            ->Where('status', '!=', 9)
+            ->get();
 
+        if ($sarf->count() > 0) {
+            foreach ($sarf as $item) {
+                $logo_item = LogoItems::find($item->logo_stock_ref);
+
+                $rest_items[] = [
+                    "ITEM_CODE" => $item->stock_code,
+                    "ITEMREF" => $item->logo_stock_ref,
+                    "UNIT_CODE" => $item->unit_code,
+                    "DESCRIPTION" => $item->description,
+                    "PRICE" => $logo_item->average_price,
+                    "TYPE" => 25,
+                    'QUANTITY' => $item->approved_consump,
+                    'SOURCEINDEX' =>  $demand->warehouse_no,
+                    'DESTINDEX' => $demand->dest_wh_no,
+                ];
+            }
+        }
+
+        $sarf_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => $demand->insert_time,
+            'GROUP' => 3,
+            "SOURCE_WH" => $demand->warehouse_no,
+            "SOURCE_COST_GRP" => $demand->warehouse_no,
+            "DEST_WH" => $demand->dest_wh_no,
+            "DEST_COST_GRP" => $demand->dest_wh_no,
+            'DOC_NUMBER' => "TR" . $this->talep_id,
+            "TYPE" => 25,
+            'IO_TYPE' => 2,
+            'TRANSACTIONS' => [
+                'items' => $rest_items
+            ]
+        ];
+
+
+
+        $ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
+        if ($ref != null && $ref > 0) {
+            $insert = new DemandFiche;
+            $insert->demand_id = $this->talep_id;
+            $insert->demand_type = $demand->demand_type;
+            $insert->logo_fiche_ref = $ref;
+            $insert->fiche_type = 3; // sarf fişi
+            $insert->insert_time = date('Y-m-d H:i:s');
+            $insert->save();
+            $this->emit('Success', 'Logo Fişi Oluşturuldu');
+            return $ref;
+        } else {
+            $this->emit('Error', 'Logo Fişi Oluşturulamadı');
+            return false;
+        }
+    }
 
 
     public function sarfet($demand, $special_code)
@@ -252,78 +345,37 @@ Satınalma Toplamı : $s_total
             foreach ($sarf as $item) {
                 $logo_item = LogoItems::find($item->logo_stock_ref);
 
-                // çok basit anlaması biraz dikkat
-                if ($demand->demand_type == 1) {
-                    $rest_items[] = [
-                        "ITEM_CODE" => $item->stock_code,
-                        "ITEMREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "DESCRIPTION" => $item->description,
-                        "PRICE" => $logo_item->average_price,
-                        "TYPE" => 25,
-                        'QUANTITY' => $item->approved_consump,
-                    ];
-                }
-                // eğer ambar tranferi ise
-                if ($demand->demand_type == 2) {
-                    $rest_items[] = [
-                        "ITEM_CODE" => $item->stock_code,
-                        "ITEMREF" => $item->logo_stock_ref,
-                        "UNIT_CODE" => $item->unit_code,
-                        "DESCRIPTION" => $item->description,
-                        "PRICE" => $logo_item->average_price,
-                        "TYPE" => 25,
-                        'QUANTITY' => $item->approved_consump,
-                        'SOURCEINDEX' =>  $demand->warehouse_no,
-                        'DESTINDEX' => $demand->dest_wh_no,
-                    ];
-                }
+                $rest_items[] = [
+                    "ITEM_CODE" => $item->stock_code,
+                    "ITEMREF" => $item->logo_stock_ref,
+                    "UNIT_CODE" => $item->unit_code,
+                    "DESCRIPTION" => $item->description,
+                    "PRICE" => $logo_item->average_price,
+                    "TYPE" => 25,
+                    'QUANTITY' => $item->approved_consump,
+                ];
             }
         }
 
-        // eğer bu talep bir sarf ise
-        if ($demand->demand_type == 1) {
-            $sarf_data = [
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
-                'DATE' => $demand->insert_time,
-                'GROUP' => 2,
-                "AUXIL_CODE" => $special_code,
-                "PROJECT_CODE" => $demand->project_code,
-                "FOOTNOTE1"  => $demand->demand_desc,
-                'DOC_NUMBER' => "SF" . $this->talep_id,
-                "TYPE" => 12,
-                'IO_TYPE' => 3,
-                'SOURCE_WH' => $demand->warehouse_no,
-                'SOURCE_COST_GRP' => 1,
-                'TRANSACTIONS' => [
-                    'items' => $rest_items
-                ]
-            ];
-        }
 
-        // eğer bu talep bir ambar transferi ise
-        if ($demand->demand_type == 2) {
-            $sarf_data = [
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
-                'DATE' => $demand->insert_time,
-                'GROUP' => 3,
-                "SOURCE_WH" => $demand->warehouse_no,
-                "SOURCE_COST_GRP" => $demand->warehouse_no,
-                "DEST_WH" => $demand->dest_wh_no,
-                "DEST_COST_GRP" => $demand->dest_wh_no,
-                'DOC_NUMBER' => "TR" . $this->talep_id,
-                "TYPE" => 25,
-                'IO_TYPE' => 2,
-                'TRANSACTIONS' => [
-                    'items' => $rest_items
-                ]
-            ];
-        }
-
+        $sarf_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'DATE' => $demand->insert_time,
+            'GROUP' => 2,
+            "AUXIL_CODE" => $special_code,
+            "PROJECT_CODE" => $demand->project_code,
+            "FOOTNOTE1"  => $demand->demand_desc,
+            'DOC_NUMBER' => "SF" . $this->talep_id,
+            "TYPE" => 12,
+            'IO_TYPE' => 3,
+            'SOURCE_WH' => $demand->warehouse_no,
+            'SOURCE_COST_GRP' => 1,
+            'TRANSACTIONS' => [
+                'items' => $rest_items
+            ]
+        ];
 
         $ref  = LogoRest::SarfFisiOlustur($sarf_data, 0);
         if ($ref != null && $ref > 0) {
@@ -401,6 +453,7 @@ Satınalma Toplamı : $s_total
         $this->edit_line_id = $id;
         $this->line_item_name = $name;
         $this->line_item = DemandDetail::find($id);
+        $this->lineSpcode = $this->line_item->special_code;
         $this->line_quantity = number_format($this->line_item->quantity, 0, "", "");
         $this->dispatchBrowserEvent('OpenModal', ['ModalName' => '#editLineModal']);
     }
@@ -409,6 +462,7 @@ Satınalma Toplamı : $s_total
     {
         $line =  DemandDetail::find($this->edit_line_id);
         $line->quantity =  $this->line_quantity;
+        $line->special_code =  $this->lineSpcode;
         $line->save();
         $this->dispatchBrowserEvent('CloseModal');
         $this->TalepKarsila($this->talep_id);

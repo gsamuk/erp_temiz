@@ -6,7 +6,10 @@ use App\Http\Middleware\LogoTokenKontrol;
 use App\Http\Controllers\UserController;
 
 
+Route::get('/print/{id}', [App\Http\Controllers\MakePdf::class, 'print']);
 Route::get('/pdf/{id}', [App\Http\Controllers\MakePdf::class, 'make']);
+Route::get('/qr_create', [App\Http\Controllers\MakePdf::class, 'qr_create']);
+Route::post('/qr', [App\Http\Controllers\MakePdf::class, 'qr']);
 Route::get('/login', [App\Http\Controllers\LoginController::class, 'login']);
 Route::post('/login_post', [App\Http\Controllers\LoginController::class, 'login_post'])->name('login.post');
 Route::get('signout', [App\Http\Controllers\LoginController::class, 'signout'])->name('signout');

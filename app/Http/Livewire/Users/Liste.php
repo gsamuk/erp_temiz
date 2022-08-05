@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Users;
 
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Users;
 
 use Intervention\Image\Facades\Image;
@@ -13,7 +14,12 @@ use Illuminate\Support\Facades\Storage;
 class Liste extends Component
 {
 
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     use WithFileUploads;
+
+    public $search;
 
     public $user;
     public $user_id;
@@ -58,7 +64,12 @@ class Liste extends Component
 
     public function render()
     {
-        $data = Users::all();
+        $data = Users::Where('id', '>', 0)
+            ->when(($this->search), function ($query) {
+                return $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orwhere('surname', 'like', '%' . $this->search . '%')
+                    ->orwhere('user_code', 'like', '%' . $this->search . '%');
+            })->paginate(3);
         return view('livewire.users.liste', ['data' => $data]);
     }
 

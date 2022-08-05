@@ -9,12 +9,13 @@ use App\Models\Demand;
 
 class TalepListesi extends Component
 {
-    protected $listeners = ['LoadDemandList' => '$refresh', 'RefreshTalepListesi' => '$refresh', 'IslemDetay'];
+    protected $listeners = ['ListReset', 'LoadDemandList' => '$refresh', 'RefreshTalepListesi' => '$refresh', 'IslemDetay'];
 
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $user_search;
     public $talep_id; // talep no
+    public $talep_tip; // talep tip
 
 
     public $status = 99; // hepsi gelir
@@ -24,7 +25,10 @@ class TalepListesi extends Component
     public $talep_detay_id;
     public $talep_islem_id;
 
-
+    public function ListReset()
+    {
+        $this->reset();
+    }
     public function set_status($status)
     {
         $this->talep_username = null;
@@ -40,9 +44,13 @@ class TalepListesi extends Component
             ->when($this->talep_id, function ($query) {
                 return $query->where('demand.id', $this->talep_id);
             })
+            ->when($this->talep_tip, function ($query) {
+                return $query->where('demand.demand_type', $this->talep_tip);
+            })
             ->when($this->user_search, function ($query) {
                 return $query->where('users.name', 'like', '%' . $this->user_search . '%')
-                    ->Orwhere('users.surname', 'like', '%' . $this->user_search . '%');
+                    ->Orwhere('users.surname', 'like', '%' . $this->user_search . '%')
+                    ->Orwhere('users.user_code', 'like', '%' . $this->user_search . '%');
             })
             ->when(($this->status == 1), function ($query) {
                 return $query->where('demand.status', $this->status);
