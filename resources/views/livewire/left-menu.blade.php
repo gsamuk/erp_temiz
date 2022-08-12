@@ -208,8 +208,9 @@
             <div class="collapse menu-dropdown" id="m2">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Siparişler
+                  <a href="#" wire:click="$emit('SetPage', 'kantar.file-upload')" class="nav-link"
+                     data-key="t-google">
+                    Kantar Raporu Yükle
                   </a>
                 </li>
                 <li class="nav-item">

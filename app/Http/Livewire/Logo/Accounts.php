@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Logo;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\LogoAccounts;
+use App\Models\LogoAccountsAll;
 
 class Accounts extends Component
 {
@@ -14,6 +15,7 @@ class Accounts extends Component
     public $item_ref;
     public $item_name;
     public $last_purchase;
+    public $all = false;
 
     protected $listeners = ['SetItemRef'];
 
@@ -27,7 +29,13 @@ class Accounts extends Component
 
     public function render()
     {
-        $data = LogoAccounts::where('account_name', 'like', '%' . $this->search . '%')
+        if ($this->all) {
+            $db = new LogoAccountsAll;
+        } else {
+            $db = new LogoAccounts;
+        }
+
+        $data = $db::where('account_name', 'like', '%' . $this->search . '%')
             ->orderByDesc('account_name')
             ->paginate(5);
 

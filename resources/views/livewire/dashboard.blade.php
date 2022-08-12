@@ -20,6 +20,8 @@
     @livewire('satinalma.siparis')
   @elseif($page == 'users.liste')
     @livewire('users.liste')
+  @elseif($page == 'kantar.file-upload')
+    @livewire('kantar.file-upload')
   @else
     @livewire('main')
   @endif

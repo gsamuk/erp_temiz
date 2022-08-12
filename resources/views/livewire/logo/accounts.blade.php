@@ -106,7 +106,6 @@
         </div>
       @else
         Bulunamadı
-
       @endif
     </div>
   </div>
