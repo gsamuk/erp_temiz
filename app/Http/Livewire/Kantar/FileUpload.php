@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 use App\Models\KantarFiles;
 use App\Models\Kantar;
 use App\Helpers\Erp;
+use App\Models\KantarData;
 use Illuminate\Support\Str;
 
 
@@ -24,14 +25,20 @@ class FileUpload extends Component
     public $file;
     public $search_kantar;
 
+    public $line;
+    public $setFile;
+
     ///////
+
+    protected $listeners = ['Yenile' => '$refresh'];
+
 
     public function render()
     {
         $data = KantarFiles::where('id', '>', 0)
             ->when($this->search_kantar, function ($query) {
                 return $query->where('kantar_id', $this->search_kantar);
-            })->orderBy('id', 'DESC')->paginate(2);
+            })->orderBy('id', 'DESC')->paginate(5);
 
         $kantarlar = Kantar::all();
         return view('livewire.kantar.file-upload', ['data' => $data, 'kantarlar' => $kantarlar]);
@@ -70,5 +77,23 @@ class FileUpload extends Component
         $this->file = null;
         $this->kantar = null;
         session()->flash('success', 'Dosya Sisteme Eklendi...');
+        $this->set_file($fup->id);
+    }
+
+
+    public function set_file($id)
+    {
+        $this->line = $id;
+        $this->setFile = $id;
+        $this->emit('SetFile', $id);
+    }
+
+    public function sil($id)
+    {
+        $up = KantarFiles::find($id);
+        $up->delete();
+        $dt = KantarData::where('file_id', $id)->delete();
+        $this->emitself('Yenile');
+        $this->setFile = null;
     }
 }

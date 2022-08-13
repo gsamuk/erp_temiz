@@ -11,6 +11,8 @@ use App\Models\KantarData;
 use App\Models\LogoAccountsAll;
 use App\Models\KantarFiles;
 use App\Models\LogoItems;
+use App\Models\LogoDb;
+use App\Http\Controllers\LogoRest;
 use Illuminate\Support\Facades\DB;
 
 class Islem extends Component
@@ -24,14 +26,62 @@ class Islem extends Component
     public $file;
     public $linecount;
 
-    protected $listeners = ['SetFile'];
+    public $fiyat;
+    public $nakliye;
+
+    // serach
+    public $fisno;
+    public $plaka;
+    public $firma;
+    public $tip;
+    public $irs;
+
+
+    protected $listeners = ['SetFile', 'Yenile' => '$refresh'];
+
+    public function search_reset()
+    {
+        $this->fisno = null;
+        $this->plaka = null;
+        $this->firma = null;
+        $this->tip = null;
+        $this->irs = null;
+    }
+
+    public function render()
+    {
+        $data = KantarData::Where('file_id', $this->file_id)
+            ->when($this->fisno, function ($query) {
+                return $query->where('fis_no', $this->fisno);
+            })
+            ->when($this->tip, function ($query) {
+                return $query->where('list_type', $this->tip);
+            })
+            ->when($this->irs, function ($query) {
+                if ($this->irs == 1) {
+                    return $query->where('logo_fiche_ref', '>', 0);
+                } else {
+                    return $query->where('logo_fiche_ref', '=', null);
+                }
+            })
+            ->when($this->firma, function ($query) {
+                return $query->where('firma', 'like', '%' . $this->firma . '%');
+            })
+            ->when($this->plaka, function ($query) {
+                return $query->where('plaka', 'like', '%' . $this->plaka . '%');
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
+        return view('livewire.kantar.islem', ['data' => $data]);
+    }
+
 
 
     public function updatedFiyat($value, $id)
     {
         $up = KantarData::find($id);
         $up->birim_fiyat = $value;
-        $up->toplam_fiyat = ($up->tarti_net / 1000) * ($value + $up->nakliye_birim_fiyat);
         $up->save();
     }
 
@@ -40,13 +90,14 @@ class Islem extends Component
     {
         $up = KantarData::find($id);
         $up->nakliye_birim_fiyat = $value;
-        $up->toplam_fiyat = ($up->tarti_net / 1000) * ($value + $up->birim_fiyat);
         $up->save();
     }
 
 
+
     public function SetFile($id)
     {
+        $this->search_reset();
         $this->linecount = null;
         $this->file_id = $id;
         $data = KantarFiles::find($id);
@@ -96,7 +147,7 @@ class Islem extends Component
         $up = KantarFiles::find($this->file_id);
         if ($chk) {
             $up->kontrol = 1;
-            session()->flash('success', 'Kontrol Başarılı, veri bütünlüğü doğrulandı.');
+            $this->emitSelf('Yenile');
         } else {
             $up->kontrol = 2;
             session()->flash('error', $msg);
@@ -175,9 +226,7 @@ class Islem extends Component
                         }
                     }
 
-                    $tp1 = ($net / 1000) * $birim_fiyat;
-                    $tp2 = ($net / 1000) * $nakliye_birim_fiyat;
-                    $toplam = $tp1 + $tp2;
+
 
 
                     $e = new KantarData;
@@ -206,7 +255,7 @@ class Islem extends Component
                     }
 
                     $e->file_id = $this->file_id;
-                    $e->toplam_fiyat = $toplam;
+
                     $e->md5_data = md5($line);
                     $e->raw_data = $line;
                     $e->list_type = $list_type; // tip nakliye varsa 2 yoksa 1
@@ -225,13 +274,69 @@ class Islem extends Component
             $up = KantarFiles::find($this->file_id);
             $up->islem = 1;
             $up->save();
-            session()->flash('success', 'Kantar Verileri Sisteme Kayıt Edildi..');
+            $this->emitSelf('Yenile');
         }
     }
 
 
-    public function render()
+
+
+
+
+
+    public function irsaliye($id)
     {
-        return view('livewire.kantar.islem');
+        $d = KantarData::find($id);
+        $item = LogoDb::Where('stock_code', $d->malzeme_sku)->first();
+        $rest_items = array();
+
+        $rest_items[] = [
+            "STOCKREF" => $item->logicalref,
+            "UNIT_CODE" => "TON",
+            "TYPE" => 0,
+            "TRCODE" => 8,
+            'QUANTITY' => ($d->tarti_net / 1000),
+            "DESCRIPTION" => $d->plaka,
+            "PRICE" => $d->birim_fiyat,
+        ];
+
+        if ($d->list_type == 2) {
+            $item = LogoDb::Where('stock_code', $d->plaka)->first();
+            $rest_items[] = [
+                "STOCKREF" => $item->logicalref,
+                "UNIT_CODE" => "TON",
+                "TYPE" => 0,
+                "TRCODE" => 8,
+                'QUANTITY' => ($d->tarti_net / 1000),
+                "DESCRIPTION" => $d->plaka,
+                "PRICE" => $d->nakliye_birim_fiyat,
+            ];
+        }
+
+        $irs_data = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'GROUP' => 2,
+            'TYPE' => 8,
+            'IO_TYPE' => 3,
+            'DATE' => $d->tarti_cikis_zaman,
+            "SOURCE_WH" => $d->ambar_no,
+            "SOURCE_COST_GRP" => $d->ambar_no,
+            'DOC_NUMBER' => $d->fis_no,
+            'ARP_CODE' =>  $d->firma_kod,
+            "STATUS" => 0,  // 1:Öneri 0:Gerçek
+            'TRANSACTIONS' => [
+                'items' => $rest_items
+            ]
+        ];
+        // dd($irs_data);
+        $ref  = LogoRest::IrsaliyeFisiOlustur($irs_data, 0);
+        if ($ref != null && $ref > 0) {
+            $d->logo_fiche_ref = $ref;
+            $d->save();
+        } else {
+            return false;
+        }
     }
 }

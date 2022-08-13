@@ -172,4 +172,32 @@ class LogoRest extends Controller
             return session()->flash('error', $e->getMessage());
         }
     }
+
+
+    static function IrsaliyeFisiOlustur($data, $id)
+    {
+        try {
+            if ($id > 0) {
+                $msg = "İrsaliye Fişi Düzenlendi";
+                $url = Self::rest_url('salesDispatches/' . $id);
+                $response = Http::withToken(Session::get("logo_access_token"))->put($url, $data);
+            } else {
+                $msg = "Yeni İrsaliye Fişi Oluşturuldu";
+                $url = Self::rest_url('salesDispatches');
+                $response = Http::withToken(Session::get("logo_access_token"))->post($url, $data);
+            }
+
+
+            if ($response->status() == 200 && $response->successful() == true) {
+                TransactionController::add($url, $data, $response->body());
+                return $response->json("INTERNAL_REFERENCE");
+            } else {
+                TransactionController::add($url, $data, $response->body());
+                return session()->flash('error', serialize($response->body()));
+            }
+        } catch (Exception $e) {
+            TransactionController::add($url, $data, $e->getMessage());
+            return session()->flash('error', $e->getMessage());
+        }
+    }
 }
