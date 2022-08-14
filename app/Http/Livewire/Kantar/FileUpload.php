@@ -21,16 +21,20 @@ class FileUpload extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $kantar;
+    public $kantar_id;
     public $file;
     public $search_kantar;
 
     public $line;
     public $setFile;
 
+    public $x;
+
     ///////
 
     protected $listeners = ['Yenile' => '$refresh'];
+
+
 
 
     public function render()
@@ -54,7 +58,7 @@ class FileUpload extends Component
             return;
         }
 
-        if (!$this->kantar) {
+        if (!$this->kantar_id) {
             session()->flash('error', 'Lütfen Kantar Seçin.');
             return;
         }
@@ -71,7 +75,7 @@ class FileUpload extends Component
         $fup->user_id = Erp::user_id();
         $fup->file_name = $fileName;
         $fup->original_file_name = $original_filename;
-        $fup->kantar_id =  $this->kantar;
+        $fup->kantar_id =  $this->kantar_id;
         $fup->insert_time = date('Y-m-d H:i:s');
         $fup->save();
         $this->file = null;

@@ -65,6 +65,7 @@
   });
 
 
+
   function imposeMinMax(el) {
     if (el.value != "" && parseInt(el.value) > 0) {
       if (parseInt(el.value) < parseInt(el.min)) {

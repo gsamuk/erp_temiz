@@ -21,6 +21,7 @@ class Islem extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+
     public $file_id;
     public $file_data;
     public $file;
@@ -71,7 +72,7 @@ class Islem extends Component
                 return $query->where('plaka', 'like', '%' . $this->plaka . '%');
             })
             ->orderBy('id', 'DESC')
-            ->paginate(10);
+            ->paginate(20);
 
         return view('livewire.kantar.islem', ['data' => $data]);
     }
@@ -114,6 +115,7 @@ class Islem extends Component
 
     public function kontrol()
     {
+
         $file = fopen(public_path("files/kantar_raporlari/" . $this->file_data->file_name), "r");
         $linecount = 0;
         $chk = true;
@@ -131,13 +133,13 @@ class Islem extends Component
                     list($no, $plaka, $fisno, $hesap_no, $hesap_adi, $stok_code, $stock_name, $ts1, $ts2, $t1, $t2, $net, $l) = $arr;
                     $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
                     if (!$malzeme) {
-                        $msg .= "<br>Bilinmeyen Malzeme, Stok Kodu: <b> $stok_code </b> | <b>Fiş No : $fisno </b> ";
+                        $msg .= "Bilinmeyen Malzeme, Stok Kodu: <b> $stok_code </b> | <b>Fiş No : $fisno </b> <br> ";
                         $chk = false;
                     }
 
                     $hesap = LogoAccountsAll::Where('account_code', $hesap_no)->first();
                     if (!$hesap) {
-                        $msg .= "<br> Bilinmeyen Cari, Hesap Kodu: <b> $hesap_no </b> | <b>Fiş No : $fisno </b> ";
+                        $msg .= "Bilinmeyen Cari, Hesap Kodu: <b> $hesap_no </b> | <b>Fiş No : $fisno </b><br> ";
                         $chk = false;
                     }
                 }
@@ -150,6 +152,7 @@ class Islem extends Component
             $this->emitSelf('Yenile');
         } else {
             $up->kontrol = 2;
+            $up->bozuk_satirlar = $msg;
             session()->flash('error', $msg);
         }
         $up->save();
@@ -279,10 +282,27 @@ class Islem extends Component
     }
 
 
+    public function toplu_irsaliye()
+    {
+        $data = KantarData::Where('file_id', $this->file_id)->Where('logo_fiche_ref', null)->get();
+        foreach ($data as $d) {
+            $this->irsaliye($d->id);
+        }
+        session()->flash('success', "Bütün İrsaliyeler Oluşturuldu...");
+    }
 
 
-
-
+    public function irsaliye_sil($id)
+    {
+        $d = KantarData::find($id);
+        $r = LogoRest::IrsaliyeSil($d->logo_fiche_ref);
+        if ($r['success'] == true) {
+            $d->logo_fiche_ref = null;
+            $d->save();
+        } else {
+            dd($r);
+        }
+    }
 
     public function irsaliye($id)
     {
@@ -338,5 +358,11 @@ class Islem extends Component
         } else {
             return false;
         }
+    }
+
+    public function satir_sil($id)
+    {
+        $d = KantarData::find($id);
+        $d->delete();
     }
 }

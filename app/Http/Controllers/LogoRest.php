@@ -200,4 +200,28 @@ class LogoRest extends Controller
             return session()->flash('error', $e->getMessage());
         }
     }
+
+
+    static function IrsaliyeSil($id)
+    {
+        try {
+            $url = Self::rest_url('salesDispatches/' . $id);
+            $response = Http::withToken(Session::get("logo_access_token"))->delete($url);
+            if ($response->status() == 200 && $response->successful() == true) {
+                TransactionController::add($url, "", $response->body());
+                $r['success'] = true;
+                return $r;
+            } else {
+                TransactionController::add($url, "", $response->body());
+                $r['success'] = false;
+                $r['msg'] = $response->body();
+                return $r;
+            }
+        } catch (Exception $e) {
+            TransactionController::add($url, "", $e->getMessage());
+            $r['success'] = false;
+            $r['msg'] = $response->body();
+            return $r;
+        }
+    }
 }
