@@ -22,6 +22,8 @@
     @livewire('users.liste')
   @elseif($page == 'kantar.file-upload')
     @livewire('kantar.file-upload')
+  @elseif($page == 'kantar.cariler')
+    @livewire('kantar.cariler')
   @else
     @livewire('main')
   @endif

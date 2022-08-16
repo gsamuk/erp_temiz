@@ -31,4 +31,15 @@ class Erp
     {
         return number_format($n, $s, ',', '.');
     }
+
+    public static function tarih($d, $z = 0)
+    {
+        if ($d) {
+            if ($z == 1) {
+                return date('d-m-Y H:i:s', strtotime($d));
+            } else {
+                return date('d-m-Y', strtotime($d));
+            }
+        }
+    }
 }

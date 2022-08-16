@@ -90,7 +90,7 @@
       @if ($file_data->kontrol == 1 && $file_data->islem == 1)
         <div class="col-xl-12">
 
-          <div class="card">
+          <div class="card card-border-warning border">
             <div class="card-header">
 
               <div class="row">
@@ -151,12 +151,18 @@
                       </tr>
                     </thead>
                     <tbody>
+                      @php
+                        $group = [];
+                      @endphp
+
                       @foreach ($data as $key => $d)
                         @php
+                          
                           $ambar = App\Models\LogoWarehouses::where('warehouse_no', $d->ambar_no)
                               ->where('company_no', 1)
                               ->first();
                           $toplam = ($d->birim_fiyat + $d->nakliye_birim_fiyat) * ($d->tarti_net / 1000);
+                          
                         @endphp
 
                         <tr>

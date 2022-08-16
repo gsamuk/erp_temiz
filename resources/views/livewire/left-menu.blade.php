@@ -214,6 +214,13 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a href="#" wire:click="$emit('SetPage', 'kantar.cariler')" class="nav-link"
+                     data-key="t-google">
+                    Cari Bakiye Durum
+                  </a>
+                </li>
+
+                <li class="nav-item">
                   <a href="#" class="nav-link" data-key="t-google">
                     İrsaliyeler
                   </a>

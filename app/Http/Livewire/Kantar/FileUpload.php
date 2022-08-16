@@ -27,6 +27,7 @@ class FileUpload extends Component
 
     public $line;
     public $setFile;
+    public $setReport;
 
     public $x;
 
@@ -88,9 +89,19 @@ class FileUpload extends Component
     public function set_file($id)
     {
         $this->line = $id;
+        $this->setReport = null;
         $this->setFile = $id;
         $this->emit('SetFile', $id);
     }
+
+    public function set_report($id)
+    {
+        $this->line = $id;
+        $this->setFile = null;
+        $this->setReport = $id;
+        $this->emit('SetReport', $id);
+    }
+
 
     public function sil($id)
     {

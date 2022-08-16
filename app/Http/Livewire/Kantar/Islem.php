@@ -177,11 +177,21 @@ class Islem extends Component
                     $nakliye_birim_fiyat = 680; // default satış fiyatı logodan gelecek
                     $ambar_no = 0; // ambar  
 
+
+
                     $linecount++;
                     $arr = explode(';', $line);
                     list($no, $plaka, $fisno, $hesap_no, $hesap_adi, $stok_code, $stock_name, $ts1, $ts2, $t1, $t2, $net, $l) = $arr;
-                    $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
 
+                    // satır daha önce eklenmişmi
+                    $md5 = md5($fisno . $this->file_data->kantar_id);
+                    $is_have = KantarData::Where('md5_data', $md5)->first();
+                    if ($is_have) {
+                        continue;
+                    }
+                    //
+
+                    $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
 
                     if (preg_match('([a-zA-Z].*[0-9]|[0-9].*[a-zA-Z])', $plaka)) {
                         // normal plaka
@@ -259,7 +269,7 @@ class Islem extends Component
 
                     $e->file_id = $this->file_id;
 
-                    $e->md5_data = md5($line);
+                    $e->md5_data = $md5;
                     $e->raw_data = $line;
                     $e->list_type = $list_type; // tip nakliye varsa 2 yoksa 1
                     $e->insert_time = date('Y-m-d H:i:s');
@@ -278,6 +288,8 @@ class Islem extends Component
             $up->islem = 1;
             $up->save();
             $this->emitSelf('Yenile');
+        } else {
+            session()->flash('success', "Bu dosyadaki veriler zaten eklenmiş.");
         }
     }
 

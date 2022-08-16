@@ -54,12 +54,19 @@
                         <td>{{ date('d-m-Y H:i', strtotime($d->insert_time)) }}</td>
                         <td>{{ $toplam_kayit }}</td>
                         <td>{{ $cnt }}</td>
-                        <td> <button wire:click="set_file({{ $d->id }})"
+                        <td>
+                          <button wire:click="set_file({{ $d->id }})"
                                   class="btn btn-sm btn-primary m-0">İşlem</button>
+                          @if ($d->islem == 1)
+                            <button wire:click="set_report({{ $d->id }})"
+                                    class="btn btn-sm btn-info m-0">Rapor</button>
+                          @endif
                           @if ($cnt == 0)
-                            <button wire:click="sil({{ $d->id }})"
+                            <button
+                                    @click="confirm('Bu Dosya ve Alt Verileri Silinecek Emin misiniz?') ? @this.sil({{ $d->id }}) : false"
                                     class="btn btn-sm btn-danger m-0">Sil</button>
                           @endif
+
                         </td>
                       </tr>
                     @endforeach
@@ -139,15 +146,13 @@
 
 
     <div class="col-xl-12">
-      <div class="card card-border-warning border">
-        <div class="card-body">
-          @if ($setFile)
-            @livewire('kantar.islem')
-          @else
-            İşlem için dosya seçin
-          @endif
-        </div>
-      </div>
+      @if ($setFile)
+        @livewire('kantar.islem')
+      @endif
+
+      @if ($setReport)
+        @livewire('kantar.rapor')
+      @endif
     </div>
   </div>
 </div>
