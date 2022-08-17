@@ -1,53 +1,33 @@
 <div>
+
+  @php
+    $data = App\Models\KantarData::select('firma', 'malzeme', 'tarti_net')
+        ->Where('file_id', $file_id)
+        ->get()
+        ->toJson(JSON_PRETTY_PRINT);
+  @endphp
   <div class="row">
-
-
-    @foreach ($firmalar as $f)
-      @php
-        $satis = App\Models\KantarData::Where('firma_kod', $f->firma_kod)->get();
-        $dip_toplam = 0;
-        $dip_toplam_ton = 0;
-      @endphp
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-header align-items-center d-flex">
-            <h4 class="card-title flex-grow-1 text-danger mb-0">{{ $f->firma }}</h4>
-          </div>
-          <div class="card-body p-1">
-            <table class="table-striped table-sm table">
-              <thead>
-                <tr>
-                  <th scope="col">Fiş No</th>
-                  <th scope="col">Malzeme</th>
-                  <th scope="col">Net</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($satis as $s)
-                  @php
-                    $toplam = ($s->birim_fiyat + $s->nakliye_birim_fiyat) * ($s->tarti_net / 1000);
-                    $dip_toplam = $dip_toplam + $toplam;
-                    $dip_toplam_ton = $dip_toplam_ton + $s->tarti_net / 1000;
-                  @endphp
-                  <tr>
-                    <td>{{ $s->fis_no }}</td>
-                    <td>{{ $s->malzeme }}</td>
-                    <td> <b>{{ number_format($s->tarti_net / 1000, 2, '.', ',') }}</b> <small>TON</small></td>
-                  </tr>
-                @endforeach
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td class="text-danger"><b>{{ $dip_toplam_ton }} TON</b></td>
-                </tr>
-              </tbody>
-            </table>
-
-          </div>
+    <div class="col-12">
+      <div class="card card-border-warning border">
+        <div class="card-body mb-0 p-2">
+          <div id="output"></div>
+          <button class="btn btn-lg btn-success m-3"
+                  onclick='$("#output").pivotUI(
+            {!! $data !!}, {
+              rows: ["firma"],
+              cols: ["malzeme"],
+              vals:["tarti_net"],
+              aggregatorName: "Integer Sum"
+            }  
+          );'>Rapor
+            Oluştur</button>
         </div>
       </div>
-    @endforeach
-
-
+    </div>
   </div>
+
+
+
+
+
 </div>

@@ -26,6 +26,7 @@
         "rtlcss": "^3.0.0",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1",
+        "tailwindcss": "^3.1.8",
         "webpack-rtl-plugin": "^2.0.0"
     },
     "dependencies": {

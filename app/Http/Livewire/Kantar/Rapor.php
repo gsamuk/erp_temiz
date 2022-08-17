@@ -16,29 +16,9 @@ class Rapor extends Component
 
     public function render()
     {
-        $data =   KantarData::Where('file_id', $this->file_id)->get();
-
-        $firmalar =  DB::select('
-        select distinct(firma_kod),
-        (select TOP 1 firma from kantar_data AS SKD Where SKD.firma_kod = KD.firma_kod) as firma
-        FROM kantar_data as KD
-        Where KD.file_id = ?        
-        ', [$this->file_id]);
-
-        $malzemeler =  DB::select('
-        select distinct(malzeme_sku),
-        (select TOP 1 malzeme from kantar_data AS SKD Where SKD.malzeme_sku = KD.malzeme_sku) as malzeme
-        FROM kantar_data as KD
-        Where KD.file_id = ?        
-        ', [$this->file_id]);
 
         return view(
-            'livewire.kantar.rapor',
-            [
-                'data' => $data,
-                'firmalar' => $firmalar,
-                'malzemeler' => $malzemeler
-            ]
+            'livewire.kantar.rapor'
         );
     }
 
