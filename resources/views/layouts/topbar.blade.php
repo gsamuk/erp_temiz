@@ -69,9 +69,7 @@
           <div class="dropdown-menu dropdown-menu-end">
             <!-- item-->
             <h6 class="dropdown-header">Hoşgeldin {{ Session::get('userData')->name }}</h6>
-            <a class="dropdown-item" href="/user/{{ Session::get('userData')->id }}"><i
-                 class="mdi mdi-account-circle text-muted fs-16 me-1 align-middle"></i> <span
-                    class="align-middle">Kullanıcı Profili</span></a>
+
             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#firma_secModal"><i
                  class="mdi mdi-store-outline text-muted fs-16 me-1 align-middle"></i> <span
                     class="align-middle">Firma Seç</span></a>

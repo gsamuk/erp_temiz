@@ -105,10 +105,13 @@ class FileUpload extends Component
 
     public function sil($id)
     {
-        $up = KantarFiles::find($id);
-        $up->delete();
-        $dt = KantarData::where('file_id', $id)->delete();
-        $this->emitself('Yenile');
-        $this->setFile = null;
+        $chk = KantarData::where('file_id', $id)->Where('logo_fiche_ref', '>', 0)->first();
+        if (!$chk) {
+            $up = KantarFiles::find($id);
+            $up->delete();
+            KantarData::where('file_id', $id)->delete();
+            $this->emitself('Yenile');
+            $this->setFile = null;
+        }
     }
 }

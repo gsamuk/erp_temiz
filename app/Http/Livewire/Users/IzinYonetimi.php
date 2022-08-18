@@ -6,6 +6,8 @@ use Livewire\Component;
 use App\Models\Permissions;
 use App\Models\UserPermissions;
 use App\Models\UserCompany;
+use App\Models\Users;
+
 
 class IzinYonetimi extends Component
 {
@@ -21,6 +23,7 @@ class IzinYonetimi extends Component
     public function getUserId($id)
     {
         $this->user_id = $id;
+        $this->user = Users::find($id);
     }
 
     public function updatedFirma($id)

@@ -43,9 +43,9 @@ File: Main Js File
                 document.getElementById("header-lang-img").src = "assets/images/flags/italy.svg";
             } else if (lang == 'ru') {
                 document.getElementById("header-lang-img").src = "assets/images/flags/russia.svg";
-            }else if (lang == 'ch') {
+            } else if (lang == 'ch') {
                 document.getElementById("header-lang-img").src = "assets/images/flags/china.svg";
-            }else if (lang == 'fr') {
+            } else if (lang == 'fr') {
                 document.getElementById("header-lang-img").src = "assets/images/flags/french.svg";
             }
             localStorage.setItem('language', lang);
@@ -56,7 +56,7 @@ File: Main Js File
 
     // Multi language setting
     function getLanguage() {
-        (language == null) ? setLanguage(default_lang): false;
+        (language == null) ? setLanguage(default_lang) : false;
         var request = new XMLHttpRequest();
         // Instantiating the request object
         request.open("GET", 'assets/lang/' + language + '.json');
@@ -245,37 +245,37 @@ File: Main Js File
                 var isTimepickerVal = item.attributes;
                 if (isTimepickerVal["data-time-basic"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.dateFormat = "H:i");
+                        (timeData.noCalendar = true),
+                        (timeData.dateFormat = "H:i");
                 }
                 if (isTimepickerVal["data-time-hrs"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.dateFormat = "H:i"),
-                    (timeData.time_24hr = true);
+                        (timeData.noCalendar = true),
+                        (timeData.dateFormat = "H:i"),
+                        (timeData.time_24hr = true);
                 }
                 if (isTimepickerVal["data-min-time"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.dateFormat = "H:i"),
-                    timeData.minTime = isTimepickerVal["data-min-time"].value.toString()
+                        (timeData.noCalendar = true),
+                        (timeData.dateFormat = "H:i"),
+                        timeData.minTime = isTimepickerVal["data-min-time"].value.toString()
                 }
                 if (isTimepickerVal["data-max-time"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.dateFormat = "H:i"),
-                    timeData.minTime = isTimepickerVal["data-max-time"].value.toString()
+                        (timeData.noCalendar = true),
+                        (timeData.dateFormat = "H:i"),
+                        timeData.minTime = isTimepickerVal["data-max-time"].value.toString()
                 }
                 if (isTimepickerVal["data-default-time"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.dateFormat = "H:i"),
-                    (timeData.defaultDate = isTimepickerVal["data-default-time"].value.toString());
+                        (timeData.noCalendar = true),
+                        (timeData.dateFormat = "H:i"),
+                        (timeData.defaultDate = isTimepickerVal["data-default-time"].value.toString());
                 }
                 if (isTimepickerVal["data-time-inline"]) {
                     (timeData.enableTime = true),
-                    (timeData.noCalendar = true),
-                    (timeData.defaultDate = isTimepickerVal["data-time-inline"].value.toString());
+                        (timeData.noCalendar = true),
+                        (timeData.defaultDate = isTimepickerVal["data-time-inline"].value.toString());
                     (timeData.inline = true);
                 }
                 flatpickr(item, timeData);
@@ -417,7 +417,7 @@ File: Main Js File
             document.getElementById("two-column-menu").innerHTML = ul.outerHTML;
 
             // show submenu on sidebar menu click
-            document.querySelector("#two-column-menu ul").querySelectorAll("li a").forEach(function (element) {                
+            document.querySelector("#two-column-menu ul").querySelectorAll("li a").forEach(function (element) {
                 element.addEventListener("click", function (e) {
                     if (!(location.pathname == '/' + element.getAttribute("href") && !element.getAttribute("data-bs-toggle")))
                         (document.body.classList.contains("twocolumn-panel")) ? document.body.classList.remove("twocolumn-panel") : "";
@@ -427,11 +427,11 @@ File: Main Js File
 
                         if (document.querySelector('#two-column-menu ul .nav-icon.active') !== null)
                             document.querySelector('#two-column-menu ul .nav-icon.active').classList.remove('active');
-                        (e.target.matches("i")) ? e.target.closest('a').classList.add("active"): e.target.classList.add("active");
+                        (e.target.matches("i")) ? e.target.closest('a').classList.add("active") : e.target.classList.add("active");
 
                         var twoColumnItem = document.getElementsByClassName('twocolumn-item-show');
 
-                        (twoColumnItem.length > 0) ? twoColumnItem[0].classList.remove('twocolumn-item-show'): '';
+                        (twoColumnItem.length > 0) ? twoColumnItem[0].classList.remove('twocolumn-item-show') : '';
 
                         var currentMenu = (e.target.matches("i")) ? e.target.closest('a') : e.target;
                         var childMenusId = currentMenu.getAttribute('href').slice(1);
@@ -448,13 +448,13 @@ File: Main Js File
             });
 
             var currentLayout = document.documentElement.getAttribute("data-layout");
-            if(currentLayout !== "horizontal") {
+            if (currentLayout !== "horizontal") {
                 var simpleBar = new SimpleBar(document.getElementById("navbar-nav"));
-                if(simpleBar)
+                if (simpleBar)
                     simpleBar.getContentElement();
 
                 var simpleBar1 = new SimpleBar(document.getElementsByClassName("twocolumn-iconview")[0]);
-                if(simpleBar1)
+                if (simpleBar1)
                     simpleBar1.getContentElement();
             }
         }
@@ -562,7 +562,7 @@ File: Main Js File
             verticalOverlay.forEach(function (element) {
                 element.addEventListener("click", function () {
                     document.body.classList.remove('vertical-sidebar-enable');
-                    if(sessionStorage.getItem("data-layout") == "twocolumn")
+                    if (sessionStorage.getItem("data-layout") == "twocolumn")
                         document.body.classList.add('twocolumn-panel');
                     else
                         document.documentElement.setAttribute("data-sidebar-size", sessionStorage.getItem("data-sidebar-size"))
@@ -575,39 +575,39 @@ File: Main Js File
         var windowSize = document.documentElement.clientWidth;
         if (windowSize < 1025 && windowSize > 767) {
             document.body.classList.remove('twocolumn-panel');
-            if(sessionStorage.getItem("data-layout") == "twocolumn"){
+            if (sessionStorage.getItem("data-layout") == "twocolumn") {
                 document.documentElement.setAttribute("data-layout", "twocolumn");
                 document.getElementById("customizer-layout03").click();
                 twoColumnMenuGenerate();
                 initTwoColumnActiveMenu();
                 isCollapseMenu();
             }
-            if(sessionStorage.getItem("data-layout") == "vertical"){
+            if (sessionStorage.getItem("data-layout") == "vertical") {
                 document.documentElement.setAttribute("data-sidebar-size", "sm");
             }
             document.querySelector(".hamburger-icon").classList.add('open');
         } else if (windowSize >= 1025) {
             document.body.classList.remove('twocolumn-panel');
-            if(sessionStorage.getItem("data-layout") == "twocolumn"){
+            if (sessionStorage.getItem("data-layout") == "twocolumn") {
                 document.documentElement.setAttribute("data-layout", "twocolumn");
                 document.getElementById("customizer-layout03").click();
                 twoColumnMenuGenerate();
                 initTwoColumnActiveMenu();
                 isCollapseMenu();
             }
-            if(sessionStorage.getItem("data-layout") == "vertical"){
+            if (sessionStorage.getItem("data-layout") == "vertical") {
                 document.documentElement.setAttribute("data-sidebar-size", sessionStorage.getItem("data-sidebar-size"));
             }
             document.querySelector(".hamburger-icon").classList.remove('open');
         } else if (windowSize <= 767) {
             document.body.classList.remove('vertical-sidebar-enable');
             document.body.classList.add('twocolumn-panel');
-            if(sessionStorage.getItem("data-layout") == "twocolumn"){
+            if (sessionStorage.getItem("data-layout") == "twocolumn") {
                 document.documentElement.setAttribute("data-layout", "vertical");
                 hideShowLayoutOptions("vertical");
                 isCollapseMenu();
             }
-            if(sessionStorage.getItem("data-layout") != "horizontal"){
+            if (sessionStorage.getItem("data-layout") != "horizontal") {
                 document.documentElement.setAttribute("data-sidebar-size", "lg");
             }
             document.querySelector(".hamburger-icon").classList.add('open');
@@ -662,7 +662,7 @@ File: Main Js File
     function toggleHamburgerMenu() {
         var windowSize = document.documentElement.clientWidth;
 
-        if(windowSize > 767)
+        if (windowSize > 767)
             document.querySelector(".hamburger-icon").classList.toggle('open');
 
         //For collapse horizontal menu
@@ -674,10 +674,10 @@ File: Main Js File
         if (document.documentElement.getAttribute('data-layout') === "vertical") {
             if (windowSize < 1025 && windowSize > 767) {
                 document.body.classList.remove('vertical-sidebar-enable');
-                (document.documentElement.getAttribute('data-sidebar-size') == 'sm') ? document.documentElement.setAttribute('data-sidebar-size', ''): document.documentElement.setAttribute('data-sidebar-size', 'sm');
+                (document.documentElement.getAttribute('data-sidebar-size') == 'sm') ? document.documentElement.setAttribute('data-sidebar-size', '') : document.documentElement.setAttribute('data-sidebar-size', 'sm');
             } else if (windowSize > 1025) {
                 document.body.classList.remove('vertical-sidebar-enable');
-                (document.documentElement.getAttribute('data-sidebar-size') == 'lg') ? document.documentElement.setAttribute('data-sidebar-size', 'sm'): document.documentElement.setAttribute('data-sidebar-size', 'lg');
+                (document.documentElement.getAttribute('data-sidebar-size') == 'lg') ? document.documentElement.setAttribute('data-sidebar-size', 'sm') : document.documentElement.setAttribute('data-sidebar-size', 'lg');
             } else if (windowSize <= 767) {
                 document.body.classList.add('vertical-sidebar-enable');
                 document.documentElement.setAttribute('data-sidebar-size', 'lg');
@@ -897,8 +897,8 @@ File: Main Js File
         document.getElementById('scrollbar').classList.remove("h-100");
 
         var splitMenu = horizontalMenuSplit;
-        var extraMenuName = "More";
-        var menuData = document.querySelectorAll("ul.navbar-nav > li.nav-item");           
+        var extraMenuName = "Devam";
+        var menuData = document.querySelectorAll("ul.navbar-nav > li.nav-item");
         var newMenus = '';
         var splitItem = '';
 
@@ -1200,9 +1200,9 @@ File: Main Js File
                         }
                         break;
                 }
-                default:
+            default:
 
-                    break;
+                break;
         }
     }
 
@@ -1216,7 +1216,7 @@ File: Main Js File
                     var verticalMenu = (document.getElementsByClassName("app-menu")) ? document.getElementsByClassName("app-menu")[0] : '';
                     if (verticalMenu && verticalMenu.querySelector(".simplebar-content-wrapper")) {
                         setTimeout(function () {
-                            (offset == 330) ? verticalMenu.querySelector(".simplebar-content-wrapper").scrollTop = offset + 85: verticalMenu.querySelector(".simplebar-content-wrapper").scrollTop = offset;
+                            (offset == 330) ? verticalMenu.querySelector(".simplebar-content-wrapper").scrollTop = offset + 85 : verticalMenu.querySelector(".simplebar-content-wrapper").scrollTop = offset;
                         }, 0);
                     }
                 }
@@ -1263,7 +1263,7 @@ File: Main Js File
     }
 
     function setDefaultAttribute() {
-        if(!sessionStorage.getItem('defaultAttribute')) {
+        if (!sessionStorage.getItem('defaultAttribute')) {
             var attributesValue = document.documentElement.attributes;
             var isLayoutAttributes = {};
             attributesValue.forEach(function (x) {
@@ -1278,7 +1278,7 @@ File: Main Js File
 
             // open right sidebar on first time load
             var offCanvas = document.querySelector('.btn[data-bs-target="#theme-settings-offcanvas"]');
-            (offCanvas) ? offCanvas.click(): '';
+            (offCanvas) ? offCanvas.click() : '';
         } else {
             var isLayoutAttributes = {};
             isLayoutAttributes['data-layout'] = sessionStorage.getItem('data-layout');
@@ -1324,7 +1324,7 @@ File: Main Js File
                 }
             }
         });
-        
+
         document.addEventListener("fullscreenchange", exitHandler);
         document.addEventListener("webkitfullscreenchange", exitHandler);
         document.addEventListener("mozfullscreenchange", exitHandler);
@@ -1386,27 +1386,27 @@ File: Main Js File
     init();
 
     var timeOutFunctionId;
-    function setResize(){
+    function setResize() {
         var currentLayout = document.documentElement.getAttribute("data-layout");
-        if(currentLayout !== "horizontal") {
-            if(document.getElementById("navbar-nav")) {
+        if (currentLayout !== "horizontal") {
+            if (document.getElementById("navbar-nav")) {
                 var simpleBar = new SimpleBar(document.getElementById("navbar-nav"));
-                if(simpleBar)
+                if (simpleBar)
                     simpleBar.getContentElement();
             }
 
-            if(document.getElementsByClassName("twocolumn-iconview")[0]) {
+            if (document.getElementsByClassName("twocolumn-iconview")[0]) {
                 var simpleBar1 = new SimpleBar(document.getElementsByClassName("twocolumn-iconview")[0]);
-                if(simpleBar1)
+                if (simpleBar1)
                     simpleBar1.getContentElement();
             }
             clearTimeout(timeOutFunctionId);
         }
     }
 
-    window.addEventListener('resize', function () {       
-        if(timeOutFunctionId)
-            clearTimeout(timeOutFunctionId);        
-        timeOutFunctionId = setTimeout(setResize, 2000);      
+    window.addEventListener('resize', function () {
+        if (timeOutFunctionId)
+            clearTimeout(timeOutFunctionId);
+        timeOutFunctionId = setTimeout(setResize, 2000);
     });
 })();

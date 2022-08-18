@@ -171,29 +171,7 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
-                  <a href="#" class="nav-link"
-                     data-key="t-google">
-                    Siparişler
-                  </a>
-                </li>
 
-
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Onay Bekleyenler
-                    <span class="badge badge-pill bg-danger" data-key="t-new">8</span>
-                  </a>
-                </li>
-
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Satın Alma Talepleri
-                    <span class="badge badge-pill bg-success" data-key="t-new">5</span>
-                  </a>
-                </li>
 
               </ul>
             </div>
@@ -220,67 +198,12 @@
                   </a>
                 </li>
 
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    İrsaliyeler
-                  </a>
-                </li>
 
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Faturalar
-                  </a>
-                </li>
-
-
-                <li class="nav-item">
-                  <a class="nav-link menu-link" href="#">
-                    <span>Onay Bekleyenler</span>
-                  </a>
-                </li>
 
               </ul>
             </div>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link menu-link" href="#m4" data-bs-toggle="collapse" role="button"
-               aria-expanded="false" aria-controls="sidebarMaps">
-              <i class="ri-user-2-line"></i> <span>Yönetim Raporları </span>
-            </a>
-            <div class="collapse menu-dropdown" id="m4">
-              <ul class="nav nav-sm flex-column">
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Stok Durum Raporu
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Cari Hesap Durum Raporu
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Satış Raporu
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Özel Rapor 1
-                  </a>
-                </li>
-
-                <li class="nav-item">
-                  <a href="#" class="nav-link" data-key="t-google">
-                    Özel Rapor 2
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </li>
 
 
 

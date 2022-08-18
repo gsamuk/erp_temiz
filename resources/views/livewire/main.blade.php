@@ -5,7 +5,7 @@
         <div class="card-body">
 
           @if (Erp::izin('items_list'))
-            <button class="btn btn-warning w-100 mt-2" wire:click="$emit('SetPage', 'malzemeler.liste')"><i
+            <button class="btn btn-secondary w-100 mt-2" wire:click="$emit('SetPage', 'malzemeler.liste')"><i
                  class="mdi mdi-format-list-checkbox"></i> Depo Malzeme Listesi</button>
           @endif
 

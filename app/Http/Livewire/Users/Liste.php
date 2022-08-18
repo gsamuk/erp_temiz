@@ -67,7 +67,7 @@ class Liste extends Component
                 return $query->where('name', 'like', '%' . $this->search . '%')
                     ->orwhere('surname', 'like', '%' . $this->search . '%')
                     ->orwhere('user_code', 'like', '%' . $this->search . '%');
-            })->paginate(10);
+            })->paginate(8);
         return view('livewire.users.liste', ['data' => $data]);
     }
 

@@ -72,7 +72,7 @@ class Islem extends Component
                 return $query->where('plaka', 'like', '%' . $this->plaka . '%');
             })
             ->orderBy('id', 'DESC')
-            ->paginate(20);
+            ->paginate(50);
 
         return view('livewire.kantar.islem', ['data' => $data]);
     }
@@ -353,6 +353,7 @@ class Islem extends Component
             'TYPE' => 8,
             'IO_TYPE' => 3,
             'DATE' => $d->tarti_cikis_zaman,
+            'DOC_DATE' => date('Y-m-d'),
             "SOURCE_WH" => $d->ambar_no,
             "SOURCE_COST_GRP" => $d->ambar_no,
             'DOC_NUMBER' => $d->fis_no,

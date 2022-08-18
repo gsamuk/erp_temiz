@@ -152,7 +152,7 @@
         <!-- <button wire:click="$emit('EditDemand',{{ $talep->id }})">Edit</button> -->
       </div>
 
-      <div class="card-body p-1">
+      <div class="card-body p-2">
         <div class="row">
           <div class="col-lg-12">
             <table class="table-light table-sm table-striped table align-middle">

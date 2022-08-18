@@ -1,9 +1,9 @@
 <div>
   <div class="row">
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-5 col-xl-5 col-xxl-5">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
       <div class="card">
 
-        <div class="card-header p-2">
+        <div class="card-header pt-3 pb-0">
 
           <div class="row">
             <div class="col-3">
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="card-body pt-1">
+        <div class="card-body p-2">
 
           <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
             <li class="nav-item">
@@ -199,7 +199,7 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-7 col-xl-7 col-xxl-7">
+    <div class="col-xs-12 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-6">
 
       @if ($talep_detay_id)
         @livewire('malzemeler.talep-karsila')

@@ -157,16 +157,13 @@
 
                       @foreach ($data as $key => $d)
                         @php
-                          
                           $ambar = App\Models\LogoWarehouses::where('warehouse_no', $d->ambar_no)
                               ->where('company_no', 1)
                               ->first();
                           $toplam = ($d->birim_fiyat + $d->nakliye_birim_fiyat) * ($d->tarti_net / 1000);
-                          
                         @endphp
 
                         <tr>
-
                           <td class="text-danger">{{ $d->fis_no }}</td>
                           <td><b>{{ $d->plaka }}</b></td>
                           <td> <b title="{{ $d->firma_kod }}" class="text-info">{{ $d->firma }}</b> </td>
@@ -187,7 +184,6 @@
                           <td>
                             @if ($d->list_type == 2)
                               {{ Erp::nmf($d->nakliye_birim_fiyat) }}
-
                               @if ($d->logo_fiche_ref == 0 || $d->logo_fiche_ref == null)
                                 <a href="javascript:void(0);" class="irs_btn"
                                    onclick="$('#nf_{{ $d->id }}').toggle();"
@@ -212,7 +208,7 @@
                             @else
                               @if ($d->logo_fiche_ref)
                                 <button onclick="$(this).attr('disabled', true);"
-                                        wire:click="irsaliye_sil({{ $d->id }})"
+                                        @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
                                         class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
                               @else
                                 <button onclick="$(this).attr('disabled', true);"
@@ -220,7 +216,8 @@
                                         class="btn btn-sm btn-soft-info irs_btn">İrsaliye Oluştur</button>
 
                                 <button onclick="$(this).attr('disabled', true);"
-                                        wire:click="satir_sil({{ $d->id }})"
+
+                                        @click="confirm('Bu Kayıt Silinecek Emin misiniz?') ? @this.satir_sil({{ $d->id }}) : false"
                                         class="btn btn-sm btn-soft-danger irs_btn">Sil</button>
                               @endif
                             @endif
