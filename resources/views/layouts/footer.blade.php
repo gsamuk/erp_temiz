@@ -28,7 +28,7 @@
       </div>
       <div class="col-sm-9">
         <div class="text-sm-end d-none d-sm-block">
-          Zeberced Online ERP v.2.0.1
+          Zeberced Online ERP v.2.1.1
         </div>
       </div>
     </div>

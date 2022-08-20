@@ -29,6 +29,7 @@ class Islem extends Component
 
     public $fiyat;
     public $nakliye;
+    public $ambar;
 
     // serach
     public $fisno;
@@ -71,7 +72,8 @@ class Islem extends Component
             ->when($this->plaka, function ($query) {
                 return $query->where('plaka', 'like', '%' . $this->plaka . '%');
             })
-            ->orderBy('id', 'DESC')
+            ->orderBy('logo_fiche_ref', 'ASC')
+            ->orderBy('fis_no', 'ASC')
             ->paginate(50);
 
         return view('livewire.kantar.islem', ['data' => $data]);
@@ -91,6 +93,13 @@ class Islem extends Component
     {
         $up = KantarData::find($id);
         $up->nakliye_birim_fiyat = $value;
+        $up->save();
+    }
+
+    public function updatedAmbar($value, $id)
+    {
+        $up = KantarData::find($id);
+        $up->ambar_no = $value;
         $up->save();
     }
 
@@ -175,7 +184,7 @@ class Islem extends Component
                     ////////// start
                     $birim_fiyat = 6000; // default satış fiyatı logodan gelecek 
                     $nakliye_birim_fiyat = 680; // default satış fiyatı logodan gelecek
-                    $ambar_no = 0; // ambar  
+                    $ambar_no = 0; // ambar   
 
 
 
@@ -193,7 +202,7 @@ class Islem extends Component
 
                     $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
 
-                    if (preg_match('([a-zA-Z].*[0-9]|[0-9].*[a-zA-Z])', $plaka)) {
+                    if (preg_match('/[a-zA-Z]/i', $plaka)) {
                         // normal plaka
                         $list_type = 1;
                     } else {
@@ -217,7 +226,9 @@ class Islem extends Component
                         $birim_fiyat = $br[0]->unit_price;
                         $ambar_no = $br[0]->warehouse_no;
                     } else {
-                        $list_type = 0;
+
+                        $birim_fiyat = 0;
+                        $ambar_no = -1;
                     }
 
                     if ($list_type == 2) {
@@ -235,7 +246,8 @@ class Islem extends Component
                             // firmanın son nakliye birim fiyatı alınıyor
                             $nakliye_birim_fiyat = $nbr[0]->unit_price;
                         } else {
-                            $list_type = 0;
+
+                            $nakliye_birim_fiyat = 0;
                         }
                     }
 
@@ -296,13 +308,26 @@ class Islem extends Component
 
     public function toplu_irsaliye()
     {
-        $data = KantarData::Where('file_id', $this->file_id)->Where('logo_fiche_ref', null)->get();
+        $data = KantarData::Where('file_id', $this->file_id)
+            ->Where('ambar_no', '>=', 0)
+            ->where('birim_fiyat', '>', 0)
+            ->Where('logo_fiche_ref', null)->get();
         foreach ($data as $d) {
             $this->irsaliye($d->id);
         }
-        session()->flash('success', "Bütün İrsaliyeler Oluşturuldu...");
+        session()->flash('success', "Uygun Verilerin İrsaliyeleri Oluşturuldu...");
     }
 
+
+    public function toplu_irsaliye_sil()
+    {
+        $data = KantarData::Where('file_id', $this->file_id)
+            ->Where('logo_fiche_ref', '>', 0)->get();
+        foreach ($data as $d) {
+            $this->irsaliye_sil($d->id);
+        }
+        session()->flash('success', " İrsaliyeler toplu olarak silindi...");
+    }
 
     public function irsaliye_sil($id)
     {
@@ -327,6 +352,8 @@ class Islem extends Component
             "UNIT_CODE" => "TON",
             "TYPE" => 0,
             "TRCODE" => 8,
+            "SOURCEINDEX" => $d->ambar_no,
+            "SOURCECOSTGRP" => $d->ambar_no,
             'QUANTITY' => ($d->tarti_net / 1000),
             "DESCRIPTION" => $d->plaka,
             "PRICE" => $d->birim_fiyat,
@@ -339,11 +366,15 @@ class Islem extends Component
                 "UNIT_CODE" => "TON",
                 "TYPE" => 0,
                 "TRCODE" => 8,
+
                 'QUANTITY' => ($d->tarti_net / 1000),
                 "DESCRIPTION" => $d->plaka,
                 "PRICE" => $d->nakliye_birim_fiyat,
             ];
         }
+
+        $k = str_split($d->firma_kod);
+        $gl_code = $k[0] . $k[1] . $k[2] . "." . $k[3] . $k[4] . "." . $k[5] . $k[6] . "." . $k[7] . $k[8] . $k[9] . "." . $k[10] . $k[11] . $k[12];
 
         $irs_data = [
             'headers' => [
@@ -353,11 +384,14 @@ class Islem extends Component
             'TYPE' => 8,
             'IO_TYPE' => 3,
             'DATE' => $d->tarti_cikis_zaman,
-            'DOC_DATE' => date('Y-m-d'),
+            'DOC_DATE' => date('Y-m-d H:i:s'),
             "SOURCE_WH" => $d->ambar_no,
             "SOURCE_COST_GRP" => $d->ambar_no,
             'DOC_NUMBER' => $d->fis_no,
             'ARP_CODE' =>  $d->firma_kod,
+            'GL_CODE' =>   $gl_code,
+            'DISP_STATUS' =>  1, // SEVK EDİLDİ
+            'CURRSEL_TOTALS' => 1,
             "STATUS" => 0,  // 1:Öneri 0:Gerçek
             'TRANSACTIONS' => [
                 'items' => $rest_items

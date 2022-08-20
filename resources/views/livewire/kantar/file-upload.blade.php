@@ -58,9 +58,8 @@
                           <button wire:click="set_file({{ $d->id }})"
                                   class="btn btn-sm btn-primary m-0">İşlem</button>
                           @if ($d->islem == 1)
-                            <!--  <button wire:click="set_report({{ $d->id }})"
+                            <button wire:click="set_report({{ $d->id }})"
                                     class="btn btn-sm btn-info m-0">Rapor</button>
-                         -->
                           @endif
                           @if ($cnt == 0)
                             <button

@@ -70,6 +70,8 @@ class TalepIslem extends Component
             "PRICE" => $item->average_price,
             "TYPE" => 25,
             'QUANTITY' => $demand_item->diff,
+            'SOURCEINDEX' => $this->talep->warehouse_no,
+            'SOURCECOSTGRP' => $this->talep->warehouse_no,
         ];
 
         $sarf_data = [

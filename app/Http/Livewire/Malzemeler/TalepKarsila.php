@@ -353,6 +353,8 @@ Satınalma Toplamı : $s_total
                     "PRICE" => $logo_item->average_price,
                     "TYPE" => 25,
                     'QUANTITY' => $item->approved_consump,
+                    'SOURCEINDEX' => $demand->warehouse_no,
+                    'SOURCECOSTGRP' => $demand->warehouse_no,
                 ];
             }
         }

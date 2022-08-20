@@ -68,7 +68,7 @@
         </div>
       @endif
 
-      <div class="col-xl-5">
+      <div class="col-xl-12">
         <span wire:loading>
           <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> İşlem Yapılıyor Lütfen Bekleyiniz...
 
@@ -77,6 +77,12 @@
           <h5 class="text-danger">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere tıklamayın!
           </h5>
         </span>
+
+        <span wire:loading wire:target="toplu_irsaliye_sil">
+          <h5 class="text-danger">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere tıklamayın!
+          </h5>
+        </span>
+
 
         @if (session()->has('success'))
           <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
@@ -92,9 +98,7 @@
 
           <div class="card card-border-warning border">
             <div class="card-header">
-
               <div class="row">
-
                 <div class="col-2">
                   <input type="text" class="form-control search" wire:model.debunce.500ms="fisno"
                          placeholder="Fiş No Ara">
@@ -124,9 +128,14 @@
                   </select>
                 </div>
 
-                <div class="col-2">
-                  <button wire:click="toplu_irsaliye()" onclick="$(this).add('.irs_btn').attr('disabled', true);"
+                <div class="col-12">
+                  <button
+                          @click="confirm('Uygun Olan Bütün İrsaliyeler Oluşturulacak Emin misiniz?') ? @this.toplu_irsaliye() : false"
                           class="btn btn-success">Toplu İrsaliye Oluştur</button>
+
+                  <button
+                          @click="confirm('Bu Dosayadaki Bütün İrsaliyeler Silinecek Emin misiniz?') ? @this.toplu_irsaliye_sil() : false"
+                          class="btn btn-danger">Toplu İrsaliye Sil</button>
                 </div>
 
               </div>
@@ -153,13 +162,20 @@
                     <tbody>
                       @php
                         $group = [];
+                        $ambarlar = App\Models\LogoWarehouses::where('company_no', 1)->get();
                       @endphp
 
                       @foreach ($data as $key => $d)
                         @php
-                          $ambar = App\Models\LogoWarehouses::where('warehouse_no', $d->ambar_no)
-                              ->where('company_no', 1)
-                              ->first();
+                          if ($d->ambar_no >= 0) {
+                              $ambar = App\Models\LogoWarehouses::where('warehouse_no', $d->ambar_no)
+                                  ->where('company_no', 1)
+                                  ->first();
+                              $warehouse_name = $ambar->warehouse_name;
+                          } else {
+                              $warehouse_name = 'Bilinmiyor.';
+                          }
+                          
                           $toplam = ($d->birim_fiyat + $d->nakliye_birim_fiyat) * ($d->tarti_net / 1000);
                         @endphp
 
@@ -198,27 +214,52 @@
                             @endif
                           </td>
                           <td><b>{{ Erp::nmf($toplam) }}</b> </td>
-                          <td>{{ $ambar->warehouse_name }}</td>
+                          <td>
+                            @if ($d->logo_fiche_ref == 0 || $d->logo_fiche_ref == null)
+                              <a href="javascript:void(0);" class="amb_btn"
+                                 onclick="$('#amb_{{ $d->id }}').toggle();"
+                                 class="link-success fs-15"><i class="ri-edit-2-line"></i> {{ $warehouse_name }} </a>
+
+
+                              <select class="form-select mb-3" id="amb_{{ $d->id }}"
+                                      style="display:none"
+                                      wire:model.lazy="ambar.{{ $d->id }}">
+                                <option value="">-- Ambar Seç --</option>
+                                @foreach ($ambarlar as $a)
+                                  <option value="{{ $a->warehouse_no }}">{{ $a->warehouse_name }}</option>
+                                @endforeach
+
+
+                              </select>
+                            @else
+                              {{ $warehouse_name }}
+                            @endif
+
+                          </td>
                           <td>{{ date('d/m H:i', strtotime($d->tarti_cikis_zaman)) }}</td>
                           <td>
-                            @if ($d->list_type == 0)
-                              <small>
-                                <span class="text-danger">{!! $d->durum !!}</span>
-                              </small>
+                            @if ($d->birim_fiyat < 1000 || $d->ambar_no < 0)
+                              <span class="text-danger">Fiyat & Ambar Düzenle</span>
                             @else
-                              @if ($d->logo_fiche_ref)
-                                <button onclick="$(this).attr('disabled', true);"
-                                        @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
-                                        class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
+                              @if ($d->list_type == 0)
+                                <small>
+                                  <span class="text-danger">{!! $d->durum !!}</span>
+                                </small>
                               @else
-                                <button onclick="$(this).attr('disabled', true);"
-                                        wire:click="irsaliye({{ $d->id }})"
-                                        class="btn btn-sm btn-soft-info irs_btn">İrsaliye Oluştur</button>
+                                @if ($d->logo_fiche_ref)
+                                  <button onclick="$(this).attr('disabled', true);"
+                                          @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
+                                          class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
+                                @else
+                                  <button onclick="$(this).attr('disabled', true);"
+                                          wire:click="irsaliye({{ $d->id }})"
+                                          class="btn btn-sm btn-soft-info irs_btn">İrsaliye Oluştur</button>
 
-                                <button onclick="$(this).attr('disabled', true);"
-
-                                        @click="confirm('Bu Kayıt Silinecek Emin misiniz?') ? @this.satir_sil({{ $d->id }}) : false"
-                                        class="btn btn-sm btn-soft-danger irs_btn">Sil</button>
+                                  <a href="javascript:void(0);" onclick="$(this).attr('disabled', true);"
+                                     @click="confirm('Bu Kayıt Silinecek Emin misiniz?') ? @this.satir_sil({{ $d->id }}) : false"
+                                     class="link-danger fs-15"><i
+                                       class="ri-delete-bin-line"></i></a>
+                                @endif
                               @endif
                             @endif
                           </td>
