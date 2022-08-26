@@ -87,23 +87,21 @@
           <div class="card card-border-warning border">
             <div class="card-body">
 
-              <form wire:submit.prevent="save">
+              <form wire:submit.prevent="save" class="mb-2">
                 <label>KANTAR RAPOR DOSYASI YÜKLE</label>
-                <select class="form-select mb-3" wire:model="kantar_id">
+                <select class="form-select mb-3" wire:model="kantarid">
                   <option value="0">-- KANTAR SEÇ --</option>
-                  <option value="1">KUBWA-1</option>
-                  <option value="2">KUBWA-2</option>
-                  <option value="3">KADUNA-1</option>
-                  <option value="4">KADUNA-2</option>
+                  <option value="1">KADUNA-1</option>
                 </select>
 
-                @if ($kantar_id > 0)
+                @if ($kantarid > 0)
                   @if (!$file)
                     <label for="file" class="btn btn-info btn-label rounded-pill">
                       <i class="ri-image-fill label-icon rounded-pill fs-16 me-2 align-middle"></i>
                       Dosya Seç
                     </label>
-                    <input id="file" style="display:none;" type="file" wire:model="file">
+                    <input id="file" wire:loading.attr="disabled" style="display:none;" type="file"
+                           wire:model="file">
                   @endif
                 @else
                   Dosyayı yüklemek için önce kantar seçin.
@@ -116,9 +114,10 @@
                 @endif
 
               </form>
-              <span wire:loading>
-                Bekleyiniz...
+              <span wire:loading wire:target="save">
+                Dosya Yükleniyor Lütfen Bekleyiniz...
               </span>
+
               @if (session()->has('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                   {{ session('error') }}
@@ -126,12 +125,7 @@
                 </div>
               @endif
 
-              @if (session()->has('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  {{ session('success') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              @endif
+
 
             </div>
           </div>

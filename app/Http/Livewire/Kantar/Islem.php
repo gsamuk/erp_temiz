@@ -72,9 +72,9 @@ class Islem extends Component
             ->when($this->plaka, function ($query) {
                 return $query->where('plaka', 'like', '%' . $this->plaka . '%');
             })
-            ->orderBy('logo_fiche_ref', 'ASC')
-            ->orderBy('fis_no', 'ASC')
-            ->paginate(50);
+
+            ->orderBy('fis_no', 'DESC')
+            ->paginate(500);
 
         return view('livewire.kantar.islem', ['data' => $data]);
     }
@@ -139,6 +139,7 @@ class Islem extends Component
                 if (strlen($line) > 10) {
                     $linecount++;
                     $arr = explode(';', $line);
+
                     list($no, $plaka, $fisno, $hesap_no, $hesap_adi, $stok_code, $stock_name, $ts1, $ts2, $t1, $t2, $net, $l) = $arr;
                     $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
                     if (!$malzeme) {
@@ -301,7 +302,7 @@ class Islem extends Component
             $up->save();
             $this->emitSelf('Yenile');
         } else {
-            session()->flash('success', "Bu dosyadaki veriler zaten eklenmiş.");
+            session()->flash('error', "Bu dosyadaki veriler zaten eklenmiş, lütfen bu dosyayı sistem siliniz.");
         }
     }
 
@@ -321,12 +322,15 @@ class Islem extends Component
 
     public function toplu_irsaliye_sil()
     {
-        $data = KantarData::Where('file_id', $this->file_id)
-            ->Where('logo_fiche_ref', '>', 0)->get();
-        foreach ($data as $d) {
-            $this->irsaliye_sil($d->id);
+        $data = KantarData::Where('file_id', $this->file_id)->Where('logo_fiche_ref', '>', 0)->get();
+        if ($data->count() > 0) {
+            foreach ($data as $d) {
+                $this->irsaliye_sil($d->id);
+            }
+            session()->flash('success', " İrsaliyeler toplu olarak silindi...");
+        } else {
+            session()->flash('error', " Bu Dosyada İrsaliye Bulunamadı...");
         }
-        session()->flash('success', " İrsaliyeler toplu olarak silindi...");
     }
 
     public function irsaliye_sil($id)
@@ -366,7 +370,6 @@ class Islem extends Component
                 "UNIT_CODE" => "TON",
                 "TYPE" => 0,
                 "TRCODE" => 8,
-
                 'QUANTITY' => ($d->tarti_net / 1000),
                 "DESCRIPTION" => $d->plaka,
                 "PRICE" => $d->nakliye_birim_fiyat,
@@ -375,6 +378,14 @@ class Islem extends Component
 
         $k = str_split($d->firma_kod);
         $gl_code = $k[0] . $k[1] . $k[2] . "." . $k[3] . $k[4] . "." . $k[5] . $k[6] . "." . $k[7] . $k[8] . $k[9] . "." . $k[10] . $k[11] . $k[12];
+
+
+        if ($d->ambar_no == 20 || $d->ambar_no == 21) {
+            $proje_kodu = "KADUNA";
+        } else {
+            $proje_kodu = null;
+        }
+
 
         $irs_data = [
             'headers' => [
@@ -391,13 +402,14 @@ class Islem extends Component
             'ARP_CODE' =>  $d->firma_kod,
             'GL_CODE' =>   $gl_code,
             'DISP_STATUS' =>  1, // SEVK EDİLDİ
+            'PROJECT_CODE' => $proje_kodu,
             'CURRSEL_TOTALS' => 1,
             "STATUS" => 0,  // 1:Öneri 0:Gerçek
             'TRANSACTIONS' => [
                 'items' => $rest_items
             ]
         ];
-        // dd($irs_data);
+
         $ref  = LogoRest::IrsaliyeFisiOlustur($irs_data, 0);
         if ($ref != null && $ref > 0) {
             $d->logo_fiche_ref = $ref;

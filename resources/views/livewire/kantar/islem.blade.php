@@ -68,30 +68,7 @@
         </div>
       @endif
 
-      <div class="col-xl-12">
-        <span wire:loading>
-          <i class="mdi mdi-spin mdi-cog-outline fs-22"></i> İşlem Yapılıyor Lütfen Bekleyiniz...
 
-        </span>
-        <span wire:loading wire:target="toplu_irsaliye">
-          <h5 class="text-danger">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere tıklamayın!
-          </h5>
-        </span>
-
-        <span wire:loading wire:target="toplu_irsaliye_sil">
-          <h5 class="text-danger">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere tıklamayın!
-          </h5>
-        </span>
-
-
-        @if (session()->has('success'))
-          <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-            {!! session('success') !!}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
-
-      </div>
 
       @if ($file_data->kontrol == 1 && $file_data->islem == 1)
         <div class="col-xl-12">
@@ -128,14 +105,52 @@
                   </select>
                 </div>
 
-                <div class="col-12">
+                <div class="col-4" wire:loading.remove>
                   <button
                           @click="confirm('Uygun Olan Bütün İrsaliyeler Oluşturulacak Emin misiniz?') ? @this.toplu_irsaliye() : false"
-                          class="btn btn-success">Toplu İrsaliye Oluştur</button>
+                          class="btn btn-success"><i class="mdi mdi-content-save-outline"></i> Toplu İrsaliye
+                    Oluştur</button>
 
                   <button
                           @click="confirm('Bu Dosayadaki Bütün İrsaliyeler Silinecek Emin misiniz?') ? @this.toplu_irsaliye_sil() : false"
-                          class="btn btn-danger">Toplu İrsaliye Sil</button>
+                          class="btn btn-danger"><i class="mdi mdi-delete-outline"></i> Toplu İrsaliye
+                    Sil</button>
+                </div>
+
+                <div class="col-8">
+                  <span wire:loading>
+                    <h5 class="text-danger"><i class="mdi mdi-spin mdi-cog-outline"></i> İşlem Yapılıyor Lütfen
+                      Bekleyiniz...
+                    </h5>
+                  </span>
+                  <span wire:loading wire:target="toplu_irsaliye">
+                    <h5 class="text-info">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere
+                      tıklamayın!
+                    </h5>
+                  </span>
+
+                  <span wire:loading wire:target="toplu_irsaliye_sil">
+                    <h5 class="text-info">Bu işlem biraz uzun sürebilir lüfen bu pencereyi kapatmayın ve başka yere
+                      tıklamayın!
+                    </h5>
+                  </span>
+
+
+                  @if (session()->has('success'))
+                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                      {!! session('success') !!}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  @endif
+
+                  @if (session()->has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                      {!! session('error') !!}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  @endif
+
+
                 </div>
 
               </div>
@@ -146,6 +161,7 @@
                   <table class="table-nowrap table-sm table-striped mb-0 table">
                     <thead class="table-light">
                       <tr>
+                        <th scope="col"></th>
                         <th scope="col">Fiş No </th>
                         <th scope="col">Plaka</th>
                         <th scope="col">Firma</th>
@@ -163,10 +179,12 @@
                       @php
                         $group = [];
                         $ambarlar = App\Models\LogoWarehouses::where('company_no', 1)->get();
+                        $sira = 0;
                       @endphp
 
                       @foreach ($data as $key => $d)
                         @php
+                          $sira = $sira + 1;
                           if ($d->ambar_no >= 0) {
                               $ambar = App\Models\LogoWarehouses::where('warehouse_no', $d->ambar_no)
                                   ->where('company_no', 1)
@@ -177,9 +195,15 @@
                           }
                           
                           $toplam = ($d->birim_fiyat + $d->nakliye_birim_fiyat) * ($d->tarti_net / 1000);
+                          
+                          if ($d->logo_fiche_ref > 0) {
+                              $invoice = App\Models\LogoSaleDispatche::find($d->logo_fiche_ref);
+                          }
+                          
                         @endphp
 
                         <tr>
+                          <td>{{ $sira }}</td>
                           <td class="text-danger">{{ $d->fis_no }}</td>
                           <td><b>{{ $d->plaka }}</b></td>
                           <td> <b title="{{ $d->firma_kod }}" class="text-info">{{ $d->firma }}</b> </td>
@@ -247,9 +271,13 @@
                                 </small>
                               @else
                                 @if ($d->logo_fiche_ref)
-                                  <button onclick="$(this).attr('disabled', true);"
-                                          @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
-                                          class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
+                                  @if ($invoice->billed == 0)
+                                    <button onclick="$(this).attr('disabled', true);"
+                                            @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
+                                            class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
+                                  @else
+                                    <span class="text-success">Fatura Oluştu</span>
+                                  @endif
                                 @else
                                   <button onclick="$(this).attr('disabled', true);"
                                           wire:click="irsaliye({{ $d->id }})"

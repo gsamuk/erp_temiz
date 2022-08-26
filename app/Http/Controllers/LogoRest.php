@@ -190,6 +190,7 @@ class LogoRest extends Controller
 
             if ($response->status() == 200 && $response->successful() == true) {
                 TransactionController::add($url, $data, $response->body());
+
                 return $response->json("INTERNAL_REFERENCE");
             } else {
                 TransactionController::add($url, $data, $response->body());
