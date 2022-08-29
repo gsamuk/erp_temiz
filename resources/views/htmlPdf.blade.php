@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 
 <body>
-  <div style="padding: 10px 50px;">
+  <div style="padding: 5px 30px;">
     <table>
       @foreach ($data as $val => $d)
         @php
@@ -14,7 +14,7 @@
           }
         @endphp
         <td style=" border:2px dashed #d1d1d1; vertical-align: text-top">
-          <div style="width: 85mm; height: 50mm;">
+          <div style="width: 85mm; height: 52mm; margin-top:5mm">
             <table style="padding-left: 13px;">
               <TR>
                 <TD colspan=3

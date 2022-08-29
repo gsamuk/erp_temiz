@@ -14,6 +14,7 @@ use App\Models\LogoItems;
 use App\Models\LogoDb;
 use App\Http\Controllers\LogoRest;
 use Illuminate\Support\Facades\DB;
+use App\Models\LogoSaleDispatche;
 
 class Islem extends Component
 {
@@ -203,14 +204,16 @@ class Islem extends Component
 
                     $malzeme = LogoItems::Where('stock_code', $stok_code)->first();
 
-                    if (preg_match('/[a-zA-Z]/i', $plaka)) {
-                        // normal plaka
-                        $list_type = 1;
-                    } else {
-                        // Plaka bölüne Özel Kod Girilen durum                            
-                        $plaka = str_replace(' ', '', $plaka); // varsa boşlukları alıyor
+                    $plaka = trim($plaka);
+                    $arr = str_split($plaka);
+
+                    if ($arr[0] == 0 && $arr[2] == 'Z') {
+                        $plaka = str_replace('Z', '-', $plaka);
                         $list_type = 2;
+                    } else {
+                        $list_type = 1;
                     }
+
 
                     // eğer firma kodu sorunsuz ise
                     $br = DB::select(
@@ -234,6 +237,7 @@ class Islem extends Component
 
                     if ($list_type == 2) {
                         // eğer nakliye varsa 
+                        // dd($plaka);
                         $malzeme_ = LogoItems::Where('stock_code', $plaka)->first();
                         $nbr = DB::select(
                             "Exec dbo.sp_get_last_sale_account @company_id ='001',
@@ -320,28 +324,19 @@ class Islem extends Component
     }
 
 
-    public function toplu_irsaliye_sil()
-    {
-        $data = KantarData::Where('file_id', $this->file_id)->Where('logo_fiche_ref', '>', 0)->get();
-        if ($data->count() > 0) {
-            foreach ($data as $d) {
-                $this->irsaliye_sil($d->id);
-            }
-            session()->flash('success', " İrsaliyeler toplu olarak silindi...");
-        } else {
-            session()->flash('error', " Bu Dosyada İrsaliye Bulunamadı...");
-        }
-    }
 
     public function irsaliye_sil($id)
     {
         $d = KantarData::find($id);
-        $r = LogoRest::IrsaliyeSil($d->logo_fiche_ref);
-        if ($r['success'] == true) {
-            $d->logo_fiche_ref = null;
-            $d->save();
-        } else {
-            dd($r);
+        $ft = LogoSaleDispatche::find($d->logo_fiche_ref);
+        if ($ft->billed == 0) {
+            $r = LogoRest::IrsaliyeSil($d->logo_fiche_ref);
+            if ($r['success'] == true) {
+                $d->logo_fiche_ref = null;
+                $d->save();
+            } else {
+                dd($r);
+            }
         }
     }
 
@@ -370,6 +365,8 @@ class Islem extends Component
                 "UNIT_CODE" => "TON",
                 "TYPE" => 0,
                 "TRCODE" => 8,
+                "SOURCEINDEX" => $d->ambar_no,
+                "SOURCECOSTGRP" => $d->ambar_no,
                 'QUANTITY' => ($d->tarti_net / 1000),
                 "DESCRIPTION" => $d->plaka,
                 "PRICE" => $d->nakliye_birim_fiyat,

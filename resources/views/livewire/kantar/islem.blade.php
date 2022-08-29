@@ -111,10 +111,6 @@
                           class="btn btn-success"><i class="mdi mdi-content-save-outline"></i> Toplu İrsaliye
                     Oluştur</button>
 
-                  <button
-                          @click="confirm('Bu Dosayadaki Bütün İrsaliyeler Silinecek Emin misiniz?') ? @this.toplu_irsaliye_sil() : false"
-                          class="btn btn-danger"><i class="mdi mdi-delete-outline"></i> Toplu İrsaliye
-                    Sil</button>
                 </div>
 
                 <div class="col-8">
@@ -196,7 +192,7 @@
                           
                           $toplam = ($d->birim_fiyat + $d->nakliye_birim_fiyat) * ($d->tarti_net / 1000);
                           
-                          if ($d->logo_fiche_ref > 0) {
+                          if ($d->logo_fiche_ref != null && $d->logo_fiche_ref > 0) {
                               $invoice = App\Models\LogoSaleDispatche::find($d->logo_fiche_ref);
                           }
                           
