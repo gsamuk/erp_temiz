@@ -153,6 +153,18 @@ class Islem extends Component
                         $msg .= "Bilinmeyen Cari, Hesap Kodu: <b> $hesap_no </b> | <b>Fiş No : $fisno </b><br> ";
                         $chk = false;
                     }
+
+                    $plaka = trim($plaka);
+                    $arr = str_split($plaka);
+
+                    if ($arr[0] == 0 && $arr[2] == 'Z') {
+                        $plaka = str_replace('Z', '-', $plaka);
+                        $plaka_malzeme = LogoItems::Where('stock_code', $plaka)->first();
+                        if (!$plaka_malzeme) {
+                            $msg .= "Bilinmeyen Nakliye Kodu: <b> $plaka </b> | <b>Fiş No : $fisno </b> <br> ";
+                            $chk = false;
+                        }
+                    }
                 }
             }
         }
@@ -187,8 +199,6 @@ class Islem extends Component
                     $birim_fiyat = 6000; // default satış fiyatı logodan gelecek 
                     $nakliye_birim_fiyat = 680; // default satış fiyatı logodan gelecek
                     $ambar_no = 0; // ambar   
-
-
 
                     $linecount++;
                     $arr = explode(';', $line);
@@ -392,7 +402,11 @@ class Islem extends Component
             'TYPE' => 8,
             'IO_TYPE' => 3,
             'DATE' => $d->tarti_cikis_zaman,
-            'DOC_DATE' => date('Y-m-d H:i:s'),
+            'TIME' => 134682914,
+            'DOC_DATE' => date('Y-m-d'),
+            'DOC_TIME' => 134682914,
+            'SHIP_DATE' => date('Y-m-d'),
+            'SHIP_TIME' => 134682914,
             "SOURCE_WH" => $d->ambar_no,
             "SOURCE_COST_GRP" => $d->ambar_no,
             'DOC_NUMBER' => $d->fis_no,
@@ -402,6 +416,7 @@ class Islem extends Component
             'PROJECT_CODE' => $proje_kodu,
             'CURRSEL_TOTALS' => 1,
             "STATUS" => 0,  // 1:Öneri 0:Gerçek
+            "EDESPATCH_STATUS" => 12,
             'TRANSACTIONS' => [
                 'items' => $rest_items
             ]

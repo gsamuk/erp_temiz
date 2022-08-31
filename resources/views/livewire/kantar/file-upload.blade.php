@@ -10,13 +10,22 @@
             <div class="card-header">
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
-                  <select wire:model="search_kantar"
-                          class="form-select mb-1" aria-label="Default select example">
-                    <option value="">-- BÜTÜN KANTARLAR -- </option>
-                    @foreach ($kantarlar as $k)
-                      <option value="{{ $k->id }}">{{ $k->kantar_adi }}</option>
-                    @endforeach
-                  </select>
+                  <div class="row">
+                    <div class="col-xl-6">
+                      <select wire:model="search_kantar"
+                              class="form-select mb-1" aria-label="Default select example">
+                        <option value="">-- BÜTÜN KANTARLAR -- </option>
+                        @foreach ($kantarlar as $k)
+                          <option value="{{ $k->id }}">{{ $k->kantar_adi }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="col-xl-6">
+                      <button wire:click="$emit('SetPage', 'kantar.rapor')"
+                              class="btn btn-outline-info">Kantar Raporları</button>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -57,10 +66,7 @@
                         <td>
                           <button wire:click="set_file({{ $d->id }})"
                                   class="btn btn-sm btn-primary m-0">İşlem</button>
-                          @if ($d->islem == 1)
-                            <button wire:click="set_report({{ $d->id }})"
-                                    class="btn btn-sm btn-info m-0">Rapor</button>
-                          @endif
+
                           @if ($cnt == 0)
                             <button
                                     @click="confirm('Bu Dosya ve Alt Verileri Silinecek Emin misiniz?') ? @this.sil({{ $d->id }}) : false"
@@ -91,7 +97,10 @@
                 <label>KANTAR RAPOR DOSYASI YÜKLE</label>
                 <select class="form-select mb-3" wire:model="kantarid">
                   <option value="0">-- KANTAR SEÇ --</option>
-                  <option value="1">KADUNA-1</option>
+                  <option value="1">KADUNA - 1</option>
+                  <option value="4">KADUNA - 2</option>
+                  <option value="2">KUBWA - 1 </option>
+                  <option value="3">KUBWA - 2</option>
                 </select>
 
                 @if ($kantarid > 0)

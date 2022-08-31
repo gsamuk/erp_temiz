@@ -24,6 +24,8 @@
     @livewire('kantar.file-upload')
   @elseif($page == 'kantar.cariler')
     @livewire('kantar.cariler')
+  @elseif($page == 'kantar.rapor')
+    @livewire('kantar.rapor')
   @else
     @livewire('main')
   @endif
@@ -34,4 +36,12 @@
     </div>
   </div>
 
+  @push('scripts')
+    <script>
+      window.livewire.on('kantar.rapor', message => {
+        $(".tarih").datepicker();
+        $(".tarih").datepicker("option", "dateFormat", "yy-mm-dd").datepicker("setDate", new Date());
+      });
+    </script>
+  @endpush
 </div

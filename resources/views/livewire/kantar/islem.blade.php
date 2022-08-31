@@ -176,6 +176,7 @@
                         $group = [];
                         $ambarlar = App\Models\LogoWarehouses::where('company_no', 1)->get();
                         $sira = 0;
+                        $gn_toplam = 0;
                       @endphp
 
                       @foreach ($data as $key => $d)
@@ -196,6 +197,7 @@
                               $invoice = App\Models\LogoSaleDispatche::find($d->logo_fiche_ref);
                           }
                           
+                          $gn_toplam = $gn_toplam + $d->tarti_net;
                         @endphp
 
                         <tr>
@@ -267,9 +269,9 @@
                                 </small>
                               @else
                                 @if ($d->logo_fiche_ref)
-                                  @if ($invoice->billed == 0)
+                                  @if ($invoice && $invoice->billed == 0)
                                     <button onclick="$(this).attr('disabled', true);"
-                                            @click="confirm('İrsaliye Silinecek Emin misiniz?') ? @this.irsaliye_sil({{ $d->id }}) : false"
+                                            wire:click="irsaliye_sil({{ $d->id }})"
                                             class="btn btn-sm btn-soft-danger irs_btn">İrsaliye Sil</button>
                                   @else
                                     <span class="text-success">Fatura Oluştu</span>
@@ -289,6 +291,20 @@
                           </td>
                         </tr>
                       @endforeach
+                      <tr>
+                        <td colspan="4">
+                          <hr>
+                        </td>
+                        <td class="text-danger">
+                          <h4><b>Toplam</b></h4>
+                        </td>
+                        <td class="text-danger">
+                          <h4><b> {{ number_format($gn_toplam / 1000, 2, '.', ',') }}</b></h4> TON
+                        </td>
+                        <td colspan="6">
+                          <hr>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   <div class="d-flex justify-content-end m-3">

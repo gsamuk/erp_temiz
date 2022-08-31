@@ -16,6 +16,9 @@ class Dashboard extends Component
     {
         $this->edit_id = null;
         $this->page = $page;
+        if ($page == 'kantar.rapor') {
+            $this->emit('kantar.rapor'); // jquery tetikleme
+        }
     }
 
     public function EditDemand($id)
