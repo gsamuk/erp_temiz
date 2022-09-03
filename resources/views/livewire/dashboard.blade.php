@@ -26,6 +26,8 @@
     @livewire('kantar.cariler')
   @elseif($page == 'kantar.rapor')
     @livewire('kantar.rapor')
+  @elseif($page == 'kantar.canli')
+    @livewire('kantar.canli')
   @else
     @livewire('main')
   @endif

@@ -42,6 +42,21 @@
       </div>
     </div>
 
+    @if (Erp::izin('kantar_file_upload'))
+      <div class="col-xl-3">
+        <div class="card card-h-100">
+          <div class="card-body">
+
+            <button class="btn btn-danger w-100 mt-2" wire:click="$emit('SetPage', 'kantar.canli')"><i
+                 class="mdi mdi-format-list-checkbox"></i> Canlı Kantar Verileri</button>
+
+
+
+          </div>
+        </div>
+      </div>
+    @endif
+
 
 
   </div>
